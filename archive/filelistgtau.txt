@@ -1,0 +1,7 @@
+files\LOADSCS.txd
+files\LOADSCV.txd
+files\logo.png
+files\main.scm
+files\script.img
+files\vehicles.ide
+files\carcols.dat
