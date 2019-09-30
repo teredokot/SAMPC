@@ -2,31 +2,31 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="net">
-      <UniqueIdentifier>{4025751f-922f-4d09-b531-e28c76e7fd25}</UniqueIdentifier>
+      <UniqueIdentifier>{0989fa90-ce43-4ac5-906a-0fd16e7a606f}</UniqueIdentifier>
     </Filter>
     <Filter Include="raknet">
-      <UniqueIdentifier>{1f60123a-f4d2-4719-b07d-4d83c8889d17}</UniqueIdentifier>
+      <UniqueIdentifier>{389bc26e-de18-4fab-b53a-6bb702a6370b}</UniqueIdentifier>
     </Filter>
     <Filter Include="archive">
-      <UniqueIdentifier>{3dc40843-121a-4ff0-bc21-7ea82d47656c}</UniqueIdentifier>
+      <UniqueIdentifier>{205d5f4f-12e8-4758-aa12-7c873e74e068}</UniqueIdentifier>
     </Filter>
     <Filter Include="game">
-      <UniqueIdentifier>{969454ac-9c05-43f9-89bd-6f8dda0b9722}</UniqueIdentifier>
+      <UniqueIdentifier>{112c9b74-5705-4e67-8827-17ee7007fd41}</UniqueIdentifier>
     </Filter>
     <Filter Include="general">
-      <UniqueIdentifier>{a3e0867d-7573-4795-b47a-f8ac6d9b41a0}</UniqueIdentifier>
+      <UniqueIdentifier>{759e4f60-62f6-4520-9148-11fe8a58c2d5}</UniqueIdentifier>
     </Filter>
     <Filter Include="general\stub">
-      <UniqueIdentifier>{5c5c9e92-8681-4a0d-acbd-11c29baa8012}</UniqueIdentifier>
+      <UniqueIdentifier>{51759537-e3be-44bc-8158-d8c7e5e0e3fe}</UniqueIdentifier>
     </Filter>
     <Filter Include="d3dhook">
-      <UniqueIdentifier>{c5732fa6-4bd5-40ad-a409-17f066fe5c84}</UniqueIdentifier>
+      <UniqueIdentifier>{d0bd96aa-c914-4c5e-ad8b-5ea0a65bd906}</UniqueIdentifier>
     </Filter>
     <Filter Include="d3dhook\d3d9">
-      <UniqueIdentifier>{80eccd2c-66cb-42b6-8a9f-236a627c684a}</UniqueIdentifier>
+      <UniqueIdentifier>{712492ad-a8e7-4283-8240-fb0315576878}</UniqueIdentifier>
     </Filter>
     <Filter Include="DXUT">
-      <UniqueIdentifier>{7279b9f1-b91f-4e18-a962-7d5dd2c0afa8}</UniqueIdentifier>
+      <UniqueIdentifier>{e2fb6e77-4024-4be3-85ce-ce470fc9be8a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -8,8 +8,8 @@
 #include <windows.h>
 #include "filechecks.h"
 #include "filehooks.h"
-#include "../saco/filesystem.h"
-#include "../saco/archive/archivefs.h"	// The new FileSystem
+#include "filesystem.h"
+#include "archive/archivefs.h"	// The new FileSystem
 #include "md5.h"
 
 extern CFileSystem *pFileSystem;
