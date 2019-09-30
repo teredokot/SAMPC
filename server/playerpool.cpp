@@ -69,14 +69,14 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
 
 		logprintf("[join] %s has joined the server (%u:%s)",szPlayerName,bytePlayerID, inet_ntoa(in));
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 		bsSend.Reset();
 		bsSend.Write(bytePlayerID);
 		bsSend.Write(szPlayerName,MAX_PLAYER_NAME);
 
 		pRcon->GetRakServer()->RPC( RPC_ServerJoin, &bsSend, HIGH_PRIORITY, RELIABLE, 0,
 			UNASSIGNED_PLAYER_ID, true, false );
-#endif
+#endif*/
 
 		pNetGame->GetFilterScripts()->OnPlayerConnect(bytePlayerID);
 		CGameMode *pGameMode = pNetGame->GetGameMode();
@@ -130,10 +130,10 @@ BOOL CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 
 	logprintf("[part] %s has left the server (%u:%u)",m_szPlayerName[bytePlayerID],bytePlayerID,byteReason);
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 	pRcon->GetRakServer()->RPC( RPC_ServerQuit, &bsSend, HIGH_PRIORITY, RELIABLE, 0,
 		UNASSIGNED_PLAYER_ID, true, false);
-#endif
+#endif*/
 
 	m_iPlayerCount--;
 

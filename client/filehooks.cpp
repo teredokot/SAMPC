@@ -9,7 +9,7 @@
 
 #include <windows.h>
 #include <stdio.h>
-#include "detours.h"
+#include <detours/detours.h>
 #include "filehooks.h"
 #include "filesystem.h"
 #include "filechecks.h"

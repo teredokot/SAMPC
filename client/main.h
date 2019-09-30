@@ -45,16 +45,16 @@ typedef struct _GAME_SETTINGS {
 	CHAR szNickName[MAX_SETTINGS_STRING+1];
 } GAME_SETTINGS;
 
-#include "d3d9/include/d3d9.h"
-#include "d3d9/include/d3dx9core.h"
-#include "d3d9/common/dxstdafx.h"
+#include <d3d9.h>
+#include <d3dx9core.h>
+#include <dxut/dxstdafx.h>
 #include "game/game.h"
 
-#include "../raknet/RakClientInterface.h"
-#include "../raknet/RakNetworkFactory.h"
-#include "../raknet/BitStream.h"
-#include "../raknet/PacketEnumerations.h"
-#include "../raknet/SAMPRPC.h"
+#include <raknet/RakClientInterface.h>
+#include <raknet/RakNetworkFactory.h>
+#include <raknet/BitStream.h>
+#include <raknet/PacketEnumerations.h>
+#include <raknet/SAMPRPC.h>
 
 #include "net/localplayer.h"
 #include "net/remoteplayer.h"
@@ -75,7 +75,7 @@ typedef struct _GAME_SETTINGS {
 #include "cmdwindow.h"
 #include "deathwindow.h"
 #include "spawnscreen.h"
-#include "playertags.h"
+//#include "playertags.h"
 #include "newplayertags.h"
 #include "scoreboard.h"
 #include "label.h"

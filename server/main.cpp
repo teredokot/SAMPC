@@ -15,9 +15,9 @@ CPlugins		*pPlugins	= NULL;
 
 SERVER_SETTINGS gServerSettings;
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 CRcon		*pRcon		= NULL;
-#endif
+#endif*/
 
 BYTE		byteRconUser= INVALID_ID;
 SOCKET		sockRconReply=INVALID_SOCKET;
@@ -294,11 +294,11 @@ int main (int argc, char** argv)
 	pConsole->AddVariable("lanmode",CON_VARTYPE_BOOL,0, &bLanModeEnable);
 	pConsole->AddVariable("query",CON_VARTYPE_BOOL, 0, &bAllowQuery);
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 	pConsole->AddVariable("rcon_port", CON_VARTYPE_INT, 0, &iRconPort);
 	pConsole->AddVariable("rcon_maxadmins", CON_VARTYPE_INT, 0, &iRconMaxAdmins);
 	pConsole->AddStringVariable("rcon_bind", 0, NULL);
-#endif
+#endif*/
 
 #ifdef LINUX
 	pConsole->AddVariable("output",CON_VARTYPE_BOOL,0,&bOutputEnable);
@@ -316,8 +316,8 @@ int main (int argc, char** argv)
 	pConsole->AddStringVariable("gamemodetext", 0, "Unknown");
 	pConsole->AddStringVariable("filterscripts", 0, "");
 	pConsole->AddStringVariable("plugins", 0, "");
-	pConsole->AddStringVariable("nosign", 0, "");
-	pConsole->AddVariable("anticheat",CON_VARTYPE_BOOL, /* CON_VARFLAG_RULE */ 0, &bEnableAC);
+	//pConsole->AddStringVariable("nosign", 0, "");
+	//pConsole->AddVariable("anticheat",CON_VARTYPE_BOOL, /* CON_VARFLAG_RULE */ 0, &bEnableAC);
 	pConsole->AddVariable("instagib", CON_VARTYPE_BOOL, CON_VARFLAG_RULE, &bEnableInstagib, ServerInstagibChanged);
 	pConsole->AddVariable("myriad", CON_VARTYPE_BOOL, 0, &bGameMod);
 
@@ -347,8 +347,8 @@ int main (int argc, char** argv)
 	pConsole->ModifyVariableFlags("rcon_port", CON_VARFLAG_READONLY);
 	pConsole->ModifyVariableFlags("filterscripts", CON_VARFLAG_READONLY);
 	pConsole->ModifyVariableFlags("plugins", CON_VARFLAG_READONLY);
-	pConsole->ModifyVariableFlags("anticheat", CON_VARFLAG_READONLY /* | CON_VARFLAG_RULE */);
-	pConsole->ModifyVariableFlags("nosign", CON_VARFLAG_READONLY);
+	//pConsole->ModifyVariableFlags("anticheat", CON_VARFLAG_READONLY /* | CON_VARFLAG_RULE */);
+	//pConsole->ModifyVariableFlags("nosign", CON_VARFLAG_READONLY);
 
 	// Add the version as a rule
 	pConsole->AddStringVariable("version", CON_VARFLAG_RULE | CON_VARFLAG_READONLY, SAMP_VERSION);
@@ -374,7 +374,7 @@ int main (int argc, char** argv)
 	pNetGame->Init(true);
 
 	// Start the rcon server
-	PCHAR szBindAddress = pConsole->GetStringVariable("rcon_bind");
+	/*PCHAR szBindAddress = pConsole->GetStringVariable("rcon_bind");
 	if (!szBindAddress || szBindAddress[0] == 0)
 		szBindAddress = pConsole->GetStringVariable("bind");
 	if (!szBindAddress || szBindAddress[0] == 0)
@@ -386,16 +386,16 @@ int main (int argc, char** argv)
 						pConsole->GetIntVariable("rcon_maxadmins"),
 						szBindAddress);
 	pRcon->Process();
-#endif
+#endif*/
 
 	// While the app is running...
 	while (!bQuitApp)
 	{
 		pNetGame->Process();
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 		pRcon->Process();
-#endif
+#endif*/
 
 		if(TRUE == bGameModeFinished) {
 			pNetGame->ShutdownForGameModeRestart();
@@ -410,9 +410,9 @@ int main (int argc, char** argv)
 		SLEEP(10);		
 	}
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 	delete pRcon;
-#endif
+#endif*/
 
 	delete pNetGame;
 

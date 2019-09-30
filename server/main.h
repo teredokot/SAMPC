@@ -119,14 +119,14 @@ typedef struct _SERVER_SETTINGS {
 #include <vector>
 
 // Raknet
-#include "../raknet/RakServer.h"
-#include "../raknet/RakNetworkFactory.h"
-#include "../raknet/BitStream.h"
-#include "../raknet/PacketEnumerations.h"
-#include "../raknet/SAMPRPC.h"
+#include <raknet/RakServer.h>
+#include <raknet/RakNetworkFactory.h>
+#include <raknet/BitStream.h>
+#include <raknet/PacketEnumerations.h>
+#include <raknet/SAMPRPC.h>
 
 // amx
-#include "amx/amx.h"
+#include <amx/amx.h>
 
 // SA:MP
 
@@ -151,7 +151,7 @@ typedef unsigned short VEHICLEID;
 #include "gangzonepool.h"
 #include "netgame.h"
 #include "plugins.h"
-#include "rcon.h"
+//#include "rcon.h"
 
 // ---------
 // EXTERNALS
@@ -161,9 +161,9 @@ extern CConsole* pConsole;
 extern CNetGame* pNetGame;
 extern CPlugins* pPlugins;
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 extern CRcon *pRcon;
-#endif
+#endif*/
 
 extern BYTE byteRconUser;
 extern BOOL bRconSocketReply;

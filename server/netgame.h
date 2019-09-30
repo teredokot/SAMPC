@@ -30,7 +30,7 @@
 #include "playerpool.h"
 #include "vehicle.h"
 #include "vehiclepool.h"
-#include "../raknet/PacketEnumerations.h"
+//#include "../raknet/PacketEnumerations.h"
 #include "netrpc.h"
 
 #define INVALID_ID			0xFF
@@ -62,7 +62,7 @@ private:
 	BOOL						m_bFirstGameModeLoaded;
 
 	BOOL						m_bLanMode;
-	BOOL						m_bACEnabled;
+	//BOOL						m_bACEnabled;
 
 	void UpdateNetwork();
 	CScriptTimers* m_pScriptTimers;
@@ -74,7 +74,7 @@ public:
 	bool m_bShowPlayerMarkers;
 	bool m_bShowNameTags;
 	bool m_bTirePopping;
-	BOOL IsACEnabled() { return m_bACEnabled; }
+	//BOOL IsACEnabled() { return m_bACEnabled; }
 	BYTE m_byteWorldTime;
 	bool m_bAllowWeapons; // Allow weapons in interiors
 	bool m_bStuntBonus; // Insane stunt bonusses enabled?

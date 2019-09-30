@@ -775,13 +775,13 @@ void CPlayer::HandleDeath(BYTE byteReason, BYTE byteWhoWasResponsible)
 	pNetGame->GetRakServer()->RPC(RPC_Death,&bsPlayerDeath,
 		HIGH_PRIORITY,RELIABLE,0,playerid,true,false);
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 		// use bsPlayerDeath because it already has the playerid in it, why make another bitstream?
 		bsPlayerDeath.Write( byteWhoWasResponsible );
 		bsPlayerDeath.Write( byteReason );
 
 		pRcon->GetRakServer()->RPC( RPC_Death, &bsPlayerDeath, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false );
-#endif
+#endif*/
 
 	if ( byteWhoWasResponsible == INVALID_PLAYER_ID )
 	{

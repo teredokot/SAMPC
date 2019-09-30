@@ -9,7 +9,7 @@
 
 #include "main.h"
 #include "vehmods.h"
-#include "anticheat.h"
+//#include "anticheat.h"
 
 extern CNetGame *pNetGame;
 
@@ -150,7 +150,7 @@ void Chat(RPCParameters *rpcParams)
 
 	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 	RakNet::BitStream bsSend;
 
 	bsSend.Write( bytePlayerID );
@@ -158,7 +158,7 @@ void Chat(RPCParameters *rpcParams)
 	bsSend.Write( szText, byteTextLen );
 
 	pRcon->GetRakServer()->RPC( RPC_Chat, &bsSend, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false );
-#endif
+#endif*/
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
 	CGameMode *pGameMode = pNetGame->GetGameMode();
@@ -215,10 +215,10 @@ void Privmsg(RPCParameters *rpcParams)
 		pPool->GetPlayerName(byteToPlayerID),
 		szText);
 
-#ifdef RAKRCON
-	/*char szPm[255];
+/*#ifdef RAKRCON
+	/ *char szPm[255];
 	sprintf(szPm, "*** PM from %s to %s: %s.", pPool->GetPlayerName(pRak->GetIndexFromPlayerID(sender)), pPool->GetPlayerName(byteToPlayerID), szText);
-	pRcon->SendEventString(szPm);*/
+	pRcon->SendEventString(szPm);* /
 
 	RakNet::BitStream bsSend;
 
@@ -229,7 +229,7 @@ void Privmsg(RPCParameters *rpcParams)
 
 	pRcon->GetRakServer()->RPC( RPC_Privmsg, &bsSend, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false );
 
-#endif
+#endif*/
 
 	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
 
@@ -286,11 +286,11 @@ void TeamPrivmsg(RPCParameters *rpcParams)
 		pPool->GetPlayerName(pRak->GetIndexFromPlayerID(sender)),
 		szText);
 
-#ifdef RAKRCON
+/*#ifdef RAKRCON
 	char szTeamPm[255];
 	sprintf(szTeamPm, "*** PM from %s to team: %s.", pPool->GetPlayerName(pRak->GetIndexFromPlayerID(sender)), szText);
 	pRcon->SendEventString(szTeamPm);
-#endif
+#endif*/
 
 	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
 

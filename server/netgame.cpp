@@ -8,7 +8,7 @@
 */
 
 #include "main.h"
-#include "anticheat.h"
+//#include "anticheat.h"
 
 float fRestartWaitTime=0.0f;
 
@@ -60,7 +60,7 @@ CNetGame::CNetGame()
 	m_pGangZonePool = NULL;
 	m_bLanMode = FALSE;
 	m_byteMod = 0x01;
-	m_bACEnabled = pConsole->GetBoolVariable("anticheat");
+	//m_bACEnabled = pConsole->GetBoolVariable("anticheat");
 
 	m_bLimitGlobalChatRadius = FALSE;
 	m_fGlobalChatRadius = 10000.0f;

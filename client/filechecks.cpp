@@ -10,7 +10,7 @@
 #include "filehooks.h"
 #include "filesystem.h"
 #include "archive/archivefs.h"	// The new FileSystem
-#include "md5.h"
+#include <md5/md5.h>
 
 extern CFileSystem *pFileSystem;
 

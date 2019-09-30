@@ -9,7 +9,7 @@
 
 #include "main.h"
 #include "game/util.h"
-#include "anticheat.h"
+//#include "anticheat.h"
 #include <aclapi.h>
 
 extern CGame			*pGame;
@@ -51,7 +51,7 @@ DWORD					dwGraphicsLoop=0;
 DWORD					dwUIMode=0;				// 0 = old mode, 1 = new MMOG mode, 2 = DXUT perhaps?
 												// Have this settable from the server.. on Init.
 CFileSystem				*pFileSystem=NULL;
-CAntiCheat				*pAntiCheat = NULL;
+//CAntiCheat				*pAntiCheat = NULL;
 
 CDXUTDialogResourceManager	*pDialogResourceManager=NULL;
 CDXUTDialog					*pGameUI=NULL;

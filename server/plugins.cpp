@@ -7,9 +7,9 @@
 
 #include "main.h"
 #include "plugins.h"
-#include "signer.h"
-#include "jenkinshash.h"
-#include "pluginkey.h"
+//#include "signer.h"
+//#include "jenkinshash.h"
+//#include "pluginkey.h"
 #include "console.h"
 
 //---------------------------------------
@@ -159,7 +159,7 @@ CPlugins::~CPlugins()
 
 //---------------------------------------
 
-void CPlugins::ConvertFromHex(unsigned char* pbBuffer, char* szData, unsigned int dwMaxLength)
+/*void CPlugins::ConvertFromHex(unsigned char* pbBuffer, char* szData, unsigned int dwMaxLength)
 {
 	unsigned int i=0, dwTemp=0;
 	char szTemp[4] = {0,0,0,0};
@@ -267,7 +267,7 @@ bool CPlugins::IsValidForNoSign(char* szFilename)
 	delete[] szLCNoSign;
 
 	return false;
-}
+}*/
 
 //---------------------------------------
 	
