@@ -30,6 +30,7 @@
 #endif
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
 
 #ifdef _WIN32
 unsigned __stdcall UpdateTCPInterfaceLoop( LPVOID arguments );

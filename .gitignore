@@ -33,3 +33,7 @@
 
 # Visual Studio files
 .vs/
+
+# Build files
+Debug/
+Release/
