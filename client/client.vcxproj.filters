@@ -10,12 +10,6 @@
     <Filter Include="game">
       <UniqueIdentifier>{112c9b74-5705-4e67-8827-17ee7007fd41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="general">
-      <UniqueIdentifier>{759e4f60-62f6-4520-9148-11fe8a58c2d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="general\stub">
-      <UniqueIdentifier>{51759537-e3be-44bc-8158-d8c7e5e0e3fe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="d3dhook">
       <UniqueIdentifier>{d0bd96aa-c914-4c5e-ad8b-5ea0a65bd906}</UniqueIdentifier>
     </Filter>
@@ -39,13 +33,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="events.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
     <ClCompile Include="net\gangzonepool.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="httpclient.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="net\localplayer.cpp">
@@ -70,9 +58,6 @@
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="net\remoteplayer.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="runutil.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="net\scriptrpc.cpp">
@@ -158,57 +143,6 @@
     </ClCompile>
     <ClCompile Include="game\vehicle.cpp">
       <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="chatwindow.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="cmdprocs.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="cmdwindow.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="deathwindow.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="exceptions.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="filesystem.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="fontrender.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="helpdialog.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="label.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="netstats.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="newplayertags.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="scoreboard.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="spawnscreen.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="subclass.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="svrnetstats.cpp">
-      <Filter>general</Filter>
-    </ClCompile>
-    <ClCompile Include="filechecks.cpp">
-      <Filter>general\stub</Filter>
-    </ClCompile>
-    <ClCompile Include="filehooks.cpp">
-      <Filter>general\stub</Filter>
     </ClCompile>
     <ClCompile Include="d3dhook\IDirect3DDevice9Hook.cpp">
       <Filter>d3dhook</Filter>
@@ -457,12 +391,29 @@
     <ClCompile Include="..\sdk\dxut\DXUTSettingsDlg.cpp">
       <Filter>sdk\dxut</Filter>
     </ClCompile>
+    <ClCompile Include="chatwindow.cpp" />
+    <ClCompile Include="cmdprocs.cpp" />
+    <ClCompile Include="cmdwindow.cpp" />
+    <ClCompile Include="deathwindow.cpp" />
+    <ClCompile Include="events.cpp" />
+    <ClCompile Include="exceptions.cpp" />
+    <ClCompile Include="filechecks.cpp" />
+    <ClCompile Include="filehooks.cpp" />
+    <ClCompile Include="filesystem.cpp" />
+    <ClCompile Include="fontrender.cpp" />
+    <ClCompile Include="helpdialog.cpp" />
+    <ClCompile Include="httpclient.cpp" />
+    <ClCompile Include="label.cpp" />
+    <ClCompile Include="netstats.cpp" />
+    <ClCompile Include="newplayertags.cpp" />
+    <ClCompile Include="runutil.cpp" />
+    <ClCompile Include="scoreboard.cpp" />
+    <ClCompile Include="spawnscreen.cpp" />
+    <ClCompile Include="subclass.cpp" />
+    <ClCompile Include="svrnetstats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="net\gangzonepool.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="httpclient.h">
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="net\localplayer.h">
@@ -487,9 +438,6 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="net\remoteplayer.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="runutil.h">
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="net\scriptrpc.h">
@@ -578,60 +526,6 @@
     </ClInclude>
     <ClInclude Include="game\vehicle.h">
       <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="chatwindow.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="cmdprocs.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="cmdwindow.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="deathwindow.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="filesystem.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="fontrender.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="helpdialog.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="label.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="mod.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="netstats.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="newplayertags.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="outputdebugstring.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="scoreboard.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="spawnscreen.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="svrnetstats.h">
-      <Filter>general</Filter>
-    </ClInclude>
-    <ClInclude Include="filechecks.h">
-      <Filter>general\stub</Filter>
-    </ClInclude>
-    <ClInclude Include="filehooks.h">
-      <Filter>general\stub</Filter>
     </ClInclude>
     <ClInclude Include="d3dhook\IDirect3DDevice9Hook.h">
       <Filter>d3dhook</Filter>
@@ -1012,6 +906,26 @@
     <ClInclude Include="..\sdk\dxut\DXUTmisc.h">
       <Filter>sdk\dxut</Filter>
     </ClInclude>
+    <ClInclude Include="chatwindow.h" />
+    <ClInclude Include="cmdprocs.h" />
+    <ClInclude Include="cmdwindow.h" />
+    <ClInclude Include="deathwindow.h" />
+    <ClInclude Include="filechecks.h" />
+    <ClInclude Include="filesystem.h" />
+    <ClInclude Include="filehooks.h" />
+    <ClInclude Include="fontrender.h" />
+    <ClInclude Include="helpdialog.h" />
+    <ClInclude Include="httpclient.h" />
+    <ClInclude Include="mod.h" />
+    <ClInclude Include="label.h" />
+    <ClInclude Include="netstats.h" />
+    <ClInclude Include="newplayertags.h" />
+    <ClInclude Include="outputdebugstring.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="runutil.h" />
+    <ClInclude Include="scoreboard.h" />
+    <ClInclude Include="spawnscreen.h" />
+    <ClInclude Include="svrnetstats.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="exceptbox.rc" />
