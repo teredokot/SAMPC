@@ -2076,6 +2076,10 @@ static cell AMX_NATIVE_CALL n_SetTimer(AMX *amx, cell *params)
 
 	char* szFuncName;
 	amx_StrParam(amx, params[1], szFuncName);
+
+	if (szFuncName == 0)
+		return 0;
+
 	return pNetGame->GetTimers()->New(szFuncName, params[2], params[3], amx);
 }
 
@@ -2331,6 +2335,10 @@ static cell AMX_NATIVE_CALL n_SetTimerEx(AMX *amx, cell *params)
 
 	char* szFuncName;
 	amx_StrParam(amx, params[1], szFuncName);
+
+	if (szFuncName == 0)
+		return 0;
+
 	return pNetGame->GetTimers()->NewEx(szFuncName, params[2], params[3], params, amx);
 }
 	

@@ -1,4 +1,4 @@
-#include <a_samp>
+#include <sampc>
 
 // This is a comment
 // uncomment the line below if you want to write a filterscript
