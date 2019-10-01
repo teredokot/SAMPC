@@ -2835,6 +2835,10 @@ static cell AMX_NATIVE_CALL n_CallRemoteFunction(AMX *amx, cell *params)
 	bool bFound = false;
 	
 	amx_StrParam(amx, params[1], szFuncName);
+
+	if (szFuncName == 0)
+		return 0;
+
 	amx_StrParam(amx, params[2], szParamList);
 	if (szParamList == NULL) iLength = 0;
 	else iLength = strlen(szParamList);
@@ -2955,6 +2959,10 @@ static cell AMX_NATIVE_CALL n_CallLocalFunction(AMX *amx, cell *params)
 	bool bFound = false;
 	
 	amx_StrParam(amx, params[1], szFuncName);
+
+	if (szFuncName == 0)
+		return 0;
+
 	amx_StrParam(amx, params[2], szParamList);
 	if (szParamList == NULL) iLength = 0;
 	else iLength = strlen(szParamList);
