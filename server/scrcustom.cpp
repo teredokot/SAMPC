@@ -4062,9 +4062,10 @@ static cell AMX_NATIVE_CALL n_GangZoneStopFlashForAll(AMX *amx, cell *params)
 static cell AMX_NATIVE_CALL n_GetServerVarAsString(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(3);
-	char *szParam;
+	char *szParam = 0, *szValue = 0;
 	amx_StrParam(amx,params[1],szParam);
-	return set_amxstring(amx,params[2],pConsole->GetStringVariable(szParam),params[3]);
+	szValue = pConsole->GetStringVariable(szParam);
+	return set_amxstring(amx, params[2], (szValue == 0) ? ("") : (szValue), params[3]);
 }
 
 // native GetServerVarAsInt(const varname[])

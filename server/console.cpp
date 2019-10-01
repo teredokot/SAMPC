@@ -409,6 +409,9 @@ CConsole::~CConsole()
 
 ConsoleVariable_s* CConsole::FindVariable(char* pVarName)
 {
+	if (pVarName == 0)
+		return 0;
+
 	char VarName[255];
 	strncpy(VarName, pVarName, 255);
 	strlwr(VarName);
