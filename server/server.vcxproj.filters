@@ -26,9 +26,6 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="query.cpp" />
     <ClCompile Include="vehicle.cpp" />
-    <ClCompile Include="..\sdk\sqlite\sqlite3.c">
-      <Filter>sdk\sqlite</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\_findfirst.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
@@ -293,6 +290,9 @@
     <ClCompile Include="sqlite_amx.c" />
     <ClCompile Include="textdrawpool.cpp" />
     <ClCompile Include="vehiclepool.cpp" />
+    <ClCompile Include="..\sdk\sqlite\sqlite3.c">
+      <Filter>sdk\sqlite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="console.h" />
@@ -304,9 +304,6 @@
     <ClInclude Include="system.h" />
     <ClInclude Include="vehicle.h" />
     <ClInclude Include="vehmods.h" />
-    <ClInclude Include="..\sdk\sqlite\sqlite3.h">
-      <Filter>sdk\sqlite</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\_findfirst.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
@@ -686,6 +683,12 @@
     <ClInclude Include="plugininternal.h" />
     <ClInclude Include="textdrawpool.h" />
     <ClInclude Include="vehiclepool.h" />
+    <ClInclude Include="..\sdk\sqlite\sqlite3.h">
+      <Filter>sdk\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\sqlite\sqlite3ext.h">
+      <Filter>sdk\sqlite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\sdk\raknet\Makefile.am">
