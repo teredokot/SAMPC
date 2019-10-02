@@ -324,12 +324,16 @@ static cell AMX_NATIVE_CALL n_strcmp(AMX *amx,cell *params)
     len=len2;
   if (len>params[4])
     len=params[4];
-  if (len==0)
-    return 0;
-
-  result=compare(cstr1,cstr2,params[3],len,0);
-  if (result==0 && len!=params[4])
-    result=len1-len2;
+  if (len==0) {
+    if (params[4]==0||len1==len2)
+      result=0;
+    else
+      result=(len1<len2)?-1:1;
+  } else {
+    result=compare(cstr1,cstr2,params[3],len,0);
+    if (result==0 &&len!=params[4]&&len1!=len2)
+      result=(len1<len2)?-1:1;
+  }
   return result;
 }
 
