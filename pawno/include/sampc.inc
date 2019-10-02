@@ -282,3 +282,4 @@ forward OnVehiclePaintjob(playerid, vehicleid, paintjobid);
 forward OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid);
 forward OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
 forward OnPlayerUpdate(playerid);
+forward OnIncomingConnection(playerid, ip[], port);

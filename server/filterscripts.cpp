@@ -1099,4 +1099,26 @@ int CFilterScripts::OnPlayerUpdate(cell playerid)
 	return (int)ret;
 }
 
+int CFilterScripts::OnIncomingConnection(cell playerid, const char* ip, cell port)
+{
+	int idx;
+	cell ret = 1;
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++) {
+		if (m_pFilterScripts[i])
+		{
+			if (!amx_FindPublic(m_pFilterScripts[i], "OnIncomingConnection", &idx))
+			{
+				cell amx_addr, * phys_addr;
+				amx_Push(m_pFilterScripts[i], port);
+				amx_PushString(m_pFilterScripts[i], &amx_addr, &phys_addr, ip, 0, 0);
+				amx_Push(m_pFilterScripts[i], playerid);
+				amx_Exec(m_pFilterScripts[i], &ret, idx);
+				amx_Release(m_pFilterScripts[i], amx_addr);
+				if (!ret) return ret;
+			}
+		}
+	}
+	return (int)ret;
+}
+
 //----------------------------------------------------------------------------------

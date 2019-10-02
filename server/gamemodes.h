@@ -76,6 +76,7 @@ public:
 	int OnPlayerInteriorChange(cell playerid, cell newid, cell oldid);
 	int OnPlayerKeyStateChange(cell playerid, cell newkeys, cell oldkeys);
 	int OnPlayerUpdate(cell playerid);
+	int OnIncomingConnection(cell playerid, char* ip, cell port);
 };
 
 //----------------------------------------------------------------------------------

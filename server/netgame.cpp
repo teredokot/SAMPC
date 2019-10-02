@@ -1028,7 +1028,13 @@ void CNetGame::Packet_NewIncomingConnection(Packet* packet)
 	
 	in_addr in;
 	in.s_addr = packet->playerId.binaryAddress;
-	logprintf("Incomming connection: %s:%u",inet_ntoa(in),packet->playerId.port);
+	char* ip = inet_ntoa(in);
+	logprintf("Incomming connection: %s:%u",ip,packet->playerId.port);
+
+	if (m_pGameMode)
+		m_pGameMode->OnIncomingConnection(packet->playerIndex, ip, packet->playerId.port);
+	if (m_pFilterScripts)
+		m_pFilterScripts->OnIncomingConnection(packet->playerIndex, ip, packet->playerId.port);
 }
 
 //----------------------------------------------------
