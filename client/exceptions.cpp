@@ -197,6 +197,7 @@ void DumpMain(BOOL bIncModules)
 
 void DoCrashReportingStuff()
 {
+#ifdef DO_REPORT_STUFF
 	CHttpClient pHttp;
 	char szURL[256];
 	char szBase64[16384];
@@ -209,7 +210,9 @@ void DoCrashReportingStuff()
 	
 	sprintf(szURL,"team.sa-mp.com/report_02X_u1.php?addr=0x%X",pContextRecord->Eip);
 	pHttp.ProcessURL(HTTP_POST,szURL,szBase64,"www.sa-mp.com");
-
+#else
+	DumpMain(TRUE);
+#endif
 	return;
 }
 
@@ -250,7 +253,7 @@ BOOL CALLBACK GuiDlgProcMain(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 				break;
 			case IDC_BUTTON2:
 				DoCrashReportingStuff();
-				EnableWindow(GetDlgItem(hDlg,IDC_BUTTON2),FALSE);
+				//EnableWindow(GetDlgItem(hDlg,IDC_BUTTON2),FALSE);
 				SetDlgItemText(hDlg,IDC_EDIT1,"Thanks for reporting this problem.");
 				break;
 			}
