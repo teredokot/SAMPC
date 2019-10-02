@@ -1068,7 +1068,17 @@ static cell AMX_NATIVE_CALL n_GetWeaponName(AMX *amx, cell *params)
 	return set_amxstring(amx,params[2],pNetGame->GetWeaponName(params[1]),params[3]);
 }
 
-//----------------------------------------------------------------------------------
+// native IsValidVehicle(vehicleid);
+static cell n_IsValidVehicle(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	if (pVehiclePool && pVehiclePool->GetSlotState((VEHICLEID)params[1]))
+		return 1;
+	else
+		return 0;
+}
 
 // native CreateVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawndelay)
 static cell AMX_NATIVE_CALL n_CreateVehicle(AMX *amx, cell *params)
@@ -4243,7 +4253,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "acos",					n_acos },
 	{ "atan2",					n_atan2 },
 	{ "atan",					n_atan },
-	
+
 	// Game
 	{ "GameModeExit",			n_GameModeExit },
 	{ "SetGameModeText",		n_SetGameModeText },
@@ -4271,7 +4281,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "UsePlayerPedAnims",		n_UsePlayerPedAnims },
 	{ "DisableInteriorEnterExits", n_DisableInteriorEnterExits },
 	{ "SetNameTagDrawDistance", n_SetNameTagDrawDistance },
-	
+
 	// Zones
 	{ "EnableZoneNames",		n_EnableZoneNames },
 	{ "GangZoneCreate",				n_GangZoneCreate },
@@ -4341,7 +4351,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetPlayerMoney",			n_GetPlayerMoney },
 	{ "ResetPlayerMoney",		n_ResetPlayerMoney },
 	{ "IsPlayerConnected",		n_IsPlayerConnected },
-	{ "GetPlayerState",			n_GetPlayerState },	
+	{ "GetPlayerState",			n_GetPlayerState },
 	{ "ResetPlayerWeapons",		n_ResetPlayerWeapons },
 	{ "GivePlayerWeapon",		n_GivePlayerWeapon },
 	{ "GetPlayerIp",			n_GetPlayerIp },
@@ -4360,11 +4370,11 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "ForceClassSelection",	n_ForceClassSelection },
 	{ "SetPlayerWantedLevel",	n_SetPlayerWantedLevel },
 	{ "GetPlayerWantedLevel",	n_GetPlayerWantedLevel },
-	
+
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },
 	{ "ShowPlayerNameTagForPlayer",	n_ShowPlayerNameTagForPlayer},
-	
+
 	{ "EnableStuntBonusForAll",		n_EnableStuntBonusForAll },
 	{ "EnableStuntBonusForPlayer",	n_EnableStuntBonusForPlayer },
 
@@ -4381,6 +4391,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "IsPlayerInRangeOfPoint", n_IsPlayerInRangeOfPoint },
 
 	// Vehicle
+	{ "IsValidVehicle",			n_IsValidVehicle },
 	{ "CreateVehicle",			n_CreateVehicle },
 	{ "DestroyVehicle",			n_DestroyVehicle },
 	{ "GetVehiclePos",			n_GetVehiclePos },

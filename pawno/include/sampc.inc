@@ -152,6 +152,7 @@ native GetPlayerSpecialAction(playerid);
 native CreatePlayerPickup(pickupid, playerid, modelid, typeid, Float:x, Float:y, Float:z);
 native DestroyPlayerPickup(pickupid, playerid);
 native IsPlayerInRangeOfPoint(playerid, Float:range, Float:x, Float:y, Float:z);
+native IsValidVehicle(vehicleid);
 native CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:a, color1, color2, respawndelay);
 native DestroyVehicle(vehicleid);
 native GetVehiclePos(vehicleid, &Float:x, &Float:y, &Float:z);
