@@ -524,10 +524,8 @@ void SetStringFromCommandLine(char *szCmdLine, char *szString)
 
 void d3d9DestroyDeviceObjects()
 {
-	//if (pPlayerTags)
-	//	pPlayerTags->DeleteDeviceObjects();
-
-	pDialogResourceManager->OnDestroyDevice();
+	if (pDialogResourceManager)
+		pDialogResourceManager->OnLostDevice();
 
 	if (pNewPlayerTags)
 		pNewPlayerTags->DeleteDeviceObjects();
@@ -541,25 +539,20 @@ void d3d9DestroyDeviceObjects()
 	if (pDefaultFont)
 		pDefaultFont->DeleteDeviceObjects();
 
-	if(pSpawnScreen)
+	if (pSpawnScreen)
 		pSpawnScreen->DeleteDeviceObjects();
 
-	if(pDeathWindow && pDeathWindow->m_pD3DFont) pDeathWindow->m_pD3DFont->OnLostDevice();
-	if(pDeathWindow && pDeathWindow->m_pWeaponFont) pDeathWindow->m_pWeaponFont->OnLostDevice();
-	if(pDeathWindow && pDeathWindow->m_pSprite) pDeathWindow->m_pSprite->OnLostDevice();
-	
-	if(pChatWindow && pChatWindow->m_pChatTextSprite) pChatWindow->m_pChatTextSprite->OnLostDevice();
+	if (pDeathWindow && pDeathWindow->m_pD3DFont) pDeathWindow->m_pD3DFont->OnLostDevice();
+	if (pDeathWindow && pDeathWindow->m_pWeaponFont) pDeathWindow->m_pWeaponFont->OnLostDevice();
+	if (pDeathWindow && pDeathWindow->m_pSprite) pDeathWindow->m_pSprite->OnLostDevice();
 
-	pDialogResourceManager->OnLostDevice();
-
+	if (pChatWindow && pChatWindow->m_pChatTextSprite) pChatWindow->m_pChatTextSprite->OnLostDevice();
 }
 
 void d3d9RestoreDeviceObjects()
 {
-	if(pDialogResourceManager) pDialogResourceManager->OnResetDevice();
-
-	//if (pPlayerTags)
-	//	pPlayerTags->RestoreDeviceObjects();
+	if (pDialogResourceManager)
+		pDialogResourceManager->OnResetDevice();
 
 	if (pNewPlayerTags)
 		pNewPlayerTags->RestoreDeviceObjects();
@@ -573,18 +566,14 @@ void d3d9RestoreDeviceObjects()
 	if (pDefaultFont)
 		pDefaultFont->RestoreDeviceObjects();
 
-	if(pSpawnScreen) 
+	if (pSpawnScreen)
 		pSpawnScreen->RestoreDeviceObjects();
 
-	if(pDeathWindow && pDeathWindow->m_pD3DFont) pDeathWindow->m_pD3DFont->OnResetDevice();
-	if(pDeathWindow && pDeathWindow->m_pWeaponFont) pDeathWindow->m_pWeaponFont->OnResetDevice();
-	if(pDeathWindow && pDeathWindow->m_pSprite) pDeathWindow->m_pSprite->OnResetDevice();
+	if (pDeathWindow && pDeathWindow->m_pD3DFont) pDeathWindow->m_pD3DFont->OnResetDevice();
+	if (pDeathWindow && pDeathWindow->m_pWeaponFont) pDeathWindow->m_pWeaponFont->OnResetDevice();
+	if (pDeathWindow && pDeathWindow->m_pSprite) pDeathWindow->m_pSprite->OnResetDevice();
 
-	if(pChatWindow && pChatWindow->m_pChatTextSprite) pChatWindow->m_pChatTextSprite->OnResetDevice();
-
-	pDialogResourceManager->OnCreateDevice(pD3DDevice);
-	pDialogResourceManager->OnResetDevice();
-	//SetupGameUI();
+	if (pChatWindow && pChatWindow->m_pChatTextSprite) pChatWindow->m_pChatTextSprite->OnResetDevice();
 }
 
 //----------------------------------------------------

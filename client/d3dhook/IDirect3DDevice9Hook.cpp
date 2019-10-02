@@ -443,7 +443,7 @@ HRESULT __stdcall IDirect3DDevice9Hook::Reset(D3DPRESENT_PARAMETERS* pPresentati
 
 	HRESULT hr = pD3DDevice->Reset(pPresentationParameters);
 
-	if (SUCCEEDED(hr))
+	if (hr == D3D_OK)
 	{			
 		d3d9RestoreDeviceObjects();
 	}
