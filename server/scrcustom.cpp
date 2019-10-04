@@ -366,6 +366,24 @@ static cell n_GetVehicleInterior(AMX* amx, cell* params)
 	return -1;
 }
 
+static cell n_GetVehicleColor(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(3);
+
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle = (pVehiclePool) ? (pVehiclePool->GetAt(params[1])) : (0);
+	if (pVehicle != 0)
+	{
+		cell* cptr;
+		if (amx_GetAddr(amx, params[2], &cptr) == AMX_ERR_NONE)
+			*cptr = pVehicle->m_SpawnInfo.iColor1;
+		if (amx_GetAddr(amx, params[3], &cptr) == AMX_ERR_NONE)
+			*cptr = pVehicle->m_SpawnInfo.iColor2;
+		return 1;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 // native AddStaticPickup(model,type,Float:X,Float:Y,Float:Z);
 
@@ -4427,7 +4445,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetVehicleNumberPlate",	n_SetVehicleNumberPlate },
 	{ "GetVehicleModel",		n_GetVehicleModel },
 	{ "GetVehicleInterior", n_GetVehicleInterior },
-
+	{ "GetVehicleColor", n_GetVehicleColor },
 	{ "SetVehicleVirtualWorld",		n_SetVehicleVirtualWorld },
 	{ "GetVehicleVirtualWorld",		n_GetVehicleVirtualWorld },
 
