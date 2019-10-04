@@ -292,7 +292,8 @@ BOOL CPlayerPool::IsNickInUse(PCHAR szNick)
 	int x=0;
 	while(x!=MAX_PLAYERS) {
 		if(GetSlotState((BYTE)x)) {
-			if(!stricmp(GetPlayerName((BYTE)x),szNick)) {
+			//if(!stricmp(GetPlayerName((BYTE)x),szNick)) {
+			if (!strcmp(GetPlayerName((BYTE)x), szNick)) {
 				return TRUE;
 			}
 		}
