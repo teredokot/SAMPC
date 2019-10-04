@@ -174,6 +174,7 @@ native IsTrailerAttachedToVehicle(vehicleid);
 native GetVehicleTrailer(vehicleid);
 native SetVehicleNumberPlate(vehicleid, const numberplate[]);
 native GetVehicleModel(vehicleid);
+native GetVehicleInterior(vehicleid);
 native SetVehicleVirtualWorld(vehicleid, worldid);
 native GetVehicleVirtualWorld(vehicleid);
 native SendClientMessage(playerid, color, const output[]);
