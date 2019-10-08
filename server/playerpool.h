@@ -38,6 +38,7 @@ private:
 	BOOL	m_bIsAnAdmin[MAX_PLAYERS];
 	BYTE	m_byteVirtualWorld[MAX_PLAYERS];
 	int		m_iPlayerCount;
+	unsigned int m_uiLastPlayerId;
 
 public:
 	
@@ -127,7 +128,7 @@ public:
 	int GetPlayerCount() { return m_iPlayerCount; };
 
 	void DeactivateAll();
-
+	unsigned int GetLastPlayerId() { return m_uiLastPlayerId; }
 };
 
 //----------------------------------------------------

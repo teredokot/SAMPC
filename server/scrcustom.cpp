@@ -531,6 +531,14 @@ static cell n_GetPlayerCount(AMX* amx, cell* params)
 	return 0;
 }
 
+static cell n_GetPlayerPoolSize(AMX* amx, cell* params)
+{
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (pPlayerPool)
+		return pPlayerPool->GetLastPlayerId();
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 // native SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Float:rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)
 static cell AMX_NATIVE_CALL n_SetSpawnInfo(AMX *amx, cell *params)
@@ -4360,6 +4368,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 
 	// Player
 	{ "GetPlayerCount", n_GetPlayerCount},
+	{"GetPlayerPoolSize", n_GetPlayerPoolSize },
 	{ "SetSpawnInfo",			n_SetSpawnInfo },
 	{ "SpawnPlayer",			n_SpawnPlayer },
 	{ "SetPlayerTeam",			n_SetPlayerTeam },

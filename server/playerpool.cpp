@@ -86,6 +86,11 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
 		
 		m_iPlayerCount++;
 
+		for (unsigned int i = 0; i < MAX_PLAYERS; i++)
+		{
+			if (GetSlotState((BYTE)i))
+				m_uiLastPlayerId = i;
+		}
 		return TRUE;
 	}
 	else
@@ -137,6 +142,11 @@ BOOL CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 
 	m_iPlayerCount--;
 
+	for (unsigned int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (GetSlotState((BYTE)i))
+			m_uiLastPlayerId = i;
+	}
 	return TRUE;
 }
 
