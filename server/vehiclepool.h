@@ -19,7 +19,7 @@ private:
 	BOOL m_bVehicleSlotState[MAX_VEHICLES];
 	CVehicle *m_pVehicles[MAX_VEHICLES];
 	BYTE m_byteVirtualWorld[MAX_VEHICLES];
-
+	unsigned int m_uiLastVehicleId;
 public:
 	CVehiclePool();
 	~CVehiclePool();
@@ -52,6 +52,8 @@ public:
 		if (VehicleID >= MAX_VEHICLES) { return 0; }
 		return m_byteVirtualWorld[VehicleID];		
 	};
+
+	unsigned int GetVehicleLastId() { return m_uiLastVehicleId; }
 
 };
 

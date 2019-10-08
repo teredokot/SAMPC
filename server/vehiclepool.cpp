@@ -52,6 +52,14 @@ VEHICLEID CVehiclePool::New(int iVehicleType,
 		m_bVehicleSlotState[VehicleID] = TRUE;
 		m_byteVirtualWorld[VehicleID] = 0;
 
+		for (unsigned int i = 0; i < MAX_VEHICLES; i++)
+		{
+			if (GetSlotState(i))
+			{
+				m_uiLastVehicleId = i;
+			}
+		}
+
 		return VehicleID;
 	}
 	else
@@ -73,6 +81,13 @@ BOOL CVehiclePool::Delete(VEHICLEID VehicleID)
 	delete m_pVehicles[VehicleID];
 	m_pVehicles[VehicleID] = NULL;
 
+	for (unsigned int i = 0; i < MAX_VEHICLES; i++)
+	{
+		if (GetSlotState(i))
+		{
+			m_uiLastVehicleId = i;
+		}
+	}
 	return TRUE;
 }
 

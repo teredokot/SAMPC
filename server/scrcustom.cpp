@@ -1115,6 +1115,14 @@ static cell AMX_NATIVE_CALL n_GetWeaponName(AMX *amx, cell *params)
 	return set_amxstring(amx,params[2],pNetGame->GetWeaponName(params[1]),params[3]);
 }
 
+static cell n_GetVehiclePoolSize(AMX* amx, cell* params)
+{
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	if (pVehiclePool)
+		return pVehiclePool->GetVehicleLastId();
+	return 0;
+}
+
 // native IsValidVehicle(vehicleid);
 static cell n_IsValidVehicle(AMX* amx, cell* params)
 {
@@ -4453,6 +4461,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "IsPlayerInRangeOfPoint", n_IsPlayerInRangeOfPoint },
 
 	// Vehicle
+	{"GetVehiclePoolSize", n_GetVehiclePoolSize },
 	{ "IsValidVehicle",			n_IsValidVehicle },
 	{ "CreateVehicle",			n_CreateVehicle },
 	{ "DestroyVehicle",			n_DestroyVehicle },
