@@ -20,6 +20,7 @@ native KillTimer(timerid);
 native GetTickCount();
 native GetMaxPlayers();
 native SetTimerEx(const funcname[], interval, repeat, const params[], {Float,_}:...);
+native Float:VectorSize(Float:x, Float:y, Float:z);
 native LimitGlobalChatRadius(Float:radius);
 native SetWeather(weatherid);
 native SetPlayerWeather(playerid, weatherid);

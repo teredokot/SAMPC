@@ -2385,6 +2385,17 @@ static cell AMX_NATIVE_CALL n_SetTimerEx(AMX *amx, cell *params)
 	
 //----------------------------------------------------
 
+// native VectorSize(Float:x, Float:y, Float:z)
+static cell n_VectorSize(AMX *amx, cell *params)
+{
+	CHECK_PARAMS(3);
+	float x = amx_ctof(params[1]);
+	float y = amx_ctof(params[2]);
+	float z = amx_ctof(params[3]);
+	float r = sqrt(x * x + y * y + z * z);
+	return amx_ftoc(r);
+}
+
 // native SendRconCommand(command[])
 static cell AMX_NATIVE_CALL n_SendRconCommand( AMX *amx, cell *params)
 {
@@ -4274,6 +4285,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetTickCount",			n_GetTickCount },
 	{ "GetMaxPlayers",			n_GetMaxPlayers },
 	{ "SetTimerEx",				n_SetTimerEx },
+	{"VectorSize", n_VectorSize},
+
 	//{ "SetMaxPlayers",			n_SetMaxPlayers },
 	{ "LimitGlobalChatRadius",	n_LimitGlobalChatRadius },
 	{ "SetWeather",				n_SetWeather },
