@@ -118,6 +118,7 @@ native GetPlayerScore(playerid);
 native SetPlayerFacingAngle(playerid, Float:a);
 native GetPlayerFacingAngle(playerid, &Float:a);
 native GivePlayerMoney(playerid, money);
+native SetPlayerMoney(playerid, money);
 native GetPlayerMoney(playerid);
 native ResetPlayerMoney(playerid);
 native IsPlayerConnected(playerid);

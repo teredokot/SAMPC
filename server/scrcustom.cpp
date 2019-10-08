@@ -1750,6 +1750,18 @@ static cell AMX_NATIVE_CALL n_GivePlayerMoney(AMX *amx, cell *params)
 	return 0;
 }
 
+static cell n_SetPlayerMoney(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (pPlayerPool && pPlayerPool->GetSlotState(params[1]))
+	{
+		pPlayerPool->SetPlayerMoney(params[1], params[2]);
+		return 1;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 // native GetPlayerMoney(playerid)
 
@@ -4415,6 +4427,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetPlayerFacingAngle",	n_SetPlayerFacingAngle },
 	{ "GetPlayerFacingAngle",	n_GetPlayerFacingAngle },
 	{ "GivePlayerMoney",		n_GivePlayerMoney },
+	{ "SetPlayerMoney",			n_SetPlayerMoney },
 	{ "GetPlayerMoney",			n_GetPlayerMoney },
 	{ "ResetPlayerMoney",		n_ResetPlayerMoney },
 	{ "IsPlayerConnected",		n_IsPlayerConnected },
