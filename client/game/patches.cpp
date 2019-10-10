@@ -98,7 +98,7 @@ void SetTimedObjects(int iTimedObjects)
 
 //----------------------------------------------------------
 
-void UnFuckAndCheck(DWORD addr, int size, BYTE byteCheck)
+/*void UnFuckAndCheck(DWORD addr, int size, BYTE byteCheck)
 {
 	DWORD d;
 	char s[256];
@@ -111,22 +111,22 @@ void UnFuckAndCheck(DWORD addr, int size, BYTE byteCheck)
 #endif
 		while(byteCheck != *(PBYTE)addr) Sleep(1);
 	}
-}
+}*/
 
 //----------------------------------------------------------
 
-void UnFuck(DWORD addr, int size)
+/*void UnFuck(DWORD addr, int size)
 {
 	DWORD d;
 	VirtualProtect((PVOID)addr,size,PAGE_EXECUTE_READWRITE,&d);
-}
+}*/
 
 //----------------------------------------------------------
 
 void ApplyDebugLevelPatches()
 {
 	// Don't go back to player anims, use the peds IDE
-	UnFuck(0x609A4E,6);
+	//UnFuck(0x609A4E,6);
 	memset((PVOID)0x609A4E, 0x90, 6);
 }
 
@@ -161,28 +161,28 @@ BOOL ApplyPreGamePatches()
 
 	// (skip to starting screen)
 	if(iGtaVersion == GTASA_VERSION_USA10) {
-		UnFuck(ADDR_BYPASS_VIDS_USA10,6);
+		//UnFuck(ADDR_BYPASS_VIDS_USA10,6);
 		*(BYTE *)ADDR_ENTRY = 5;
 		memset((PVOID)ADDR_BYPASS_VIDS_USA10,0x90,6);
 	} 
 	else if (iGtaVersion == GTASA_VERSION_EU10) {
-		UnFuck(ADDR_BYPASS_VIDS_EU10,6);
+		//UnFuck(ADDR_BYPASS_VIDS_EU10,6);
 		*(BYTE *)ADDR_ENTRY = 5;
 		memset((PVOID)ADDR_BYPASS_VIDS_EU10,0x90,6);
 	}
 
 	// Loading screens
-	UnFuck(0x866CD8,10);
-	UnFuck(0x866CCC,10);
+	//UnFuck(0x866CD8,10);
+	//UnFuck(0x866CCC,10);
 	strcpy((PCHAR)0x866CD8,"title");
 	strcpy((PCHAR)0x866CCC,"title");
 
 	// Modify the streaming memory hardcoded values
-	UnFuck(0x5B8E6A,4);
+	//UnFuck(0x5B8E6A,4);
 	*(DWORD *)0x5B8E6A = 134217728; // 128MB
 
 	// For SCM disable/enable
-	UnFuck(0x469EF5,2);
+	//UnFuck(0x469EF5,2);
 
 	return TRUE;
 }
@@ -217,7 +217,7 @@ void ApplyInGamePatches()
 	*(PDWORD)0xC1704C = 55UL; // yes that means 40..*/
 
 	// Increase the vehicle pool limit (see top of proc for patch)
-	UnFuckAndCheck(0x551024,sizeof(pbyteVehiclePoolAllocPatch),0x68);
+	//UnFuckAndCheck(0x551024,sizeof(pbyteVehiclePoolAllocPatch),0x68);
 	memcpy((PVOID)0x551024,pbyteVehiclePoolAllocPatch,sizeof(pbyteVehiclePoolAllocPatch));
 
 	/* ----THIS IS GTAU STUFF
@@ -249,31 +249,31 @@ void ApplyInGamePatches()
 	// ----END GTAU
 	
 	// Increase the ped pool limit (210)
-	UnFuck(0x550FF2,1);
+	//UnFuck(0x550FF2,1);
 	*(PBYTE)0x550FF2 = 0xD2;
 
 	// And we need 210 ped intelligence too plz
-	UnFuck(0x551283,1);
+	//UnFuck(0x551283,1);
 	*(PBYTE)0x551283 = 0xD2; // thx
 	
 	// And a larger task pool
-	UnFuck(0x551140,1);
+	//UnFuck(0x551140,1);
 	*(PBYTE)0x551140 = 0x05; // 1524
 
 	// And a larger event pool
-	UnFuck(0x551178,1);
+	//UnFuck(0x551178,1);
 	*(PBYTE)0x551178 = 0x01; // 456
 
 	// And we'd definitely need some more matrices.
 	// Who doesn't need more matrices?
-	UnFuck(0x54F3A2,1);
+	//UnFuck(0x54F3A2,1);
 	*(PBYTE)0x54F3A2 = 0x15; // 4228
 
 	// (aru) Patch the VehicleStruct pool to have more than 50 vehicles
 	//       We'll use 127 (max is 211 vehicles)
 	//       We can't just patch the imm8 in the push due to it being unsigned
 	//       so, we'll use our intelligence to hack it in :)
-	UnFuck(0x5B8FDE, 7);
+	//UnFuck(0x5B8FDE, 7);
 	*(BYTE*)0x5B8FDE = 0x6A;	// push imm8
 	*(BYTE*)0x5B8FDF = 0x00;	// 0
 	*(BYTE*)0x5B8FE0 = 0x68;	// push imm32
@@ -283,11 +283,11 @@ void ApplyInGamePatches()
 	*(BYTE*)0x5B8FE4 = 0x00;
 	
 	// Increase the collision model ptr
-	UnFuck(0x551106,sizeof(pbyteCollisionPoolAllocPatch));
+	//UnFuck(0x551106,sizeof(pbyteCollisionPoolAllocPatch));
 	memcpy((PVOID)0x551106,pbyteCollisionPoolAllocPatch,sizeof(pbyteCollisionPoolAllocPatch));
 
 	// Increase the entry info nodes
-	UnFuck(0x550FB9,sizeof(pbyteEntryInfoPoolAllocPatch));
+	//UnFuck(0x550FB9,sizeof(pbyteEntryInfoPoolAllocPatch));
 	memcpy((PVOID)0x550FB9,pbyteEntryInfoPoolAllocPatch,sizeof(pbyteEntryInfoPoolAllocPatch));
 
 	//------------------
@@ -301,13 +301,13 @@ void ApplyInGamePatches()
 	memset((PVOID)0x53E121,0x90,15);*/
 
 	// Remove random procedural geometry like plants/rocks etc.
-	UnFuck(0x53C159,5);
+	//UnFuck(0x53C159,5);
 	memset((PVOID)0x53C159,0x90,5);
 	
 	if (dwUIMode != 0) 
 	{
 		// Move the radar to the top left of the screen
-		UnFuck(0x866B70,4);
+		//UnFuck(0x866B70,4);
 		*(float *)0x866B70 = 430.0f;
 	    
 		// Scale down the hud slightly
@@ -328,56 +328,56 @@ void ApplyInGamePatches()
 	*(PBYTE)0x6194A0 = 0xC3;*/
 
 	// No vehicle name rendering
-	UnFuck(0x58FBE9,5);
+	//UnFuck(0x58FBE9,5);
     memset((PVOID)0x58FBE9,0x90,5);
 
 	// No playidles anim loading.
-	UnFuck(0x86D1EC,1);
+	//UnFuck(0x86D1EC,1);
 	*(BYTE*)0x86D1EC = '\0';
 
 	// Prevent replays
-	UnFuck(0x53C090,5);
+	//UnFuck(0x53C090,5);
 	memset((PVOID)0x53C090,0x90,5);
 
 	// NO MORE INTERIOR PEDS
-	UnFuck(0x440833,8);
+	//UnFuck(0x440833,8);
 	memset((PVOID)0x440833,0x90,8);
 
 	// (ped shadows crash)
-	UnFuck(0x53EA08,10);
+	//UnFuck(0x53EA08,10);
 	memset((PVOID)0x53EA08,0x90,10);
 
 	// Anti-pause
-	UnFuck(0x561AF0,7);
+	//UnFuck(0x561AF0,7);
 	memset((PVOID)0x561AF0,0x90,7);
 	
 	// Unknown from CPlayerPed::ProcessControl causes crash
-	UnFuck(0x609C08,39);
+	//UnFuck(0x609C08,39);
 	memset((PVOID)0x609C08,0x90,39);
 
 	// FindPlayerVehicle (Always use nPlayerPed)
-	UnFuck(0x56E0FA,18);
+	//UnFuck(0x56E0FA,18);
 	memset((PVOID)0x56E0FA,0x90,18);
 
 	// CMotorBike::ProcessControlInputs.. why oh why..
-	UnFuck(0x6BC9EB,2);
+	//UnFuck(0x6BC9EB,2);
 	memset((PVOID)0x6BC9EB,0x90,2);
 
 	// This removes the random weapon pickups (e.g. on the hill near chilliad)
-	UnFuck(0x5B47B0,1);
+	//UnFuck(0x5B47B0,1);
 	memset((PVOID)0x5B47B0,0xC3,1);
 
 	// Removes the FindPlayerInfoForThisPlayerPed at these locations.
-	UnFuck(0x5E63A6,19);
+	//UnFuck(0x5E63A6,19);
 	memset((PVOID)0x5E63A6,0x90,19);
 
-	UnFuck(0x621AEA,12);
+	//UnFuck(0x621AEA,12);
 	memset((PVOID)0x621AEA,0x90,12);
 
-	UnFuck(0x62D331,11);
+	//UnFuck(0x62D331,11);
 	memset((PVOID)0x62D331,0x90,11);
 
-	UnFuck(0x741FFF,27);
+	//UnFuck(0x741FFF,27);
 	memset((PVOID)0x741FFF,0x90,27);
 
 	/* temp testing vehicle horn
@@ -385,45 +385,45 @@ void ApplyInGamePatches()
 	memset((PVOID)0x500360,0x90,11);*/
 	
 	// hack to remove motion blur in high speed vehicle
-	UnFuck(0x704E8A,5);
+	//UnFuck(0x704E8A,5);
 	memset((PVOID)0x704E8A,0x90,5);
 
 	// Respawn and Interior
-	UnFuck(0x4090A0,1);
+	//UnFuck(0x4090A0,1);
 	*(BYTE*)0x4090A0 = 0xC3;
 	
 	// Respawn and Interior
-	UnFuck(0x441482,5);
+	//UnFuck(0x441482,5);
 	memset((void*)0x441482, 0x90, 5);
 
 	// No MessagePrint
-	UnFuck(0x588BE0,1);
+	//UnFuck(0x588BE0,1);
 	*(BYTE*)0x588BE0 = 0xC3;
 
 	// No IPL vehicle
-	UnFuck(0x53C06A,5);
+	//UnFuck(0x53C06A,5);
 	memset((PVOID)0x53C06A,0x90,5);
 
 	// SomeCarGenerator (0x41a8b3 crash)
-	UnFuck(0x434272,5);
+	//UnFuck(0x434272,5);
 	memset((PVOID)0x434272,0x90,5);
 
 	// CPlayerPed_CPlayerPed .. task system corrupts some shit
-	UnFuck(0x60D64D,2);
+	//UnFuck(0x60D64D,2);
 	*(PBYTE)0x60D64E = 0x84; // jnz to jz
 	
 	// CPhysical Destructor (705b3b crash)
-	UnFuck(0x542485,11);
+	//UnFuck(0x542485,11);
 	memset((PVOID)0x542485,0x90,11);
 	
 	// No peds kthx. (CPopulation::AddPed() nulled)
-	UnFuck(0x612710,3);
+	//UnFuck(0x612710,3);
 	*(BYTE*)0x612710 = 0x33;
 	*(BYTE*)0x612711 = 0xC0; // xor eax, eax
 	*(BYTE*)0x612712 = 0xC3; // ret
 
 	// Fuck the call to CPopulation::AddPed() for create_train off to kingdom kong	
-    UnFuck(0x613BA7, 5);
+	//UnFuck(0x613BA7, 5);
 	*(BYTE*)0x613BA7 = 0x90;
 	*(BYTE*)0x613BA8 = 0x90;
 	*(BYTE*)0x613BA9 = 0x90;
@@ -431,20 +431,20 @@ void ApplyInGamePatches()
 	*(BYTE*)0x613BAB = 0x90;
 
 	// Don't go back to player anims, use the peds IDE
-	UnFuck(0x609A4E,6);
+	//UnFuck(0x609A4E,6);
 	memset((PVOID)0x609A4E, 0x90, 6);
 
 	// Train derailment 
-	UnFuck(0x006F8CF8, 12);
+	//UnFuck(0x006F8CF8, 12);
 	memset((PVOID)0x006F8CF8, 0x90, 5); // (Actual hook is installed in hooks.cpp)
 	memcpy((PVOID)(0x006F8CF8+5), pbyteTrainDelrailmentPatch, sizeof(pbyteTrainDelrailmentPatch));
 
 	// CarCtl::GenerateRandomCars nulled from CGame::Process (firetrucks etc)
-	UnFuck(0x53C1C1,5);
+	//UnFuck(0x53C1C1,5);
 	memset((PVOID)0x53C1C1,0x90,5);
 
 	// (540040 bug), test ecx for 0 instead of [ecx+270]
-	UnFuck(0x540040,10);
+	//UnFuck(0x540040,10);
 	// nop the first 8 bytes
 	memset((PVOID)0x540040,0x90,6);
 	*(PBYTE)0x540046 = 0x85;
@@ -452,45 +452,45 @@ void ApplyInGamePatches()
 	*(PBYTE)0x540048 = 0x74; // jz
 	
 	// No wasted message
-	UnFuck(0x56E5AD,5);
+	//UnFuck(0x56E5AD,5);
 	memset((PVOID)0x56E5AD,0x90,5);
 
 	// For the input disabling in CGame.
-	UnFuck(0x541DF5,5);
+	//UnFuck(0x541DF5,5);
 
 	/* Ret at CCamera::ClearPlayerWeaponMode
 	UnFuck(0x50AB10,2);
 	*(PBYTE)0x50AB10 = 0xC3;*/
-	UnFuck(0x609CB4,5);
+	//UnFuck(0x609CB4,5);
 	memset((PVOID)0x609CB4,0x90,5);
 
 	// PlayerInfo checks in CPlayerPed::ProcessControl
-	UnFuck(0x60F2C4,25);
+	//UnFuck(0x60F2C4,25);
 	memset((PVOID)0x60F2C4,0x90,25);
 
 	// No Vehicle Audio Processing (done manually from the hooks)
-	UnFuck(0x6B18F1,5);
+	//UnFuck(0x6B18F1,5);
 	memset((PVOID)0x6B18F1,0x90,5);
-	UnFuck(0x6B9298,5);
+	//UnFuck(0x6B9298,5);
 	memset((PVOID)0x6B9298,0x90,5);
-	UnFuck(0x6F1793,5);
+	//UnFuck(0x6F1793,5);
 	memset((PVOID)0x6F1793,0x90,5);
-	UnFuck(0x6F86B6,5);
+	//UnFuck(0x6F86B6,5);
 	memset((PVOID)0x6F86B6,0x90,5);
 
 	// camera_on_actor patch, tsk tsk R*
-	UnFuck(0x0047C477,1);
+	//UnFuck(0x0047C477,1);
 	*(BYTE*)0x0047C477 = 0xEB;
 
 	// CPushBike fires set on CPed patch
-	UnFuck(0x0053A984,2);
+	//UnFuck(0x0053A984,2);
 	*(BYTE*)0x0053A984 = 0xEB;  // jmp
 	*(BYTE*)0x0053A985 = 0x77;  // +77h = 0x0053A9FD
 
 	// Stop sniper clicking
-	UnFuck(0x0060F289, 8);
+	//UnFuck(0x0060F289, 8);
 	memset((PVOID)0x0060F289, 0x90, 8);
-	UnFuck(0x0060F29D, 19);
+	//UnFuck(0x0060F29D, 19);
 	memset((PVOID)0x0060F29D, 0x90, 19);
 	
 	// Automatic go-to-menu on alt+tab
@@ -498,7 +498,7 @@ void ApplyInGamePatches()
 	//memset((PVOID)0x748063, 0x90, 5);
 
 	// Wanted level hook
-	UnFuck(0x58DB5F, 9);
+	//UnFuck(0x58DB5F, 9);
 	*(BYTE*)0x58DB5F = 0xBD;
 	*(BYTE*)0x58DB60 = 0x00;
 	*(BYTE*)0x58DB61 = 0x00;
@@ -514,15 +514,15 @@ void ApplyInGamePatches()
 	//UnFuck(0xA44B68, 2);
 
 	// Remove the blue(-ish) fog in the map
-	UnFuck(0x00575B0E, 5);
+	//UnFuck(0x00575B0E, 5);
 	memset((PVOID)0x00575B0E, 0x90, 5);
 
 	// Make the shadows slightly darker by increasing the alpha
-	UnFuck(0x71162C,1);
+	//UnFuck(0x71162C,1);
 	*(PBYTE)0x71162C = 80;
 
 	// Remove the CReferences call from CTaskEnterVehicleDriver ctor
-	UnFuck(0x63ADC8,6);
+	//UnFuck(0x63ADC8,6);
 	memset((PVOID)0x63ADC8,0x90,6);
 
 	// Rest of the stuff
@@ -531,10 +531,10 @@ void ApplyInGamePatches()
 	RelocatePedsListHack(); // allows us to use all 300 ped model slots
 
 	// Stop ped rotations from the camera
-	UnFuck(0x6884C4,6);
+	//UnFuck(0x6884C4,6);
 	memset((PVOID)0x6884C4,0x90,6);
 
-	UnFuck(0x47BF54,4);
+	//UnFuck(0x47BF54,4);
 	InstallSCMEventsProcessor();
 }
 
@@ -562,7 +562,7 @@ void RelocatePedsListHack()
 	}
 	// Patch the GetPedsModelInfo to use us
 	// instead of the gta_sa.exe mem.
-	UnFuck(0x4C67AD,4);
+	//UnFuck(0x4C67AD,4);
 	*(DWORD *)0x4C67AD = (DWORD)aPedsListMemory;
 }
 

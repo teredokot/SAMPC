@@ -143,7 +143,7 @@ void cmdSetFrameLimit(PCHAR szCmd)
 	if(strlen(szCmd)) {
 		DWORD dwFLAmount = atoi(szCmd);
 		if(dwFLAmount >= 20 && dwFLAmount <= 100) {
-			UnFuck(0xC1704C,4);
+			//UnFuck(0xC1704C,4);
 			*(PDWORD)0xC1704C = (DWORD)(dwFLAmount * 1.375f);
 			pChatWindow->AddDebugMessage("FrameLimiter: %u",dwFLAmount);
 		} else {

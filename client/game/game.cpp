@@ -31,6 +31,10 @@ typedef void (*DrawZone_t)(float *fPos, DWORD *dwColor, BYTE byteMenu);
 
 CGame::CGame()
 {
+	DWORD dwOldPropect;
+	VirtualProtect((LPVOID)0x00401000, 0x004F2FFF,
+		PAGE_EXECUTE_READWRITE, &dwOldPropect);
+
 	m_pGameCamera = new CCamera();
 	m_pGamePlayer = NULL;
 	m_bCheckpointsEnabled = FALSE;
@@ -99,12 +103,12 @@ BYTE byteGetKeyStateFunc[] = { 0xE8,0x46,0xF3,0xFE,0xFF };
 void CGame::ProcessInputDisabling()
 {
 	if(bInputsDisabled) {
-		UnFuck(0x541DF5,5);
+		//UnFuck(0x541DF5,5);
 		memset((PVOID)0x541DF5,0x90,5);	// disable call	
 		//GameResetInternalKeys(); // set keys to 0
 	} else {
 		if(!iInputDisableWaitFrames) {
-			UnFuck(0x541DF5,5);
+			//UnFuck(0x541DF5,5);
 			memcpy((PVOID)0x541DF5,byteGetKeyStateFunc,5);
 			//GameResetInternalKeys(); // set keys to 0
 		} else {
@@ -256,7 +260,7 @@ void CGame::GetWorldTime(int* iHour, int* iMinute)
 
 void CGame::ToggleThePassingOfTime(BYTE byteOnOff)
 {
-	UnFuck(0x52CF10,1);
+	//UnFuck(0x52CF10,1);
 
 	if(byteOnOff) {
 		*(PBYTE)0x52CF10 = 0x56; // push esi
@@ -776,7 +780,7 @@ DWORD CGame::GetWeaponInfo(int iWeapon, int iUnk)
 
 void CGame::SetGravity(float fGravity)
 {
-	UnFuck(0x863984, 4);
+	//UnFuck(0x863984, 4);
 	*(float*)0x863984 = fGravity;
 }
 
@@ -806,7 +810,7 @@ void CGame::DrawGangZone(float fPos[], DWORD dwColor)
 void CGame::EnableClock(BYTE byteClock)
 {
 	BYTE byteClockData[] = {'%', '0', '2', 'd', ':', '%', '0', '2', 'd', 0};
-	UnFuck(0x859A6C,10);
+	//UnFuck(0x859A6C,10);
 	if (byteClock)
 	{
 		ToggleThePassingOfTime(1);
@@ -830,7 +834,7 @@ void CGame::EnableZoneNames(BYTE byteEnable)
 
 void CGame::EnableStuntBonus(bool bEnable)
 {
-	UnFuck(0xA4A474,4);
+	//UnFuck(0xA4A474,4);
 	*(DWORD*)0xA4A474 = (int)bEnable;
 }
 

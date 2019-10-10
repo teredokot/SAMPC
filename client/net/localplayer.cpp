@@ -1033,7 +1033,7 @@ BOOL CLocalPlayer::Spawn()
 	pGame->DisableTrainTraffic();
 	
 	// No fading CCamera_Fade. (applied here because otherwise there's audio volume issues)
-	UnFuck(0x50AC20,3);
+	//UnFuck(0x50AC20,3);
 	*(PBYTE)0x50AC20 = 0xC2;
 	*(PBYTE)0x50AC21 = 0x08;
 	*(PBYTE)0x50AC22 = 0x00;

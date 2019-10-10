@@ -91,7 +91,7 @@ void SetStringFromCommandLine(char *szCmdLine, char *szString);
 void InitSettings();
 void QuitGame();
 
-void UnFuck(DWORD addr, int size);
+//void UnFuck(DWORD addr, int size);
 
 #include "outputdebugstring.h"
 

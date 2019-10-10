@@ -1233,7 +1233,7 @@ void InstallCallHook(DWORD dwInstallAddress, DWORD dwHookFunction, BYTE byteJump
 
 void InstallGameAndGraphicsLoopHooks()
 {	
-	UnFuck(0x53EB13,4);
+	//UnFuck(0x53EB13,4);
 	*(int *)0x53EB13 = dwGraphicsLoop - 0x53EB12 - 5; // relative addr
 
 	InstallHook(0x58C246,(DWORD)GameProcessHook,

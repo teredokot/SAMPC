@@ -1219,7 +1219,7 @@ void CPlayerPed::SetModelIndex(UINT uiModel)
 	if(dwPedPtr) {
 
 		// CPlayerPed_UpdateAfterPhysicalChange nulled
-		UnFuck(0x5A82C0,1);
+		//UnFuck(0x5A82C0,1);
 		*(BYTE *)0x5A82C0 = 0xC3;
 
 		DestroyFollowPedTask();

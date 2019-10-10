@@ -31,7 +31,7 @@ extern CChatWindow *pChatWindow;
 int iTimesDataModified = 0;
 extern BOOL bFirstSpawn;
 
-void UnFuck(DWORD,int);
+//void UnFuck(DWORD,int);
 
 extern CChatWindow *pChatWindow;
 extern CNetGame *pNetGame;
