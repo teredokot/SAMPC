@@ -325,6 +325,7 @@ int main (int argc, char** argv)
 #endif
 
 	pConsole->AddVariable("timestamp",CON_VARTYPE_BOOL,0,&bEnableTimestamp);
+	pConsole->AddStringVariable("logtimeformat", 0, "[%H:%M:%S]");
 	pConsole->AddStringVariable("password", 0, NULL, ServerPasswordChanged);
 	pConsole->AddStringVariable("hostname", 0, "SA:MP Server");
 	pConsole->AddStringVariable("mapname", CON_VARFLAG_RULE, "San Andreas");
@@ -477,13 +478,14 @@ void logprintf(char* format, ...)
 		if (pConsole) {
 			if (pConsole->GetBoolVariable("timestamp"))
 			{
+				char* tmfrmt = pConsole->GetStringVariable("logtimeformat");
 				const struct tm *tm;
 				time_t now;
 				now = time(NULL);
 				tm = localtime(&now);
 				char *s;
 				s = new char[256];
-				strftime(s, 256, "[%H:%M:%S]", tm);
+				strftime(s, 256, (tmfrmt && tmfrmt[0] != 0) ? (tmfrmt) : ("[%H:%M:%S]"), tm);
 				fprintf(pLogFile, "%s %s\n", s, buffer);
 				delete [] s;
 			}
