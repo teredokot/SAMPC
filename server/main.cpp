@@ -81,6 +81,26 @@ BOOL WINAPI CtrlHandler(DWORD type)
 
 //----------------------------------------------------
 
+void ServerWeatherChanged()
+{
+	if (pNetGame)
+	{
+		int iWeatherId = atoi(pConsole->GetStringVariable("weather"));
+		pNetGame->SetWeather(iWeatherId);
+		logprintf("Weather set to %d", iWeatherId);
+	}
+}
+
+void ServerGravityChanged()
+{
+	if (pNetGame)
+	{
+		float fGravity = std::stof(pConsole->GetStringVariable("gravity"));
+		pNetGame->SetGravity(fGravity);
+		logprintf("Gravity set to %.3f", fGravity);
+	}
+}
+
 void ServerPasswordChanged()
 {
 	if (pNetGame)
@@ -310,8 +330,8 @@ int main (int argc, char** argv)
 	pConsole->AddStringVariable("mapname", CON_VARFLAG_RULE, "San Andreas");
 	pConsole->AddStringVariable("weburl", CON_VARFLAG_RULE, "www.sa-mp.com");
 	pConsole->AddStringVariable("rcon_password", 0, "changeme");
-	pConsole->AddStringVariable("gravity", CON_VARFLAG_RULE, "0.008");
-	pConsole->AddStringVariable("weather", CON_VARFLAG_RULE, "10");
+	pConsole->AddStringVariable("gravity", CON_VARFLAG_RULE, "0.008", ServerGravityChanged);
+	pConsole->AddStringVariable("weather", CON_VARFLAG_RULE, "10", ServerWeatherChanged);
 	//pConsole->AddStringVariable("tirepopping", CON_VARFLAG_RULE, "0");
 	pConsole->AddStringVariable("gamemodetext", 0, "Unknown");
 	pConsole->AddStringVariable("filterscripts", 0, "");

@@ -249,7 +249,7 @@ void con_players() {
 	}
 }
 
-void con_gravity()
+/*void con_gravity()
 {
 	char* arg = strtok(NULL, " ");
 	if (arg)
@@ -265,7 +265,7 @@ void con_weather()
 	{
 		pNetGame->SetWeather(atoi(arg));
 	}
-}
+}*/
 
 void con_loadfs()
 {
@@ -366,8 +366,8 @@ struct ConsoleCommand_s
 	{"players",		0,	con_players},
 	{"banip",		0,	con_banip},
 	{"unbanip",		0,	con_unbanip},
-	{"gravity",		0,	con_gravity},
-	{"weather",		0,	con_weather},
+	//{"gravity",		0,	con_gravity},
+	//{"weather",		0,	con_weather},
 	{"loadfs",		0,	con_loadfs},
 	{"unloadfs",	0,	con_unloadfs},
 	{"reloadfs",	0,	con_reloadfs},
