@@ -14,7 +14,7 @@
 
 native print(const output[]);
 native printf(const output[], {Float,_}:...);
-native format(buffer, length, const format[], {Float,_}:...);
+native format(buffer[], length, const format[], {Float,_}:...);
 native SetTimer(const funcname[], interval, repeat);
 native KillTimer(timerid);
 native GetTickCount();
