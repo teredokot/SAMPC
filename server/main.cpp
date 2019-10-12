@@ -340,7 +340,7 @@ int main (int argc, char** argv)
 	//pConsole->AddStringVariable("nosign", 0, "");
 	//pConsole->AddVariable("anticheat",CON_VARTYPE_BOOL, /* CON_VARFLAG_RULE */ 0, &bEnableAC);
 	pConsole->AddVariable("instagib", CON_VARTYPE_BOOL, CON_VARFLAG_RULE, &bEnableInstagib, ServerInstagibChanged);
-	pConsole->AddVariable("myriad", CON_VARTYPE_BOOL, 0, &bGameMod);
+	//pConsole->AddVariable("myriad", CON_VARTYPE_BOOL, 0, &bGameMod);
 
 	// Add 16 gamemode variables.
 	int x=0;

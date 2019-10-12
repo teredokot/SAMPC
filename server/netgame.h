@@ -84,7 +84,7 @@ public:
 	int  m_iDeathDropMoney;
 	BOOL m_bAdminTeleport;
 	bool m_bZoneNames;
-	BYTE m_byteMod;
+	//BYTE m_byteMod;
 	bool m_bLimitGlobalChatRadius; // limit global player chat to other players within a certain radius
 	bool m_bUseCJWalk;
 	float m_fGlobalChatRadius; // limit global chat radius

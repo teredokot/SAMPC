@@ -59,7 +59,7 @@ CNetGame::CNetGame()
 	m_pTextPool = NULL;
 	m_pGangZonePool = NULL;
 	m_bLanMode = FALSE;
-	m_byteMod = 0x01;
+	//m_byteMod = 0x01;
 	//m_bACEnabled = pConsole->GetBoolVariable("anticheat");
 
 	m_bLimitGlobalChatRadius = FALSE;
@@ -87,7 +87,7 @@ CNetGame::CNetGame()
 	DWORD dwPort = pConsole->GetIntVariable("port");
 	DWORD dwMaxPlayers = pConsole->GetIntVariable("maxplayers");
 	BOOL bLanMode = pConsole->GetBoolVariable("lanmode");
-	BOOL bMyriad = pConsole->GetBoolVariable("myriad");
+	//BOOL bMyriad = pConsole->GetBoolVariable("myriad");
 
 	// Setup RakNet
 	m_pRak = RakNetworkFactory::GetRakServerInterface();
@@ -131,11 +131,11 @@ CNetGame::CNetGame()
 	sprintf(szTime, "%02d:%02d", m_byteWorldTime, 0);
 	pConsole->AddStringVariable("worldtime", CON_VARFLAG_RULE, szTime);
 
-	if (bMyriad)
+	/*if (bMyriad)
 	{
 		pConsole->SetStringVariable("mapname", "Myriad Islands");
 		m_byteMod = 0x02;
-	}
+	}*/
 	
 	// Define LAN mode
 	if(bLanMode) {

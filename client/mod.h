@@ -7,12 +7,12 @@
 
 //#define MYRIAD
 
-#ifndef MYRIAD
+//#ifndef MYRIAD
 
 #include "../archive/pkey.h"
 #include "../archive/skey.h"
 
-#define MOD_VERSION 0x01
+/*#define MOD_VERSION 0x01
 
 #else
 
@@ -21,4 +21,4 @@
 
 #define MOD_VERSION 0x02
 
-#endif
+#endif*/

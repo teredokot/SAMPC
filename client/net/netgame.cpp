@@ -745,12 +745,12 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 	m_iGameState = GAMESTATE_AWAIT_JOIN;
 
 	int iVersion = NETGAME_VERSION;
-	BYTE byteMod = MOD_VERSION;
+	//BYTE byteMod = MOD_VERSION;
 	BYTE byteNameLen = (BYTE)strlen(m_pPlayerPool->GetLocalPlayerName());
 
 	RakNet::BitStream bsSend;
 	bsSend.Write(iVersion);
-	bsSend.Write(byteMod);
+	//bsSend.Write(byteMod);
 	bsSend.Write(byteNameLen);
 	bsSend.Write(m_pPlayerPool->GetLocalPlayerName(),byteNameLen);
 	bsSend.Write(uiChallenge);    

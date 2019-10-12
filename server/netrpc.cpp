@@ -48,7 +48,7 @@ void ClientJoin(RPCParameters *rpcParams)
 	CHAR szPlayerName[256];
 	BYTE bytePlayerID;
 	int  iVersion;
-	BYTE byteMod;
+	//BYTE byteMod;
 	BYTE byteNickLen;
 	BYTE byteRejectReason;
 	unsigned int uiChallengeResponse=0;
@@ -60,7 +60,7 @@ void ClientJoin(RPCParameters *rpcParams)
 	memset(szPlayerName,0,256);
 
 	bsData.Read(iVersion);
-	bsData.Read(byteMod);
+	//bsData.Read(byteMod);
 	bsData.Read(byteNickLen);
 	bsData.Read(szPlayerName,byteNickLen);
 	szPlayerName[byteNickLen] = '\0';
@@ -90,13 +90,13 @@ void ClientJoin(RPCParameters *rpcParams)
 		return;
 	}
 	
-	if(byteMod != pNetGame->m_byteMod) {
+	/*if(byteMod != pNetGame->m_byteMod) {
 		byteRejectReason = REJECT_REASON_BAD_MOD;
 		bsReject.Write(byteRejectReason);
 		pRak->RPC(RPC_ConnectionRejected,&bsReject,HIGH_PRIORITY,RELIABLE,0,sender,FALSE,FALSE);
 		pRak->Kick(sender);
 		return;
-	}
+	}*/
 
 	if(ContainsInvalidNickChars(szPlayerName) ||
 		byteNickLen < 3 || byteNickLen > 16 || pPlayerPool->IsNickInUse(szPlayerName)) {
