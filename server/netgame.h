@@ -184,6 +184,7 @@ public:
 
 //----------------------------------------------------
 
+#define WEAPON_FIST						0
 #define WEAPON_BRASSKNUCKLE				1
 #define WEAPON_GOLFCLUB					2
 #define WEAPON_NITESTICK				3
@@ -224,6 +225,8 @@ public:
 #define WEAPON_SPRAYCAN					41
 #define WEAPON_FIREEXTINGUISHER			42
 #define WEAPON_CAMERA					43
+#define WEAPON_NIGHT_VIS_GOGGLES		44
+#define WEAPON_THERMAL_GOGGLES			45
 #define WEAPON_PARACHUTE				46
 #define WEAPON_VEHICLE					49
 #define WEAPON_DROWN					53
