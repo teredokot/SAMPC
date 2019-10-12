@@ -525,6 +525,10 @@ void ApplyInGamePatches()
 	//UnFuck(0x63ADC8,6);
 	memset((PVOID)0x63ADC8,0x90,6);
 
+	// Stop taking $100 or maybe more every death
+	memset((void*)0x442E47, 0x90, 5);
+	memset((void*)0x443200, 0x90, 6);
+
 	// Rest of the stuff
 	RelocateScanListHack();
 	
