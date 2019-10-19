@@ -364,7 +364,7 @@ BOOL CPlugins::LoadSinglePlugin(char *szPluginPath)
 
 //---------------------------------------
 
-void CPlugins::LoadPlugins(char *szSearchPath)
+/*void CPlugins::LoadPlugins(char *szSearchPath)
 {
 	char szPath[MAX_PATH];
 	char szFullPath[MAX_PATH];
@@ -411,10 +411,56 @@ void CPlugins::LoadPlugins(char *szSearchPath)
 		szFilename = strtok(NULL, " ");
 	}
 	logprintf(" Loaded %d plugins.\n", GetPluginCount());
+}*/
+
+void CPlugins::LoadPlugins(std::string strPath)
+{
+#ifdef WIN32
+	if (strPath.back() != '\\')
+		strPath += '\\';
+#else
+	if (strPath.back() != '/')
+		strPath += '/';
+#endif
+
+	logprintf("\nServer Plugins");
+	logprintf("--------------");
+
+	unsigned int uiPluginCount = 0;
+	char* szPlugins = pConsole->GetStringVariable("plugins");
+	if (szPlugins)
+	{
+		std::istringstream issPlugins(szPlugins);
+		std::string strPlugin;
+		while (std::getline(issPlugins, strPlugin, ' '))
+		{
+			logprintf(" Loading plugin: %s", strPlugin.c_str());
+
+			std::string strFullPath;
+			strFullPath = strPath + strPlugin;
+			if (LoadSinglePlugin((char*)strFullPath.c_str()))
+			{
+				logprintf("  Loaded.");
+				uiPluginCount++;
+			}
+			else
+			{
+#ifdef WIN32
+				logprintf("  Failed. (Error code: %d)", GetLastError());
+#else
+				char* szDLError = 0;
+				szDLError = PLUGIN_GETERROR();
+				logprintf((szDLError) ? ("  Failed. (%s)") : ("  Failed."), szDLError);
+#endif
+			}
+		}
+	}
+
+	logprintf(" Loaded %d plugins.\n", uiPluginCount);
 }
 
 // [OBSOLETE: Using the non search defined method]
-void CPlugins::LoadPluginsSearch(char *szSearchPath)
+/*void CPlugins::LoadPluginsSearch(char *szSearchPath)
 {
 #ifdef LINUX
 	DIR *dir = opendir(szSearchPath);
@@ -505,14 +551,14 @@ void CPlugins::LoadPluginsSearch(char *szSearchPath)
 	}
 	FindClose(hFindFile);
 #endif
-}
+}*/
 
 //---------------------------------------
 	
-DWORD CPlugins::GetPluginCount()
+/*DWORD CPlugins::GetPluginCount()
 {
 	return (DWORD)m_Plugins.size();
-}
+}*/
 
 //---------------------------------------
 

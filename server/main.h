@@ -117,6 +117,7 @@ typedef struct _SERVER_SETTINGS {
 #include <map>
 #include <string>
 #include <vector>
+#include <sstream>
 
 // Raknet
 #include <raknet/RakServer.h>

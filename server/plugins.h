@@ -87,9 +87,10 @@ public:
 	CPlugins();
 	~CPlugins();
 
-	void LoadPlugins(char *szSearchPath);
-	void LoadPluginsSearch(char *szSearchPath);
-	DWORD GetPluginCount();
+	//void LoadPlugins(char *szSearchPath);
+	void LoadPlugins(std::string strPath);
+	//void LoadPluginsSearch(char *szSearchPath);
+	//DWORD GetPluginCount();
 	ServerPlugin_s* GetPlugin(DWORD index);
 
 	void DoProcessTick();
