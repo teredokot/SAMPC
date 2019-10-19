@@ -509,6 +509,20 @@ static cell AMX_NATIVE_CALL n_BanEx(AMX *amx, cell *params)
 	return 0;
 }
 
+static cell n_RemoveBan(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	char* szIP;
+	amx_StrParam(amx, params[1], szIP);
+	if (szIP)
+	{
+		pNetGame->RemoveBan(szIP);
+		return 1;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 // native IsPlayerAdmin(playerid)
 static cell AMX_NATIVE_CALL n_IsPlayerAdmin(AMX *amx, cell *params)
@@ -4380,6 +4394,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "Kick",					n_Kick },
 	{ "Ban",					n_Ban },
 	{ "BanEx",					n_BanEx },
+	{"RemoveBan", n_RemoveBan},
 	{ "SendRconCommand",		n_SendRconCommand },
 	{ "GetServerVarAsString",	n_GetServerVarAsString },
 	{ "GetServerVarAsInt",		n_GetServerVarAsInt },
