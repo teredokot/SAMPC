@@ -529,6 +529,22 @@ void ApplyInGamePatches()
 	memset((void*)0x442E47, 0x90, 5);
 	memset((void*)0x443200, 0x90, 6);
 
+	// Set CTimer tick delay from 14 to 0
+	*(unsigned char*)0x53E94C = 0;
+
+	// Set CLoadingScreen::g_bActive to 0
+	*(unsigned char*)0xBAB318 = 0;
+
+	// Disable vehicle gifts
+	// - Shotgun from police cars (596-599)
+	// - $12 from taxi cars (420,438)
+	// - 20 health from Ambulance (416)
+	// - Armor from Enforcer (427)
+	// - Golf Club from Caddy (457)
+	// - Stat increment from Hotdog (588)
+	*(unsigned long*)0x006D170B = 0xE9;
+	*(unsigned long*)0x006D170C = 0x006D17D5 - 0x006D170B - 5;
+
 	// Rest of the stuff
 	RelocateScanListHack();
 	
