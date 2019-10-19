@@ -122,6 +122,7 @@ native Kick(playerid);
 native Ban(playerid);
 native BanEx(playerid, const reason[]);
 native RemoveBan(ip[]);
+native IsBanned(ip[]);
 native SendRconCommand(const command[]);
 native GetServerVarAsString(const varname[], buffer[], length);
 native GetServerVarAsInt(const varname[]);
