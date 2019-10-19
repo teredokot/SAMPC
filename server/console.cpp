@@ -743,7 +743,29 @@ void CConsole::Execute(char* pExecLine)
 			case CON_VARTYPE_BOOL:
 				if ((arg) && (!readonly))
 				{
-					*(bool*)ConVar->VarPtr = (atoi(arg) > 0);
+					bool bValue = true;
+					switch (arg[0])
+					{
+					case 'T': case 't':
+					case 'Y': case 'y':
+					case '1':
+						bValue = true;
+						break;
+					case 'F': case 'f':
+					case 'N': case 'n':
+					case '0':
+						bValue = false;
+						break;
+					case 'O': case 'o':
+						if (arg[1] == 'N' || arg[1] == 'n')
+							bValue = true;
+						if (arg[1] == 'F' || arg[1] == 'f')
+							bValue = false;
+						break;
+					default:
+						bValue = (atoi(arg) > 0);
+					}
+					*(bool*)ConVar->VarPtr = bValue;
 					bChangedVar = true;
 				} else {
 					logprintf("%s = %d  (bool%s)", cmd, *(bool*)ConVar->VarPtr, readonly?", read-only":"");
