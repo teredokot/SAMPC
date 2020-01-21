@@ -1,31 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="sdk">
-      <UniqueIdentifier>{d83496fc-13e3-4d75-89e3-0ffca3754368}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\sqlite">
-      <UniqueIdentifier>{0e2e4133-ad8a-4136-a659-59fef098ca0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\amx">
-      <UniqueIdentifier>{992bc445-459e-4d39-9708-d7fdc14b5c06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\raknet">
-      <UniqueIdentifier>{c993a8c5-8385-46fa-8d59-d9f0701c5051}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sdk\zlib">
-      <UniqueIdentifier>{c4acb53f-49bc-4cdc-8cff-8f356c68f1e8}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="console.cpp" />
+    <ClCompile Include="exceptions.cpp" />
+    <ClCompile Include="filterscripts.cpp" />
+    <ClCompile Include="format.cpp" />
+    <ClCompile Include="gamemodes.cpp" />
+    <ClCompile Include="gangzonepool.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="menupool.cpp" />
     <ClCompile Include="netgame.cpp" />
     <ClCompile Include="netrpc.cpp" />
     <ClCompile Include="object.cpp" />
+    <ClCompile Include="objectpool.cpp" />
+    <ClCompile Include="pickuppool.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerpool.cpp" />
+    <ClCompile Include="plugins.cpp" />
     <ClCompile Include="query.cpp" />
+    <ClCompile Include="runutil.cpp" />
+    <ClCompile Include="scrcustom.cpp" />
+    <ClCompile Include="scrcore.cpp" />
+    <ClCompile Include="scrtimers.cpp" />
+    <ClCompile Include="sqlite_amx.c" />
+    <ClCompile Include="textdrawpool.cpp" />
     <ClCompile Include="vehicle.cpp" />
+    <ClCompile Include="vehiclepool.cpp" />
+    <ClCompile Include="..\sdk\sqlite\sqlite3.c">
+      <Filter>sdk\sqlite</Filter>
+    </ClCompile>
     <ClCompile Include="..\sdk\raknet\_findfirst.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
@@ -209,46 +213,7 @@
     <ClCompile Include="..\sdk\raknet\TelnetTransport.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\zlib\adler32.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\compress.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\crc32.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\deflate.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\gzio.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\infback.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\inffast.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\inflate.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\inftrees.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\trees.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\uncompr.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\zutil.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\amx\amx.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\amx\amxcore.c">
       <Filter>sdk\amx</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\amx\amxDGram.c">
@@ -266,44 +231,42 @@
     <ClCompile Include="..\sdk\amx\amxtime.c">
       <Filter>sdk\amx</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\amx\getch.c">
+    <ClCompile Include="..\sdk\amx\amxcore.c">
       <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\amx\prefix.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="exceptions.cpp" />
-    <ClCompile Include="filterscripts.cpp" />
-    <ClCompile Include="format.cpp" />
-    <ClCompile Include="gamemodes.cpp" />
-    <ClCompile Include="gangzonepool.cpp" />
-    <ClCompile Include="menupool.cpp" />
-    <ClCompile Include="objectpool.cpp" />
-    <ClCompile Include="pickuppool.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="playerpool.cpp" />
-    <ClCompile Include="plugins.cpp" />
-    <ClCompile Include="runutil.cpp" />
-    <ClCompile Include="scrcore.cpp" />
-    <ClCompile Include="scrcustom.cpp" />
-    <ClCompile Include="scrtimers.cpp" />
-    <ClCompile Include="sqlite_amx.c" />
-    <ClCompile Include="textdrawpool.cpp" />
-    <ClCompile Include="vehiclepool.cpp" />
-    <ClCompile Include="..\sdk\sqlite\sqlite3.c">
-      <Filter>sdk\sqlite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="console.h" />
+    <ClInclude Include="filterscripts.h" />
+    <ClInclude Include="format.h" />
+    <ClInclude Include="gamemodes.h" />
+    <ClInclude Include="gangzonepool.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="menu.h" />
-    <ClInclude Include="netgame.h" />
+    <ClInclude Include="menupool.h" />
     <ClInclude Include="netrpc.h" />
+    <ClInclude Include="netgame.h" />
+    <ClInclude Include="objectpool.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="pickuppool.h" />
+    <ClInclude Include="playerpool.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="plugincommon.h" />
+    <ClInclude Include="plugininternal.h" />
+    <ClInclude Include="plugins.h" />
+    <ClInclude Include="runutil.h" />
+    <ClInclude Include="scrtimers.h" />
     <ClInclude Include="system.h" />
+    <ClInclude Include="textdrawpool.h" />
+    <ClInclude Include="vehiclepool.h" />
     <ClInclude Include="vehicle.h" />
     <ClInclude Include="vehmods.h" />
+    <ClInclude Include="..\sdk\sqlite\sqlite3.h">
+      <Filter>sdk\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\sqlite\sqlite3ext.h">
+      <Filter>sdk\sqlite</Filter>
+    </ClInclude>
     <ClInclude Include="..\sdk\raknet\_findfirst.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
@@ -619,76 +582,26 @@
     <ClInclude Include="..\sdk\raknet\Types.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\zlib\crc32.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\deflate.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\inffast.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\inffixed.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\inflate.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\inftrees.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\trees.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\zconf.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\zconf.in.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\zlib.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\zutil.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\amx\amx.h">
       <Filter>sdk\amx</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\amx\getch.h">
-      <Filter>sdk\amx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\amx\osdefs.h">
-      <Filter>sdk\amx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\amx\prefix.h">
-      <Filter>sdk\amx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\amx\sclinux.h">
-      <Filter>sdk\amx</Filter>
-    </ClInclude>
-    <ClInclude Include="filterscripts.h" />
-    <ClInclude Include="format.h" />
-    <ClInclude Include="gamemodes.h" />
-    <ClInclude Include="gangzonepool.h" />
-    <ClInclude Include="menupool.h" />
-    <ClInclude Include="objectpool.h" />
-    <ClInclude Include="pickuppool.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="playerpool.h" />
-    <ClInclude Include="runutil.h" />
-    <ClInclude Include="scrtimers.h" />
-    <ClInclude Include="plugins.h" />
-    <ClInclude Include="plugincommon.h" />
-    <ClInclude Include="plugininternal.h" />
-    <ClInclude Include="textdrawpool.h" />
-    <ClInclude Include="vehiclepool.h" />
-    <ClInclude Include="..\sdk\sqlite\sqlite3.h">
-      <Filter>sdk\sqlite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\sqlite\sqlite3ext.h">
-      <Filter>sdk\sqlite</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{d10cd4e7-76e9-4746-b061-3d95934181a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\sqlite">
+      <UniqueIdentifier>{b6cee485-f36f-4854-94f2-1175b4d2e152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\raknet">
+      <UniqueIdentifier>{6e933ca2-d84b-4be7-bb0a-45c9cfcd11aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\amx">
+      <UniqueIdentifier>{76fe6b33-2ee8-459a-a9f1-c9383c8665a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\zlib">
+      <UniqueIdentifier>{2d7eee43-7c5a-4025-9217-21cb99820dcd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\sdk\raknet\Makefile.am">
