@@ -921,14 +921,11 @@
     <ClInclude Include="netstats.h" />
     <ClInclude Include="newplayertags.h" />
     <ClInclude Include="outputdebugstring.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="runutil.h" />
     <ClInclude Include="scoreboard.h" />
     <ClInclude Include="spawnscreen.h" />
     <ClInclude Include="svrnetstats.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="exceptbox.rc" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\sdk\detours\detours.lib">
@@ -942,5 +939,8 @@
     <None Include="..\sdk\raknet\Makefile.am">
       <Filter>sdk\raknet</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="client.rc" />
   </ItemGroup>
 </Project>

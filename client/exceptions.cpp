@@ -234,9 +234,9 @@ BOOL CALLBACK GuiDlgProcMain(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 			DumpMain(FALSE);
 
-			SetDlgItemText(hDlg,IDC_EDIT1,szErrorString);
-			SetForegroundWindow(GetDlgItem(hDlg,IDD_DIALOG1));
-			SetFocus(GetDlgItem(hDlg,IDC_BUTTON1));
+			SetDlgItemText(hDlg,IDC_REPORT_OUTPUT,szErrorString);
+			SetForegroundWindow(GetDlgItem(hDlg, IDD_EXCEPTION));
+			SetFocus(GetDlgItem(hDlg,IDCLOSE));
 			break;
 
 		case WM_DESTROY:
@@ -247,14 +247,16 @@ BOOL CALLBACK GuiDlgProcMain(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		case WM_COMMAND:
 			switch(LOWORD(wParam))
 			{
-			case IDC_BUTTON1:
+			case IDCLOSE:
 				EndDialog(hDlg,TRUE);
 				//ExitProcess(1);
 				break;
-			case IDC_BUTTON2:
+			case ID_REPORT_CRASH:
 				DoCrashReportingStuff();
 				//EnableWindow(GetDlgItem(hDlg,IDC_BUTTON2),FALSE);
-				SetDlgItemText(hDlg,IDC_EDIT1,"Thanks for reporting this problem.");
+
+				// TODO: Show it after the crash report was successfully sent.
+				//SetDlgItemText(hDlg,IDC_EDIT1,"Thanks for reporting this problem.");
 				break;
 			}
 			break;
@@ -269,8 +271,8 @@ LONG WINAPI exc_handler(_EXCEPTION_POINTERS* exc_inf)
 {
 	pContextRecord = exc_inf->ContextRecord;
 	
-	ShowWindow(pGame->GetMainWindowHwnd(),SW_MINIMIZE);
-	DialogBox((HINSTANCE)hInstance,MAKEINTRESOURCE(IDD_DIALOG1),pGame->GetMainWindowHwnd(),(DLGPROC)GuiDlgProcMain);
+	ShowWindow(pGame->GetMainWindowHwnd(), SW_MINIMIZE);
+	DialogBox((HINSTANCE)hInstance, MAKEINTRESOURCE(IDD_EXCEPTION), pGame->GetMainWindowHwnd(), (DLGPROC)GuiDlgProcMain);
 
 //#ifdef _DEBUG
 	return EXCEPTION_CONTINUE_SEARCH;

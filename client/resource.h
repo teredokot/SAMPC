@@ -1,19 +1,20 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by exceptbox.rc
+// Microsoft Visual C++ generated include file.
+// Used by client.rc
 //
-#define IDD_DIALOG1                     101
-#define IDC_EDIT1                       1000
-#define IDC_BUTTON1                     1001
-#define IDC_BUTTON2                     1002
+#define IDD_EXCEPTION                   101
+#define ID_REPORT_CRASH                 1001
+#define IDC_REPORT_INPUT                1003
+#define IDC_REPORT_OUTPUT               1003
+#define IDC_INFO_TEXT                   1004
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        102
+#define _APS_NEXT_RESOURCE_VALUE        103
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1003
+#define _APS_NEXT_CONTROL_VALUE         1005
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
