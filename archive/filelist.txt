@@ -5,7 +5,6 @@ files\default.ide
 files\gta.dat
 files\handling.cfg
 files\LOADSCS.txd
-files\LOADSCV.txd
 files\vehicle.txd
 ..\scm\main.scm
 files\melee.dat
