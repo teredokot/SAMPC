@@ -153,6 +153,7 @@ typedef unsigned short VEHICLEID;
 #include "netgame.h"
 #include "plugins.h"
 //#include "rcon.h"
+#include "runutil.h"
 
 // ---------
 // EXTERNALS

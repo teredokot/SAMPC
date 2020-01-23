@@ -130,6 +130,7 @@ native GetServerVarAsBool(const varname[]);
 native GetConsoleVarAsString(const varname[], buffer[], length) = GetServerVarAsString;
 native GetConsoleVarAsInt(const varname[]) = GetServerVarAsInt;
 native GetConsoleVarAsBool(const varname[]) = GetServerVarAsBool;
+native GetPlayerIDFromName(const name[]);
 native GetPlayerCount();
 native GetPlayerPoolSize();
 native SetSpawnInfo(playerid, teamid, skinid, Float:x, Float:y, Float:z, Float:a, weap1, ammo1, weap2, ammo2, weap3, ammo3);

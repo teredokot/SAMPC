@@ -549,6 +549,25 @@ static cell AMX_NATIVE_CALL n_IsPlayerAdmin(AMX *amx, cell *params)
 	return 0;
 }
 
+static cell n_GetPlayerIDFromName(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	char* szSearchName = 0;
+	amx_StrParam(amx, params[1], szSearchName);
+
+	for (size_t uiIndex = 0; uiIndex < MAX_PLAYERS; uiIndex++)
+	{
+		if (!pNetGame->GetPlayerPool()->GetSlotState(uiIndex))
+			continue;
+		
+		char* szPlayerName = pNetGame->GetPlayerPool()->GetPlayerName(uiIndex);
+		if (szSearchName && Util_stristr(szPlayerName, szSearchName))
+			return uiIndex;
+	}
+	return -1;
+}
+
 static cell n_GetPlayerCount(AMX* amx, cell* params)
 {
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
@@ -4415,6 +4434,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 
 
 	// Player
+	{ "GetPlayerIDFromName", n_GetPlayerIDFromName },
 	{ "GetPlayerCount", n_GetPlayerCount},
 	{"GetPlayerPoolSize", n_GetPlayerPoolSize },
 	{ "SetSpawnInfo",			n_SetSpawnInfo },
