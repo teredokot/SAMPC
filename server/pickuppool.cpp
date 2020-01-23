@@ -93,4 +93,18 @@ void CPickupPool::InitForPlayer(BYTE bytePlayerID)
 	delete pbsPickup;
 }
 
-//----------------------------------------------------
+bool CPickupPool::IsValid(int iPickupId)
+{
+	if (0 <= iPickupId && iPickupId <= MAX_PICKUPS && m_bActive[iPickupId] != 0)
+		return true;
+
+	return false;
+}
+
+bool CPickupPool::IsStatic(int iPickupId)
+{
+	if (0 <= iPickupId && iPickupId <= MAX_PICKUPS && m_bActive[iPickupId] == -1)
+		return true;
+
+	return false;
+}

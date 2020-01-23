@@ -58,6 +58,15 @@ public:
 	int New(int iModel, int iType, float fX, float fY, float fZ, BYTE staticp = 0);
 	int Destroy(int iPickup);
 	void InitForPlayer(BYTE bytePlayerID);
+	bool IsValid(int iPickupId);
+	bool IsStatic(int iPickupId);
+	inline PICKUP Get(int iPickupId)
+	{
+		return m_Pickups[iPickupId];
+	}
+	inline int GetCount() {
+		return m_iPickupCount;
+	}
 };
 
 //----------------------------------------------------

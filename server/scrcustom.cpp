@@ -422,6 +422,80 @@ static cell AMX_NATIVE_CALL n_DestroyPickup(AMX *amx, cell *params)
 	return pNetGame->GetPickupPool()->Destroy(params[1]);
 }
 
+// native DestroyAllPickups();
+static cell n_DestroyAllPickups(AMX* amx, cell* params)
+{
+	for (unsigned int uiIndex = 0; uiIndex < MAX_PICKUPS; uiIndex++)
+	{
+		pNetGame->GetPickupPool()->Destroy(uiIndex);
+	}
+	return 1;
+}
+
+// native IsValidPickup(pickupid);
+static cell n_IsValidPickup(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	return (cell)pNetGame->GetPickupPool()->IsValid(params[1]);
+}
+
+// native IsStaticPickup(pickupid);
+static cell n_IsPickupStatic(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	return (cell)pNetGame->GetPickupPool()->IsStatic(params[1]);
+}
+
+// native GetPickupPos(pickupid, &Float:x, &Float:y, &Float:z);
+static cell n_GetPickupPos(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+	if (pNetGame->GetPickupPool()->IsValid(params[1]))
+	{
+		PICKUP pickup = pNetGame->GetPickupPool()->Get(params[1]);
+
+		cell* cptr;
+		amx_GetAddr(amx, params[2], &cptr);
+		*cptr = amx_ftoc(pickup.fX);
+		amx_GetAddr(amx, params[3], &cptr);
+		*cptr = amx_ftoc(pickup.fY);
+		amx_GetAddr(amx, params[4], &cptr);
+		*cptr = amx_ftoc(pickup.fZ);
+		return 1;
+	}
+	return 0;
+}
+
+// native GetPickupModel(pickupid);
+static cell n_GetPickupModel(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	if (pNetGame->GetPickupPool()->IsValid(params[1]))
+	{
+		return pNetGame->GetPickupPool()->Get(params[1]).iModel;
+	}
+	return -1;
+}
+
+// native GetPickupType(pickupid);
+static cell n_GetPickupType(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	if (pNetGame->GetPickupPool()->IsValid(params[1]))
+	{
+		return pNetGame->GetPickupPool()->Get(params[1]).iType;
+	}
+	return -1;
+}
+
+// native GetPickupCount();
+static cell n_GetPickupCount(AMX* amx, cell* params)
+{
+	return pNetGame->GetPickupPool()->GetCount();
+}
+
 //----------------------------------------------------------------------------------
 // native SetPlayerWorldBounds(playerid,Float:x_max,Float:y_max,Float:x_min,Float:y_min);
 
@@ -4390,6 +4464,13 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "AddStaticPickup",		n_AddStaticPickup },
 	{ "CreatePickup",			n_CreatePickup },
 	{ "DestroyPickup",			n_DestroyPickup },
+	{"DestroyAllPickups", n_DestroyAllPickups},
+	{"IsValidPickup", n_IsValidPickup},
+	{"IsStaticPickup", n_IsPickupStatic},
+	{"GetPickupPos", n_GetPickupPos},
+	{"GetPickupModel", n_GetPickupModel},
+	{"GetPickupType", n_GetPickupType},
+	{"GetPickupCount", n_GetPickupCount},
 	{ "SetPlayerWorldBounds",	n_SetPlayerWorldBounds },
 	{ "ShowNameTags",			n_ShowNameTags },
 	{ "ShowPlayerMarkers",		n_ShowPlayerMarkers },

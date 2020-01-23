@@ -90,6 +90,13 @@ native AddStaticVehicleEx(modelid, Float:x, Float:y, Float:z, Float:a, color1, c
 native AddStaticPickup(modelid, typeid, Float:x, Float:y, Float:z);
 native CreatePickup(modelid, typeid, Float:x, Float:y, Float:z);
 native DestroyPickup(pickupid);
+native DestroyAllPickups();
+native IsValidPickup(pickupid);
+native IsStaticPickup(pickupid);
+native GetPickupPos(pickupid, &Float:x, &Float:y, &Float:z);
+native GetPickupModel(pickupid);
+native GetPickupType(pickupid);
+native GetPickupCount();
 native SetPlayerWorldBounds(playerid, Float:maxx, Float:maxy, Float:minx, Float:miny);
 native ShowNameTags(show);
 native ShowPlayerMarkers(show);
