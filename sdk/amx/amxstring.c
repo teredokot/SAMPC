@@ -480,9 +480,7 @@ static cell AMX_NATIVE_CALL n_strdel(AMX *amx,cell *params)
 static cell AMX_NATIVE_CALL n_strins(AMX *amx,cell *params)
 {
   cell *cstr,*csub;
-  int index,lenstr,lensub,count;
-  int needed;
-  size_t lastaddr;
+  int index,lenstr,lensub,maxlen,count;
   unsigned char *ptr;
   cell c;
 
@@ -492,32 +490,31 @@ static cell AMX_NATIVE_CALL n_strins(AMX *amx,cell *params)
   amx_StrLen(cstr,&lenstr);
   amx_StrLen(csub,&lensub);
   index=(int)params[3];
-  if (index>lenstr)
+  maxlen=(int)params[4];
+  if ((ucell)*cstr>UNPACKEDMAX)
+    maxlen*=sizeof(cell);
+  maxlen-=1;
+  if (index>lenstr || index>maxlen)
     return amx_RaiseError(amx,AMX_ERR_NATIVE);
 
-  if (((ucell)*cstr>UNPACKEDMAX)) {
-    needed=(lenstr+lensub+sizeof(cell))/sizeof(cell);   /* # of cells needed */
-    assert(needed>0);
-    lastaddr=(size_t)(params[1]+sizeof(cell)*needed-1);
-  } else {
-    lastaddr=(size_t)(params[1]+sizeof(cell)*(lenstr+lensub+1)-1);
-  } /* if */
-  if (verify_addr(amx,(cell)lastaddr)!=AMX_ERR_NONE)
-    return amx_RaiseError(amx,AMX_ERR_NATIVE);
-
-  if (*cstr==0) {
+  if (lenstr==0) {
     /* current string is empty (and the insertion point is zero), just make a copy */
     assert(index==0);
+    if (lensub>maxlen)
+      lensub=maxlen;
     if ((ucell)*csub>UNPACKEDMAX)
-      amx_StrPack(cstr,csub,lensub,0);
+      amx_StrPack(cstr, csub, lensub, 0);
     else
-      amx_StrUnpack(cstr,csub,lensub);
+      amx_StrUnpack(cstr, csub, lensub);
     return 1;
   } /* if */
 
-  if (((ucell)*cstr>UNPACKEDMAX)) {
+  lenstr+=lensub; /* length after insertion */
+  if (lenstr>=maxlen)
+    lenstr=maxlen-1;
+  if ((ucell)*cstr>UNPACKEDMAX) {
     /* make room for the new characters */
-    for (count=lenstr+lensub; count>index; count--) {
+    for (count=lenstr; count>index; count--) {
       ptr=packedptr(cstr,count-lensub);
       c=*ptr;
       ptr=packedptr(cstr,count);
@@ -529,9 +526,10 @@ static cell AMX_NATIVE_CALL n_strins(AMX *amx,cell *params)
       ptr=packedptr(cstr,index+count);
       *ptr=(unsigned char)c;
     } /* for */
-  } else {
+  }
+  else {
     /* make room for the new characters */
-    for (count=lenstr+lensub; count>index; count--)
+    for (count=lenstr; count>index; count--)
       cstr[count]=cstr[count-lensub];
     /* copy in the new characters */
     for (count=0; count<lensub; count++) {
