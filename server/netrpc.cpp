@@ -773,15 +773,24 @@ void AdminMapTeleport(RPCParameters *rpcParams)
 	bsData.Read(vecPos.Z);
 
 	BYTE bytePlayerId = pRak->GetIndexFromPlayerID(sender);
-    CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
+	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
-	if(!pNetGame) return;
-	if(pNetGame->GetGameState() != GAMESTATE_RUNNING) return;
-	if(!pNetGame->m_bAdminTeleport) return;
-	
-	if(pPlayerPool->GetSlotState(bytePlayerId)) {
-		CPlayer *pPlayer = pPlayerPool->GetAt(bytePlayerId);
-		if(pPlayer && pPlayer->m_bCanTeleport && pPlayerPool->IsAdmin(bytePlayerId)) 
+	if (!pNetGame) return;
+	if (pNetGame->GetGameState() != GAMESTATE_RUNNING) return;
+
+	if (pPlayerPool->GetSlotState(bytePlayerId)) {
+		CPlayer* pPlayer = pPlayerPool->GetAt(bytePlayerId);
+		if (!pPlayer)
+			return;
+
+		if (!pNetGame->GetGameMode()->OnPlayerClickMap(
+			(cell)bytePlayerId, vecPos.X, vecPos.Y, vecPos.Z))
+		{
+			pNetGame->GetFilterScripts()->OnPlayerClickMap((cell)bytePlayerId,
+				vecPos.X, vecPos.Y, vecPos.Z);
+		}
+
+		if (pNetGame->m_bAdminTeleport && pPlayer->m_bCanTeleport && pPlayerPool->IsAdmin(bytePlayerId))
 		{
 			RakNet::BitStream bsParams;
 			bsParams.Write(vecPos.X);	// X
@@ -790,7 +799,7 @@ void AdminMapTeleport(RPCParameters *rpcParams)
 
 			RakServerInterface* pRak = pNetGame->GetRakServer();
 			pRak->RPC(RPC_ScrSetPlayerPos, &bsParams, HIGH_PRIORITY, RELIABLE, 0,
-					sender, false, false);
+				sender, false, false);
 		}
 	}
 }

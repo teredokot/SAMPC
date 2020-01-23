@@ -1122,3 +1122,24 @@ int CFilterScripts::OnIncomingConnection(cell playerid, const char* ip, cell por
 }
 
 //----------------------------------------------------------------------------------
+
+int CFilterScripts::OnPlayerClickMap(cell playerid, float fX, float fY, float fZ)
+{
+	int idx;
+	cell ret = 1;
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++) {
+		if (m_pFilterScripts[i])
+		{
+			if (!amx_FindPublic(m_pFilterScripts[i], "OnPlayerClickMap", &idx))
+			{
+				amx_Push(m_pFilterScripts[i], amx_ftoc(fZ));
+				amx_Push(m_pFilterScripts[i], amx_ftoc(fY));
+				amx_Push(m_pFilterScripts[i], amx_ftoc(fX));
+				amx_Push(m_pFilterScripts[i], playerid);
+				amx_Exec(m_pFilterScripts[i], &ret, idx);
+				if (!ret) return ret;
+			}
+		}
+	}
+	return (int)ret;
+}

@@ -879,3 +879,20 @@ int CGameMode::OnIncomingConnection(cell playerid, char* ip, cell port)
 	}
 	return (int)ret;
 }
+
+int CGameMode::OnPlayerClickMap(cell playerid, float fX, float fY, float fZ)
+{
+	CHECK_INIT();
+
+	int idx = 0;
+	cell ret = 1;
+	if (!amx_FindPublic(&m_amx, "OnPlayerClickMap", &idx))
+	{
+		amx_Push(&m_amx, amx_ftoc(fZ));
+		amx_Push(&m_amx, amx_ftoc(fY));
+		amx_Push(&m_amx, amx_ftoc(fX));
+		amx_Push(&m_amx, playerid);
+		amx_Exec(&m_amx, &ret, idx);
+	}
+	return (int)ret;
+}

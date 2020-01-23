@@ -73,6 +73,7 @@ public:
 	int OnPlayerKeyStateChange(cell playerid, cell newkeys, cell oldkeys);
 	int OnPlayerUpdate(cell playerid);
 	int OnIncomingConnection(cell playerid, const char* ip, cell port);
+	int OnPlayerClickMap(cell playerid, float fX, float fY, float fZ);
 };
 
 //----------------------------------------------------------------------------------

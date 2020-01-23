@@ -345,3 +345,4 @@ forward OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid);
 forward OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
 forward OnPlayerUpdate(playerid);
 forward OnIncomingConnection(playerid, ip[], port);
+forward OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ);
