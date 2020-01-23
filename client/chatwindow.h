@@ -42,7 +42,7 @@ typedef struct _CHAT_WINDOW_ENTRY
 class CChatWindow
 {
 private:
-
+	unsigned int	m_uiPageSize;
 	int					m_iEnabled;
 	int					m_iCurrentPage;
 	CHAT_WINDOW_ENTRY	m_ChatWindowEntries[MAX_MESSAGES];
@@ -96,6 +96,8 @@ public:
 	ID3DXFont		    *m_pD3DFont;
 	ID3DXSprite			*m_pChatTextSprite;
 	IDirect3DDevice9	*m_pD3DDevice;
+
+	void SetPageSize(unsigned int uiSize);
 };
 
 //----------------------------------------------------

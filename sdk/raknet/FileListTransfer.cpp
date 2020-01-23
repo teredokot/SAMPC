@@ -224,7 +224,7 @@ bool FileListTransfer::DecodeSetHeader(Packet *packet)
 
 bool FileListTransfer::DecodeFile(Packet *packet, bool fullFile)
 {
-	unsigned char *decompressedFileData;
+	unsigned char *decompressedFileData = 0;
 	char fileName[512];
 	unsigned char context;
 	unsigned fileIndex, fileLength, compressedLength;

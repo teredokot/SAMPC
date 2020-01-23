@@ -84,7 +84,7 @@ void Util_strupr(char *string)
 
 int Util_wildcmp(char *wild, char *string)
 {
-	char *cp, *mp;
+	char *cp = 0, *mp = 0;
 	
 	while((*string) && (*wild != '*'))
 	{

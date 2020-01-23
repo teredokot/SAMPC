@@ -1400,6 +1400,15 @@ void cmdShowPlayerVirtualWorld(PCHAR szCmd)
 
 //----------------------------------------------------
 
+static void cmdSetChatPageSize(PCHAR szCmd)
+{
+	unsigned int uiSize = (unsigned int)atoi(szCmd);
+	if (1 <= uiSize && uiSize <= 30)
+		pChatWindow->SetPageSize(uiSize);
+	else
+		pChatWindow->AddInfoMessage("Usage: /pagesize [1-30]");
+}
+
 void SetupCommands()
 {
 	// RELEASE COMMANDS
@@ -1409,6 +1418,7 @@ void SetupCommands()
 	pCmdWindow->AddCmdProc("save",cmdSavePos);
 	pCmdWindow->AddCmdProc("rcon",cmdRcon);
 
+	pCmdWindow->AddCmdProc("pagesize", cmdSetChatPageSize);
 #ifndef _DEBUG
 	if (tSettings.bDebug)
 	{

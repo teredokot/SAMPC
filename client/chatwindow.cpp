@@ -21,6 +21,7 @@ CChatWindow::CChatWindow(IDirect3DDevice9 *pD3DDevice, ID3DXFont *pFont)
 	m_pD3DFont			= pFont;
 	m_iEnabled			= CHAT_WINDOW_MODE_FULL;
 	m_iCurrentPage		= 1;
+	m_uiPageSize		= DISP_MESSAGES;
 
 	// Create a sprite to use when drawing text
 	D3DXCreateSprite(pD3DDevice,&m_pChatTextSprite);
@@ -47,6 +48,11 @@ CChatWindow::~CChatWindow() {}
 
 //----------------------------------------------------
 
+void CChatWindow::SetPageSize(unsigned int uiSize)
+{
+	m_uiPageSize = uiSize;
+}
+
 void CChatWindow::ResetDialogControls(CDXUTDialog *pGameUI)
 {
 	m_pGameUI = pGameUI;
@@ -59,8 +65,8 @@ void CChatWindow::ResetDialogControls(CDXUTDialog *pGameUI)
 		m_pScrollBar->SetVisible(true);
 		m_pScrollBar->SetEnabled(true);
 		m_pScrollBar->SetLocation(5,40);
-        m_pScrollBar->SetSize(15,((m_lFontSizeY+1)*DISP_MESSAGES)-60);
-		m_pScrollBar->SetTrackRange(0,(MAX_MESSAGES-DISP_MESSAGES)-1);
+        m_pScrollBar->SetSize(15,((m_lFontSizeY+1)* m_uiPageSize)-60);
+		m_pScrollBar->SetTrackRange(0,(MAX_MESSAGES- m_uiPageSize)-1);
 		m_pScrollBar->SetPageSize(5);
 		m_pScrollBar->ShowItem(MAX_MESSAGES-1);
 
@@ -144,13 +150,13 @@ void CChatWindow::Draw()
 		m_pScrollBar->SetVisible(true);
 	}
 
-	iMessageAt = (m_iCurrentPage * DISP_MESSAGES) - 1;
+	iMessageAt = (m_iCurrentPage * m_uiPageSize) - 1;
 
 	if(m_pD3DFont && m_iEnabled)
 	{
 		m_pChatTextSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
 
-		while(x!=DISP_MESSAGES) {
+		while(x!= m_uiPageSize) {
 
 			switch(m_ChatWindowEntries[iMessageAt].eType) {
 
