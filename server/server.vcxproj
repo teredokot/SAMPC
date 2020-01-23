@@ -145,7 +145,6 @@
   <ItemGroup>
     <ClCompile Include="..\sdk\amx\amx.c" />
     <ClCompile Include="..\sdk\amx\amxcore.c" />
-    <ClCompile Include="..\sdk\amx\amxDGram.c" />
     <ClCompile Include="..\sdk\amx\amxfile.c" />
     <ClCompile Include="..\sdk\amx\amxfloat.c" />
     <ClCompile Include="..\sdk\amx\amxstring.c" />

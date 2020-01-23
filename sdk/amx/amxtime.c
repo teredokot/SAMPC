@@ -65,6 +65,7 @@ static unsigned long gettimestamp(void)
 /* settime(hour, minute, second)
  * Always returns 0
  */
+#ifdef AMX_USE_TIME_DATE_SET
 static cell AMX_NATIVE_CALL n_settime(AMX *amx, cell *params)
 {
   #if defined __WIN32__ || defined _WIN32 || defined WIN32
@@ -100,6 +101,7 @@ static cell AMX_NATIVE_CALL n_settime(AMX *amx, cell *params)
   (void)amx;
   return 0;
 }
+#endif
 
 /* gettime(&hour, &minute, &second)
  * The return value is the number of seconds since 1 January 1970 (Unix system
@@ -129,12 +131,13 @@ static cell AMX_NATIVE_CALL n_gettime(AMX *amx, cell *params)
   /* the time() function returns the number of seconds since January 1 1970
    * in Universal Coordinated Time (the successor to Greenwich Mean Time)
    */
-  return sec1970;
+  return (cell)sec1970;
 }
 
 /* setdate(year, month, day)
  * Always returns 0
  */
+#ifdef AMX_USE_TIME_DATE_SET
 static cell AMX_NATIVE_CALL n_setdate(AMX *amx, cell *params)
 {
   #if defined __WIN32__ || defined _WIN32 || defined WIN32
@@ -170,6 +173,7 @@ static cell AMX_NATIVE_CALL n_setdate(AMX *amx, cell *params)
   (void)amx;
   return 0;
 }
+#endif
 
 /* getdate(&year, &month, &day)
  * The return value is the number of days since the start of the year. January
@@ -265,9 +269,11 @@ static int AMXAPI amx_TimeIdle(AMX *amx)
 #endif
 const AMX_NATIVE_INFO time_Natives[] = {
   { "gettime",   n_gettime },
-  { "settime",   n_settime },
   { "getdate",   n_getdate },
+#ifdef AMX_USE_TIME_DATE_SET
+  { "settime",   n_settime },
   { "setdate",   n_setdate },
+#endif
   { "tickcount", n_tickcount },
   { "settimer",  n_settimer },
   { NULL, NULL }        /* terminator */

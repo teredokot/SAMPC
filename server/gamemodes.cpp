@@ -26,8 +26,6 @@ extern "C" int amx_FileInit(AMX* amx);
 extern "C" int amx_FileCleanup(AMX* amx);
 extern "C" int amx_TimeInit(AMX* amx);
 extern "C" int amx_TimeCleanup(AMX* amx);
-extern "C" int amx_DGramInit(AMX* amx);
-extern "C" int amx_DGramCleanup(AMX* amx);
 extern "C" int amx_sampDbInit(AMX *amx);
 extern "C" int amx_sampDbCleanup(AMX *amx);
 
@@ -91,7 +89,6 @@ bool CGameMode::Load(char* pFileName)
 	amx_StringInit(&m_amx);
 	amx_FileInit(&m_amx);
 	amx_TimeInit(&m_amx);
-	//amx_DGramInit(&m_amx);
 	amx_CustomInit(&m_amx);
 	amx_sampDbInit(&m_amx);
 
@@ -141,7 +138,6 @@ void CGameMode::Unload()
 		aux_FreeProgram(&m_amx);
 		pPlugins->DoAmxUnload(&m_amx);
 		amx_sampDbCleanup(&m_amx);
-		//amx_DGramCleanup(&m_amx);
 		amx_TimeCleanup(&m_amx);
 		amx_FileCleanup(&m_amx);
 		amx_StringCleanup(&m_amx);

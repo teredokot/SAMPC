@@ -216,9 +216,6 @@
     <ClCompile Include="..\sdk\amx\amx.c">
       <Filter>sdk\amx</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\amx\amxDGram.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\amx\amxfile.c">
       <Filter>sdk\amx</Filter>
     </ClCompile>
