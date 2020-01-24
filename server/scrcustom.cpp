@@ -3980,6 +3980,7 @@ static cell AMX_NATIVE_CALL n_TextDrawCreate(AMX *amx, cell *params)
 	{
 		char* szText;
 		amx_StrParam(amx, params[3], szText);
+		szText = (szText != NULL) ? (szText) : ("");
 		return pTextDraw->New(amx_ctof(params[1]), amx_ctof(params[2]), szText);
 	}
 	return 0xFFFF;
@@ -3993,6 +3994,7 @@ static cell AMX_NATIVE_CALL n_TextDrawSetString(AMX *amx, cell *params)
 	{
 		char* szText;
 		amx_StrParam(amx, params[2], szText);
+		szText = (szText != NULL) ? (szText) : ("");
 		pTextDraw->SetTextString(params[1], szText);
 		return 1;
 	}
