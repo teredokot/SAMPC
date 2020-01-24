@@ -548,6 +548,9 @@ void ApplyInGamePatches()
 	// Disable camera jump-cut after spawning
 	memset((void*)0x4422F9, 0x90, 5);
 
+	// Disable pop-up stats menu
+	*(BYTE*)0x58FC2C = 0xEB;
+
 	// Rest of the stuff
 	RelocateScanListHack();
 	
