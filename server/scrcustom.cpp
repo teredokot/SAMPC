@@ -3774,7 +3774,7 @@ static cell AMX_NATIVE_CALL n_HideMenuForPlayer(AMX *amx, cell *params)
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool) return 0;
 	pMenuPool->GetAt((BYTE)params[1])->HideForPlayer((BYTE)params[2]);
-	pMenuPool->SetPlayerMenu((BYTE)params[2], 255);
+	pMenuPool->SetPlayerMenu((BYTE)params[2], (BYTE)params[1]);
 	return 1;
 }
 
