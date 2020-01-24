@@ -384,6 +384,19 @@ static cell n_GetVehicleColor(AMX* amx, cell* params)
 	return 0;
 }
 
+// native GetVehiclePaintjob(vehicleid);
+static cell n_GetVehiclePaintjob(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+	if (pVehicle)
+	{
+		return pVehicle->m_CarModInfo.bytePaintJob;
+	}
+	return -1;
+}
+
 //----------------------------------------------------------------------------------
 // native AddStaticPickup(model,type,Float:X,Float:Y,Float:Z);
 
@@ -4625,6 +4638,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetVehicleModel",		n_GetVehicleModel },
 	{ "GetVehicleInterior", n_GetVehicleInterior },
 	{ "GetVehicleColor", n_GetVehicleColor },
+	{ "GetVehiclePaintjob", n_GetVehiclePaintjob },
 	{ "SetVehicleVirtualWorld",		n_SetVehicleVirtualWorld },
 	{ "GetVehicleVirtualWorld",		n_GetVehicleVirtualWorld },
 
