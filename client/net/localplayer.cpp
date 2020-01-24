@@ -993,20 +993,10 @@ BOOL CLocalPlayer::Spawn()
 {
 	if(!m_bHasSpawnInfo) return FALSE;
 
-	CCamera			*pGameCamera;
-	pGameCamera = pGame->GetCamera();
-	pGameCamera->Restore();
-	pGameCamera->SetBehindPlayer();
 	pGame->DisplayHud(TRUE);
 	m_pPlayerPed->TogglePlayerControllable(1);
 
 	iTimesDataModified = 0;
-
-	if(!bFirstSpawn) {
-		m_pPlayerPed->SetInitialState();
-	} else {
-		bFirstSpawn = FALSE;
-	}
 
 	pGame->RefreshStreamingAt(m_SpawnInfo.vecPos.X,m_SpawnInfo.vecPos.Y);
 
@@ -1037,12 +1027,24 @@ BOOL CLocalPlayer::Spawn()
 	*(PBYTE)0x50AC20 = 0xC2;
 	*(PBYTE)0x50AC21 = 0x08;
 	*(PBYTE)0x50AC22 = 0x00;
-		
-	m_pPlayerPed->TeleportTo(m_SpawnInfo.vecPos.X,
-		m_SpawnInfo.vecPos.Y,(m_SpawnInfo.vecPos.Z + 1.0f));
 	
+	if (m_pPlayerPed->IsInVehicle())
+		m_pPlayerPed->RemoveFromVehicleAndPutAt(m_SpawnInfo.vecPos.X,
+			m_SpawnInfo.vecPos.Y, m_SpawnInfo.vecPos.Z);
+	else
+		m_pPlayerPed->TeleportTo(m_SpawnInfo.vecPos.X,
+			m_SpawnInfo.vecPos.Y, (m_SpawnInfo.vecPos.Z + 1.0f));
+
 	m_pPlayerPed->SetTargetRotation(m_SpawnInfo.fRotation);
-		
+	
+	pGame->GetCamera()->Restore(); // Restore camera without jump-cut
+	//pGame->GetCamera();->SetBehindPlayer(); // will be handled by SetInitialState()
+
+	if (!bFirstSpawn)
+		m_pPlayerPed->SetInitialState();
+	else
+		bFirstSpawn = FALSE;
+
 	m_bIsWasted = FALSE;
 	m_bIsActive = TRUE;
 	m_bWaitingForSpawnRequestReply = FALSE;

@@ -545,6 +545,9 @@ void ApplyInGamePatches()
 	*(unsigned long*)0x006D170B = 0xE9;
 	*(unsigned long*)0x006D170C = 0x006D17D5 - 0x006D170B - 5;
 
+	// Disable camera jump-cut after spawning
+	memset((void*)0x4422F9, 0x90, 5);
+
 	// Rest of the stuff
 	RelocateScanListHack();
 	
