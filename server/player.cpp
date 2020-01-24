@@ -78,6 +78,9 @@ CPlayer::CPlayer()
 	m_iInteriorId = 0;
 	m_byteSpectateType = 0;
 	m_SpectateID = 0xFFFFFFFF;
+    
+	m_bInCheckpoint = false;
+	m_bInRaceCheckpoint = false;
 	
 	BYTE i;
 	for (i = 0; i < 13; i++)
