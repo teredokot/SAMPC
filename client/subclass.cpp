@@ -198,6 +198,9 @@ BOOL HandleKeyPress(DWORD vKey)
 
 BOOL HandleCharacterInput(DWORD dwChar)
 {
+	if (pGame->IsMenuActive())
+		return FALSE;
+
 	if(pCmdWindow->isEnabled()) {
 		switch (dwChar)
 		{
