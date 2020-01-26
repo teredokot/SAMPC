@@ -150,25 +150,25 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 	if (g_bTakeScreenshot)
 	{
 		g_bTakeScreenshot = FALSE;
-		std::string sFileName;
-		GetScreenshotFileName(sFileName);
-	
-		IDirect3DSurface9* pFrontBuffer;
-		pD3DDevice->CreateOffscreenPlainSurface(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), D3DFMT_A8R8G8B8, D3DPOOL_SCRATCH, &pFrontBuffer, NULL);
-		if (SUCCEEDED(pD3DDevice->GetFrontBufferData(0, pFrontBuffer)))
-		{
-			POINT point = {0, 0};
-			ClientToScreen(pGame->GetMainWindowHwnd(), &point);
-			RECT rect;
-			GetClientRect(pGame->GetMainWindowHwnd(), &rect);
-			rect.left += point.x; rect.right += point.x;
-			rect.top += point.y; rect.bottom += point.y;
 
-			D3DXSaveSurfaceToFile(sFileName.c_str(), D3DXIFF_PNG, pFrontBuffer, NULL, &rect);
-			pChatWindow->AddInfoMessage("Screenshot Taken - %s",sFileName.c_str());
-		} else {
-			pChatWindow->AddDebugMessage("Unable to save screenshot.");
+		IDirect3DSurface9* tpSurface = NULL;
+		D3DDISPLAYMODE tDisplayMode;
+
+		pD3DDevice->GetDisplayMode(0, &tDisplayMode);
+		pD3DDevice->CreateOffscreenPlainSurface(tDisplayMode.Width, tDisplayMode.Height,
+			D3DFMT_A8R8G8B8, D3DPOOL_SCRATCH, &tpSurface, NULL);
+		if (pD3DDevice->GetFrontBufferData(0, tpSurface) == D3D_OK)
+		{
+			std::string sFileName;
+			GetScreenshotFileName(sFileName);
+			D3DXSaveSurfaceToFile(sFileName.c_str(), D3DXIFF_JPG, tpSurface, NULL, NULL);
+
+			pChatWindow->AddInfoMessage("Screenshot Taken - %s", sFileName.c_str());
 		}
+		else
+			pChatWindow->AddDebugMessage("Unable to save screenshot.");
+
+		tpSurface->Release();
 	}
 
 	if(!pGame->IsMenuActive())

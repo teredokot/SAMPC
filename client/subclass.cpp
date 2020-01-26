@@ -292,7 +292,7 @@ void GetScreenshotFileName(std::string & FileName)
     HANDLE h;
     for (int i = 0; i < 1000; i++)
     {
-        wsprintf(Buf, (FileName + "sa-mp-%03i.png").c_str(), i);
+        wsprintf(Buf, (FileName + "sa-mp-%03i.jpg").c_str(), i);
         h = FindFirstFile(Buf, &ffd);
         if(h != INVALID_HANDLE_VALUE) {   
 			FindClose(h);
