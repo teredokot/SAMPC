@@ -679,7 +679,7 @@ void CPlayer::StoreSpectatorFullSyncData(SPECTATOR_SYNC_DATA *pspSync)
 
 //----------------------------------------------------
 
-void CPlayer::Say(unsigned char * szText, BYTE byteTextLen)
+void CPlayer::Say(unsigned char * szText, size_t byteTextLen)
 {
 	PlayerID playerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(m_bytePlayerID);
 	RakNet::BitStream bsSend;
@@ -722,7 +722,7 @@ void CPlayer::Say(unsigned char * szText, BYTE byteTextLen)
 
 //----------------------------------------------------
 
-void CPlayer::Privmsg(BYTE byteToPlayerID, unsigned char * szText, BYTE byteTextLen)
+void CPlayer::Privmsg(BYTE byteToPlayerID, unsigned char * szText, size_t byteTextLen)
 {
 	PlayerID playerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(m_bytePlayerID);
 	PlayerID toplayerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(byteToPlayerID);
@@ -739,7 +739,7 @@ void CPlayer::Privmsg(BYTE byteToPlayerID, unsigned char * szText, BYTE byteText
 
 //----------------------------------------------------
 
-void CPlayer::TeamPrivmsg(unsigned char * szText, BYTE byteTextLen)
+void CPlayer::TeamPrivmsg(unsigned char * szText, size_t byteTextLen)
 {
 	PlayerID playerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(m_bytePlayerID);
 	RakNet::BitStream bsSend;

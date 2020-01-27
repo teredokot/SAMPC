@@ -99,13 +99,13 @@ int ScriptCommand(const SCRIPT_COMMAND* pScriptCommand, ...)
 			case 's':	// If string... Updated 13th Jan 06.. (kyeman) SA string support
 			{
 				char* sz = va_arg(ap, char*);
-				unsigned char aLen = strlen(sz);
+				size_t uiLen = strlen(sz);
 				ScriptBuf[buf_pos] = 0x0E;
 				buf_pos++;
-				ScriptBuf[buf_pos] = aLen;
+				ScriptBuf[buf_pos] = (BYTE)uiLen;
 				buf_pos++;
-				memcpy(&ScriptBuf[buf_pos],sz,aLen);				
-				buf_pos += aLen;
+				memcpy(&ScriptBuf[buf_pos],sz, uiLen);
+				buf_pos += uiLen;
 				break;
 			}
 			case 'z':	// If the params need zero-terminating...

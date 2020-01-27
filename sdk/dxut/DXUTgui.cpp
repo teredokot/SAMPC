@@ -1282,7 +1282,7 @@ HRESULT CDXUTDialog::AddListBox( int ID, int x, int y, int width, int height, DW
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTDialog::InitControl( CDXUTControl* pControl )
 {
-    HRESULT hr;
+    //HRESULT hr;
 
     if( pControl == NULL )
         return E_INVALIDARG;

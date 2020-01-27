@@ -195,7 +195,7 @@ void CScoreBoard::Draw()
 	int endplayer = min(m_iOffset+21, playercount);
 
 	char szServerAddress[255];
-	sprintf(szServerAddress, "Players: %d-%d of %d", m_iOffset+1, endplayer, playercount);
+	sprintf_s(szServerAddress, "Players: %d-%d of %d", m_iOffset+1, endplayer, playercount);
 
 	// HOSTNAME AND IP ADDRESS
 	RECT rectMain = {(LONG)(24.0f * m_fScalar + m_fScreenOffsetX), (LONG)(21.0f * m_fScalar + m_fScreenOffsetY),
@@ -239,9 +239,9 @@ void CScoreBoard::Draw()
 
 	for (x=m_iOffset; x<endplayer; x++)
 	{
-		sprintf(szPlayerId, "%d", Players[x].dwId);
-		sprintf(szScore, "%d", Players[x].iScore);
-		sprintf(szPing, "%d", Players[x].dwPing);
+		sprintf_s(szPlayerId, "%d", Players[x].dwId);
+		sprintf_s(szScore, "%d", Players[x].iScore);
+		sprintf_s(szPing, "%d", Players[x].dwPing);
 
 		rectPlayerId.left++; rectPlayerId.top++;
 		m_pFont->DrawText(m_pSprite, szPlayerId, -1, &rectPlayerId, DT_SINGLELINE|DT_CENTER, D3DCOLOR_XRGB(0, 0, 0));
@@ -253,7 +253,7 @@ void CScoreBoard::Draw()
 		char szUsePlayerName[64];
 
 #ifdef _DEBUG
-		sprintf(szUsePlayerName,"%s (%u)",Players[x].szName,Players[x].iState);
+		sprintf_s(szUsePlayerName,"%s (%u)",Players[x].szName,Players[x].iState);
 #else
 		strcpy(szUsePlayerName,Players[x].szName);
 #endif

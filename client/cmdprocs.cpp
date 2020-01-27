@@ -63,14 +63,15 @@ void cmdMsg(PCHAR szCmd)
 	
 	char * szDestination;
 	char * szMsg;
+	char* ctx;
 
-	szDestination = strtok(szCmd, " ");
+	szDestination = strtok_s(szCmd, " ", &ctx);
 	if (!szDestination || !IsNumeric(szDestination)) {
 		pChatWindow->AddInfoMessage("Enter a valid player ID!");
 		return;
 	}
 
-	szMsg = strtok(NULL, "");
+	szMsg = strtok_s(NULL, "", &ctx);
 	if (szMsg == NULL)
 	{
 		pChatWindow->AddInfoMessage("Enter a message!");
@@ -111,7 +112,7 @@ void cmdDiscon(PCHAR szCmd)
 void cmdOnfootCorrection(PCHAR szCmd)
 {
 	if(strlen(szCmd)) {
-		fOnFootCorrectionMultiplier = atof(szCmd);
+		fOnFootCorrectionMultiplier = strtof(szCmd, NULL);
 	}	
 	pChatWindow->AddDebugMessage("OnFootCorrection: %.4f",fOnFootCorrectionMultiplier);
 }
@@ -121,7 +122,7 @@ void cmdOnfootCorrection(PCHAR szCmd)
 void cmdInCarCorrection(PCHAR szCmd)
 {
 	if(strlen(szCmd)) {
-		fInCarCorrectionMultiplier = atof(szCmd);
+		fInCarCorrectionMultiplier = strtof(szCmd, NULL);
 	}
 	pChatWindow->AddDebugMessage("InCarCorrection: %.4f",fInCarCorrectionMultiplier);
 }
@@ -131,7 +132,7 @@ void cmdInCarCorrection(PCHAR szCmd)
 void cmdInAccMultiplier(PCHAR szCmd)
 {
 	if(strlen(szCmd)) {
-		fInaccuracyFactorMultiplier = atof(szCmd);
+		fInaccuracyFactorMultiplier = strtof(szCmd, NULL);
 	}
 	pChatWindow->AddDebugMessage("InAccMultiplier: %.4f",fInaccuracyFactorMultiplier);
 }
@@ -227,7 +228,7 @@ void cmdSavePos(PCHAR szCmd)
 
 	//if(!tSettings.bDebug) return;
 
-	fileOut = fopen("savedpositions.txt","a");
+	fopen_s(&fileOut, "savedpositions.txt","a");
 	if(!fileOut) {
 		pChatWindow->AddDebugMessage("I can't open the savepositions.txt file for append.");
 		return;
@@ -325,7 +326,7 @@ void cmdCreateVehicle(PCHAR szCmd)
 			MATRIX4X4 matPlayer;
 			pPlayer->GetMatrix(&matPlayer);
 			CHAR blank[9] = "";
-			sprintf(blank, "TYPE_%d", iVehicleType);
+			sprintf_s(blank, "TYPE_%d", iVehicleType);
 			CVehicle *pTestVehicle = pGame->NewVehicle(iVehicleType,
 				(matPlayer.pos.X - 5.0f), (matPlayer.pos.Y - 5.0f),
 				matPlayer.pos.Z+1.0f, 0.0f, (PCHAR)blank);
@@ -402,7 +403,7 @@ void cmdDebugLabels(PCHAR szCmd)
 void cmdPlayerToVehicle(PCHAR szCmd)
 {
 	int iPlayer,iVehicle;
-	sscanf(szCmd,"%u%u",&iPlayer,&iVehicle);
+	sscanf_s(szCmd,"%u%u",&iPlayer,&iVehicle);
 
 	if(pNetGame) {
 		CRemotePlayer *pRemotePlayer = pNetGame->GetPlayerPool()->GetAt(iPlayer);
@@ -419,7 +420,7 @@ void cmdPlayerToVehicle(PCHAR szCmd)
 void cmdCamMode(PCHAR szCmd)
 {
 	int iMode;
-	sscanf(szCmd,"%d",&iMode);
+	sscanf_s(szCmd,"%d",&iMode);
 	*pbyteCameraMode = (BYTE)iMode;	
 }
 
@@ -434,7 +435,7 @@ void cmdCreatePlayer(PCHAR szCmd)
 
 	int iActorSkin=0,iPlayerNum=0;
 
-	sscanf(szCmd, "%d%d", &iPlayerNum, &iActorSkin);
+	sscanf_s(szCmd, "%d%d", &iPlayerNum, &iActorSkin);
 
 	if(pGame->IsGameLoaded()) {
 
@@ -547,7 +548,7 @@ void cmdSetCameraPos(PCHAR szCmd)
 		return;
 	}
 
-	sscanf(szCmd,"%f%f%f%f%f%f",&fX,&fY,&fZ,&fLookX,&fLookY,&fLookZ);
+	sscanf_s(szCmd,"%f%f%f%f%f%f",&fX,&fY,&fZ,&fLookX,&fLookY,&fLookZ);
 	pGame->GetCamera()->SetPosition(fX,fY,fZ,0.0f,0.0f,0.0f);
 	pGame->GetCamera()->LookAtPoint(fLookX,fLookY,fLookZ,0);
 }
@@ -569,7 +570,7 @@ void cmdGiveActorWeapon(PCHAR szCmd)
 	}
 
 	int	 iWeaponID=0;
-	sscanf(szCmd,"%d",&iWeaponID);
+	sscanf_s(szCmd,"%d",&iWeaponID);
 	pGame->FindPlayerPed()->GiveWeapon(iWeaponID,1000);
 }
 
@@ -585,7 +586,7 @@ void cmdDisplayMemory(PCHAR szCmd)
 	DWORD dwDebugAddr;
 	DWORD dwDebugOffset;
 
-	sscanf(szCmd,"%X%u",&dwDebugAddr,&dwDebugOffset);
+	sscanf_s(szCmd,"%X%u",&dwDebugAddr,&dwDebugOffset);
 
 	if(!dwDebugAddr) {
 		pChatWindow->AddDebugMessage("usage: /disp_mem (Hex Address) (Decimal Offset)");
@@ -607,7 +608,7 @@ void cmdDisplayMemoryAsc(PCHAR szCmd)
 	DWORD dwDebugAddr;
 	DWORD dwDebugOffset;
 
-	sscanf(szCmd,"%X%u",&dwDebugAddr,&dwDebugOffset);
+	sscanf_s(szCmd,"%X%u",&dwDebugAddr,&dwDebugOffset);
 
 	if(!dwDebugAddr) {
 		pChatWindow->AddDebugMessage("usage: /disp_mem_asc (Hex Address) (Decimal Offset)");
@@ -640,7 +641,7 @@ void cmdSetTime(PCHAR szCmd)
 		
 	int	iHour=0,iMinute=0;
 
-	sscanf(szCmd,"%d%d",&iHour,&iMinute);
+	sscanf_s(szCmd,"%d%d",&iHour,&iMinute);
 
 	if ((iHour >= 0 && iHour <= 23) && (iMinute >= 0 && iMinute <= 59)) {
 		pGame->SetWorldTime(iHour,iMinute);
@@ -705,7 +706,7 @@ void cmdRemotePlayerRespawn(PCHAR szCmd)
 void cmdPlayerAddr(PCHAR szCmd)
 {
 	int iActor=0;
-	sscanf(szCmd,"%d",&iActor);
+	sscanf_s(szCmd,"%d",&iActor);
 
 	if(iActor==0) {
 		pChatWindow->AddDebugMessage("0x%X",GamePool_FindPlayerPed());
@@ -794,7 +795,7 @@ void cmdWorldVehicleRemove(PCHAR szCmd)
 	CVehicle *pThisVehicle;
 
 	int iVehicle=0;
-	sscanf(szCmd,"%d",&iVehicle);
+	sscanf_s(szCmd,"%d",&iVehicle);
 	pThisVehicle = pVehiclePool->GetAt(iVehicle);
 	if(pThisVehicle) pThisVehicle->Remove();
 }
@@ -807,7 +808,7 @@ void cmdWorldVehicleAdd(PCHAR szCmd)
 	CVehicle *pThisVehicle;
 
 	int iVehicle=0;
-	sscanf(szCmd,"%d",&iVehicle);
+	sscanf_s(szCmd,"%d",&iVehicle);
 	pThisVehicle = pVehiclePool->GetAt(iVehicle);
 	if(pThisVehicle) pThisVehicle->Add();
 }
@@ -820,7 +821,7 @@ void cmdWorldPlayerRemove(PCHAR szCmd)
 	CRemotePlayer *pThisPlayer;
 
 	int iPlayer=0;
-	sscanf(szCmd,"%d",&iPlayer);
+	sscanf_s(szCmd,"%d",&iPlayer);
 	pThisPlayer = pPlayerPool->GetAt(iPlayer);
 	if(pThisPlayer) pThisPlayer->GetPlayerPed()->Remove();
 }
@@ -833,7 +834,7 @@ void cmdWorldPlayerAdd(PCHAR szCmd)
 	CRemotePlayer *pThisPlayer;
 
 	int iPlayer=0;
-	sscanf(szCmd,"%d",&iPlayer);
+	sscanf_s(szCmd,"%d",&iPlayer);
 	pThisPlayer = pPlayerPool->GetAt(iPlayer);
 	if(pThisPlayer) pThisPlayer->GetPlayerPed()->Add();
 }
@@ -854,7 +855,7 @@ void cmdKillRemotePlayer(PCHAR szCmd)
 	CRemotePlayer *pThisPlayer;
 
 	int iPlayer=0;
-	sscanf(szCmd,"%d",&iPlayer);
+	sscanf_s(szCmd,"%d",&iPlayer);
 	pThisPlayer = pPlayerPool->GetAt(iPlayer);
 	if(pThisPlayer) pThisPlayer->GetPlayerPed()->SetDead();
 }
@@ -865,7 +866,7 @@ void cmdApplyAnimation(PCHAR szCmd)
 {
 	char szAnimFile[256];
 	char szAnimName[256];
-	sscanf(szCmd,"%s%s",szAnimName,szAnimFile);
+	sscanf_s(szCmd,"%s%s",szAnimName,_countof(szAnimName),szAnimFile,_countof(szAnimFile));
 
 	//CPlayerPed *pPlayer = pGame->FindPlayerPed();
 	//pPlayer->ApplyAnimation(szAnimName,szAnimFile,4.0f,1,0,0,0,0);
@@ -932,7 +933,7 @@ void cmdPlaySound(PCHAR szCmd)
 		pPlayer->GetMatrix(&matPlayer);
 
 		int iSound = 0;
-		sscanf(szCmd, "%d", &iSound);
+		sscanf_s(szCmd, "%d", &iSound);
 		ScriptCommand(&play_sound, matPlayer.pos.X, matPlayer.pos.Y, matPlayer.pos.Z, iSound);
 	}
 }
@@ -941,7 +942,8 @@ void cmdPlaySound(PCHAR szCmd)
 
 void cmdSaveLocation(PCHAR szCmd)
 {
-	FILE* fileOut = fopen("savedlocations.txt", "a");
+	FILE* fileOut = NULL;
+	fopen_s(&fileOut, "savedlocations.txt", "a");
 	if (fileOut)
 	{
 		float fZAngle;
@@ -979,7 +981,7 @@ void cmdDeactivatePlayers(PCHAR szCmd)
 void cmdSetFarClip(PCHAR szCmd)
 {
 	float f;
-	sscanf(szCmd,"%f",&f);
+	sscanf_s(szCmd,"%f",&f);
 	fFarClip = f;
 }
 
@@ -1095,7 +1097,7 @@ void cmdSpectatev(PCHAR szCmd)
 	CLocalPlayer *pPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
 	if (strlen(szCmd))
 	{
-		sscanf(szCmd, "%d%d", &iPlayerID, &iSpectateMode);
+		sscanf_s(szCmd, "%d%d", &iPlayerID, &iSpectateMode);
 		pPlayer->ToggleSpectating(TRUE);
 		pPlayer->m_byteSpectateMode = iSpectateMode;
 		pPlayer->SpectateVehicle(iPlayerID);
@@ -1113,7 +1115,7 @@ void cmdSpectatep(PCHAR szCmd)
 	CLocalPlayer *pPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
 	if (strlen(szCmd))
 	{
-		sscanf(szCmd, "%d%d", &iPlayerID, &iSpectateMode);
+		sscanf_s(szCmd, "%d%d", &iPlayerID, &iSpectateMode);
 		pPlayer->ToggleSpectating(TRUE);
 		pPlayer->m_byteSpectateMode = iSpectateMode;
 		pPlayer->SpectatePlayer(iPlayerID);
@@ -1126,15 +1128,17 @@ void cmdSpectatep(PCHAR szCmd)
 
 void cmdClothes(PCHAR szCmd)
 {
-	char szTexture[64];
-	char szModel[64];
+	char szTexture[64] = { 0 };
+	char szModel[64] = { 0 };
 	int iType = 0;
 
-	sscanf(szCmd, "%s %s %d", szTexture, szModel, &iType);
+	sscanf_s(szCmd, "%s %s %d", szTexture, (unsigned)_countof(szTexture),
+		szModel, (unsigned)_countof(szModel), &iType);
+
 	if (strcmp(szTexture, "-")==0)
-		strcpy(szTexture, "");
+		strcpy_s(szTexture, "");
 	if (strcmp(szModel, "-")==0)
-		strcpy(szModel, "");
+		strcpy_s(szModel, "");
 
 	__asm
 	{
@@ -1209,7 +1213,7 @@ void cmdAttractAddr(PCHAR szCmd)
 void cmdPlayerVtbl(PCHAR szCmd)
 {
 	//GamePool_FindPlayerPed()->entity.vtable = 0x86C0A8;
-	MATRIX4X4 mat;
+	//MATRIX4X4 mat;
 	CPlayerPed *pPed = pGame->FindPlayerPed();
 	BYTE *b = (BYTE *)pPed->m_pPed+1156;
 	BYTE sv = *b;
@@ -1234,7 +1238,8 @@ void cmdDumpFreqTable(PCHAR szCmd)
 
 	if(pNetGame) {
 		pNetGame->GetRakClient()->GetSendFrequencyTable(freqTable);
-		FILE *fout = fopen("freqclient.txt","w");
+		FILE* fout = NULL;
+		fopen_s(&fout, "freqclient.txt", "w");
 		if(!fout) return;
 		int x=0;
 		while(x!=256) {

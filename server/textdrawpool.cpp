@@ -63,13 +63,13 @@ WORD CTextDrawPool::New(float fX, float fY, char* szText)
 	{
 		strncpy(Text, szText, MAX_TEXT_DRAW_LINE);
 		Text[MAX_TEXT_DRAW_LINE - 1] = '\0';
-		TextDraw->fLetterWidth = 0.48;
-		TextDraw->fLetterHeight = 1.12;
+		TextDraw->fLetterWidth = 0.48f;
+		TextDraw->fLetterHeight = 1.12f;
 		TextDraw->dwLetterColor = 0xFFE1E1E1; // ABGR
 		TextDraw->byteCenter = 0;
 		TextDraw->byteBox = 0;
-		TextDraw->fLineWidth = 1280.0;
-		TextDraw->fLineHeight = 1280.0;
+		TextDraw->fLineWidth = 1280.0f;
+		TextDraw->fLineHeight = 1280.0f;
 		TextDraw->dwBoxColor = 0x80808080; // ABGR
 		TextDraw->byteProportional = 1;
 		TextDraw->dwBackgroundColor = 0xFF000000; // ABGR

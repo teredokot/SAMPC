@@ -2521,7 +2521,7 @@ CDXUTDirectionWidget::CDXUTDirectionWidget()
 HRESULT CDXUTDirectionWidget::StaticOnCreateDevice( IDirect3DDevice9* pd3dDevice )
 {
     TCHAR str[MAX_PATH];
-    HRESULT hr;
+    //HRESULT hr;
 
     s_pd3dDevice = pd3dDevice;
    
@@ -2642,12 +2642,12 @@ HRESULT CDXUTDirectionWidget::OnRender( D3DXCOLOR color, const D3DXMATRIX* pmVie
     m_mView = *pmView;
 
     // Render the light spheres so the user can visually see the light dir
-    UINT iPass, cPasses;
+    UINT iPass, cPasses = 0;
     D3DXMATRIX mRotate;
     D3DXMATRIX mScale;
     D3DXMATRIX mTrans;
     D3DXMATRIXA16 mWorldViewProj;
-    HRESULT hr;
+    //HRESULT hr;
 
     s_pEffect->SetTechnique( "RenderWith1LightNoTexture" );
     s_pEffect->SetVector( "g_MaterialDiffuseColor", (D3DXVECTOR4*)&color);

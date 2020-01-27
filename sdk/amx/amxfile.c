@@ -301,7 +301,7 @@ static size_t fgets_char(FILE *fp, char *string, size_t max)
 #if defined _UNICODE
 wchar_t *_wgetenv(wchar_t *name)
 {
-static wchar_t buffer[_MAX_PATH];
+static wchar_t buffer[AMX_MAX_PATH];
   buffer[0]=L'\0';
   GetEnvironmentVariable(name,buffer,sizeof buffer/sizeof(wchar_t));
   return buffer[0]!=L'\0' ? buffer : NULL;
@@ -309,7 +309,7 @@ static wchar_t buffer[_MAX_PATH];
 #else
 char *amx_getenv(const char *name)
 {
-static char buffer[_MAX_PATH];
+static char buffer[AMX_MAX_PATH];
   buffer[0]='\0';
   GetEnvironmentVariable(name,buffer,sizeof buffer);
   return buffer[0]!='\0' ? buffer : NULL;
@@ -422,7 +422,7 @@ static char *completename(TCHAR *dest, TCHAR *src, size_t size)
 static cell AMX_NATIVE_CALL n_fopen(AMX *amx, cell *params)
 {
   TCHAR *attrib,*altattrib;
-  TCHAR *name,fullname[_MAX_PATH];
+  TCHAR *name,fullname[AMX_MAX_PATH];
   FILE *f = NULL;
 
   altattrib=NULL;
@@ -640,7 +640,7 @@ static cell AMX_NATIVE_CALL n_fseek(AMX *amx, cell *params)
 static cell AMX_NATIVE_CALL n_fexist(AMX *amx, cell *params)
 {
   int r=1;
-  TCHAR *name,fullname[_MAX_PATH];
+  TCHAR *name,fullname[AMX_MAX_PATH];
 
   amx_StrParam(amx,params[1],name);
   if (name!=NULL && completename(fullname,name,sizeof fullname)!=NULL)
@@ -652,7 +652,7 @@ static cell AMX_NATIVE_CALL n_fexist(AMX *amx, cell *params)
 static cell AMX_NATIVE_CALL n_fremove(AMX *amx, cell *params)
 {
   int r=1;
-  TCHAR *name,fullname[_MAX_PATH];
+  TCHAR *name,fullname[AMX_MAX_PATH];
 
   amx_StrParam(amx,params[1],name);
   if (name!=NULL && completename(fullname,name,sizeof fullname)!=NULL)

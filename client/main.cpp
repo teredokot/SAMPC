@@ -222,7 +222,7 @@ void HookRwRenderStateSet()
 	_asm mov [eax+32], edx
 
 #ifdef _DEBUG
-	sprintf(dbgstr,"HookRwRenderStateSet(0x%X)",dwOrgRwSetState);
+	sprintf_s(dbgstr,"HookRwRenderStateSet(0x%X)",dwOrgRwSetState);
 	OutputDebugString(dbgstr);
 #endif
 

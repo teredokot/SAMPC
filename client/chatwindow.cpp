@@ -214,7 +214,7 @@ void CChatWindow::AddInfoMessage(CHAR * szFormat, ...)
 
 	va_list args;
 	va_start(args, szFormat);
-	vsprintf(tmp_buf, szFormat, args);
+	vsprintf_s(tmp_buf, szFormat, args);
 	va_end(args);
 
 	FilterInvalidChars(tmp_buf);
@@ -233,7 +233,7 @@ void CChatWindow::AddDebugMessage(CHAR * szFormat, ...)
 
 	va_list args;
 	va_start(args, szFormat);
-	vsprintf(tmp_buf, szFormat, args);
+	vsprintf_s(tmp_buf, szFormat, args);
 	va_end(args);
 
 	FilterInvalidChars(tmp_buf);
@@ -286,8 +286,8 @@ void CChatWindow::AddToChatWindowBuffer(eChatMessageType eType,
 	m_ChatWindowEntries[0].dwNickColor = dwChatColor;
 	
 	if(szNick) {
-		strcpy(m_ChatWindowEntries[0].szNick,szNick);
-		strcat(m_ChatWindowEntries[0].szNick,":");
+		strcpy_s(m_ChatWindowEntries[0].szNick,szNick);
+		strcat_s(m_ChatWindowEntries[0].szNick,":");
 	} else {
 		m_ChatWindowEntries[0].szNick[0] = '\0';
 	}
@@ -301,7 +301,7 @@ void CChatWindow::AddToChatWindowBuffer(eChatMessageType eType,
 
 		if((MAX_LINE_LENGTH - iBestLineLength) > 12) {
 			// we should just take the whole line
-			strncpy(m_ChatWindowEntries[0].szMessage,szString,MAX_LINE_LENGTH);
+			strncpy_s(m_ChatWindowEntries[0].szMessage,szString,MAX_LINE_LENGTH);
 			m_ChatWindowEntries[0].szMessage[MAX_LINE_LENGTH] = '\0';
 
 			PushBack();
@@ -311,11 +311,11 @@ void CChatWindow::AddToChatWindowBuffer(eChatMessageType eType,
 			m_ChatWindowEntries[0].dwNickColor = dwChatColor;
 			m_ChatWindowEntries[0].szNick[0] = '\0';
 
-			strcpy(m_ChatWindowEntries[0].szMessage,szString+MAX_LINE_LENGTH);
+			strcpy_s(m_ChatWindowEntries[0].szMessage,szString+MAX_LINE_LENGTH);
 		}
 		else {
 			// grab upto the found space.
-			strncpy(m_ChatWindowEntries[0].szMessage,szString,iBestLineLength);
+			strncpy_s(m_ChatWindowEntries[0].szMessage,szString,iBestLineLength);
 			m_ChatWindowEntries[0].szMessage[iBestLineLength] = '\0';
 
 			PushBack();
@@ -325,11 +325,11 @@ void CChatWindow::AddToChatWindowBuffer(eChatMessageType eType,
 			m_ChatWindowEntries[0].dwNickColor = dwChatColor;
 			m_ChatWindowEntries[0].szNick[0] = '\0';
 
-			strcpy(m_ChatWindowEntries[0].szMessage,szString+(iBestLineLength+1));
+			strcpy_s(m_ChatWindowEntries[0].szMessage,szString+(iBestLineLength+1));
 		}
 	}
 	else {
-		strncpy(m_ChatWindowEntries[0].szMessage,szString,MAX_MESSAGE_LENGTH);
+		strncpy_s(m_ChatWindowEntries[0].szMessage,szString,MAX_MESSAGE_LENGTH);
 		m_ChatWindowEntries[0].szMessage[MAX_MESSAGE_LENGTH] = '\0';
 	}
 	

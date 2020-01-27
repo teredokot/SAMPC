@@ -238,12 +238,12 @@ void PrintInfoForTask(char *name, DWORD *task)
 {
 	CHAR line_buffer[512];
 
-	sprintf( line_buffer, "%s: S: 0x%08X  VT: 0x%08X  T: %s (0x%x)", 
+	sprintf_s( line_buffer, "%s: S: 0x%p  VT: 0x%08X  T: %s (0x%x)", 
 		name,task,task?*task:0,GetTaskNameFromTask(task),GetTaskTypeFromTask(task));
 	GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(255,255,255,255));
 
 	while(task = GetNextTaskFromTask(task)) {
-		sprintf( line_buffer, "%s: S: 0x%08X  VT: 0x%08X  T: %s (0x%x)", 
+		sprintf_s( line_buffer, "%s: S: 0x%p  VT: 0x%08X  T: %s (0x%x)", 
 			name,task,task?*task:0,GetTaskNameFromTask(task),GetTaskTypeFromTask(task));
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(255,255,255,255));
 	}
@@ -278,13 +278,13 @@ void GameDebugDrawTaskInfo()
 	// init position for drawing
 	debug_draw_top = 50;
 
-	sprintf(line_buffer,"PlayerPed %u (struct: 0x%X, vtbl: 0x%X)",dwDebugEntity1,actor,actor->entity.vtable);
+	sprintf_s(line_buffer,"PlayerPed %u (struct: 0x%p, vtbl: 0x%X)",dwDebugEntity1,actor,actor->entity.vtable);
 	GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(255,90,90,255));
 
 	GameDebugDrawNextLine("Displaying Ped Intelligence...",D3DCOLOR_ARGB(255,90,90,255));
 	GameDebugDrawNextLine("",D3DCOLOR_ARGB(255,255,255,255));
 
-	sprintf(line_buffer, "Ped: struct: 0x%08X,  vtbl: 0x%08X", 
+	sprintf_s(line_buffer, "Ped: struct: 0x%p,  vtbl: 0x%08X", 
 		actor->Tasks->pdwPed, actor->Tasks->pdwPed?*(actor->Tasks->pdwPed):0);
 	GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(255,255,255,255));
 
@@ -325,80 +325,80 @@ void GameDebugDrawActorInfo()
 	if(actor)
 	{		
 
-		sprintf(line_buffer,"PlayerPed %u (entity offset: 0x%X)",dwDebugEntity1,actor);
+		sprintf_s(line_buffer,"PlayerPed %u (entity offset: 0x%p)",dwDebugEntity1,actor);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(255,90,90,255));
 
-		sprintf(line_buffer,"vtbl: 0x%X",actor->entity.vtable);
+		sprintf_s(line_buffer,"vtbl: 0x%X",actor->entity.vtable);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"0xB6F178=%f 0xB7CB5C=%f 0x863AC0=%f 0x858FE8=%f",
+		sprintf_s(line_buffer,"0xB6F178=%f 0xB7CB5C=%f 0x863AC0=%f 0x858FE8=%f",
 			*(float *)0xB6F178,*(float *)0xB7CB5C,*(float *)0x863AC0,*(float *)0x858FE8);
         GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"right: %f %f %f = %f",
+		sprintf_s(line_buffer,"right: %f %f %f = %f",
 			actor->entity.mat->right.X,actor->entity.mat->right.Y,actor->entity.mat->right.Z,
-			(actor->entity.mat->right.X * actor->entity.mat->right.X) +
+			((actor->entity.mat->right.X * actor->entity.mat->right.X) +
 			(actor->entity.mat->right.Y * actor->entity.mat->right.Y) + 
-			(actor->entity.mat->right.Z * actor->entity.mat->right.Z));
+			(actor->entity.mat->right.Z * actor->entity.mat->right.Z)));
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"up: %f %f %f = %f",
+		sprintf_s(line_buffer,"up: %f %f %f = %f",
 			actor->entity.mat->up.X,actor->entity.mat->up.Y,actor->entity.mat->up.Z,
 			(actor->entity.mat->up.X * actor->entity.mat->up.X) +
 			(actor->entity.mat->up.Y * actor->entity.mat->up.Y) + 
 			(actor->entity.mat->up.Z * actor->entity.mat->up.Z));
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"at: %f %f %f",
+		sprintf_s(line_buffer,"at: %f %f %f",
 			actor->entity.mat->at.X,actor->entity.mat->at.Y,actor->entity.mat->at.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"pos: %f %f %f",
+		sprintf_s(line_buffer,"pos: %f %f %f",
 			actor->entity.mat->pos.X,actor->entity.mat->pos.Y,actor->entity.mat->pos.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 			
-		sprintf(line_buffer,"Move: %f %f %f",
+		sprintf_s(line_buffer,"Move: %f %f %f",
 			actor->entity.vecMoveSpeed.X,actor->entity.vecMoveSpeed.Y,actor->entity.vecMoveSpeed.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Turn: %f %f %f",
+		sprintf_s(line_buffer,"Turn: %f %f %f",
 			actor->entity.vecTurnSpeed.X,actor->entity.vecTurnSpeed.Y,actor->entity.vecTurnSpeed.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Control Flags: 0x%X",actor->entity.nControlFlags);
+		sprintf_s(line_buffer,"Control Flags: 0x%X",actor->entity.nControlFlags);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Model Index: %u",actor->entity.nModelIndex);
+		sprintf_s(line_buffer,"Model Index: %u",actor->entity.nModelIndex);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"RW: 0x%X",actor->entity.pdwRenderWare);
+		sprintf_s(line_buffer,"RW: 0x%p",actor->entity.pdwRenderWare);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		_itoa(actor->dwStateFlags,s,2);
-		sprintf(line_buffer,"StateFlags: %s",s);
+		_itoa_s(actor->dwStateFlags,s,2);
+		sprintf_s(line_buffer,"StateFlags: %s",s);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		_itoa(actor->entity.byteImmunities,s,2);
-		sprintf(line_buffer,"Immunities: %s",s);
+		_itoa_s(actor->entity.byteImmunities,s,2);
+		sprintf_s(line_buffer,"Immunities: %s",s);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Vehicle: 0x%X Intelligence: 0x%X",actor->pVehicle,actor->Tasks);
+		sprintf_s(line_buffer,"Vehicle: 0x%X Intelligence: 0x%p",actor->pVehicle,actor->Tasks);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"MovRot1: %f MovRot2: %f ToRot: %f ActRot: %f CamAdj: %f",
+		sprintf_s(line_buffer,"MovRot1: %f MovRot2: %f ToRot: %f ActRot: %f CamAdj: %f",
 			actor->fMoveRot1,actor->fMoveRot2,actor->fRotation1,actor->fRotation2,actor->fRotCamAdjust);
         GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Health: %f",actor->fHealth);
+		sprintf_s(line_buffer,"Health: %f",actor->fHealth);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Action: %u",actor->dwAction);
+		sprintf_s(line_buffer,"Action: %u",actor->dwAction);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"PedType: %u",actor->dwPedType);
+		sprintf_s(line_buffer,"PedType: %u",actor->dwPedType);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"PedStatPrim: %d PedStat: %d",
+		sprintf_s(line_buffer,"PedStatPrim: %d PedStat: %d",
 			Game_PedStatPrim(actor->entity.nModelIndex),
 			Game_PedStat(actor->entity.nModelIndex));
 
@@ -424,20 +424,20 @@ void GameDebugDrawActorInfo()
 		_asm mov dwAnimSet, ebx
 
 		if(actor->Tasks->pdwFighting) {
-			sprintf(line_buffer,"FightVtbl: 0x%X   FightStruct: 0x%X   PlayerInfoAim: %f",
+			sprintf_s(line_buffer,"FightVtbl: 0x%X   FightStruct: 0x%p   PlayerInfoAim: %f",
 				*actor->Tasks->pdwFighting,actor->Tasks->pdwFighting,fAimZ);
 			GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		}
 
 		WEAPON_SLOT_TYPE * Weapon = &actor->WeaponSlots[actor->byteCurWeaponSlot];
-		sprintf(line_buffer,"Weap: %u Sta: %u Clip: %u Ammo: %u",
+		sprintf_s(line_buffer,"Weap: %u Sta: %u Clip: %u Ammo: %u",
 			Weapon->dwType, Weapon->dwState, Weapon->dwAmmoInClip, Weapon->dwAmmo );
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Target: %u Jetpack: %u AnimSet: %u",actor->pTarget,pGame->FindPlayerPed()->IsInJetpackMode(),dwAnimSet);
+		sprintf_s(line_buffer,"Target: %u Jetpack: %u AnimSet: %u",actor->pTarget,pGame->FindPlayerPed()->IsInJetpackMode(),dwAnimSet);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Cam1: %f %f %f = %f",
+		sprintf_s(line_buffer,"Cam1: %f %f %f = %f",
 			pcaInternalAim->f1x,pcaInternalAim->f1y,pcaInternalAim->f1z,
 			(pcaInternalAim->f1x * pcaInternalAim->f1x) +
 			(pcaInternalAim->f1y * pcaInternalAim->f1y) + 
@@ -445,7 +445,7 @@ void GameDebugDrawActorInfo()
 			);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 	
-		sprintf(line_buffer,"Cam2: %f %f %f = %f",
+		sprintf_s(line_buffer,"Cam2: %f %f %f = %f",
 			pcaInternalAim->f2x,pcaInternalAim->f2y,pcaInternalAim->f2z,
 			(pcaInternalAim->f2x * pcaInternalAim->f2x) +
 			(pcaInternalAim->f2y * pcaInternalAim->f2y) + 
@@ -453,7 +453,7 @@ void GameDebugDrawActorInfo()
 			);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Campos: %f %f %f PosFromPlayer: %f %f %f",
+		sprintf_s(line_buffer,"Campos: %f %f %f PosFromPlayer: %f %f %f",
 			pcaInternalAim->pos1x,
 			pcaInternalAim->pos1y,
 			pcaInternalAim->pos1z,
@@ -465,7 +465,7 @@ void GameDebugDrawActorInfo()
 
 		float camExZoom = *(float*)0xB6F250;
 
-		sprintf(line_buffer,"Cam Extended Zoom Values: %f", camExZoom);
+		sprintf_s(line_buffer,"Cam Extended Zoom Values: %f", camExZoom);
 			
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
@@ -473,20 +473,20 @@ void GameDebugDrawActorInfo()
 		WORD camMode2 = *(WORD*)0xB6F858;
 		DWORD camMode3 = *(DWORD*)0xB6F1C4;
 
-		sprintf(line_buffer,"CamMode: %u FarClip: %f HudScaleX: %f HudScaleY: %f",*pbyteCameraMode,fFarClip,*(float *)0x859520,*(float *)0x859524);
+		sprintf_s(line_buffer,"CamMode: %u FarClip: %f HudScaleX: %f HudScaleY: %f",*pbyteCameraMode,fFarClip,*(float *)0x859520,*(float *)0x859524);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"dwWeaponUsed: %u pdwDamageEnt: 0x%X",actor->dwWeaponUsed,actor->pdwDamageEntity);
+		sprintf_s(line_buffer,"dwWeaponUsed: %u pdwDamageEnt: 0x%p",actor->dwWeaponUsed,actor->pdwDamageEntity);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
 		DWORD dwRet;
 		ScriptCommand(&get_active_interior,&dwRet);
-		sprintf(line_buffer,"Current Player Interior: %u",dwRet);
+		sprintf_s(line_buffer,"Current Player Interior: %u",dwRet);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
 		WORD lr,ud;
 		pGame->FindPlayerPed()->GetKeys(&lr,&ud);
-		sprintf(line_buffer,"Analog1LR: %d Analog1UD: %d",lr,ud);
+		sprintf_s(line_buffer,"Analog1LR: %d Analog1UD: %d",lr,ud);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 	}
 }
@@ -516,99 +516,99 @@ void GameDebugDrawVehicleInfo()
 
 	if(vehicle)
 	{
-		sprintf(line_buffer,"Vehicle %u",dwDebugEntity1);
+		sprintf_s(line_buffer,"Vehicle %u",dwDebugEntity1);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(255,255,90,90));
 		
-		sprintf(line_buffer,"addr: 0x%X",vehicle);
+		sprintf_s(line_buffer,"addr: 0x%p",vehicle);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"vtbl: 0x%X",vehicle->entity.vtable);
+		sprintf_s(line_buffer,"vtbl: 0x%X",vehicle->entity.vtable);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Roll: %f %f %f",
+		sprintf_s(line_buffer,"Roll: %f %f %f",
 			vehicle->entity.mat->right.X,vehicle->entity.mat->right.Y,vehicle->entity.mat->right.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Direction: %f %f %f",
+		sprintf_s(line_buffer,"Direction: %f %f %f",
 			vehicle->entity.mat->up.X,vehicle->entity.mat->up.Y,vehicle->entity.mat->up.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Scale: %f %f %f",
+		sprintf_s(line_buffer,"Scale: %f %f %f",
 			vehicle->entity.mat->at.X,vehicle->entity.mat->at.Y,vehicle->entity.mat->at.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Position: %f %f %f",
+		sprintf_s(line_buffer,"Position: %f %f %f",
 			vehicle->entity.mat->pos.X,vehicle->entity.mat->pos.Y,vehicle->entity.mat->pos.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		float fZRot1 = atan2(-vehicle->entity.mat->up.X, vehicle->entity.mat->up.Y) * 180.0f/3.1415926536f;
+		float fZRot1 = (float)atan2(-vehicle->entity.mat->up.X, vehicle->entity.mat->up.Y) * 180.0f/3.1415926536f;
 		
-		sprintf(line_buffer,"Z Rot: %f degrees", fZRot1);
+		sprintf_s(line_buffer,"Z Rot: %f degrees", fZRot1);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Move: %f %f %f",
+		sprintf_s(line_buffer,"Move: %f %f %f",
 			vehicle->entity.vecMoveSpeed.X,vehicle->entity.vecMoveSpeed.Y,vehicle->entity.vecMoveSpeed.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Turn: %f %f %f",
+		sprintf_s(line_buffer,"Turn: %f %f %f",
 			vehicle->entity.vecTurnSpeed.X,vehicle->entity.vecTurnSpeed.Y,vehicle->entity.vecTurnSpeed.Z);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Control Flags: 0x%X",vehicle->entity.nControlFlags);
+		sprintf_s(line_buffer,"Control Flags: 0x%X",vehicle->entity.nControlFlags);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Model Index: %u",vehicle->entity.nModelIndex);
+		sprintf_s(line_buffer,"Model Index: %u",vehicle->entity.nModelIndex);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Renderware: 0x%X",vehicle->entity.pdwRenderWare);
+		sprintf_s(line_buffer,"Renderware: 0x%p",vehicle->entity.pdwRenderWare);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"dwUnkModelRel: 0x%X",vehicle->entity.dwUnkModelRel);
+		sprintf_s(line_buffer,"dwUnkModelRel: 0x%X",vehicle->entity.dwUnkModelRel);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
 		char s[256];
 
-		_itoa(vehicle->entity.byteImmunities,s,2);
-		sprintf(line_buffer,"Immunities: %s",s);
+		_itoa_s(vehicle->entity.byteImmunities,s,2);
+		sprintf_s(line_buffer,"Immunities: %s",s);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Driver: 0x%X",vehicle->pDriver);
+		sprintf_s(line_buffer,"Driver: 0x%p",vehicle->pDriver);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Health: %f",vehicle->fHealth);
+		sprintf_s(line_buffer,"Health: %f",vehicle->fHealth);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 			
-		sprintf(line_buffer,"mat: 0x%X",vehicle->entity.mat);
+		sprintf_s(line_buffer,"mat: 0x%p",vehicle->entity.mat);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"RadioPed: 0x%X 0x%X",*(PDWORD)0xB6B98C,*(PDWORD)0xB6B99C);
+		sprintf_s(line_buffer,"RadioPed: 0x%X 0x%X",*(PDWORD)0xB6B98C,*(PDWORD)0xB6B99C);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Flags: 0x%X",vehicle->byteFlags);
+		sprintf_s(line_buffer,"Flags: 0x%X",vehicle->byteFlags);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Steer1: %f",vehicle->fSteerAngle1);
+		sprintf_s(line_buffer,"Steer1: %f",vehicle->fSteerAngle1);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Steer2: %f",vehicle->fSteerAngle2);
+		sprintf_s(line_buffer,"Steer2: %f",vehicle->fSteerAngle2);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 				
-		sprintf(line_buffer,"Accel: %f",vehicle->fAcceleratorPedal);
+		sprintf_s(line_buffer,"Accel: %f",vehicle->fAcceleratorPedal);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Brake: %f",vehicle->fBrakePedal);
+		sprintf_s(line_buffer,"Brake: %f",vehicle->fBrakePedal);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Hydra: %u",vehicle->dwHydraThrusters);
+		sprintf_s(line_buffer,"Hydra: %u",vehicle->dwHydraThrusters);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Color1: %u",vehicle->byteColor1);
+		sprintf_s(line_buffer,"Color1: %u",vehicle->byteColor1);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 		
-		sprintf(line_buffer,"Color2: %u",vehicle->byteColor2);
+		sprintf_s(line_buffer,"Color2: %u",vehicle->byteColor2);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 
-		sprintf(line_buffer,"Siren On: %u, Horn: %d %d %d %d, Landing Gear: %f", vehicle->bSirenOn, vehicle->byteHorn, 
+		sprintf_s(line_buffer,"Siren On: %u, Horn: %d %d %d %d, Landing Gear: %f", vehicle->bSirenOn, vehicle->byteHorn,
 			vehicle->iHornLevel, vehicle->byteHorn2, vehicle->iSirenLevel, vehicle->fPlaneLandingGear);
 
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
@@ -633,7 +633,7 @@ void GameDebugDrawVehicleInfo()
 		_asm mov al, [edx+168]
 		_asm mov byte168, al
 
-			sprintf(line_buffer,"164:%u 165:%u 166:%u 167:%u 168:%u",byte164,byte165,byte166,byte167,byte168);
+			sprintf_s(line_buffer,"164:%u 165:%u 166:%u 167:%u 168:%u",byte164,byte165,byte166,byte167,byte168);
 		GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(150,255,255,255));
 	}	
 }
@@ -646,7 +646,7 @@ void GameDebugInitTextScreen()
 	while(x != NUM_SCREEN_LINES)
 	{
 		screen_buf[x] = (PCHAR)malloc(256);
-		memset(screen_buf[x],0,256);
+		SecureZeroMemory(screen_buf[x], 256);
 		x++;
 	}
 }
@@ -668,12 +668,12 @@ void GameDebugAddMessage(char *szFormat, ...)
 
 	va_list args;
 	va_start(args, szFormat);
-	vsprintf(tmp_buf, szFormat, args);
+	vsprintf_s(tmp_buf, szFormat, args);
 	va_end(args);
 
 	// move in the new line
 	screen_buf[NUM_SCREEN_LINES - 1] = (PCHAR)malloc(256);
-	strcpy(screen_buf[NUM_SCREEN_LINES - 1],tmp_buf);	
+	strcpy(screen_buf[NUM_SCREEN_LINES - 1], tmp_buf);	
 }
 
 //----------------------------------------------------------
@@ -701,7 +701,7 @@ void GameDrawMemoryInfo()
 	// init position for drawing
 	debug_draw_top = 20;
 
-	sprintf(line_buffer,"Displaying 512 Bytes From Address 0x%X + %u",dwDebugEntity1,dwDebugEntity2);
+	sprintf_s(line_buffer,"Displaying 512 Bytes From Address 0x%X + %u",dwDebugEntity1,dwDebugEntity2);
 	GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(255,255,10,10));
 
 	if(IsBadReadPtr((PVOID)(dwDebugEntity1+dwDebugEntity2),512)) return;
@@ -709,7 +709,7 @@ void GameDrawMemoryInfo()
 
 	while(x!=32)
 	{
-		sprintf(line_buffer,"%.3u: %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X",
+		sprintf_s(line_buffer,"%.3u: %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X",
 			((x*16)+dwDebugEntity2),
 			memory_data[y],
 			memory_data[y+1],
@@ -749,7 +749,7 @@ void GameDrawMemoryInfoAscii()
 	// init position for drawing
 	debug_draw_top = 20;
 
-	sprintf(line_buffer,"Displaying 512 Bytes From Address 0x%X + %u",dwDebugEntity1,dwDebugEntity2);
+	sprintf_s(line_buffer,"Displaying 512 Bytes From Address 0x%X + %u",dwDebugEntity1,dwDebugEntity2);
 	GameDebugDrawNextLine(line_buffer,D3DCOLOR_ARGB(255,255,10,10));
 
 	if(IsBadReadPtr((PVOID)(dwDebugEntity1+dwDebugEntity2),512)) return;
@@ -757,7 +757,7 @@ void GameDrawMemoryInfoAscii()
 
 	while(x!=32)
 	{
-		sprintf(line_buffer,"%.3u: %c %c %c %c %c %c %c %c %c %c %c %c %c %c %c %c",
+		sprintf_s(line_buffer,"%.3u: %c %c %c %c %c %c %c %c %c %c %c %c %c %c %c %c",
 			((x*16)+dwDebugEntity2),
 			memory_data[y],
 			memory_data[y+1],
@@ -946,7 +946,7 @@ void GameBuildSelectVehicle()
 			MATRIX4X4 matPlayer;
 			pPlayer->GetMatrix(&matPlayer);
 			CHAR blank[9] = "";
-			sprintf(blank, "TYPE_%d", iSelection);
+			sprintf_s(blank, "TYPE_%d", iSelection);
 			CVehicle *pTestVehicle = pGame->NewVehicle(iSelection,
 				(matPlayer.pos.X - 5.0f), (matPlayer.pos.Y - 5.0f),
 				matPlayer.pos.Z+1.0f,0.0f,(PCHAR)blank);

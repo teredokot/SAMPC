@@ -1063,11 +1063,11 @@ BOOL CLocalPlayer::Spawn()
 
 void CLocalPlayer::Say(PCHAR szText)
 {
-	BYTE byteTextLen = strlen(szText);
+	size_t uiTextLen = strlen(szText);
 
 	RakNet::BitStream bsSend;
-	bsSend.Write(byteTextLen);
-	bsSend.Write(szText,byteTextLen);
+	bsSend.Write(uiTextLen);
+	bsSend.Write(szText, uiTextLen);
 
 	pNetGame->GetRakClient()->RPC(RPC_Chat,&bsSend,HIGH_PRIORITY,RELIABLE,0,false);
 	
@@ -1093,12 +1093,12 @@ void CLocalPlayer::Msg(BYTE byteToPlayer, PCHAR szText)
 		return;
 	}
 
-	BYTE byteTextLen = strlen(szText);
+	size_t uiTextLen = strlen(szText);
 
 	RakNet::BitStream bsSend;
 	bsSend.Write(byteToPlayer);
-	bsSend.Write(byteTextLen);
-	bsSend.Write(szText,byteTextLen);
+	bsSend.Write(uiTextLen);
+	bsSend.Write(szText, uiTextLen);
 
 	pNetGame->GetRakClient()->RPC(RPC_Privmsg,&bsSend,HIGH_PRIORITY,RELIABLE,0,false);
 }
@@ -1107,11 +1107,11 @@ void CLocalPlayer::Msg(BYTE byteToPlayer, PCHAR szText)
 
 void CLocalPlayer::TeamMsg(PCHAR szText)
 {
-	BYTE byteTextLen = strlen(szText);
+	size_t uiTextLen = strlen(szText);
 
 	RakNet::BitStream bsSend;
-	bsSend.Write(byteTextLen);
-	bsSend.Write(szText,byteTextLen);
+	bsSend.Write(uiTextLen);
+	bsSend.Write(szText, uiTextLen);
 
 	pNetGame->GetRakClient()->RPC(RPC_TeamPrivmsg,&bsSend,HIGH_PRIORITY,RELIABLE,0,false);
 }
@@ -1275,15 +1275,15 @@ void CLocalPlayer::ProcessClassSelection()
 		// SHOW INFO ABOUT THE SELECTED CLASS..
 		if(pChatWindow) {
 			szMsg[0] = '\0';
-			strcat(szMsg,"Use left and right arrow keys to select class.\n");
-			strcat(szMsg,"Press SHIFT when ready to spawn.\n\n");
+			strcat_s(szMsg,"Use left and right arrow keys to select class.\n");
+			strcat_s(szMsg,"Press SHIFT when ready to spawn.\n\n");
 			
-			sprintf(szClassInfo,"Class %u Weapons:\n- %s\n- %s\n- %s",m_iSelectedClass,
+			sprintf_s(szClassInfo,"Class %u Weapons:\n- %s\n- %s\n- %s",m_iSelectedClass,
 				pGame->GetWeaponName(m_SpawnInfo.iSpawnWeapons[0]),
 				pGame->GetWeaponName(m_SpawnInfo.iSpawnWeapons[1]),
 				pGame->GetWeaponName(m_SpawnInfo.iSpawnWeapons[2]));
 
-			strcat(szMsg, szClassInfo);
+			strcat_s(szMsg, szClassInfo);
 		
 			pSpawnScreen->SetSpawnText(szMsg);
 		}

@@ -59,7 +59,7 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
 
 	if(m_pPlayers[bytePlayerID])
 	{
-		strcpy(m_szPlayerNames[bytePlayerID],szPlayerName);
+		strcpy_s(m_szPlayerNames[bytePlayerID],szPlayerName);
 		m_pPlayers[bytePlayerID]->SetID(bytePlayerID);
 		m_bPlayerSlotState[bytePlayerID] = TRUE;
 		//if(pChatWindow) 

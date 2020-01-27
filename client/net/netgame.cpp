@@ -52,8 +52,8 @@ BYTE GetPacketID(Packet *p)
 CNetGame::CNetGame(PCHAR szHostOrIp, int iPort, 
 				   PCHAR szPlayerName, PCHAR szPass)
 {
-	strcpy(m_szHostName, "San Andreas Multiplayer");
-	strncpy(m_szHostOrIp, szHostOrIp, sizeof(m_szHostOrIp));
+	strcpy_s(m_szHostName, "San Andreas Multiplayer");
+	strncpy_s(m_szHostOrIp, szHostOrIp, sizeof(m_szHostOrIp));
 	m_iPort = iPort;
 
 	// Setup player pool
@@ -701,7 +701,7 @@ void CNetGame::Packet_ModifiedPacket(Packet* packet)
 {
 #ifdef _DEBUG
 	char szBuffer[256];
-	sprintf(szBuffer, "Packet was modified, sent by id: %d, ip: %s", 
+	sprintf_s(szBuffer, "Packet was modified, sent by id: %d, ip: %s", 
 					(unsigned int)packet->playerIndex, packet->playerId.ToString());
 	pChatWindow->AddDebugMessage(szBuffer);
 	//m_pRakClient->Disconnect(0);

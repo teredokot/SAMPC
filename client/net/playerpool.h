@@ -36,11 +36,11 @@ public:
 	// Process All CPlayers
 	BOOL Process();
 
-	void SetLocalPlayerName(PCHAR szName) { strcpy(m_szLocalPlayerName,szName); };
+	void SetLocalPlayerName(PCHAR szName) { strcpy_s(m_szLocalPlayerName,szName); };
 	PCHAR GetLocalPlayerName() { return m_szLocalPlayerName; };
 	PCHAR GetPlayerName(BYTE bytePlayerID) { return m_szPlayerNames[bytePlayerID]; };
 	void SetPlayerName(BYTE bytePlayerID, PCHAR szName) {
-		strcpy(m_szPlayerNames[bytePlayerID], szName);
+		strcpy_s(m_szPlayerNames[bytePlayerID], szName);
 	}
 
 	CLocalPlayer * GetLocalPlayer() { return m_pLocalPlayer; };
@@ -61,7 +61,7 @@ public:
 	};
 	
 	void SetLocalPlayerID(BYTE byteID) {
-		strcpy(m_szPlayerNames[byteID],m_szLocalPlayerName);
+		strcpy_s(m_szPlayerNames[byteID],m_szLocalPlayerName);
 		m_byteLocalPlayerID = byteID;
 	};
 

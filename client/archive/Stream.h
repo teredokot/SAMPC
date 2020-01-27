@@ -119,7 +119,7 @@ public:
 				szMode[nPos++] = 'b'; break;
 		}
 
-		m_fiFile = fopen(szFilename, szMode);
+		fopen_s(&m_fiFile, szFilename, szMode);
 		if (!m_fiFile)
 			return false;
 

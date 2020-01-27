@@ -15,8 +15,7 @@ CLabel::CLabel(IDirect3DDevice9* pDevice, char* szFontFace, bool bFontBold)
 	m_pDevice			= pDevice;
 	m_pFont				= NULL;
 
-	m_szFontFace		= (char*)malloc(strlen(szFontFace)+1);
-	strcpy(m_szFontFace, szFontFace);
+	strcpy_s(m_szFontFace, szFontFace);
 	m_bFontBold			= bFontBold;
 }
 

@@ -91,9 +91,9 @@
       <AdditionalIncludeDirectories>..\sdk\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -119,11 +119,11 @@
       <AdditionalIncludeDirectories>..\sdk\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -211,6 +211,18 @@
     <ClCompile Include="..\sdk\raknet\TelnetTransport.cpp" />
     <ClCompile Include="..\sdk\raknet\_findfirst.cpp" />
     <ClCompile Include="..\sdk\sqlite\sqlite3.c" />
+    <ClCompile Include="..\sdk\zlib\adler32.c" />
+    <ClCompile Include="..\sdk\zlib\compress.c" />
+    <ClCompile Include="..\sdk\zlib\crc32.c" />
+    <ClCompile Include="..\sdk\zlib\deflate.c" />
+    <ClCompile Include="..\sdk\zlib\gzio.c" />
+    <ClCompile Include="..\sdk\zlib\infback.c" />
+    <ClCompile Include="..\sdk\zlib\inffast.c" />
+    <ClCompile Include="..\sdk\zlib\inflate.c" />
+    <ClCompile Include="..\sdk\zlib\inftrees.c" />
+    <ClCompile Include="..\sdk\zlib\trees.c" />
+    <ClCompile Include="..\sdk\zlib\uncompr.c" />
+    <ClCompile Include="..\sdk\zlib\zutil.c" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="exceptions.cpp" />
     <ClCompile Include="filterscripts.cpp" />
@@ -347,6 +359,17 @@
     <ClInclude Include="..\sdk\raknet\_findfirst.h" />
     <ClInclude Include="..\sdk\sqlite\sqlite3.h" />
     <ClInclude Include="..\sdk\sqlite\sqlite3ext.h" />
+    <ClInclude Include="..\sdk\zlib\crc32.h" />
+    <ClInclude Include="..\sdk\zlib\deflate.h" />
+    <ClInclude Include="..\sdk\zlib\inffast.h" />
+    <ClInclude Include="..\sdk\zlib\inffixed.h" />
+    <ClInclude Include="..\sdk\zlib\inflate.h" />
+    <ClInclude Include="..\sdk\zlib\inftrees.h" />
+    <ClInclude Include="..\sdk\zlib\trees.h" />
+    <ClInclude Include="..\sdk\zlib\zconf.h" />
+    <ClInclude Include="..\sdk\zlib\zconf.in.h" />
+    <ClInclude Include="..\sdk\zlib\zlib.h" />
+    <ClInclude Include="..\sdk\zlib\zutil.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="filterscripts.h" />
     <ClInclude Include="format.h" />
@@ -375,9 +398,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\sdk\raknet\Makefile.am" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\sdk\zlib\zlib.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

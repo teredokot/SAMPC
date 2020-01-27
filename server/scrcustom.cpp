@@ -645,10 +645,10 @@ static cell n_GetPlayerIDFromName(AMX* amx, cell* params)
 
 	for (size_t uiIndex = 0; uiIndex < MAX_PLAYERS; uiIndex++)
 	{
-		if (!pNetGame->GetPlayerPool()->GetSlotState(uiIndex))
+		if (!pNetGame->GetPlayerPool()->GetSlotState((unsigned char)uiIndex))
 			continue;
 		
-		char* szPlayerName = pNetGame->GetPlayerPool()->GetPlayerName(uiIndex);
+		char* szPlayerName = pNetGame->GetPlayerPool()->GetPlayerName((unsigned char)uiIndex);
 		if (szSearchName && Util_stristr(szPlayerName, szSearchName))
 			return uiIndex;
 	}
@@ -771,20 +771,20 @@ static cell AMX_NATIVE_CALL n_SetPlayerName(AMX *amx, cell *params)
 		if(ContainsInvalidNickChars(szNewNick)) return -1;
 
 		BYTE bytePlayerID = (BYTE)params[1];
-		BYTE byteNickLen = strlen(szNewNick);
+		size_t uiNickLen = strlen(szNewNick);
 		BYTE byteSuccess;
 
-		if(byteNickLen > MAX_PLAYER_NAME) return -1;
+		if(uiNickLen > MAX_PLAYER_NAME) return -1;
 
 		strncpy(szOldNick,pNetGame->GetPlayerPool()->GetPlayerName(bytePlayerID),MAX_PLAYER_NAME);
 		
-		if (byteNickLen == 0 || pNetGame->GetPlayerPool()->IsNickInUse(szNewNick)) byteSuccess = 0;
+		if (uiNickLen == 0 || pNetGame->GetPlayerPool()->IsNickInUse(szNewNick)) byteSuccess = 0;
 		else byteSuccess = 1;
 
 		RakNet::BitStream bsData;
 		bsData.Write(bytePlayerID); // player id
-		bsData.Write(byteNickLen); // nick length
-		bsData.Write(szNewNick, byteNickLen); // name
+		bsData.Write(uiNickLen); // nick length
+		bsData.Write(szNewNick, uiNickLen); // name
 		bsData.Write(byteSuccess); // if the nickname was rejected
 
 		if (byteSuccess != 0)
@@ -1398,12 +1398,12 @@ static cell AMX_NATIVE_CALL n_SendPlayerMessageToPlayer(AMX *amx, cell *params)
 	{	
 		char* szMessage;
 		amx_StrParam(amx, params[3], szMessage);
-		BYTE byteTextLen = strlen(szMessage);
+		size_t uiLen = strlen(szMessage);
 		
 		RakNet::BitStream bsSend;
 		bsSend.Write((BYTE)params[2]);
-		bsSend.Write(byteTextLen);
-		bsSend.Write(szMessage, byteTextLen);
+		bsSend.Write(uiLen);
+		bsSend.Write(szMessage, uiLen);
 		pNetGame->GetRakServer()->RPC(RPC_Chat, &bsSend, HIGH_PRIORITY, RELIABLE, 0,
 			pNetGame->GetRakServer()->GetPlayerIDFromIndex((BYTE)params[1]), false, false);
 		return 1;
@@ -1421,12 +1421,12 @@ static cell AMX_NATIVE_CALL n_SendPlayerMessageToAll(AMX *amx, cell *params)
 	{	
 		char* szMessage;
 		amx_StrParam(amx, params[2], szMessage);
-		BYTE byteTextLen = strlen(szMessage);
+		size_t uiLen = strlen(szMessage);
 		
 		RakNet::BitStream bsSend;
 		bsSend.Write((BYTE)params[1]);
-		bsSend.Write(byteTextLen);
-		bsSend.Write(szMessage, byteTextLen);
+		bsSend.Write(uiLen);
+		bsSend.Write(szMessage, uiLen);
 		pNetGame->GetRakServer()->RPC(RPC_Chat, &bsSend, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 		return 1;
 	}
@@ -2884,8 +2884,8 @@ static cell AMX_NATIVE_CALL n_ApplyAnimation(AMX *amx, cell *params)
 
 	char *szAnimLib;
 	char *szAnimName;
-	BYTE byteAnimLibLen;
-	BYTE byteAnimNameLen;
+	size_t uiLibLen;
+	size_t uiNameLen;
 	float fS;
 	bool opt1,opt2,opt3,opt4;
 	int opt5;
@@ -2896,8 +2896,8 @@ static cell AMX_NATIVE_CALL n_ApplyAnimation(AMX *amx, cell *params)
 	amx_StrParam(amx, params[2], szAnimLib);
 	amx_StrParam(amx, params[3], szAnimName);
 
-	byteAnimLibLen = strlen(szAnimLib);
-	byteAnimNameLen = strlen(szAnimName);
+	uiLibLen = strlen(szAnimLib);
+	uiNameLen = strlen(szAnimName);
 
 	fS = amx_ctof(params[4]);
 	opt1 = (bool)params[5];
@@ -2907,10 +2907,10 @@ static cell AMX_NATIVE_CALL n_ApplyAnimation(AMX *amx, cell *params)
 	opt5 = (int)params[9];
 
 	bsSend.Write((BYTE)params[1]);
-	bsSend.Write(byteAnimLibLen);
-	bsSend.Write(szAnimLib,byteAnimLibLen);
-	bsSend.Write(byteAnimNameLen);
-	bsSend.Write(szAnimName,byteAnimNameLen);
+	bsSend.Write(uiLibLen);
+	bsSend.Write(szAnimLib, uiLibLen);
+	bsSend.Write(uiNameLen);
+	bsSend.Write(szAnimName, uiNameLen);
 	bsSend.Write(fS);
 	bsSend.Write(opt1);
 	bsSend.Write(opt2);

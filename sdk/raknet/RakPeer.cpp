@@ -4098,7 +4098,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 	if ( remoteSystem )
 	{
 #ifdef TEA_ENCRYPTOR
-		char szBuffer[32];
+		//char szBuffer[32];
 /*
 #ifdef SAMPSRV
 		sprintf(szBuffer, "SvLength: %d\n", length);

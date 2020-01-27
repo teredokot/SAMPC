@@ -55,9 +55,9 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
 		// a 'ServerJoin' join RPC 
 		RakNet::BitStream bsSend;
 		bsSend.Write(bytePlayerID);
-		BYTE namelen = strlen(szPlayerName);
-		bsSend.Write(namelen);
-		bsSend.Write(szPlayerName,namelen);
+		size_t uiNameLen = strlen(szPlayerName);
+		bsSend.Write(uiNameLen);
+		bsSend.Write(szPlayerName, uiNameLen);
 
 		pNetGame->GetRakServer()->RPC(RPC_ServerJoin ,&bsSend,HIGH_PRIORITY,RELIABLE,0,
 			pNetGame->GetRakServer()->GetPlayerIDFromIndex(bytePlayerID),true,false);
@@ -181,11 +181,11 @@ void CPlayerPool::InitPlayersForPlayer(BYTE bytePlayerID)
 
 	while(lp!=MAX_PLAYERS) {
 		if((GetSlotState(lp) == TRUE) && (lp != bytePlayerID)) {
-			BYTE namelen = strlen(GetPlayerName(lp));
+			size_t uiNameLen = strlen(GetPlayerName(lp));
 
 			bsExistingClient.Write(lp);
-			bsExistingClient.Write(namelen);
-			bsExistingClient.Write(GetPlayerName(lp),namelen);
+			bsExistingClient.Write(uiNameLen);
+			bsExistingClient.Write(GetPlayerName(lp), uiNameLen);
 
 			pNetGame->GetRakServer()->RPC(RPC_ServerJoin,&bsExistingClient,HIGH_PRIORITY,RELIABLE,0,Player,false,false);
 			bsExistingClient.Reset();

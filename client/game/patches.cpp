@@ -20,7 +20,7 @@ extern DWORD dwUIMode;
 
 //----------------------------------------------------------
 
-#define memadd(num,arr) dwAlloc+=num;cBytes=(char*)&dwAlloc;for(int i=0;i<4;i++)arr[i]=cBytes[i]
+/*#define memadd(num,arr) dwAlloc+=num;cBytes=(char*)&dwAlloc;for(int i=0;i<4;i++)arr[i]=cBytes[i]
 #define patch(a,b) _patch(a,b,sizeof(b))
 
 //----------------------------------------------------------
@@ -94,7 +94,7 @@ void SetTimedObjects(int iTimedObjects)
 		BYTE pushTimedObjects[] = { 0x68, cBytes[0], cBytes[1], cBytes[2], cBytes[3] };
 		patch(0x4C58A5,pushTimedObjects);
 	}
-}
+}*/
 
 //----------------------------------------------------------
 

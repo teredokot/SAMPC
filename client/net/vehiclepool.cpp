@@ -327,7 +327,7 @@ void CVehiclePool::Process()
 					else {
 #ifdef _DEBUG
 						CHAR szBuffer2[1024];
-						sprintf(szBuffer2, "Inactive vehicle getting respawned: %d\n", x);
+						sprintf_s(szBuffer2, "Inactive vehicle getting respawned: %d\n", x);
 						OutputDebugString(szBuffer2);
 #endif
 						Spawn(x,m_SpawnInfo[x].iVehicleType,&m_SpawnInfo[x].vecPos, m_SpawnInfo[x].fRotation,

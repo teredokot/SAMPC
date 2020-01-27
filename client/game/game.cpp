@@ -366,11 +366,12 @@ void CGame::DisplayGameText(char *szStr,int iTime,int iSize)
 {
 	ScriptCommand(&text_clear_all);
 
-	strcpy(szGameTextMessage,szStr);
+	//strcpy(szGameTextMessage,szStr);
 
 	_asm push iSize
 	_asm push iTime
-	_asm push szGameTextMessage
+	//_asm push szGameTextMessage
+	_asm push szStr
 	_asm mov eax, 0x69F2B0
 	_asm call eax
 	_asm add esp, 12

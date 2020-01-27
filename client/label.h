@@ -15,7 +15,7 @@ private:
 	IDirect3DDevice9* m_pDevice;
 	ID3DXFont* m_pFont;
 
-	char* m_szFontFace;
+	char m_szFontFace[60];
 	bool m_bFontBold;
 public:
 	CLabel(IDirect3DDevice9* pDevice, char* szFontFace, bool bFontBold);

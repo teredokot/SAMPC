@@ -402,7 +402,6 @@
     <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="fontrender.cpp" />
     <ClCompile Include="helpdialog.cpp" />
-    <ClCompile Include="httpclient.cpp" />
     <ClCompile Include="label.cpp" />
     <ClCompile Include="netstats.cpp" />
     <ClCompile Include="newplayertags.cpp" />
@@ -915,7 +914,6 @@
     <ClInclude Include="filehooks.h" />
     <ClInclude Include="fontrender.h" />
     <ClInclude Include="helpdialog.h" />
-    <ClInclude Include="httpclient.h" />
     <ClInclude Include="mod.h" />
     <ClInclude Include="label.h" />
     <ClInclude Include="netstats.h" />

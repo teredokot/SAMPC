@@ -95,11 +95,11 @@ void CCmdWindow::AddToRecallBuffer(char *szCmdInput)
 	// Move all the existing recalls up 1
     int x=MAX_RECALLS-1;
 	while(x) {
-		strcpy(m_szRecallBuffer[x],m_szRecallBuffer[x-1]);
+		strcpy_s(m_szRecallBuffer[x],m_szRecallBuffer[x-1]);
 		x--;
 	}
 	// Copy this into the first recall slot
-    strcpy(m_szRecallBuffer[0],szCmdInput);
+    strcpy_s(m_szRecallBuffer[0],szCmdInput);
 	if(m_iTotalRecalls < MAX_RECALLS) {
 		m_iTotalRecalls++;
 	}
@@ -113,7 +113,7 @@ void CCmdWindow::RecallUp()
 
 	if(m_iCurrentRecallAt == -1) {
 		// Save the current buffer incase we want to return to it.
-		strncpy(m_szCurBuffer,m_pEditControl->GetText(),MAX_CMD_INPUT);
+		strncpy_s(m_szCurBuffer,m_pEditControl->GetText(),MAX_CMD_INPUT);
 		m_szCurBuffer[MAX_CMD_INPUT] = '\0';
 	}
 
@@ -154,7 +154,7 @@ void CCmdWindow::ProcessInput()
 
 	if(!m_pEditControl) return;
 
-	strncpy(m_szInputBuffer,m_pEditControl->GetText(),MAX_CMD_INPUT);
+	strncpy_s(m_szInputBuffer,m_pEditControl->GetText(),MAX_CMD_INPUT);
 	m_szInputBuffer[MAX_CMD_INPUT] = '\0';
     
 	// don't process 0 length input
@@ -196,7 +196,7 @@ void CCmdWindow::ProcessInput()
 		}
 		else {
 			char szCopiedBuffer[MAX_CMD_INPUT+1];
-			strcpy(szCopiedBuffer, m_szInputBuffer);
+			strcpy_s(szCopiedBuffer, m_szInputBuffer);
 
 			*szCmdEndPos='\0'; // null terminate it
 			szCmdEndPos++; // rest is the parameters.
@@ -228,7 +228,7 @@ CMDPROC CCmdWindow::GetCmdHandler(PCHAR szCmdName)
 {
 	int x=0;
 	while(x!=m_iCmdCount) {
-		if(!stricmp(szCmdName,m_szCmdNames[x])) {
+		if(!_stricmp(szCmdName,m_szCmdNames[x])) {
 			return m_pCmds[x];
 		}
 		x++;
@@ -249,7 +249,7 @@ void CCmdWindow::AddCmdProc(PCHAR szCmdName, CMDPROC cmdHandler)
 {
 	if(m_iCmdCount < MAX_CMDS && (strlen(szCmdName) < MAX_CMD_STRLEN)) {
 		m_pCmds[m_iCmdCount] = cmdHandler;
-		strcpy(m_szCmdNames[m_iCmdCount],szCmdName);
+		strcpy_s(m_szCmdNames[m_iCmdCount],szCmdName);
 		m_iCmdCount++;
 	}
 }

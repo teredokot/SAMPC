@@ -62,14 +62,14 @@ TCPInterface::TCPInterface()
 	{
 #if defined(_WIN32) && !defined(_COMPATIBILITY_1) && defined(_DEBUG)
 		DWORD dwIOError = GetLastError();
-		LPVOID messageBuffer;
+		/*LPVOID messageBuffer;
 		FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL, dwIOError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),  // Default language
-			( LPTSTR ) & messageBuffer, 0, NULL );
+			( LPTSTR ) & messageBuffer, 0, NULL );*/
 		// something has gone wrong here...
-		printf( "WSAStartup failed:Error code - %d\n%s", dwIOError, messageBuffer );
+		printf( "WSAStartup failed:Error code - %d", dwIOError /*, messageBuffer*/ );
 		//Free the buffer.
-		LocalFree( messageBuffer );
+		//LocalFree( messageBuffer );
 #endif
 	}
 

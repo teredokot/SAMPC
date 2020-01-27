@@ -326,25 +326,25 @@ void RequestClass(RPCParameters *rpcParams)
 	if(pNetGame->GetGameState() != GAMESTATE_RUNNING) return;
 	if(!pNetGame->GetPlayerPool()->GetSlotState(pRak->GetIndexFromPlayerID(sender))) return;
 	
-	unsigned int uiRequestedClass = 1;
+	int iRequestedClass = 1;
 	BYTE byteRequestOutcome = 0;
 	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
-	bsData.Read(uiRequestedClass);
+	bsData.Read(iRequestedClass);
 
-	if(uiRequestedClass >= MAX_SPAWNS) return;
-	if(uiRequestedClass >= (unsigned int)pNetGame->m_iSpawnsAvailable) return;
+	if(iRequestedClass >= MAX_SPAWNS) return;
+	if(iRequestedClass >= pNetGame->m_iSpawnsAvailable) return;
     
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-	if(pPlayer && (uiRequestedClass <= (pNetGame->m_iSpawnsAvailable - 1)))
+	if(pPlayer && (iRequestedClass <= (pNetGame->m_iSpawnsAvailable - 1)))
 	{
-		pPlayer->SetSpawnInfo(&pNetGame->m_AvailableSpawns[uiRequestedClass]);
+		pPlayer->SetSpawnInfo(&pNetGame->m_AvailableSpawns[iRequestedClass]);
 		//logprintf("SetSpawnInfo - iSkin = %d", pNetGame->m_AvailableSpawns[iRequestedClass].iSkin);
 	}
 
-	pNetGame->GetFilterScripts()->OnPlayerRequestClass((cell)bytePlayerID, (cell)uiRequestedClass);
+	pNetGame->GetFilterScripts()->OnPlayerRequestClass((cell)bytePlayerID, (cell)iRequestedClass);
 	byteRequestOutcome = 1;
 	if (pNetGame->GetGameMode()) {
-		byteRequestOutcome = pNetGame->GetGameMode()->OnPlayerRequestClass((cell)bytePlayerID, (cell)uiRequestedClass);
+		byteRequestOutcome = pNetGame->GetGameMode()->OnPlayerRequestClass((cell)bytePlayerID, (cell)iRequestedClass);
 	}
 	
 	RakNet::BitStream bsSpawnRequestReply;

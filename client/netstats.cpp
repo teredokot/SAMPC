@@ -57,16 +57,16 @@ void CNetStats::Draw()
 	int iPlayersInRange = pLocalPlayer->DetermineNumberOfPlayersInLocalRange();
 	if(!iPlayersInRange) iPlayersInRange = 20;
 
-	sprintf(szDispBuf,"Download Rate: %.2f kbps\nUpload Rate: %.2f kbps\n",
+	sprintf_s(szDispBuf,"Download Rate: %.2f kbps\nUpload Rate: %.2f kbps\n",
 		fDown,fUp);
 
 	if(pPlayerPed) {
 		if(!pPlayerPed->IsInVehicle()) {
-			sprintf(szStatBuf,"OnFoot Send Rate: %u\n",pLocalPlayer->GetOptimumOnFootSendRate(iPlayersInRange));
+			sprintf_s(szStatBuf,"OnFoot Send Rate: %u\n",pLocalPlayer->GetOptimumOnFootSendRate(iPlayersInRange));
 		} else {
-			sprintf(szStatBuf,"InCar Send Rate: %u\n",pLocalPlayer->GetOptimumInCarSendRate(iPlayersInRange));
+			sprintf_s(szStatBuf,"InCar Send Rate: %u\n",pLocalPlayer->GetOptimumInCarSendRate(iPlayersInRange));
 		}
-		strcat(szDispBuf,szStatBuf);
+		strcat_s(szDispBuf,szStatBuf);
 	}
 
 #ifdef _DEBUG
@@ -74,7 +74,7 @@ void CNetStats::Draw()
 #else
 	StatisticsToString(pRakStats,szStatBuf,1);
 #endif
-	strcat(szDispBuf,szStatBuf);
+	strcat_s(szDispBuf,szStatBuf);
 
 	//m_pD3DDevice->GetDisplayMode(0,&dDisplayMode);
 

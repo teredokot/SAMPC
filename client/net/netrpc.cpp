@@ -216,7 +216,7 @@ void Privmsg(RPCParameters *rpcParams)
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
 	{
-		sprintf(szStr, "PM sent to %s: %s", pPlayerPool->GetPlayerName(byteToPlayerID), szText);
+		sprintf_s(szStr, "PM sent to %s: %s", pPlayerPool->GetPlayerName(byteToPlayerID), szText);
 		pChatWindow->AddClientMessage(D3DCOLOR_ARGB(255,220,24,26), szStr);
 	} else {
 		CRemotePlayer *pRemotePlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
@@ -256,7 +256,7 @@ void TeamPrivmsg(RPCParameters *rpcParams)
 	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
 	{
 		char szTempBuffer[256];
-		sprintf(szTempBuffer, "Team PM sent: %s", szText);
+		sprintf_s(szTempBuffer, "Team PM sent: %s", szText);
 		pChatWindow->AddClientMessage(D3DCOLOR_ARGB(255,220,24,26), szTempBuffer);
 	} else {
 		CRemotePlayer *pRemotePlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);

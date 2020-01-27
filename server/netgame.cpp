@@ -480,7 +480,7 @@ void CNetGame::ReInitWhenRestarting()
 
 #ifdef WIN32
 
-#pragma comment(lib, "winmm.lib")
+//#pragma comment(lib, "winmm.lib")
 float GetElapsedTime()
 {
 	static BOOL bTimerInit = false;
@@ -1223,9 +1223,9 @@ void CNetGame::InitGameForPlayer(BYTE bytePlayerID)
 	
 	char* szHostName = pConsole->GetStringVariable("hostname");
 	if(szHostName) {
-		BYTE byteStrLen = strlen(szHostName);
-		bsInitGame.Write(byteStrLen);
-		bsInitGame.Write(szHostName, byteStrLen);
+		size_t uiHostLen = strlen(szHostName);
+		bsInitGame.Write(uiHostLen);
+		bsInitGame.Write(szHostName, uiHostLen);
 	} else {
 		bsInitGame.Write((BYTE)0);
 	}

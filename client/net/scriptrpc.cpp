@@ -1041,7 +1041,7 @@ void ScrNumberPlate(RPCParameters *rpcParams)
 	
 	bsData.Read(Vehicle);
 	bsData.Read(cNumberPlate, 9);
-	strcpy(pNetGame->GetVehiclePool()->m_charNumberPlate[Vehicle], cNumberPlate);
+	strcpy_s(pNetGame->GetVehiclePool()->m_charNumberPlate[Vehicle], cNumberPlate);
 }
 
 //----------------------------------------------------

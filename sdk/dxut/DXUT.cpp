@@ -4526,8 +4526,8 @@ HWND DXUTGetHWNDFocus()                             { return GetDXUTState().GetH
 HWND DXUTGetHWNDDeviceFullScreen()                  { return GetDXUTState().GetHWNDDeviceFullScreen(); }
 HWND DXUTGetHWNDDeviceWindowed()                    { return GetDXUTState().GetHWNDDeviceWindowed(); }
 RECT DXUTGetWindowClientRect()                      { RECT rc; GetClientRect( DXUTGetHWND(), &rc ); return rc; }
-RECT DXUTGetWindowClientRectAtModeChange()          { RECT rc = { 0, 0, GetDXUTState().GetWindowBackBufferWidthAtModeChange(), GetDXUTState().GetWindowBackBufferHeightAtModeChange() }; return rc; }
-RECT DXUTGetFullsceenClientRectAtModeChange()       { RECT rc = { 0, 0, GetDXUTState().GetFullScreenBackBufferWidthAtModeChange(), GetDXUTState().GetFullScreenBackBufferHeightAtModeChange() }; return rc; }
+RECT DXUTGetWindowClientRectAtModeChange()          { RECT rc = { 0, 0, (LONG)GetDXUTState().GetWindowBackBufferWidthAtModeChange(), (LONG)GetDXUTState().GetWindowBackBufferHeightAtModeChange() }; return rc; }
+RECT DXUTGetFullsceenClientRectAtModeChange()       { RECT rc = { 0, 0, (LONG)GetDXUTState().GetFullScreenBackBufferWidthAtModeChange(), (LONG)GetDXUTState().GetFullScreenBackBufferHeightAtModeChange() }; return rc; }
 double DXUTGetTime()                                { return GetDXUTState().GetTime(); }
 float DXUTGetElapsedTime()                          { return GetDXUTState().GetElapsedTime(); }
 float DXUTGetFPS()                                  { return GetDXUTState().GetFPS(); }

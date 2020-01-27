@@ -817,7 +817,6 @@ void _declspec(noreturn) GameForcedExit(int iReasonCode)
 	memcpy(pOffs, (char*)0x86B97C, 8); 	pOffs+=8;
 
 	itoa(nonse, (char*)(pOffs), 8);
-
 	// Pass over the dirty work to GameForcedExitHelper
 	__asm
 	{

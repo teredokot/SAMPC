@@ -100,7 +100,7 @@ void __stdcall RenderPlayerTags()
 							1, 0, 0, 0, 0 );
 
 						if(dwHitEntity) {
-							sprintf(szBuffer, "%s(%d)", pPlayerPool->GetPlayerName(x), x);
+							sprintf_s(szBuffer, "%s(%d)", pPlayerPool->GetPlayerName(x), x);
 							pNewPlayerTags->Draw(&PlayerPos,szBuffer,
 								Player->GetPlayerColorAsARGB(),
 								Player->GetReportedHealth(),Player->GetReportedArmour(),
@@ -221,9 +221,9 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 
 				for(DWORD x=0; x < MAX_PLAYERS; x++)
 				{
-					if(pPlayerPool->GetSlotState(x) == TRUE)
+					if(pPlayerPool->GetSlotState((BYTE)x) == TRUE)
 					{
-						CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt(x);
+						CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt((BYTE)x);
 						CPlayerPed*	PlayerPed = pRemotePlayer->GetPlayerPed();
 
 						if(PlayerPed && PlayerPed->IsAdded() && PlayerPed->GetDistanceFromLocalPlayerPed() <= 70.0f)
@@ -241,7 +241,7 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 							char label[255];
 							DWORD color = 0xFF35D48B;
 
-							sprintf(label,"Off: %.4f %.4f %.4f",
+							sprintf_s(label,"Off: %.4f %.4f %.4f",
 								pRemotePlayer->m_vecPositionInaccuracy.X,
 								pRemotePlayer->m_vecPositionInaccuracy.Y,
 								pRemotePlayer->m_vecPositionInaccuracy.Z);

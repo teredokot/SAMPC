@@ -64,7 +64,7 @@ VOID SwitchWindowedMode()
 #ifdef _DEBUG
 
 	char szBuffer[256];
-	sprintf(szBuffer, "Video Mode Change: %d (windowed=%d)\n", nVideoMode, pVideoModeInfo[4]);
+	sprintf_s(szBuffer, "Video Mode Change: %d (windowed=%d)\n", nVideoMode, pVideoModeInfo[4]);
 	OutputDebugString(szBuffer);
 
 #endif
