@@ -128,17 +128,17 @@ void Chat(RPCParameters *rpcParams)
 	unsigned char szText[256];
 	memset(szText,0,256);
 
-	BYTE byteTextLen;
+	size_t uiTextLen;
 
 	CPlayerPool *pPool = pNetGame->GetPlayerPool();
 
 	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
-	bsData.Read(byteTextLen);
+	bsData.Read(uiTextLen);
 
-	if(byteTextLen > MAX_CMD_INPUT) return;
+	if(uiTextLen > MAX_CMD_INPUT) return;
 
-	bsData.Read((char *)szText,byteTextLen);
-	szText[byteTextLen] = '\0';
+	bsData.Read((char *)szText, uiTextLen);
+	szText[uiTextLen] = '\0';
 
 	if (!pPool->GetSlotState(pRak->GetIndexFromPlayerID(sender))) return;	
 
@@ -175,7 +175,7 @@ void Chat(RPCParameters *rpcParams)
 				pGameMode->OnPlayerText((cell)bytePlayerID, szText);
 			} else {
 				// No pGameMode
-				pPlayer->Say(szText,byteTextLen);
+				pPlayer->Say(szText, uiTextLen);
 			}
 		}
 	}

@@ -115,13 +115,12 @@ void InitGame(RPCParameters *rpcParams)
 	bsInitGame.Read(pNetGame->m_fNameTagDrawDistance);
 	bsInitGame.Read(pNetGame->m_bDisableEnterExits);
 
-	BYTE byteStrLen;
-	bsInitGame.Read(byteStrLen);
-	if(byteStrLen) {
-		memset(pNetGame->m_szHostName,0,sizeof(pNetGame->m_szHostName));
-		bsInitGame.Read(pNetGame->m_szHostName, byteStrLen);
+	size_t uiHostLen;
+	bsInitGame.Read(uiHostLen);
+	if(0 < uiHostLen) {
+		bsInitGame.Read(pNetGame->m_szHostName, uiHostLen);
 	}
-	pNetGame->m_szHostName[byteStrLen] = '\0';
+	pNetGame->m_szHostName[uiHostLen] = '\0';
 
 	pPlayerPool->SetLocalPlayerID(byteMyPlayerID);
 	pGame->EnableStuntBonus(bStuntBonus);
@@ -155,7 +154,7 @@ void Chat(RPCParameters *rpcParams)
 
 	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
 	BYTE bytePlayerID;
-	BYTE byteTextLen;
+	size_t uiTextLen;
 
 	if(pNetGame->GetGameState() != GAMESTATE_CONNECTED)	return;
 
@@ -163,13 +162,13 @@ void Chat(RPCParameters *rpcParams)
 	memset(szText,0,256);
 
 	bsData.Read(bytePlayerID);
-	bsData.Read(byteTextLen);
+	bsData.Read(uiTextLen);
 
-	if(byteTextLen > MAX_CMD_INPUT) return;
+	if(uiTextLen > MAX_CMD_INPUT) return;
 
-	bsData.Read((char*)szText,byteTextLen);
+	bsData.Read((char*)szText, uiTextLen);
 
-	szText[byteTextLen] = '\0';
+	szText[uiTextLen] = '\0';
 
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
@@ -199,19 +198,19 @@ void Privmsg(RPCParameters *rpcParams)
 
 	BYTE bytePlayerID;
 	BYTE byteToPlayerID;
-	BYTE byteTextLen;
+	size_t uiTextLen;
 	CHAR szText[256];
 	CHAR szStr[256];
 
 	bsData.Read(bytePlayerID);
 	bsData.Read(byteToPlayerID);
-	bsData.Read(byteTextLen);
+	bsData.Read(uiTextLen);
 
-	if(byteTextLen > MAX_CMD_INPUT) return;
+	if(uiTextLen > MAX_CMD_INPUT) return;
 
-	bsData.Read(szText,byteTextLen);
+	bsData.Read(szText, uiTextLen);
 
-	szText[byteTextLen] = '\0';
+	szText[uiTextLen] = '\0';
 
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
@@ -240,17 +239,17 @@ void TeamPrivmsg(RPCParameters *rpcParams)
 	if(pNetGame->GetGameState() != GAMESTATE_CONNECTED)	return;
 
     BYTE bytePlayerID;
-	BYTE byteTextLen;
+	size_t uiTextLen;
 	CHAR szText[256];
 
 	bsData.Read(bytePlayerID);
-	bsData.Read(byteTextLen);
+	bsData.Read(uiTextLen);
 
-	if(byteTextLen > MAX_CMD_INPUT) return;
+	if(uiTextLen > MAX_CMD_INPUT) return;
 
-	bsData.Read(szText,byteTextLen);
+	bsData.Read(szText, uiTextLen);
 
-	szText[byteTextLen] = '\0';
+	szText[uiTextLen] = '\0';
 
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
