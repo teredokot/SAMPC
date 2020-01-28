@@ -52,17 +52,10 @@ DWORD dwSavedEBP;
 DWORD dwHitEntity = 0;
 DWORD *pHitEntity = &dwHitEntity;
 
-// Used by cheat checking
-DWORD dwTestPtr=0;
-DWORD dwD3DDev=0;
-
 char szBuffer[128];
 
 extern void CallRwRenderStateSet(int state, int option);
 extern void SetupD3DFog(BOOL bEnable);
-
-extern DWORD dwD3D9DllBaseAddr;
-extern DWORD dwD3D9DllSize;
 
 //-------------------------------------------
 
@@ -133,20 +126,6 @@ void __stdcall RenderPlayerTags()
 
 HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion)
 {		
-    // ---- Detection of fake d3d9.dll
-	dwD3DDev = (DWORD)pD3DDevice;
-	
-	_asm mov eax, dwD3DDev
-	_asm mov ebx, [eax]
-	_asm mov eax, [ebx+68]
-	_asm mov dwTestPtr, eax
-		
-	if(dwTestPtr < (dwD3D9DllBaseAddr ^ 0xACACACAC) || dwTestPtr > ((dwD3D9DllBaseAddr ^ 0xACACACAC) + dwD3D9DllSize)) {
-		//pChatWindow->AddDebugMessage("This isn't d3d9.dll");
-		FORCE_EXIT( 20 );
-	}
-	// --- End detection of fake d3d9.dll
-
 	if (g_bTakeScreenshot)
 	{
 		g_bTakeScreenshot = FALSE;
@@ -568,41 +547,11 @@ HRESULT __stdcall IDirect3DDevice9Hook::GetDepthStencilSurface(IDirect3DSurface9
 
 HRESULT __stdcall IDirect3DDevice9Hook::BeginScene()
 {
-	// We want to check that what we're
-	// about to call into is actually within
-	// the d3d9.dll address space.
-	dwD3DDev = (DWORD)pD3DDevice;
-
-	_asm mov eax, dwD3DDev
-	_asm mov ebx, [eax]
-	_asm mov eax, [ebx+164]
-	_asm mov dwTestPtr, eax
-	
-	if(dwTestPtr < (dwD3D9DllBaseAddr ^ 0xACACACAC) || dwTestPtr > ((dwD3D9DllBaseAddr ^ 0xACACACAC) + dwD3D9DllSize)) {
-		//pChatWindow->AddDebugMessage("This isn't d3d9.dll");
-		FORCE_EXIT( 21 );
-	}
-
 	return pD3DDevice->BeginScene();
 }
 
 HRESULT __stdcall IDirect3DDevice9Hook::EndScene()
 {
-	// We want to check that what we're
-	// about to call into is actually within
-	// the d3d9.dll address space.
-	dwD3DDev = (DWORD)pD3DDevice;
-	
-	_asm mov eax, dwD3DDev
-	_asm mov ebx, [eax]
-	_asm mov eax, [ebx+168]
-	_asm mov dwTestPtr, eax
-		
-	if(dwTestPtr < (dwD3D9DllBaseAddr ^ 0xACACACAC) || dwTestPtr > ((dwD3D9DllBaseAddr ^ 0xACACACAC) + dwD3D9DllSize)) {
-		//pChatWindow->AddDebugMessage("This isn't d3d9.dll");
-		FORCE_EXIT( 22 );
-	}
-
 	return pD3DDevice->EndScene();
 }
 
@@ -614,21 +563,6 @@ HRESULT __stdcall IDirect3DDevice9Hook::Clear(DWORD Count, CONST D3DRECT* pRects
 
 HRESULT __stdcall IDirect3DDevice9Hook::SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX* mat)
 {
-	// We want to check that what we're
-	// about to call into is actually within
-	// the d3d9.dll address space.
-	dwD3DDev = (DWORD)pD3DDevice;
-	
-	_asm mov eax, dwD3DDev
-	_asm mov ebx, [eax]
-	_asm mov eax, [ebx+176]
-	_asm mov dwTestPtr, eax
-		
-	if(dwTestPtr < (dwD3D9DllBaseAddr ^ 0xACACACAC) || dwTestPtr > ((dwD3D9DllBaseAddr ^ 0xACACACAC) + dwD3D9DllSize)) {
-		//pChatWindow->AddDebugMessage("This isn't d3d9.dll");
-		FORCE_EXIT( 25 );
-	}
-
 	switch (State)
 	{
 	case D3DTS_PROJECTION:

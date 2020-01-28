@@ -36,15 +36,11 @@ extern BOOL bFirstSpawn;
 extern CChatWindow *pChatWindow;
 extern CNetGame *pNetGame;
 
-int iDupeD3D9DllsWasVerified=0;
 
-DWORD dwD3D9DllBaseAddr=0;
-DWORD dwD3D9DllSize=0;
-
-typedef HANDLE (WINAPI *CREATETOOLHELP32SNAPSHOT)(DWORD, DWORD);
+/*typedef HANDLE (WINAPI *CREATETOOLHELP32SNAPSHOT)(DWORD, DWORD);
 typedef BOOL (WINAPI *CLOSETOOLHELP32SNAPSHOT)(HANDLE);
 typedef BOOL (WINAPI *MODULE32FIRST)(HANDLE, LPMODULEENTRY32);
-typedef BOOL (WINAPI *MODULE32NEXT)(HANDLE, LPMODULEENTRY32);
+typedef BOOL (WINAPI *MODULE32NEXT)(HANDLE, LPMODULEENTRY32);*/
 
 //----------------------------------------------------------
 
@@ -88,7 +84,7 @@ void DoCheatDataStoring()
 
 //----------------------------------------------------------
 
-void CheckDuplicateD3D9Dlls()
+/*void CheckDuplicateD3D9Dlls()
 {
 	CREATETOOLHELP32SNAPSHOT fnCreateToolhelp32Snapshot = NULL;
 	MODULE32FIRST fnModule32First = NULL;
@@ -145,8 +141,6 @@ void CheckDuplicateD3D9Dlls()
 
 	} while( fnModule32Next( hModuleSnap, &me32 ) );
 
-	iDupeD3D9DllsWasVerified = 1;
-	
 	// If there is more than 1 d3d9.dll or its image size is less than
 	// 0x00100005 FORCE_EXIT.
 	if(iFoundD3D9Dll > 1 || dwD3D9DllSize < 0x00100005) {
@@ -155,7 +149,7 @@ void CheckDuplicateD3D9Dlls()
 
 	CloseHandle( hModuleSnap );
 	return;
-}
+}*/
 
 //----------------------------------------------------------
 

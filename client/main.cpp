@@ -265,7 +265,7 @@ void SetupGameUI()
 
 //----------------------------------------------------
 
-extern void CheckDuplicateD3D9Dlls();
+//extern void CheckDuplicateD3D9Dlls();
 
 void DoInitStuff()
 {
@@ -277,7 +277,7 @@ void DoInitStuff()
 		timeBeginPeriod(5); // increases the accuracy of Sleep()
 		SubclassGameWindow();
 
-		CheckDuplicateD3D9Dlls(); // Do this before any hooks are installed.
+		//CheckDuplicateD3D9Dlls(); // Do this before any hooks are installed.
 
 		// Grab the real IDirect3D9 * from the game.
 		pD3D = (IDirect3D9 *)pGame->GetD3D();
