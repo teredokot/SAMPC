@@ -3862,6 +3862,25 @@ static cell AMX_NATIVE_CALL n_CreateExplosion(AMX *amx, cell *params)
 	return 1;
 }
 
+static cell n_CreateExplosionForPlayer(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(6);
+
+	if (pNetGame->GetPlayerPool()->GetSlotState(params[1]))
+	{
+		RakNet::BitStream bs;
+
+		bs.Write(amx_ctof(params[2])); // x
+		bs.Write(amx_ctof(params[3])); // y
+		bs.Write(amx_ctof(params[4])); // z
+		bs.Write(params[5]); // type
+		bs.Write(amx_ctof(params[6])); // radius
+
+		pNetGame->SendToPlayer(params[1], RPC_ScrCreateExplosion, &bs);
+	}
+	return 1;
+}
+
 static cell AMX_NATIVE_CALL n_SetDisabledWeapons(AMX *amx, cell *params)
 {
 	long long* lpWeapons = &pNetGame->m_longSynchedWeapons;
@@ -4517,7 +4536,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetGravity",				n_GetGravity },
 	{ "AllowAdminTeleport",		n_AllowAdminTeleport },
 	{ "SetDeathDropAmount",		n_SetDeathDropAmount },
-	{ "CreateExplosion",        n_CreateExplosion },
+	DEFINE_NATIVE(CreateExplosion),
+	DEFINE_NATIVE(CreateExplosionForPlayer),
 	{ "SetDisabledWeapons",		n_SetDisabledWeapons },
 	{ "UsePlayerPedAnims",		n_UsePlayerPedAnims },
 	{ "DisableInteriorEnterExits", n_DisableInteriorEnterExits },
