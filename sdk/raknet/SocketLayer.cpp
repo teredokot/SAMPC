@@ -147,14 +147,7 @@ SOCKET SocketLayer::CreateBoundSocket( unsigned short port, bool blockingSocket,
 	sockaddr_in listenerSocketAddress;
 	int ret;
 
-#ifdef __USE_IO_COMPLETION_PORTS
-
-	if ( blockingSocket == false ) 
-		listenSocket = WSASocket( AF_INET, SOCK_DGRAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
-	else
-#endif
-
-		listenSocket = socket( AF_INET, SOCK_DGRAM, 0 );
+	listenSocket = socket( AF_INET, SOCK_DGRAM, 0 );
 
 	if ( listenSocket == INVALID_SOCKET )
 	{

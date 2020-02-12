@@ -82,6 +82,12 @@ CPlayer::CPlayer()
 	m_bInCheckpoint = false;
 	m_bInRaceCheckpoint = false;
 	
+	// World bound is set in client by this default values
+	m_fWorldBounds[0] = 20000.0f;
+	m_fWorldBounds[1] = -20000.0f;
+	m_fWorldBounds[2] = 20000.0f;
+	m_fWorldBounds[3] = -20000.0f;
+
 	BYTE i;
 	for (i = 0; i < 13; i++)
 	{

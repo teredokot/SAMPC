@@ -221,6 +221,7 @@ public:
 	VECTOR  m_vecPos;
 	float	m_fRotation;
 	BOOL	m_bCanTeleport;
+	float m_fWorldBounds[4];
 
 	BOOL IsActive() { 
 		if( m_byteState != PLAYER_STATE_NONE && m_byteState != PLAYER_STATE_SPECTATING ) { return TRUE; }

@@ -141,6 +141,7 @@ native GetPickupPos(pickupid, &Float:x, &Float:y, &Float:z);
 native GetPickupModel(pickupid);
 native GetPickupType(pickupid);
 native GetPickupCount();
+native GetPlayerWorldBounds(playerid, &Float:maxx, &Float:maxy, &Float:minx, &Float:miny);
 native SetPlayerWorldBounds(playerid, Float:maxx, Float:maxy, Float:minx, Float:miny);
 native ShowNameTags(show);
 native ShowPlayerMarkers(show);

@@ -670,6 +670,16 @@ void CNetGame::UpdateNetwork()
 	}
 }
 
+bool CNetGame::SendToPlayer(unsigned int uiPlayerId,
+	char* szUniqId, RakNet::BitStream* pBitStream)
+{
+	if (m_pRak == 0)
+		return false;
+
+	return m_pRak->RPC(szUniqId, pBitStream, HIGH_PRIORITY,
+		RELIABLE, 0, m_pRak->GetPlayerIDFromIndex(uiPlayerId), false, false);
+}
+
 //----------------------------------------------------
 
 int CNetGame::GetBroadcastSendRateFromPlayerDistance(float fDistance)

@@ -15,6 +15,7 @@
 #include "main.h"
 
 #define CHECK_PARAMS(n) { if (params[0] != (n * sizeof(cell))) { logprintf("SCRIPT: Bad parameter count (Count is %d, Should be %d): ", params[0] / sizeof(cell), n); return 0; } }
+#define DEFINE_NATIVE(func) {#func, n_##func}
 
 char* format_amxstring(AMX *amx, cell *params, int parm, int &len);
 int set_amxstring(AMX *amx,cell amx_addr,const char *source,int max);
@@ -509,32 +510,50 @@ static cell n_GetPickupCount(AMX* amx, cell* params)
 	return pNetGame->GetPickupPool()->GetCount();
 }
 
-//----------------------------------------------------------------------------------
-// native SetPlayerWorldBounds(playerid,Float:x_max,Float:y_max,Float:x_min,Float:y_min);
+// native GetPlayerWorldBounds(playerid,&Float:x_max,&Float:y_max,&Float:x_min,&Float:y_min);
+static cell n_GetPlayerWorldBounds(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(5);
+	
+	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+	if (pPlayer == NULL)
+		return 0;
 
+	cell* cptr;
+	amx_GetAddr(amx, params[2], &cptr);
+	*cptr = amx_ftoc(pPlayer->m_fWorldBounds[0]);
+	amx_GetAddr(amx, params[3], &cptr);
+	*cptr = amx_ftoc(pPlayer->m_fWorldBounds[1]);
+	amx_GetAddr(amx, params[4], &cptr);
+	*cptr = amx_ftoc(pPlayer->m_fWorldBounds[2]);
+	amx_GetAddr(amx, params[5], &cptr);
+	*cptr = amx_ftoc(pPlayer->m_fWorldBounds[3]);
+
+	return 1;
+}
+
+// native SetPlayerWorldBounds(playerid,Float:x_max,Float:y_max,Float:x_min,Float:y_min);
 static cell AMX_NATIVE_CALL n_SetPlayerWorldBounds(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(5);
+
 	RakNet::BitStream bsBounds;
-	float fBounds[4];
 	
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(!pPlayer) return 0;
 
-	fBounds[0] = amx_ctof(params[2]);
-	fBounds[1] = amx_ctof(params[3]);
-	fBounds[2] = amx_ctof(params[4]);
-	fBounds[3] = amx_ctof(params[5]);
+	// Update player's new bound 
+	pPlayer->m_fWorldBounds[0] = amx_ctof(params[2]);
+	pPlayer->m_fWorldBounds[1] = amx_ctof(params[3]);
+	pPlayer->m_fWorldBounds[2] = amx_ctof(params[4]);
+	pPlayer->m_fWorldBounds[3] = amx_ctof(params[5]);
 	
-	bsBounds.Write(fBounds[0]);
-	bsBounds.Write(fBounds[1]);
-	bsBounds.Write(fBounds[2]);
-	bsBounds.Write(fBounds[3]);
+	bsBounds.Write(pPlayer->m_fWorldBounds[0]);
+	bsBounds.Write(pPlayer->m_fWorldBounds[1]);
+	bsBounds.Write(pPlayer->m_fWorldBounds[2]);
+	bsBounds.Write(pPlayer->m_fWorldBounds[3]);
 
-	RakServerInterface* pRak = pNetGame->GetRakServer();
-	pRak->RPC(RPC_ScrSetWorldBounds , &bsBounds, HIGH_PRIORITY, 
-		RELIABLE, 0, pRak->GetPlayerIDFromIndex(params[1]), false, false);
-	
+	pNetGame->SendToPlayer(params[1], RPC_ScrSetWorldBounds, &bsBounds);
 	return 1;
 }
 
@@ -4486,7 +4505,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{"GetPickupModel", n_GetPickupModel},
 	{"GetPickupType", n_GetPickupType},
 	{"GetPickupCount", n_GetPickupCount},
-	{ "SetPlayerWorldBounds",	n_SetPlayerWorldBounds },
+	DEFINE_NATIVE(GetPlayerWorldBounds),
+	DEFINE_NATIVE(SetPlayerWorldBounds),
 	{ "ShowNameTags",			n_ShowNameTags },
 	{ "ShowPlayerMarkers",		n_ShowPlayerMarkers },
 	{ "SetWorldTime",			n_SetWorldTime },
