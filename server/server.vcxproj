@@ -149,9 +149,7 @@
     <ClCompile Include="..\sdk\amx\amxfloat.c" />
     <ClCompile Include="..\sdk\amx\amxstring.c" />
     <ClCompile Include="..\sdk\amx\amxtime.c" />
-    <ClCompile Include="..\sdk\raknet\AsynchronousFileIO.cpp" />
     <ClCompile Include="..\sdk\raknet\BitStream.cpp" />
-    <ClCompile Include="..\sdk\raknet\BitStream_NoTemplate.cpp" />
     <ClCompile Include="..\sdk\raknet\CheckSum.cpp" />
     <ClCompile Include="..\sdk\raknet\CommandParserInterface.cpp" />
     <ClCompile Include="..\sdk\raknet\ConnectionGraph.cpp" />
@@ -159,12 +157,8 @@
     <ClCompile Include="..\sdk\raknet\DataBlockEncryptor.cpp" />
     <ClCompile Include="..\sdk\raknet\DataCompressor.cpp" />
     <ClCompile Include="..\sdk\raknet\DirectoryDeltaTransfer.cpp" />
-    <ClCompile Include="..\sdk\raknet\DS_ByteQueue.cpp" />
     <ClCompile Include="..\sdk\raknet\DS_HuffmanEncodingTree.cpp" />
     <ClCompile Include="..\sdk\raknet\DS_Table.cpp" />
-    <ClCompile Include="..\sdk\raknet\EmailSender.cpp" />
-    <ClCompile Include="..\sdk\raknet\EncodeClassName.cpp" />
-    <ClCompile Include="..\sdk\raknet\ExtendedOverlappedPool.cpp" />
     <ClCompile Include="..\sdk\raknet\FileList.cpp" />
     <ClCompile Include="..\sdk\raknet\FileListTransfer.cpp" />
     <ClCompile Include="..\sdk\raknet\FileOperations.cpp" />
@@ -203,8 +197,6 @@
     <ClCompile Include="..\sdk\raknet\StringCompressor.cpp" />
     <ClCompile Include="..\sdk\raknet\StringTable.cpp" />
     <ClCompile Include="..\sdk\raknet\SystemAddressList.cpp" />
-    <ClCompile Include="..\sdk\raknet\SystemDatabaseClient.cpp" />
-    <ClCompile Include="..\sdk\raknet\SystemDatabaseServer.cpp" />
     <ClCompile Include="..\sdk\raknet\TableSerializer.cpp" />
     <ClCompile Include="..\sdk\raknet\TCPInterface.cpp" />
     <ClCompile Include="..\sdk\raknet\TEABlockEncryptor.cpp" />
@@ -252,14 +244,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\sdk\amx\amx.h" />
-    <ClInclude Include="..\sdk\raknet\AsynchronousFileIO.h" />
-    <ClInclude Include="..\sdk\raknet\AutopatcherPatchContext.h" />
-    <ClInclude Include="..\sdk\raknet\AutopatcherRepositoryInterface.h" />
     <ClInclude Include="..\sdk\raknet\BigTypes.h" />
     <ClInclude Include="..\sdk\raknet\BitStream.h" />
-    <ClInclude Include="..\sdk\raknet\BitStream_NoTemplate.h" />
     <ClInclude Include="..\sdk\raknet\CheckSum.h" />
-    <ClInclude Include="..\sdk\raknet\ClientContextStruct.h" />
     <ClInclude Include="..\sdk\raknet\CommandParserInterface.h" />
     <ClInclude Include="..\sdk\raknet\ConnectionGraph.h" />
     <ClInclude Include="..\sdk\raknet\ConsoleServer.h" />
@@ -268,7 +255,6 @@
     <ClInclude Include="..\sdk\raknet\DirectoryDeltaTransfer.h" />
     <ClInclude Include="..\sdk\raknet\DS_BinarySearchTree.h" />
     <ClInclude Include="..\sdk\raknet\DS_BPlusTree.h" />
-    <ClInclude Include="..\sdk\raknet\DS_ByteQueue.h" />
     <ClInclude Include="..\sdk\raknet\DS_Heap.h" />
     <ClInclude Include="..\sdk\raknet\DS_HuffmanEncodingTree.h" />
     <ClInclude Include="..\sdk\raknet\DS_HuffmanEncodingTreeFactory.h" />
@@ -285,9 +271,7 @@
     <ClInclude Include="..\sdk\raknet\DS_Table.h" />
     <ClInclude Include="..\sdk\raknet\DS_Tree.h" />
     <ClInclude Include="..\sdk\raknet\DS_WeightedGraph.h" />
-    <ClInclude Include="..\sdk\raknet\EmailSender.h" />
     <ClInclude Include="..\sdk\raknet\Export.h" />
-    <ClInclude Include="..\sdk\raknet\ExtendedOverlappedPool.h" />
     <ClInclude Include="..\sdk\raknet\FileList.h" />
     <ClInclude Include="..\sdk\raknet\FileListTransfer.h" />
     <ClInclude Include="..\sdk\raknet\FileListTransferCBInterface.h" />
@@ -310,7 +294,6 @@
     <ClInclude Include="..\sdk\raknet\PacketEnumerations.h" />
     <ClInclude Include="..\sdk\raknet\PacketFileLogger.h" />
     <ClInclude Include="..\sdk\raknet\PacketLogger.h" />
-    <ClInclude Include="..\sdk\raknet\PacketPool.h" />
     <ClInclude Include="..\sdk\raknet\PacketPriority.h" />
     <ClInclude Include="..\sdk\raknet\PluginInterface.h" />
     <ClInclude Include="..\sdk\raknet\RakAssert.h" />
@@ -347,8 +330,6 @@
     <ClInclude Include="..\sdk\raknet\StringCompressor.h" />
     <ClInclude Include="..\sdk\raknet\StringTable.h" />
     <ClInclude Include="..\sdk\raknet\SystemAddressList.h" />
-    <ClInclude Include="..\sdk\raknet\SystemDatabaseClient.h" />
-    <ClInclude Include="..\sdk\raknet\SystemDatabaseServer.h" />
     <ClInclude Include="..\sdk\raknet\TableSerializer.h" />
     <ClInclude Include="..\sdk\raknet\TCPInterface.h" />
     <ClInclude Include="..\sdk\raknet\TEABlockEncryptor.h" />

@@ -37,3 +37,6 @@
 # Build files
 Debug/
 Release/
+
+# That stupid settings.ini from Pawno
+pawno/settings.ini

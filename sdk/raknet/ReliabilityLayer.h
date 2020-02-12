@@ -346,10 +346,6 @@ private:
 	unsigned sendPacketCount, receivePacketCount;
 	RakNetTimeNS ackTimeIncrement;
 
-#ifdef __USE_IO_COMPLETION_PORTS
-	///\note Windows Port only
-	SOCKET readWriteSocket;
-#endif
 	///This variable is so that free memory can be called by only the update thread so we don't have to mutex things so much
 	bool freeThreadedMemoryOnNextUpdate;
 

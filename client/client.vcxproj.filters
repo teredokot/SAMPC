@@ -187,7 +187,47 @@
     <ClCompile Include="..\sdk\zlib\inffast.c">
       <Filter>sdk\zlib</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\BitStream_NoTemplate.cpp">
+    <ClCompile Include="..\sdk\dxut\dxstdafx.cpp">
+      <Filter>sdk\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\dxut\DXUT.cpp">
+      <Filter>sdk\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\dxut\DXUTenum.cpp">
+      <Filter>sdk\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\dxut\DXUTgui.cpp">
+      <Filter>sdk\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\dxut\DXUTMesh.cpp">
+      <Filter>sdk\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\dxut\DXUTmisc.cpp">
+      <Filter>sdk\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\dxut\DXUTSettingsDlg.cpp">
+      <Filter>sdk\dxut</Filter>
+    </ClCompile>
+    <ClCompile Include="chatwindow.cpp" />
+    <ClCompile Include="cmdprocs.cpp" />
+    <ClCompile Include="cmdwindow.cpp" />
+    <ClCompile Include="deathwindow.cpp" />
+    <ClCompile Include="events.cpp" />
+    <ClCompile Include="exceptions.cpp" />
+    <ClCompile Include="filechecks.cpp" />
+    <ClCompile Include="filehooks.cpp" />
+    <ClCompile Include="filesystem.cpp" />
+    <ClCompile Include="fontrender.cpp" />
+    <ClCompile Include="helpdialog.cpp" />
+    <ClCompile Include="label.cpp" />
+    <ClCompile Include="netstats.cpp" />
+    <ClCompile Include="newplayertags.cpp" />
+    <ClCompile Include="runutil.cpp" />
+    <ClCompile Include="scoreboard.cpp" />
+    <ClCompile Include="spawnscreen.cpp" />
+    <ClCompile Include="subclass.cpp" />
+    <ClCompile Include="svrnetstats.cpp" />
+    <ClCompile Include="..\sdk\raknet\BitStream.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\CheckSum.cpp">
@@ -211,22 +251,10 @@
     <ClCompile Include="..\sdk\raknet\DirectoryDeltaTransfer.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\DS_ByteQueue.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\DS_HuffmanEncodingTree.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\DS_Table.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\EmailSender.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\EncodeClassName.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\ExtendedOverlappedPool.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\FileList.cpp">
@@ -343,12 +371,6 @@
     <ClCompile Include="..\sdk\raknet\SystemAddressList.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\SystemDatabaseClient.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\SystemDatabaseServer.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\TableSerializer.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
@@ -364,52 +386,6 @@
     <ClCompile Include="..\sdk\raknet\_findfirst.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\AsynchronousFileIO.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\BitStream.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\dxut\dxstdafx.cpp">
-      <Filter>sdk\dxut</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\dxut\DXUT.cpp">
-      <Filter>sdk\dxut</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\dxut\DXUTenum.cpp">
-      <Filter>sdk\dxut</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\dxut\DXUTgui.cpp">
-      <Filter>sdk\dxut</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\dxut\DXUTMesh.cpp">
-      <Filter>sdk\dxut</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\dxut\DXUTmisc.cpp">
-      <Filter>sdk\dxut</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\dxut\DXUTSettingsDlg.cpp">
-      <Filter>sdk\dxut</Filter>
-    </ClCompile>
-    <ClCompile Include="chatwindow.cpp" />
-    <ClCompile Include="cmdprocs.cpp" />
-    <ClCompile Include="cmdwindow.cpp" />
-    <ClCompile Include="deathwindow.cpp" />
-    <ClCompile Include="events.cpp" />
-    <ClCompile Include="exceptions.cpp" />
-    <ClCompile Include="filechecks.cpp" />
-    <ClCompile Include="filehooks.cpp" />
-    <ClCompile Include="filesystem.cpp" />
-    <ClCompile Include="fontrender.cpp" />
-    <ClCompile Include="helpdialog.cpp" />
-    <ClCompile Include="label.cpp" />
-    <ClCompile Include="netstats.cpp" />
-    <ClCompile Include="newplayertags.cpp" />
-    <ClCompile Include="runutil.cpp" />
-    <ClCompile Include="scoreboard.cpp" />
-    <ClCompile Include="spawnscreen.cpp" />
-    <ClCompile Include="subclass.cpp" />
-    <ClCompile Include="svrnetstats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="net\gangzonepool.h">
@@ -569,13 +545,50 @@
     <ClInclude Include="..\sdk\zlib\inffast.h">
       <Filter>sdk\zlib</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\BitStream_NoTemplate.h">
+    <ClInclude Include="..\sdk\dxut\DXUTSettingsDlg.h">
+      <Filter>sdk\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\dxut\dxstdafx.h">
+      <Filter>sdk\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\dxut\DXUT.h">
+      <Filter>sdk\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\dxut\DXUTenum.h">
+      <Filter>sdk\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\dxut\DXUTgui.h">
+      <Filter>sdk\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\dxut\DXUTMesh.h">
+      <Filter>sdk\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\dxut\DXUTmisc.h">
+      <Filter>sdk\dxut</Filter>
+    </ClInclude>
+    <ClInclude Include="chatwindow.h" />
+    <ClInclude Include="cmdprocs.h" />
+    <ClInclude Include="cmdwindow.h" />
+    <ClInclude Include="deathwindow.h" />
+    <ClInclude Include="filechecks.h" />
+    <ClInclude Include="filesystem.h" />
+    <ClInclude Include="filehooks.h" />
+    <ClInclude Include="fontrender.h" />
+    <ClInclude Include="helpdialog.h" />
+    <ClInclude Include="mod.h" />
+    <ClInclude Include="label.h" />
+    <ClInclude Include="netstats.h" />
+    <ClInclude Include="newplayertags.h" />
+    <ClInclude Include="outputdebugstring.h" />
+    <ClInclude Include="runutil.h" />
+    <ClInclude Include="scoreboard.h" />
+    <ClInclude Include="spawnscreen.h" />
+    <ClInclude Include="svrnetstats.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\sdk\raknet\BitStream.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\CheckSum.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\ClientContextStruct.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\CommandParserInterface.h">
@@ -600,9 +613,6 @@
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\DS_BPlusTree.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\DS_ByteQueue.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\DS_Heap.h">
@@ -653,13 +663,7 @@
     <ClInclude Include="..\sdk\raknet\DS_WeightedGraph.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\EmailSender.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\Export.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\ExtendedOverlappedPool.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\FileList.h">
@@ -726,9 +730,6 @@
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\PacketLogger.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\PacketPool.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\PacketPriority.h">
@@ -839,12 +840,6 @@
     <ClInclude Include="..\sdk\raknet\SystemAddressList.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\SystemDatabaseClient.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\SystemDatabaseServer.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\TableSerializer.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
@@ -869,61 +864,9 @@
     <ClInclude Include="..\sdk\raknet\_findfirst.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\AsynchronousFileIO.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\AutopatcherPatchContext.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\AutopatcherRepositoryInterface.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\BigTypes.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\BitStream.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\dxut\DXUTSettingsDlg.h">
-      <Filter>sdk\dxut</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\dxut\dxstdafx.h">
-      <Filter>sdk\dxut</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\dxut\DXUT.h">
-      <Filter>sdk\dxut</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\dxut\DXUTenum.h">
-      <Filter>sdk\dxut</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\dxut\DXUTgui.h">
-      <Filter>sdk\dxut</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\dxut\DXUTMesh.h">
-      <Filter>sdk\dxut</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\dxut\DXUTmisc.h">
-      <Filter>sdk\dxut</Filter>
-    </ClInclude>
-    <ClInclude Include="chatwindow.h" />
-    <ClInclude Include="cmdprocs.h" />
-    <ClInclude Include="cmdwindow.h" />
-    <ClInclude Include="deathwindow.h" />
-    <ClInclude Include="filechecks.h" />
-    <ClInclude Include="filesystem.h" />
-    <ClInclude Include="filehooks.h" />
-    <ClInclude Include="fontrender.h" />
-    <ClInclude Include="helpdialog.h" />
-    <ClInclude Include="mod.h" />
-    <ClInclude Include="label.h" />
-    <ClInclude Include="netstats.h" />
-    <ClInclude Include="newplayertags.h" />
-    <ClInclude Include="outputdebugstring.h" />
-    <ClInclude Include="runutil.h" />
-    <ClInclude Include="scoreboard.h" />
-    <ClInclude Include="spawnscreen.h" />
-    <ClInclude Include="svrnetstats.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\sdk\detours\detours.lib">
@@ -934,11 +877,11 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="client.rc" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\sdk\raknet\Makefile.am">
       <Filter>sdk\raknet</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="client.rc" />
   </ItemGroup>
 </Project>

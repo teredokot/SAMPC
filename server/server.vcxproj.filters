@@ -30,16 +30,64 @@
     <ClCompile Include="..\sdk\sqlite\sqlite3.c">
       <Filter>sdk\sqlite</Filter>
     </ClCompile>
+    <ClCompile Include="..\sdk\amx\amx.c">
+      <Filter>sdk\amx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\amx\amxfile.c">
+      <Filter>sdk\amx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\amx\amxfloat.c">
+      <Filter>sdk\amx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\amx\amxstring.c">
+      <Filter>sdk\amx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\amx\amxtime.c">
+      <Filter>sdk\amx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\amx\amxcore.c">
+      <Filter>sdk\amx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\trees.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\uncompr.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\zutil.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\adler32.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\compress.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\crc32.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\deflate.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\gzio.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\infback.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\inffast.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\inflate.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\zlib\inftrees.c">
+      <Filter>sdk\zlib</Filter>
+    </ClCompile>
     <ClCompile Include="..\sdk\raknet\_findfirst.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\AsynchronousFileIO.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\BitStream.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\BitStream_NoTemplate.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\CheckSum.cpp">
@@ -63,22 +111,10 @@
     <ClCompile Include="..\sdk\raknet\DirectoryDeltaTransfer.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\DS_ByteQueue.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\DS_HuffmanEncodingTree.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\DS_Table.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\EmailSender.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\EncodeClassName.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\ExtendedOverlappedPool.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\FileList.cpp">
@@ -195,12 +231,6 @@
     <ClCompile Include="..\sdk\raknet\SystemAddressList.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\SystemDatabaseClient.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\SystemDatabaseServer.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\TableSerializer.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
@@ -212,60 +242,6 @@
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\TelnetTransport.cpp">
       <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\amx\amx.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\amx\amxfile.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\amx\amxfloat.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\amx\amxstring.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\amx\amxtime.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\amx\amxcore.c">
-      <Filter>sdk\amx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\trees.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\uncompr.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\zutil.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\adler32.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\compress.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\crc32.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\deflate.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\gzio.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\infback.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\inffast.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\inflate.c">
-      <Filter>sdk\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\zlib\inftrees.c">
-      <Filter>sdk\zlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -300,16 +276,46 @@
     <ClInclude Include="..\sdk\sqlite\sqlite3ext.h">
       <Filter>sdk\sqlite</Filter>
     </ClInclude>
+    <ClInclude Include="..\sdk\amx\amx.h">
+      <Filter>sdk\amx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\inftrees.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\trees.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\zconf.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\zconf.in.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\zlib.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\zutil.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\crc32.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\deflate.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\inffast.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\inffixed.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\zlib\inflate.h">
+      <Filter>sdk\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\raknet\SAMPRPC.h">
+      <Filter>sdk\raknet</Filter>
+    </ClInclude>
     <ClInclude Include="..\sdk\raknet\_findfirst.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\AsynchronousFileIO.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\AutopatcherPatchContext.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\AutopatcherRepositoryInterface.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\BigTypes.h">
@@ -318,13 +324,7 @@
     <ClInclude Include="..\sdk\raknet\BitStream.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\BitStream_NoTemplate.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\CheckSum.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\ClientContextStruct.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\CommandParserInterface.h">
@@ -349,9 +349,6 @@
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\DS_BPlusTree.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\DS_ByteQueue.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\DS_Heap.h">
@@ -402,13 +399,7 @@
     <ClInclude Include="..\sdk\raknet\DS_WeightedGraph.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\EmailSender.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\Export.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\ExtendedOverlappedPool.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\FileList.h">
@@ -475,9 +466,6 @@
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\PacketLogger.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\PacketPool.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\PacketPriority.h">
@@ -561,9 +549,6 @@
     <ClInclude Include="..\sdk\raknet\RSACrypt.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\SAMPRPC.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\SHA1.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
@@ -588,12 +573,6 @@
     <ClInclude Include="..\sdk\raknet\SystemAddressList.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\SystemDatabaseClient.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\SystemDatabaseServer.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\TableSerializer.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
@@ -614,42 +593,6 @@
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\Types.h">
       <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\amx\amx.h">
-      <Filter>sdk\amx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\inftrees.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\trees.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\zconf.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\zconf.in.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\zlib.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\zutil.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\crc32.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\deflate.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\inffast.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\inffixed.h">
-      <Filter>sdk\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\zlib\inflate.h">
-      <Filter>sdk\zlib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

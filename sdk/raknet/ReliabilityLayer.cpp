@@ -76,10 +76,6 @@ int SplitPacketIndexComp( SplitPacketIndexType const &key, InternalPacket* const
 //-------------------------------------------------------------------------------------------------------
 ReliabilityLayer::ReliabilityLayer() : updateBitStream( DEFAULT_MTU_SIZE )   // preallocate the update bitstream so we can avoid a lot of reallocs at runtime
 {
-#ifdef __USE_IO_COMPLETION_PORTS
-	readWriteSocket = INVALID_SOCKET;
-#endif
-
 	freeThreadedMemoryOnNextUpdate = false;
 #ifdef _DEBUG
 	// Wait longer to disconnect in debug so I don't get disconnected while tracing
@@ -101,10 +97,6 @@ ReliabilityLayer::ReliabilityLayer() : updateBitStream( DEFAULT_MTU_SIZE )   // 
 ReliabilityLayer::~ReliabilityLayer()
 {
 	FreeMemory( true ); // Free all memory immediately
-#ifdef __USE_IO_COMPLETION_PORTS
-	if ( readWriteSocket != INVALID_SOCKET )
-		closesocket( readWriteSocket );
-#endif
 }
 
 //-------------------------------------------------------------------------------------------------------
@@ -136,11 +128,7 @@ void ReliabilityLayer::SetEncryptionKey( const unsigned char* key )
 #endif
 void ReliabilityLayer::SetSocket( SOCKET s )
 {
-#ifdef __USE_IO_COMPLETION_PORTS
-	// If this hits I am probably using sequential ports while doing IO completion ports
-	assert( s != INVALID_SOCKET );
-	readWriteSocket = s;
-#endif
+	(void)s;
 }
 
 //-------------------------------------------------------------------------------------------------------
@@ -148,12 +136,7 @@ void ReliabilityLayer::SetSocket( SOCKET s )
 //-------------------------------------------------------------------------------------------------------
 SOCKET ReliabilityLayer::GetSocket( void )
 {
-#ifdef __USE_IO_COMPLETION_PORTS
-	return readWriteSocket;
-#else
-
 	return INVALID_SOCKET;
-#endif
 }
 
 //-------------------------------------------------------------------------------------------------------
@@ -827,13 +810,6 @@ bool ReliabilityLayer::Send( char *data, int numberOfBitsToSend, PacketPriority 
 	assert( numberOfBitsToSend > 0 );
 #endif
 
-#ifdef __USE_IO_COMPLETION_PORTS
-
-	if ( readWriteSocket == INVALID_SOCKET )
-		return false;
-
-#endif
-
 	// Fix any bad parameters
 	if ( reliability > RELIABLE_SEQUENCED || reliability < 0 )
 		reliability = RELIABLE;
@@ -959,15 +935,6 @@ bool ReliabilityLayer::Send( char *data, int numberOfBitsToSend, PacketPriority 
 //-------------------------------------------------------------------------------------------------------
 void ReliabilityLayer::Update( SOCKET s, PlayerID playerId, int MTUSize, RakNetTimeNS time, DataStructures::List<PluginInterface*> &messageHandlerList )
 {
-#ifdef __USE_IO_COMPLETION_PORTS
-
-	if ( readWriteSocket == INVALID_SOCKET )
-		return;
-
-	if (deadConnection)
-		return;
-#endif
-
 	// This line is necessary because the timer isn't accurate
 	if (time <= lastUpdateTime)
 	{
@@ -1212,24 +1179,11 @@ void ReliabilityLayer::SendBitStream( SOCKET s, PlayerID playerId, RakNet::BitSt
 		length = bitStream->GetNumberOfBytesUsed();
 	}
 
-#ifdef __USE_IO_COMPLETION_PORTS
-	if ( readWriteSocket == INVALID_SOCKET )
-	{
-		assert( 0 );
-		return ;
-	}
-
-	statistics.packetsSent++;
-	statistics.totalBitsSent += length * 8;
-	SocketLayer::Instance()->Write( readWriteSocket, ( const char* ) bitStream->GetData(), length );
-#else
-
 	statistics.packetsSent++;
 	statistics.totalBitsSent += length * 8;
 	//printf("total bits=%i length=%i\n", BITS_TO_BYTES(statistics.totalBitsSent), length);
 
 	SocketLayer::Instance()->SendTo( s, ( char* ) bitStream->GetData(), length, playerId.binaryAddress, playerId.port );
-#endif // __USE_IO_COMPLETION_PORTS
 
 	// lastPacketSendTime=time;
 }

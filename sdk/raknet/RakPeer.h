@@ -557,10 +557,6 @@ protected:
 	/// \param[in] playerId The sender of the packet 
 	void HandleRPCReplyPacket( const char *data, int length, PlayerID playerId );
 
-#ifdef __USE_IO_COMPLETION_PORTS
-
-	bool SetupIOCompletionPortSocket( int index );
-#endif
 	///Set this to true to terminate the Peer thread execution 
 	volatile bool endThreads;
 	///true if the peer thread is active. 
