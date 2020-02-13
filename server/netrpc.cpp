@@ -51,6 +51,8 @@ void ClientJoin(RPCParameters *rpcParams)
 	//BYTE byteMod;
 	BYTE byteNickLen;
 	BYTE byteRejectReason;
+	size_t uiVersionLen = 0;
+	char szVersion[12];
 	unsigned int uiChallengeResponse=0;
 
 	bytePlayerID = pRak->GetIndexFromPlayerID(sender);
@@ -65,6 +67,18 @@ void ClientJoin(RPCParameters *rpcParams)
 	bsData.Read(szPlayerName,byteNickLen);
 	szPlayerName[byteNickLen] = '\0';
 	bsData.Read(uiChallengeResponse);
+
+	bsData.Read(uiVersionLen);
+	if (uiVersionLen < 1 || 11 < uiVersionLen)
+	{
+		byteRejectReason = REJECT_REASON_BAD_VERSION;
+		bsReject.Write(byteRejectReason);
+		pRak->RPC(RPC_ConnectionRejected, &bsReject, HIGH_PRIORITY, RELIABLE, 0, sender, FALSE, FALSE);
+		pRak->Kick(sender);
+		return;
+	}
+	bsData.Read(szVersion, uiVersionLen);
+	szVersion[uiVersionLen] = '\0';
 
 	if(UNASSIGNED_PLAYER_ID == MyPlayerID) {
 		in.s_addr = sender.binaryAddress;
@@ -108,7 +122,7 @@ void ClientJoin(RPCParameters *rpcParams)
 	}
 
 	// Add this client to the player pool.
-	if(!pPlayerPool->New(bytePlayerID, szPlayerName)) {
+	if(!pPlayerPool->New(bytePlayerID, szPlayerName, szVersion)) {
 		pRak->Kick(sender);
 		return;
 	}

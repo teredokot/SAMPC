@@ -204,6 +204,8 @@ public:
 	BYTE					m_byteSpectateType;
 	DWORD					m_SpectateID; // Vehicle or player id
 
+	char m_szClientVersion[12];
+
 	ONFOOT_SYNC_DATA* GetOnFootSyncData() { return &m_ofSync; }
 	INCAR_SYNC_DATA* GetInCarSyncData() { return &m_icSync; }
 	PASSENGER_SYNC_DATA* GetPassengerSyncData() { return &m_psSync; }

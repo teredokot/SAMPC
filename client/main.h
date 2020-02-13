@@ -13,6 +13,8 @@
 #include <windows.h>
 #include <process.h>
 
+#define SAMP_VERSION "0.2X"
+
 #define ARRAY_SIZE(a)	( sizeof((a)) / sizeof(*(a)) )
 #define SAFE_DELETE(p)	{ if (p) { delete (p); (p) = NULL; } }
 #define SAFE_RELEASE(p)	{ if (p) { (p)->Release(); (p) = NULL; } }

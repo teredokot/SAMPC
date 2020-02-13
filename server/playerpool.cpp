@@ -34,7 +34,7 @@ CPlayerPool::~CPlayerPool()
 
 //----------------------------------------------------
 
-BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
+BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
 {
 	if(bytePlayerID > MAX_PLAYERS) return FALSE;
 	if(strlen(szPlayerName) > MAX_PLAYER_NAME) return FALSE;
@@ -44,6 +44,8 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
 	if(m_pPlayers[bytePlayerID])
 	{
 		strcpy(m_szPlayerName[bytePlayerID],szPlayerName);
+		strcpy(m_pPlayers[bytePlayerID]->m_szClientVersion, szVersion);
+
 		m_pPlayers[bytePlayerID]->SetID(bytePlayerID);
 		m_bPlayerSlotState[bytePlayerID] = TRUE;
 		m_iPlayerScore[bytePlayerID] = 0;

@@ -753,7 +753,11 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 	//bsSend.Write(byteMod);
 	bsSend.Write(byteNameLen);
 	bsSend.Write(m_pPlayerPool->GetLocalPlayerName(),byteNameLen);
-	bsSend.Write(uiChallenge);    
+	bsSend.Write(uiChallenge);
+	
+	size_t uiVersionLen = strlen(SAMP_VERSION);
+	bsSend.Write(uiVersionLen);
+	bsSend.Write(SAMP_VERSION, uiVersionLen);
 
 	m_pRakClient->RPC(RPC_ClientJoin,&bsSend,HIGH_PRIORITY,RELIABLE,0,FALSE);
 }

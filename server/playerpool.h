@@ -46,7 +46,7 @@ public:
 	~CPlayerPool();
 
 	BOOL Process(float fElapsedTime);
-	BOOL New(BYTE bytePlayerID, PCHAR szPlayerName);
+	BOOL New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion);
 	BOOL Delete(BYTE bytePlayerID, BYTE byteReason);
 		
 	// Retrieve a player
