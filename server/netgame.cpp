@@ -94,6 +94,15 @@ CNetGame::CNetGame()
 	//m_pRak->InitializeSecurity(0, 0);
 	//m_pRak->SetTrackFrequencyTable(true);
 
+	int iMTUSize = pConsole->GetIntVariable("mtu");
+	m_pRak->SetMTUSize(iMTUSize);
+
+	if (iMTUSize != m_pRak->GetMTUSize())
+	{
+		pConsole->SetIntVariable("mtu", m_pRak->GetMTUSize());
+		pConsole->ModifyVariableFlags("mtu", CON_VARFLAG_READONLY);
+	}
+
 	if (!m_pRak->Start(dwMaxPlayers, 0, 10, dwPort, szBindAddress))
 	{
 		if (szBindAddress)
@@ -114,7 +123,6 @@ CNetGame::CNetGame()
 	}
 		
 	m_pRak->StartOccasionalPing();
-	//m_pRak->SetMTUSize(1492);
 
 	char* szPass = pConsole->GetStringVariable("password");
 	if ((szPass) && (szPass[0] != 0)) { 

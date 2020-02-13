@@ -250,6 +250,7 @@ int main (int argc, char** argv)
 	bool bGameMod = false;
 	bool bEnableAC = false;
 	bool bAllowQuery = true;
+	int iMTUSize = MAXIMUM_MTU_SIZE;
 
 	// Open the log file
 	LoadLogFile();
@@ -324,6 +325,7 @@ int main (int argc, char** argv)
 	pConsole->AddVariable("output",CON_VARTYPE_BOOL,0,&bOutputEnable);
 #endif
 
+	pConsole->AddVariable("mtu", CON_VARTYPE_INT, 0, &iMTUSize);
 	pConsole->AddVariable("timestamp",CON_VARTYPE_BOOL,0,&bEnableTimestamp);
 	pConsole->AddStringVariable("logtimeformat", 0, "[%H:%M:%S]");
 	pConsole->AddStringVariable("password", 0, NULL, ServerPasswordChanged);
@@ -361,6 +363,7 @@ int main (int argc, char** argv)
 	}
 
 	// Change some var flags to read-only (can only be accessed from server.cfg).
+	//pConsole->ModifyVariableFlags("mtu", CON_VARFLAG_READONLY);
 	pConsole->ModifyVariableFlags("maxplayers", CON_VARFLAG_READONLY);
 	pConsole->ModifyVariableFlags("bind", CON_VARFLAG_READONLY);
 	pConsole->ModifyVariableFlags("port", CON_VARFLAG_READONLY);
