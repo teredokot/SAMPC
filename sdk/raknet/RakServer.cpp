@@ -536,6 +536,11 @@ void RakServer::AddToBanList( const char *IP )
 	RakPeer::AddToBanList( IP );
 }
 
+void RakServer::AddToBanListEx(const char* IP, RakNetTime ms)
+{
+	RakPeer::AddToBanList(IP, ms);
+}
+
 void RakServer::RemoveFromBanList( const char *IP )
 {
 	RakPeer::RemoveFromBanList( IP );
