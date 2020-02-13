@@ -792,6 +792,10 @@ void CPlayer::HandleDeath(BYTE byteReason, BYTE byteWhoWasResponsible)
 		pRcon->GetRakServer()->RPC( RPC_Death, &bsPlayerDeath, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false );
 #endif*/
 
+	// Return here instead, if 'chatlogging' is disabled
+	if (!pConsole->GetIntVariable("chatlogging"))
+		return;
+
 	if ( byteWhoWasResponsible == INVALID_PLAYER_ID )
 	{
 		logprintf("[death] %s died %d",pNetGame->GetPlayerPool()->GetPlayerName(m_bytePlayerID), byteReason);

@@ -852,7 +852,10 @@ static cell AMX_NATIVE_CALL n_SetPlayerName(AMX *amx, cell *params)
 		if (byteSuccess != 0)
 		{
 			pNetGame->GetPlayerPool()->SetPlayerName(bytePlayerID, szNewNick);
-			logprintf("[nick] %s nick changed to %s", szOldNick, szNewNick);
+
+			if(pConsole->GetIntVariable("chatlogging"))
+				logprintf("[nick] %s nick changed to %s", szOldNick, szNewNick);
+
 			pNetGame->GetRakServer()->RPC(RPC_ScrSetPlayerName , &bsData, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 
 		}
