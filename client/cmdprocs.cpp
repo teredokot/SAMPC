@@ -1414,6 +1414,14 @@ static void cmdSetChatPageSize(PCHAR szCmd)
 		pChatWindow->AddInfoMessage("Usage: /pagesize [1-30]");
 }
 
+static void cmdToggleChatTimeStamp(PCHAR szCmd)
+{
+	(void)szCmd;
+
+	if (pChatWindow)
+		pChatWindow->ToggleTimeStamp();
+}
+
 void SetupCommands()
 {
 	// RELEASE COMMANDS
@@ -1424,6 +1432,8 @@ void SetupCommands()
 	pCmdWindow->AddCmdProc("rcon",cmdRcon);
 
 	pCmdWindow->AddCmdProc("pagesize", cmdSetChatPageSize);
+	pCmdWindow->AddCmdProc("timestamp", cmdToggleChatTimeStamp);
+
 #ifndef _DEBUG
 	if (tSettings.bDebug)
 	{

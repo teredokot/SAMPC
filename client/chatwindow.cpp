@@ -22,6 +22,7 @@ CChatWindow::CChatWindow(IDirect3DDevice9 *pD3DDevice, ID3DXFont *pFont)
 	m_iEnabled			= CHAT_WINDOW_MODE_FULL;
 	m_iCurrentPage		= 1;
 	m_uiPageSize		= DISP_MESSAGES;
+	m_bTimeStamp = false;
 
 	// Create a sprite to use when drawing text
 	D3DXCreateSprite(pD3DDevice,&m_pChatTextSprite);
@@ -53,6 +54,11 @@ void CChatWindow::SetPageSize(unsigned int uiSize)
 	m_uiPageSize = uiSize;
 }
 
+void CChatWindow::ToggleTimeStamp()
+{
+	m_bTimeStamp = !m_bTimeStamp;
+}
+
 void CChatWindow::ResetDialogControls(CDXUTDialog *pGameUI)
 {
 	m_pGameUI = pGameUI;
@@ -60,12 +66,12 @@ void CChatWindow::ResetDialogControls(CDXUTDialog *pGameUI)
 	if(pGameUI) {
 		//pGameUI->AddEditBox(IDC_CHATBACK,"",5,5,420,170,true,&m_pEditBackground);
 
-		m_pScrollBar = new CDXUTScrollBar(pGameUI);        
+		m_pScrollBar = new CDXUTScrollBar(pGameUI);
 		pGameUI->AddControl(m_pScrollBar);
 		m_pScrollBar->SetVisible(true);
 		m_pScrollBar->SetEnabled(true);
 		m_pScrollBar->SetLocation(5,40);
-        m_pScrollBar->SetSize(15,((m_lFontSizeY+1)* m_uiPageSize)-60);
+		m_pScrollBar->SetSize(15,((m_lFontSizeY+1)* m_uiPageSize)-60);
 		m_pScrollBar->SetTrackRange(0,(MAX_MESSAGES- m_uiPageSize)-1);
 		m_pScrollBar->SetPageSize(5);
 		m_pScrollBar->ShowItem(MAX_MESSAGES-1);
@@ -105,13 +111,12 @@ void CChatWindow::PageUp()
 {
 	if(!m_iEnabled) return;
 
-    m_iCurrentPage++;
+	m_iCurrentPage++;
 	if(m_iCurrentPage > CHAT_WINDOW_PAGES) {
 		m_iCurrentPage = CHAT_WINDOW_PAGES;
 	} else {
 		ScrollBarPosFromCurrentPage();
 	}
-	
 }
 
 //----------------------------------------------------
@@ -120,12 +125,18 @@ void CChatWindow::PageDown()
 {
 	if(!m_iEnabled) return;
 
-    m_iCurrentPage--;
+	m_iCurrentPage--;
 	if(m_iCurrentPage < 1) {
 		m_iCurrentPage = 1;
 	} else {
 		ScrollBarPosFromCurrentPage();
 	}
+}
+
+void CChatWindow::CycleMode()
+{
+	if ((m_iEnabled--) <= 0)
+		m_iEnabled = CHAT_WINDOW_MODE_FULL;
 }
 
 //----------------------------------------------------
@@ -138,7 +149,7 @@ void CChatWindow::Draw()
 	int x=0;
 	int i=0;
 	int iMessageAt;
-		
+
 	rect.top		= 10;
 	rect.left		= 30;
 	rect.bottom		= 110;
@@ -158,40 +169,47 @@ void CChatWindow::Draw()
 
 		while(x!= m_uiPageSize) {
 
+			if (m_bTimeStamp)
+			{
+				m_pD3DFont->DrawText(0, m_ChatWindowEntries[iMessageAt].szTimeStamp, -1, &rectSize, DT_CALCRECT | DT_LEFT, 0xFF000000);
+				RenderText(m_ChatWindowEntries[iMessageAt].szTimeStamp, rect, m_ChatWindowEntries[iMessageAt].dwTextColor);
+				rect.left = 35 + (rectSize.right - rectSize.left);
+			}
+
 			switch(m_ChatWindowEntries[iMessageAt].eType) {
 
-				case CHAT_TYPE_CHAT:
+			case CHAT_TYPE_CHAT:
 
-					i = strlen(m_ChatWindowEntries[iMessageAt].szNick);
+				i = strlen(m_ChatWindowEntries[iMessageAt].szNick);
 
-					if(i) {
-						m_pD3DFont->DrawText(0,m_ChatWindowEntries[iMessageAt].szNick,-1,&rectSize,DT_CALCRECT|DT_LEFT,0xFF000000);
-						RenderText(m_ChatWindowEntries[iMessageAt].szNick,rect,m_ChatWindowEntries[iMessageAt].dwNickColor);
-						rect.left = 35 + (rectSize.right - rectSize.left);
-					}					
+				if(i) {
+					m_pD3DFont->DrawText(0,m_ChatWindowEntries[iMessageAt].szNick,-1,&rectSize,DT_CALCRECT|DT_LEFT,0xFF000000);
+					RenderText(m_ChatWindowEntries[iMessageAt].szNick,rect,m_ChatWindowEntries[iMessageAt].dwNickColor);
+					rect.left = (m_bTimeStamp) ? (rect.left + (rectSize.right - rectSize.left)) : (35 + (rectSize.right - rectSize.left));
+				}
 
-					RenderText(m_ChatWindowEntries[iMessageAt].szMessage,rect,m_ChatWindowEntries[iMessageAt].dwTextColor);
-	
-					break;
+				RenderText(m_ChatWindowEntries[iMessageAt].szMessage,rect,m_ChatWindowEntries[iMessageAt].dwTextColor);
 
-				case CHAT_TYPE_INFO:
-				case CHAT_TYPE_DEBUG:
+				break;
 
-					RenderText(m_ChatWindowEntries[iMessageAt].szMessage,rect,m_ChatWindowEntries[iMessageAt].dwTextColor);
-					break;
-			}		
+			case CHAT_TYPE_INFO:
+			case CHAT_TYPE_DEBUG:
+
+				RenderText(m_ChatWindowEntries[iMessageAt].szMessage,rect,m_ChatWindowEntries[iMessageAt].dwTextColor);
+				break;
+			}
 
 			rect.top+=m_lFontSizeY+1;
 			rect.bottom= rect.top + m_lFontSizeY+1;
 			rect.left = 30;
-			
+
 			iMessageAt--;
 			x++;
 		}
 		m_lChatWindowBottom = rect.bottom;
 
 		m_pChatTextSprite->End();
-	}	
+	}
 }
 
 //----------------------------------------------------
@@ -271,26 +289,28 @@ void CChatWindow::FilterInvalidChars(PCHAR szString)
 
 //----------------------------------------------------
 
-void CChatWindow::AddToChatWindowBuffer(eChatMessageType eType, 
-										PCHAR szString, 
-										PCHAR szNick,
-										DWORD dwTextColor,
-										DWORD dwChatColor)
+void CChatWindow::AddToChatWindowBuffer(eChatMessageType eType,
+	PCHAR szString, PCHAR szNick, DWORD dwTextColor, DWORD dwChatColor)
 {
 	int iBestLineLength=0;
+	SYSTEMTIME time;
 
 	PushBack();
 
 	m_ChatWindowEntries[0].eType = eType;
 	m_ChatWindowEntries[0].dwTextColor = dwTextColor;
 	m_ChatWindowEntries[0].dwNickColor = dwChatColor;
-	
+
 	if(szNick) {
 		strcpy_s(m_ChatWindowEntries[0].szNick,szNick);
 		strcat_s(m_ChatWindowEntries[0].szNick,":");
 	} else {
 		m_ChatWindowEntries[0].szNick[0] = '\0';
 	}
+
+	GetSystemTime(&time);
+	snprintf(m_ChatWindowEntries[0].szTimeStamp, sizeof(m_ChatWindowEntries[0].szTimeStamp),
+		"[%02d:%02d:%02d]", time.wHour, time.wMinute, time.wSecond);
 
 	if(m_ChatWindowEntries[0].eType == CHAT_TYPE_CHAT && strlen(szString) > MAX_LINE_LENGTH)
 	{
@@ -305,7 +325,7 @@ void CChatWindow::AddToChatWindowBuffer(eChatMessageType eType,
 			m_ChatWindowEntries[0].szMessage[MAX_LINE_LENGTH] = '\0';
 
 			PushBack();
-			
+
 			m_ChatWindowEntries[0].eType = eType;
 			m_ChatWindowEntries[0].dwTextColor = dwTextColor;
 			m_ChatWindowEntries[0].dwNickColor = dwChatColor;
@@ -332,7 +352,7 @@ void CChatWindow::AddToChatWindowBuffer(eChatMessageType eType,
 		strncpy_s(m_ChatWindowEntries[0].szMessage,szString,MAX_MESSAGE_LENGTH);
 		m_ChatWindowEntries[0].szMessage[MAX_MESSAGE_LENGTH] = '\0';
 	}
-	
+
 }
 
 //----------------------------------------------------

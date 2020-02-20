@@ -22,7 +22,6 @@ enum eChatMessageType {
 	CHAT_TYPE_DEBUG
 };
 
-#pragma pack(1)
 typedef struct _CHAT_WINDOW_ENTRY
 {
 	eChatMessageType eType;
@@ -30,6 +29,7 @@ typedef struct _CHAT_WINDOW_ENTRY
 	CHAR szNick[MAX_PLAYER_NAME+1];
 	DWORD dwTextColor;
 	DWORD dwNickColor;
+	char szTimeStamp[12];
 } CHAT_WINDOW_ENTRY;
 
 #define CHAT_WINDOW_MODE_OFF	0
@@ -38,11 +38,11 @@ typedef struct _CHAT_WINDOW_ENTRY
 
 //----------------------------------------------------
 
-#pragma pack(1)
 class CChatWindow
 {
 private:
 	unsigned int	m_uiPageSize;
+	bool m_bTimeStamp;
 	int					m_iEnabled;
 	int					m_iCurrentPage;
 	CHAT_WINDOW_ENTRY	m_ChatWindowEntries[MAX_MESSAGES];
@@ -55,12 +55,12 @@ private:
 	CDXUTDialog			*m_pGameUI;
 	CDXUTEditBox		*m_pEditBackground;
 	CDXUTScrollBar		*m_pScrollBar;
-    
+
 	void PushBack();
 	void FilterInvalidChars(PCHAR szString);
 	void AddToChatWindowBuffer(eChatMessageType eType,PCHAR szString,
 		PCHAR szNick,DWORD dwTextColor,DWORD dwChatColor);
-	
+
 public:
 	void Draw();
 	void AddChatMessage(CHAR *szNick, DWORD dwNickColor, CHAR *szMessage);
@@ -71,17 +71,7 @@ public:
 	void PageUp();
 	void PageDown();
 
-	void CycleMode() {
-		if(m_iEnabled == CHAT_WINDOW_MODE_OFF) {
-			m_iEnabled = CHAT_WINDOW_MODE_FULL; return;
-		}
-		if(m_iEnabled == CHAT_WINDOW_MODE_LIGHT) {
-			m_iEnabled = CHAT_WINDOW_MODE_OFF; return;
-		}
-		if(m_iEnabled == CHAT_WINDOW_MODE_FULL) {
-			m_iEnabled = CHAT_WINDOW_MODE_LIGHT; return;
-		}
-	};
+	void CycleMode();
 
 	void RenderText(CHAR *sz,RECT rect,DWORD dwColor);
 	void ResetDialogControls(CDXUTDialog *pGameUI);
@@ -93,11 +83,12 @@ public:
 	void ScrollBarPosFromCurrentPage();
 
 	LONG				m_lFontSizeY;
-	ID3DXFont		    *m_pD3DFont;
+	ID3DXFont			*m_pD3DFont;
 	ID3DXSprite			*m_pChatTextSprite;
 	IDirect3DDevice9	*m_pD3DDevice;
 
 	void SetPageSize(unsigned int uiSize);
+	void ToggleTimeStamp();
 };
 
 //----------------------------------------------------
