@@ -89,6 +89,8 @@ public:
 	void	SetHornState(BYTE byteState);
 	BOOL	HasADriver();
 	BOOL	VerifyInstance();
+
+	void ToggleWindow(unsigned char ucDoorId, bool bOpen);
 	
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;

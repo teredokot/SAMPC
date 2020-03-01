@@ -1618,6 +1618,19 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 	case 1:
 		pVehicle->Fix();
 		break;
+	case 2:
+		int d, p, bl, br;
+
+		in.Read(d);
+		in.Read(p);
+		in.Read(bl);
+		in.Read(br);
+
+		pVehicle->ToggleWindow(10, !!d);
+		pVehicle->ToggleWindow(8, !!p);
+		pVehicle->ToggleWindow(11, !!bl);
+		pVehicle->ToggleWindow(9, !!br);
+		break;
 	}
 }
 

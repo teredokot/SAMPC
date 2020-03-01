@@ -804,5 +804,16 @@ BOOL CVehicle::VerifyInstance()
 	}
 	return FALSE;
 }
+
+void CVehicle::ToggleWindow(unsigned char ucDoorId, bool bOpen)
+{
+	DWORD dwThis = (DWORD)m_pVehicle;
+	DWORD dwFunc = bOpen ? (0x6D3080) : (0x6D30B0);
+
+	_asm mov ecx, dwThis
+	_asm push ucDoorId
+	_asm call dwFunc
+}
+
 //-----------------------------------------------------------
 // EOF

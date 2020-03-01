@@ -994,6 +994,28 @@ static cell n_RepairVehicle(AMX* amx, cell* params)
 	return 0;
 }
 
+// native SetVehicleParamsCarWindows(vehicleid, driver, passenger, backleft, backright)
+static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(5);
+
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	if (pVehiclePool && pVehiclePool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+
+		out.Write<int>(VEHICLE_OP_WINDOW);
+		out.Write(params[1]); // vehicleid
+		out.Write(params[2]); // driver
+		out.Write(params[3]); // passenger
+		out.Write(params[4]); // back-left
+		out.Write(params[5]); // back-right
+
+		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
+			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
 
 //----------------------------------------------------------------------------------
 // native TogglePlayerSpectating(playerid, toggle);
@@ -4752,6 +4774,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetVehicleVirtualWorld",		n_SetVehicleVirtualWorld },
 	{ "GetVehicleVirtualWorld",		n_GetVehicleVirtualWorld },
 	DEFINE_NATIVE(RepairVehicle),
+	DEFINE_NATIVE(SetVehicleParamsCarWindows),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

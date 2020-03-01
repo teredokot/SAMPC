@@ -13,6 +13,7 @@
 enum eVehicleOP
 {
 	VEHICLE_OP_REPAIR = 1,
+	VEHICLE_OP_WINDOW = 2,
 };
 
 //----------------------------------------------------
