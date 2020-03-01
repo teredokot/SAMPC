@@ -975,6 +975,25 @@ static cell AMX_NATIVE_CALL n_GetVehicleVirtualWorld(AMX *amx, cell *params)
 	return 0;
 }
 
+// native RepairVehicle(vehicleid)
+static cell n_RepairVehicle(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream bs;
+
+		bs.Write<int>(VEHICLE_OP_REPAIR);
+		bs.Write(params[1]);
+
+		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &bs, HIGH_PRIORITY,
+			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
+
 
 //----------------------------------------------------------------------------------
 // native TogglePlayerSpectating(playerid, toggle);
@@ -4632,7 +4651,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetPlayerPos",			n_GetPlayerPos },
 	{ "SetPlayerPos",			n_SetPlayerPos },
 	{ "SetPlayerPosFindZ",		n_SetPlayerPosFindZ },
-	{ "GetPlayerHealth",		n_GetPlayerHealth },
+	{ "GetPlayerHealth", n_GetPlayerHealth },
 	{ "SetPlayerHealth",		n_SetPlayerHealth },
 	{ "SetPlayerColor",			n_SetPlayerColor },
 	{ "GetPlayerColor",			n_GetPlayerColor },
@@ -4686,7 +4705,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },
-	{ "ShowPlayerNameTagForPlayer",	n_ShowPlayerNameTagForPlayer},
+	{ "ShowPlayerNameTagForPlayer",	n_ShowPlayerNameTagForPlayer },
 
 	{ "EnableStuntBonusForAll",		n_EnableStuntBonusForAll },
 	{ "EnableStuntBonusForPlayer",	n_EnableStuntBonusForPlayer },
@@ -4703,8 +4722,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "DestroyPlayerPickup",	n_DestroyPlayerPickup },
 	{ "IsPlayerInRangeOfPoint", n_IsPlayerInRangeOfPoint },
 
-	// Vehicle
-	{"GetVehiclePoolSize", n_GetVehiclePoolSize },
+		// Vehicle
+	{ "GetVehiclePoolSize", n_GetVehiclePoolSize },
 	{ "IsValidVehicle",			n_IsValidVehicle },
 	{ "CreateVehicle",			n_CreateVehicle },
 	{ "DestroyVehicle",			n_DestroyVehicle },
@@ -4732,6 +4751,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetVehiclePaintjob", n_GetVehiclePaintjob },
 	{ "SetVehicleVirtualWorld",		n_SetVehicleVirtualWorld },
 	{ "GetVehicleVirtualWorld",		n_GetVehicleVirtualWorld },
+	DEFINE_NATIVE(RepairVehicle),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

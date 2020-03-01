@@ -296,6 +296,7 @@ native GetVehicleColor(vehicleid, &color1, &color2);
 native GetVehiclePaintjob(vehicleid);
 native SetVehicleVirtualWorld(vehicleid, worldid);
 native GetVehicleVirtualWorld(vehicleid);
+native RepairVehicle(vehicleid);
 native SendClientMessage(playerid, color, const output[]);
 native SendClientMessageToAll(color, const output[]);
 native SendDeathMessage(killerid, killedid, weaponid);

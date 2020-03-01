@@ -1598,6 +1598,29 @@ void ScrEnableStuntBonus(RPCParameters *rpcParams)
 	pGame->EnableStuntBonus(bStuntBonusEnabled);
 }
 
+static void ScrSetVehicle(RPCParameters* rpcParams)
+{
+	RakNet::BitStream in(rpcParams->input,
+		BYTES_TO_BITS(rpcParams->numberOfBitsOfData), false);
+
+	int iOP = 0;
+	VEHICLEID iVehicleID = 0;
+
+	in.Read(iOP);
+	in.Read(iVehicleID);
+
+	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(iVehicleID);
+	if (pVehicle == NULL)
+		return;
+	
+	switch (iOP)
+	{
+	case 1:
+		pVehicle->Fix();
+		break;
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1673,6 +1696,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrClearAnimations);
 	REGISTER_STATIC_RPC(pRakClient, ScrSetSpecialAction);
 	REGISTER_STATIC_RPC(pRakClient, ScrEnableStuntBonus);
+	REGISTER_STATIC_RPC(pRakClient, ScrSetVehicle);
 }
 
 //----------------------------------------------------
@@ -1749,6 +1773,7 @@ void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient, ScrClearAnimations);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetSpecialAction);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrEnableStuntBonus);
+	UNREGISTER_STATIC_RPC(pRakClient, ScrSetVehicle);
 }
 
 //----------------------------------------------------

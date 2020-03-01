@@ -60,7 +60,7 @@ public:
 	void  SetTrainSpeed(float fSpeed);
 
 	void  Explode();
-
+	void  Fix();
 	void  ClearLastWeaponDamage();
 	UINT  GetPassengersMax();
 

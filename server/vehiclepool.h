@@ -10,6 +10,11 @@
 #ifndef SAMPSRV_VEHICLEPOOL_H
 #define SAMPSRV_VEHICLEPOOL_H
 
+enum eVehicleOP
+{
+	VEHICLE_OP_REPAIR = 1,
+};
+
 //----------------------------------------------------
 
 class CVehiclePool
