@@ -77,8 +77,8 @@ void CRemotePlayer::Process(BYTE byteLocalWorld)
 			else m_bVisible = TRUE;			
 
 			m_pPlayerPed->ProcessMarkers(
-				pNetGame->m_bLimitGlobalChatRadius,
-				pNetGame->m_fGlobalChatRadius,
+				pNetGame->m_bLimitGlobalMarkerRadius,
+				pNetGame->m_fGlobalMarkerRadius,
 				m_bVisible);
 
 			HandlePlayerPedStreaming();

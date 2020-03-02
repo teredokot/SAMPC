@@ -64,6 +64,8 @@ CNetGame::CNetGame()
 
 	m_bLimitGlobalChatRadius = FALSE;
 	m_fGlobalChatRadius = 10000.0f;
+	m_bLimitGlobalMarkerRadius = false;
+	m_fGlobalMarkerRadius = 10000.0f;
 	m_fNameTagDrawDistance = 70.0f;
 	m_bDisableEnterExits = false;
 
@@ -395,6 +397,8 @@ void CNetGame::Init(BOOL bFirst = false)
 
 	m_bLimitGlobalChatRadius = FALSE;
 	m_fGlobalChatRadius = 10000.0f;
+	m_bLimitGlobalMarkerRadius = false;
+	m_fGlobalMarkerRadius = 10000.0f;
 	m_fNameTagDrawDistance = 70.0f;
 	m_bDisableEnterExits = false;
 
@@ -1233,8 +1237,8 @@ void CNetGame::InitGameForPlayer(BYTE bytePlayerID)
 	bsInitGame.Write(m_bZoneNames);
 	bsInitGame.Write(m_bUseCJWalk);
 	bsInitGame.Write(m_bAllowWeapons);
-	bsInitGame.Write(m_bLimitGlobalChatRadius);
-	bsInitGame.Write(m_fGlobalChatRadius);
+	bsInitGame.Write(m_bLimitGlobalMarkerRadius);
+	bsInitGame.Write(m_fGlobalMarkerRadius);
 	bsInitGame.Write(m_bStuntBonus);
 	bsInitGame.Write(m_fNameTagDrawDistance);
 	bsInitGame.Write(m_bDisableEnterExits);

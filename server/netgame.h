@@ -86,8 +86,10 @@ public:
 	bool m_bZoneNames;
 	//BYTE m_byteMod;
 	bool m_bLimitGlobalChatRadius; // limit global player chat to other players within a certain radius
+	bool m_bLimitGlobalMarkerRadius;
 	bool m_bUseCJWalk;
 	float m_fGlobalChatRadius; // limit global chat radius
+	float m_fGlobalMarkerRadius;
 	float m_fNameTagDrawDistance; // The distance which players will start rendering nametags
 	bool m_bDisableEnterExits; // Interior enter/exits disabled?
 	

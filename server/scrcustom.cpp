@@ -2486,6 +2486,15 @@ static cell AMX_NATIVE_CALL n_LimitGlobalChatRadius(AMX *amx, cell *params)
 	return 1;
 }
 
+static cell n_LimitPlayerMarkerRadius(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	pNetGame->m_bLimitGlobalMarkerRadius = TRUE;
+	pNetGame->m_fGlobalMarkerRadius = amx_ctof(params[1]);
+	return 1;
+}
+
 //----------------------------------------------------------------------------------
 
 // native GetVehicleZAngle(vehicleid, &Float:z_angle)
@@ -4618,6 +4627,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 
 	//{ "SetMaxPlayers",			n_SetMaxPlayers },
 	{ "LimitGlobalChatRadius",	n_LimitGlobalChatRadius },
+	DEFINE_NATIVE(LimitPlayerMarkerRadius),
 	{ "SetWeather",				n_SetWeather },
 	{ "SetPlayerWeather",		n_SetPlayerWeather },
 	{ "CallRemoteFunction",		n_CallRemoteFunction },

@@ -109,8 +109,8 @@ void InitGame(RPCParameters *rpcParams)
 	bsInitGame.Read(pNetGame->m_bZoneNames);
 	bsInitGame.Read(pNetGame->m_bUseCJWalk);	
 	bsInitGame.Read(pNetGame->m_bAllowWeapons);
-	bsInitGame.Read(pNetGame->m_bLimitGlobalChatRadius);
-	bsInitGame.Read(pNetGame->m_fGlobalChatRadius);
+	bsInitGame.Read(pNetGame->m_bLimitGlobalMarkerRadius);
+	bsInitGame.Read(pNetGame->m_fGlobalMarkerRadius);
 	bsInitGame.Read(bStuntBonus);
 	bsInitGame.Read(pNetGame->m_fNameTagDrawDistance);
 	bsInitGame.Read(pNetGame->m_bDisableEnterExits);

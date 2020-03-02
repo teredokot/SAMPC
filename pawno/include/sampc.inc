@@ -116,6 +116,7 @@ native GetMaxPlayers();
 native SetTimerEx(const funcname[], interval, repeat, const params[], {Float,_}:...);
 native Float:VectorSize(Float:x, Float:y, Float:z);
 native LimitGlobalChatRadius(Float:radius);
+native LimitPlayerMarkerRadius(Float:marker_radius);
 native SetWeather(weatherid);
 native SetPlayerWeather(playerid, weatherid);
 native CallRemoteFunction(const funcname[], const params[], {Float,_}:...);

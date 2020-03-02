@@ -64,9 +64,9 @@ public:
 	BYTE		m_byteHoldTime;
 	bool		m_bInstagib;
 	bool		m_bZoneNames;
-	bool		m_bLimitGlobalChatRadius;
+	bool		m_bLimitGlobalMarkerRadius;
 	bool		m_bUseCJWalk;
-	float		m_fGlobalChatRadius;
+	float		m_fGlobalMarkerRadius;
 	float		m_fNameTagDrawDistance; // The distance which players will start rendering nametags
 	bool		m_bDisableEnterExits; // Interior enter/exits disabled?
 	int			m_iSpawnsAvailable;
