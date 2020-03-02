@@ -113,6 +113,7 @@ public:
 		return m_byteVirtualWorld[bytePlayerID];		
 	};
 
+	void SetAdmin(unsigned int iPlayerId, bool bToggle) { m_bIsAnAdmin[iPlayerId] = bToggle; }
 	void SetAdmin(BYTE bytePlayerID) { m_bIsAnAdmin[bytePlayerID] = TRUE; };
 	BOOL IsAdmin(BYTE bytePlayerID) { return m_bIsAnAdmin[bytePlayerID]; };
 

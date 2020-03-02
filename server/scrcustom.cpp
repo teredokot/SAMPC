@@ -685,6 +685,20 @@ static cell AMX_NATIVE_CALL n_IsPlayerAdmin(AMX *amx, cell *params)
 	return 0;
 }
 
+// native SetPlayerAdmin(playerid, toggle)
+static cell n_SetPlayerAdmin(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		pPool->SetAdmin(params[1], !!params[2]);
+		return 1;
+	}
+	return 0;
+}
+
 static cell n_GetPlayerIDFromName(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(1);
@@ -4665,6 +4679,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 
 	// Admin
 	{ "IsPlayerAdmin",			n_IsPlayerAdmin },
+	DEFINE_NATIVE(SetPlayerAdmin),
 	{ "Kick",					n_Kick },
 	{ "Ban",					n_Ban },
 	{ "BanEx",					n_BanEx },

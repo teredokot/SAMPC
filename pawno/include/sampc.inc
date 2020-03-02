@@ -171,6 +171,7 @@ native GangZoneFlashForAll(gangzoneid, color);
 native GangZoneStopFlashForPlayer(playerid, gangzoneid);
 native GangZoneStopFlashForAll(gangzoneid);
 native IsPlayerAdmin(playerid);
+native SetPlayerAdmin(playerid, toggle);
 native Kick(playerid);
 native Ban(playerid);
 native BanEx(playerid, const reason[]);
