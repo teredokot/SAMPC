@@ -145,6 +145,26 @@ void ServerInstagibChanged()
 	}
 }
 
+void ServerTimeOutChanged()
+{
+	if (!pNetGame)
+		return;
+
+	int iTime = pConsole->GetIntVariable("playertimeout");
+	if (iTime <= 0)
+		pConsole->SetIntVariable("playertimeout", 10000);
+
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	RakServerInterface* pServer = pNetGame->GetRakServer();
+	for (int iIdx = 0; iIdx < (int)pPool->GetLastPlayerId(); iIdx++)
+	{
+		if (!pPool->GetSlotState(iIdx))
+			continue;
+
+		pServer->SetTimeoutTime(iTime, pServer->GetPlayerIDFromIndex(iIdx));
+	}
+}
+
 //----------------------------------------------------
 
 void LoadLogFile()
@@ -252,6 +272,7 @@ int main (int argc, char** argv)
 	bool bAllowQuery = true;
 	int iMTUSize = MAXIMUM_MTU_SIZE;
 	int iChatLogging = 1;
+	int iPlayerTimeout = 10000;
 
 	// Open the log file
 	LoadLogFile();
@@ -345,6 +366,7 @@ int main (int argc, char** argv)
 	pConsole->AddVariable("instagib", CON_VARTYPE_BOOL, CON_VARFLAG_RULE, &bEnableInstagib, ServerInstagibChanged);
 	//pConsole->AddVariable("myriad", CON_VARTYPE_BOOL, 0, &bGameMod);
 	pConsole->AddVariable("chatlogging", CON_VARTYPE_INT, 0, &iChatLogging);
+	pConsole->AddVariable("playertimeout", CON_VARTYPE_INT, 0, &iPlayerTimeout, ServerTimeOutChanged);
 
 	// Add 16 gamemode variables.
 	int x=0;

@@ -69,6 +69,9 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
 		in_addr in;
 		in.s_addr = Player.binaryAddress;
 
+		int iTime = pConsole->GetIntVariable("playertimeout");
+		pNetGame->GetRakServer()->SetTimeoutTime(iTime, Player);
+
 		logprintf("[join] %s has joined the server (%u:%s)",szPlayerName,bytePlayerID, inet_ntoa(in));
 
 /*#ifdef RAKRCON
