@@ -91,7 +91,8 @@ public:
 	BOOL	VerifyInstance();
 
 	void ToggleWindow(unsigned char ucDoorId, bool bOpen);
-	
+	void ToggleTaxiLight(bool bToggle);
+
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;
 	BOOL		m_bIsLocked; // No control state

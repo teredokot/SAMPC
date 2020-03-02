@@ -815,5 +815,19 @@ void CVehicle::ToggleWindow(unsigned char ucDoorId, bool bOpen)
 	_asm call dwFunc
 }
 
+void CVehicle::ToggleTaxiLight(bool bToggle)
+{
+	if (m_pVehicle->entity.nModelIndex == 420 ||
+		m_pVehicle->entity.nModelIndex == 438)
+	{
+		DWORD dwThis = (DWORD)m_pVehicle;
+		DWORD dwFunc = 0x6A3740;
+
+		_asm mov ecx, dwThis
+		_asm push bToggle
+		_asm call dwFunc
+	}
+}
+
 //-----------------------------------------------------------
 // EOF

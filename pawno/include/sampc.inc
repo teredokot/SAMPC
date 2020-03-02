@@ -298,6 +298,7 @@ native SetVehicleVirtualWorld(vehicleid, worldid);
 native GetVehicleVirtualWorld(vehicleid);
 native RepairVehicle(vehicleid);
 native SetVehicleParamsCarWindows(vehicleid, driver, passenger, backleft, backright);
+native ToggleTaxiLight(vehicleid, toggle);
 native SendClientMessage(playerid, color, const output[]);
 native SendClientMessageToAll(color, const output[]);
 native SendDeathMessage(killerid, killedid, weaponid);

@@ -1017,6 +1017,26 @@ static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
 	return 0;
 }
 
+// native ToggleTaxiLight(vehicleid, toggle)
+static cell n_ToggleTaxiLight(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	if (pVehiclePool && pVehiclePool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+
+		out.Write<int>(VEHICLE_OP_TAXI_LIGHT);
+		out.Write(params[1]); // vehicleid
+		out.Write(params[2]); // toggle
+
+		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
+			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 // native TogglePlayerSpectating(playerid, toggle);
 static cell AMX_NATIVE_CALL n_TogglePlayerSpectating(AMX *amx, cell *params)
@@ -4675,7 +4695,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetPlayerPosFindZ",		n_SetPlayerPosFindZ },
 	{ "GetPlayerHealth", n_GetPlayerHealth },
 	{ "SetPlayerHealth",		n_SetPlayerHealth },
-	{ "SetPlayerColor",			n_SetPlayerColor },
+	{ "SetPlayerColor", n_SetPlayerColor },
 	{ "GetPlayerColor",			n_GetPlayerColor },
 	{ "GetPlayerVehicleID",		n_GetPlayerVehicleID },
 	{ "PutPlayerInVehicle",		n_PutPlayerInVehicle },
@@ -4775,6 +4795,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetVehicleVirtualWorld",		n_GetVehicleVirtualWorld },
 	DEFINE_NATIVE(RepairVehicle),
 	DEFINE_NATIVE(SetVehicleParamsCarWindows),
+	DEFINE_NATIVE(ToggleTaxiLight),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },
