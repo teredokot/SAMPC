@@ -78,7 +78,8 @@ CPlayer::CPlayer()
 	m_iInteriorId = 0;
 	m_byteSpectateType = 0;
 	m_SpectateID = 0xFFFFFFFF;
-    
+	m_iDrunkLevel = 0;
+
 	m_bInCheckpoint = false;
 	m_bInRaceCheckpoint = false;
 	

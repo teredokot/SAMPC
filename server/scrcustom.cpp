@@ -1867,6 +1867,35 @@ static cell AMX_NATIVE_CALL n_GetPlayerSpecialAction(AMX *amx, cell *params)
 	return SPECIAL_ACTION_NONE;
 }
 
+// native GetPlayerDrunkLevel(playerid)
+static cell AMX_NATIVE_CALL n_GetPlayerDrunkLevel(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+	if (!pPlayer)
+		return 0;
+
+	return pPlayer->m_iDrunkLevel;
+}
+
+// native SetPlayerDrunkLevel(playerid, level)
+static cell AMX_NATIVE_CALL n_SetPlayerDrunkLevel(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+
+	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+	if (!pPlayer)
+		return 0;
+
+	RakNet::BitStream out;
+	out.Write<int>(1); // OP code
+	out.Write((float)params[2]);
+	pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out);
+
+	pPlayer->m_iDrunkLevel = params[2];
+	return 1;
+}
 
 //----------------------------------------------------------------------------------
 
@@ -4784,6 +4813,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "ClearAnimations",		n_ClearAnimations },
 	{ "SetPlayerSpecialAction", n_SetPlayerSpecialAction },
 	{ "GetPlayerSpecialAction", n_GetPlayerSpecialAction },
+	DEFINE_NATIVE(GetPlayerDrunkLevel),
+	DEFINE_NATIVE(SetPlayerDrunkLevel),
 
 	{ "CreatePlayerPickup",		n_CreatePlayerPickup },
 	{ "DestroyPlayerPickup",	n_DestroyPlayerPickup },

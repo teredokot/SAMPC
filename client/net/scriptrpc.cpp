@@ -1638,6 +1638,23 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrSetPlayer(RPCParameters* rpcParams)
+{
+	RakNet::BitStream in(rpcParams->input,
+		BYTES_TO_BITS(rpcParams->numberOfBitsOfData), false);
+
+	int iOP = 0;
+	in.Read(iOP);
+	switch (iOP)
+	{
+	case 1:
+		float fDrunkLevel = 0.0f;
+		in.Read(fDrunkLevel);
+		pGame->SetDrunkLevel(fDrunkLevel);
+		break;
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1714,6 +1731,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrSetSpecialAction);
 	REGISTER_STATIC_RPC(pRakClient, ScrEnableStuntBonus);
 	REGISTER_STATIC_RPC(pRakClient, ScrSetVehicle);
+	REGISTER_STATIC_RPC(pRakClient, ScrSetPlayer);
 }
 
 //----------------------------------------------------
@@ -1791,6 +1809,7 @@ void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetSpecialAction);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrEnableStuntBonus);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetVehicle);
+	UNREGISTER_STATIC_RPC(pRakClient, ScrSetPlayer);
 }
 
 //----------------------------------------------------

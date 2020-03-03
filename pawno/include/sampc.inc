@@ -267,6 +267,8 @@ native ApplyAnimation(playerid, const animlib[], const animname[], Float:speed, 
 native ClearAnimations(playerid);
 native SetPlayerSpecialAction(playerid, actionid);
 native GetPlayerSpecialAction(playerid);
+native GetPlayerDrunkLevel(playerid);
+native SetPlayerDrunkLevel(playerid, level);
 native CreatePlayerPickup(pickupid, playerid, modelid, typeid, Float:x, Float:y, Float:z);
 native DestroyPlayerPickup(pickupid, playerid);
 native IsPlayerInRangeOfPoint(playerid, Float:range, Float:x, Float:y, Float:z);

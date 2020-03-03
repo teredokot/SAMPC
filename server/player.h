@@ -193,6 +193,7 @@ public:
 	BOOL					m_bCheckpointEnabled;
 	BOOL					m_bRaceCheckpointEnabled;
 	int						m_iInteriorId;
+	int						m_iDrunkLevel;
 		
 	// Weapon data
 	DWORD					m_dwSlotAmmo[13];

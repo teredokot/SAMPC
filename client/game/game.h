@@ -100,7 +100,7 @@ public:
 	void	SetGameTextCount(WORD wCount);
 	void	DrawGangZone(float* fPos, DWORD dwColor);
 	void    EnableStuntBonus(bool bEnable);
-	
+	void	SetDrunkLevel(float fLevel);
 	void   UpdateCheckpoints();
 	void   ToggleCheckpoints(BOOL bEnabled){ m_bCheckpointsEnabled = bEnabled; };
 	void   SetCheckpointInformation(VECTOR *pos, VECTOR *extent);
