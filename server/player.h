@@ -270,6 +270,8 @@ public:
 	void EnterVehicle(VEHICLEID VehicleID,BYTE bytePassenger);
 	void ExitVehicle(VEHICLEID VehicleID);
 
+	float GetDistanceFromPoint(float fX, float fY, float fZ);
+
 	void SetPlayerColor(DWORD dwColor);
 	DWORD GetPlayerColor() { return m_dwColor; };
 

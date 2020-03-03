@@ -272,6 +272,7 @@ native SetPlayerDrunkLevel(playerid, level);
 native CreatePlayerPickup(pickupid, playerid, modelid, typeid, Float:x, Float:y, Float:z);
 native DestroyPlayerPickup(pickupid, playerid);
 native IsPlayerInRangeOfPoint(playerid, Float:range, Float:x, Float:y, Float:z);
+native Float:GetPlayerDistanceFromPoint(playerid, Float:X, Float:Y, Float:Z);
 native GetVehiclePoolSize();
 native IsValidVehicle(vehicleid);
 native CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:a, color1, color2, respawndelay);

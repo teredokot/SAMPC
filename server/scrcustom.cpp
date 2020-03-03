@@ -4639,6 +4639,26 @@ static cell AMX_NATIVE_CALL n_IsPlayerInRangeOfPoint(AMX *amx, cell *params)
 	return 0;
 }
 
+// native Float:GetPlayerDistanceFromPoint(playerid, Float:X, Float:Y, Float:Z)
+static cell n_GetPlayerDistanceFromPoint(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+
+	float fResult = 0.0f;
+
+	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+	if (!pPlayer)
+		return fResult;
+	
+	float
+		fX = amx_ctof(params[2]),
+		fY = amx_ctof(params[3]),
+		fZ = amx_ctof(params[4]);
+
+	fResult = pPlayer->GetDistanceFromPoint(fX, fY, fZ);
+
+	return fResult;
+}
 //----------------------------------------------------------------------------------
 
 AMX_NATIVE_INFO custom_Natives[] =
@@ -4819,6 +4839,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "CreatePlayerPickup",		n_CreatePlayerPickup },
 	{ "DestroyPlayerPickup",	n_DestroyPlayerPickup },
 	{ "IsPlayerInRangeOfPoint", n_IsPlayerInRangeOfPoint },
+	DEFINE_NATIVE(GetPlayerDistanceFromPoint),
 
 		// Vehicle
 	{ "GetVehiclePoolSize", n_GetVehiclePoolSize },
