@@ -281,6 +281,7 @@ native GetVehiclePos(vehicleid, &Float:x, &Float:y, &Float:z);
 native SetVehiclePos(vehicleid, Float:x, Float:y, Float:z);
 native GetVehicleZAngle(vehicleid, &Float:a);
 native SetVehicleZAngle(vehicleid, Float:a);
+native Float:GetVehicleDistanceFromPoint(vehicleid, Float:X, Float:Y, Float:Z);
 native SetVehicleParamsForPlayer(vehicleid, playerid, objective, locked);
 native SetVehicleToRespawn(vehicleid);
 native AddVehicleComponent(vehicleid, componentid);

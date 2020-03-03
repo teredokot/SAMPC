@@ -281,3 +281,13 @@ void CVehicle::SetNumberPlate(PCHAR Plate)
 }
 
 //----------------------------------------------------------
+
+float CVehicle::GetDistanceFromPoint(float fX, float fY, float fZ)
+{
+	float
+		x = m_matWorld.pos.X - fX,
+		y = m_matWorld.pos.Y - fY,
+		z = m_matWorld.pos.Z - fZ;
+
+	return sqrtf(z * z + y * y + x * x);
+}

@@ -938,6 +938,16 @@ void CPlayer::ExitVehicle(VEHICLEID VehicleID)
 		0,playerid,true,false);
 }
 
+float CPlayer::GetDistanceFromPoint(float fX, float fY, float fZ)
+{
+	float
+		x = m_vecPos.X - fX,
+		y = m_vecPos.Y - fY,
+		z = m_vecPos.Z - fZ;
+
+	return sqrtf(z * z + y * y + x * x);
+}
+
 //----------------------------------------------------
 
 void CPlayer::SetPlayerColor(DWORD dwColor)

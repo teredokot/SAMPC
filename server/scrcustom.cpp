@@ -4648,7 +4648,7 @@ static cell n_GetPlayerDistanceFromPoint(AMX* amx, cell* params)
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 	if (!pPlayer)
-		return fResult;
+		return amx_ftoc(fResult);
 	
 	float
 		fX = amx_ctof(params[2]),
@@ -4657,8 +4657,30 @@ static cell n_GetPlayerDistanceFromPoint(AMX* amx, cell* params)
 
 	fResult = pPlayer->GetDistanceFromPoint(fX, fY, fZ);
 
-	return fResult;
+	return amx_ftoc(fResult);
 }
+
+// native Float:GetVehicleDistanceFromPoint(vehicleid, Float:X, Float:Y, Float:Z)
+static cell n_GetVehicleDistanceFromPoint(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+
+	float fResult = 0.0f;
+
+	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+	if (!pVehicle)
+		return amx_ftoc(fResult);
+
+	float
+		fX = amx_ctof(params[2]),
+		fY = amx_ctof(params[3]),
+		fZ = amx_ctof(params[4]);
+
+	fResult = pVehicle->GetDistanceFromPoint(fX, fY, fZ);
+
+	return amx_ctof(fResult);
+}
+
 //----------------------------------------------------------------------------------
 
 AMX_NATIVE_INFO custom_Natives[] =
@@ -4850,6 +4872,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetVehiclePos",			n_SetVehiclePos },
 	{ "GetVehicleZAngle",		n_GetVehicleZAngle },
 	{ "SetVehicleZAngle",		n_SetVehicleZAngle },
+	DEFINE_NATIVE(GetVehicleDistanceFromPoint),
 	{ "SetVehicleParamsForPlayer",	n_SetVehicleParamsForPlayer },
 	{ "SetVehicleToRespawn",	n_SetVehicleToRespawn },
 	{ "AddVehicleComponent",	n_AddVehicleComponent },

@@ -99,6 +99,8 @@ public:
 	bool IsATrainPart();
 
 	void Update(BYTE bytePlayerID, MATRIX4X4 * matWorld, float fHealth, VEHICLEID TrailerID);
+
+	float GetDistanceFromPoint(float fX, float fY, float fZ);
 };
 
 #endif
