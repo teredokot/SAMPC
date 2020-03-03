@@ -3818,6 +3818,21 @@ static cell AMX_NATIVE_CALL n_DestroyPlayerObject(AMX *amx, cell *params)
 	return 1;
 }
 
+// native IsPlayerObjectMoving(playerid, playerobjectid)
+static cell n_IsPlayerObjectMoving(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+
+	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
+		return 0;
+
+	CObject* pObject = pNetGame->GetObjectPool()->GetAtIndividual(params[1], params[2]);
+	if (!pObject)
+		return 0;
+
+	return (pObject->m_byteMoving & 1);
+}
+
 static cell AMX_NATIVE_CALL n_MovePlayerObject(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(6);
@@ -4943,6 +4958,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetPlayerObjectRot",			n_GetPlayerObjectRot },
 	{ "IsValidPlayerObject",		n_IsValidPlayerObject },
 	{ "DestroyPlayerObject",		n_DestroyPlayerObject },
+	DEFINE_NATIVE(IsPlayerObjectMoving),
 	{ "MovePlayerObject",			n_MovePlayerObject },
 	{ "StopPlayerObject",			n_StopPlayerObject },
 

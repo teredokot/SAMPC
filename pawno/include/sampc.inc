@@ -346,6 +346,7 @@ native GetPlayerObjectPos(playerid, playerobjectid, &Float:x, &Float:y, &Float:z
 native GetPlayerObjectRot(playerid, playerobjectid, &Float:x, &Float:y, &Float:z);
 native IsValidPlayerObject(playerid, playerobjectid);
 native DestroyPlayerObject(playerid, playerobjectid);
+native IsPlayerObjectMoving(playerid, playerobjectid);
 native MovePlayerObject(playerid, playerobjectid, Float:x, Float:y, Float:z, Float:speed);
 native StopPlayerObject(playerid, playerobjectid);
 native AttachObjectToPlayer(objectid, playerid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz);
