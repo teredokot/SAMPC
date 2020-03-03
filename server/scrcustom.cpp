@@ -3599,6 +3599,18 @@ static cell AMX_NATIVE_CALL n_DestroyObject(AMX *amx, cell *params)
 	return 1;
 }
 
+// native IsObjectMoving(objectid)
+static cell n_IsObjectMoving(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	CObject* pObject = pNetGame->GetObjectPool()->GetAt(params[1]);
+	if (!pObject)
+		return 0;
+
+	return (pObject->m_byteMoving & 1);
+}
+
 static cell AMX_NATIVE_CALL n_MoveObject(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(5);
@@ -4948,6 +4960,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetObjectRot",			n_GetObjectRot },
 	{ "IsValidObject",			n_IsValidObject },
 	{ "DestroyObject",			n_DestroyObject },
+	DEFINE_NATIVE(IsObjectMoving),
 	{ "MoveObject",				n_MoveObject },
 	{ "StopObject",				n_StopObject },
 	

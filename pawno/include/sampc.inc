@@ -337,6 +337,7 @@ native GetObjectPos(objectid, &Float:x, &Float:y, &Float:z);
 native GetObjectRot(objectid, &Float:rx, &Float:ry, &Float:rz);
 native IsValidObject(objectid);
 native DestroyObject(objectid);
+native IsObjectMoving(objectid);
 native MoveObject(objectid, Float:x, Float:y, Float:z, Float:speed);
 native StopObject(objectid);
 native CreatePlayerObject(playerid, modelid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz);
