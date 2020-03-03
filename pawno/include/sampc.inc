@@ -308,6 +308,7 @@ native ToggleTaxiLight(vehicleid, toggle);
 native SendClientMessage(playerid, color, const output[]);
 native SendClientMessageToAll(color, const output[]);
 native SendDeathMessage(killerid, killedid, weaponid);
+native SendDeathMessageToPlayer(playerid, killer, killee, weapon);
 native GameTextForAll(const output[], time, style);
 native GameTextForPlayer(playerid, const output[], time, style);
 native SendPlayerMessageToPlayer(playerid, senderid, const output[]);

@@ -1603,6 +1603,22 @@ static cell AMX_NATIVE_CALL n_SendDeathMessage(AMX *amx, cell *params)
 	return 1;
 }
 
+// native SendDeathMessageToPlayer(playerid, killer, killee, weapon)
+static cell n_SendDeathMessageToPlayer(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+
+	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1]))
+		return 0;
+
+	RakNet::BitStream out;
+	out.Write((BYTE)params[2]); // killer
+	out.Write((BYTE)params[3]); // killee
+	out.Write((BYTE)params[4]); // weapon
+
+	return (cell)pNetGame->SendToPlayer(params[1], RPC_ScrDeathMessage, &out);
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerColor(playerid, color)
@@ -4940,6 +4956,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SendClientMessage",		n_SendClientMessage },
 	{ "SendClientMessageToAll",	n_SendClientMessageToAll },
 	{ "SendDeathMessage",		n_SendDeathMessage },
+	DEFINE_NATIVE(SendDeathMessageToPlayer),
 	{ "GameTextForAll",			n_GameTextForAll },
 	{ "GameTextForPlayer",		n_GameTextForPlayer },
 	{ "SendPlayerMessageToPlayer",	n_SendPlayerMessageToPlayer },
