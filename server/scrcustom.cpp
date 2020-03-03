@@ -3568,6 +3568,18 @@ static cell AMX_NATIVE_CALL n_GetObjectRot(AMX *amx, cell *params)
 	return 0;
 }
 
+// native GetObjectModel(objectid)
+static cell n_GetObjectModel(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+
+	CObject* pObject = pNetGame->GetObjectPool()->GetAt(params[1]);
+	if (!pObject)
+		return -1;
+
+	return pObject->m_iModel;
+}
+
 static cell AMX_NATIVE_CALL n_IsValidObject(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(1);
@@ -4958,6 +4970,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetObjectRot",			n_SetObjectRot },
 	{ "GetObjectPos",			n_GetObjectPos },
 	{ "GetObjectRot",			n_GetObjectRot },
+	DEFINE_NATIVE(GetObjectModel),
 	{ "IsValidObject",			n_IsValidObject },
 	{ "DestroyObject",			n_DestroyObject },
 	DEFINE_NATIVE(IsObjectMoving),

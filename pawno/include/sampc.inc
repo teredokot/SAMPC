@@ -335,6 +335,7 @@ native SetObjectPos(objectid, Float:x, Float:y, Float:z);
 native SetObjectRot(objectid, Float:rx, Float:ry, Float:rz);
 native GetObjectPos(objectid, &Float:x, &Float:y, &Float:z);
 native GetObjectRot(objectid, &Float:rx, &Float:ry, &Float:rz);
+native GetObjectModel(objectid);
 native IsValidObject(objectid);
 native DestroyObject(objectid);
 native IsObjectMoving(objectid);
