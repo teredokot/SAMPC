@@ -1138,3 +1138,22 @@ int CFilterScripts::OnPlayerClickMap(cell playerid, float fX, float fY, float fZ
 	}
 	return (int)ret;
 }
+
+int CFilterScripts::OnTrailerUpdate(cell playerid, cell vehicleid)
+{
+	int idx;
+	cell ret = 1;
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++) {
+		if (m_pFilterScripts[i])
+		{
+			if (!amx_FindPublic(m_pFilterScripts[i], "OnTrailerUpdate", &idx))
+			{
+				amx_Push(m_pFilterScripts[i], vehicleid);
+				amx_Push(m_pFilterScripts[i], playerid);
+				amx_Exec(m_pFilterScripts[i], &ret, idx);
+				if (!ret) return ret;
+			}
+		}
+	}
+	return (int)ret;
+}

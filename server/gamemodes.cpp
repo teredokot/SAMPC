@@ -892,3 +892,18 @@ int CGameMode::OnPlayerClickMap(cell playerid, float fX, float fY, float fZ)
 	}
 	return (int)ret;
 }
+
+int CGameMode::OnTrailerUpdate(cell playerid, cell vehicleid)
+{
+	CHECK_INIT();
+
+	int idx = 0;
+	cell ret = 1;
+	if (!amx_FindPublic(&m_amx, "OnTrailerUpdate", &idx))
+	{
+		amx_Push(&m_amx, vehicleid);
+		amx_Push(&m_amx, playerid);
+		amx_Exec(&m_amx, &ret, idx);
+	}
+	return (int)ret;
+}

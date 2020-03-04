@@ -74,6 +74,7 @@ public:
 	int OnPlayerUpdate(cell playerid);
 	int OnIncomingConnection(cell playerid, const char* ip, cell port);
 	int OnPlayerClickMap(cell playerid, float fX, float fY, float fZ);
+	int OnTrailerUpdate(cell playerid, cell vehicleid);
 };
 
 //----------------------------------------------------------------------------------
