@@ -92,6 +92,7 @@ public:
 
 	void ToggleWindow(unsigned char ucDoorId, bool bOpen);
 	void ToggleTaxiLight(bool bToggle);
+	void ToggleEngine(bool bToggle);
 
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;

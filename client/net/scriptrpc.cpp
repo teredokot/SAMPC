@@ -1629,9 +1629,17 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 		pVehicle->ToggleWindow(9, !!br);
 		break;
 	case 3:
+	{
 		int iOn = 0;
 		in.Read(iOn);
 		pVehicle->ToggleTaxiLight(!!iOn);
+		break;
+	}
+	case 4:
+		int iEngineState = 0;
+		in.Read(iEngineState);
+		pVehicle->ToggleEngine(!!iEngineState);
+		break;
 	}
 }
 

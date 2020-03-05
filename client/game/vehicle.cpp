@@ -829,5 +829,10 @@ void CVehicle::ToggleTaxiLight(bool bToggle)
 	}
 }
 
+void CVehicle::ToggleEngine(bool bToggle)
+{
+	((void(__thiscall*)(VEHICLE_TYPE*, bool))0x41BDD0)(m_pVehicle, bToggle);
+}
+
 //-----------------------------------------------------------
 // EOF

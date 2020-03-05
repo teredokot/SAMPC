@@ -1051,6 +1051,26 @@ static cell n_ToggleTaxiLight(AMX* amx, cell* params)
 	return 0;
 }
 
+// native SetVehicleEngineState(vehicleid, engine_state)
+static cell n_SetVehicleEngineState(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	if (pVehiclePool && pVehiclePool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+
+		out.Write<int>(4);
+		out.Write(params[1]); // vehicleid
+		out.Write(params[2]); // toggle
+
+		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
+			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 // native TogglePlayerSpectating(playerid, toggle);
 static cell AMX_NATIVE_CALL n_TogglePlayerSpectating(AMX *amx, cell *params)
@@ -4954,6 +4974,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(RepairVehicle),
 	DEFINE_NATIVE(SetVehicleParamsCarWindows),
 	DEFINE_NATIVE(ToggleTaxiLight),
+	DEFINE_NATIVE(SetVehicleEngineState),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },
