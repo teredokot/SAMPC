@@ -383,9 +383,18 @@ void CPlayer::BroadcastSyncData()
 		}
 
 		// TRAILER SPECIAL
-		if (m_icSync.TrailerID != 0 &&
-			(pNetGame->GetFilterScripts()->OnTrailerUpdate(m_bytePlayerID, m_icSync.TrailerID) ||
-			pNetGame->GetGameMode()->OnTrailerUpdate(m_bytePlayerID, m_icSync.TrailerID)))
+		bool bSend = false;
+		if (m_icSync.TrailerID != 0)
+		{
+			if (pNetGame->GetFilterScripts()->OnTrailerUpdate(m_bytePlayerID, m_icSync.TrailerID))
+			{
+				if (pNetGame->GetGameMode()->OnTrailerUpdate(m_bytePlayerID, m_icSync.TrailerID))
+				{
+					bSend = true;
+				}
+			}
+		}
+		if(bSend)
 		{
 			bsSync.Write(true);
 			bsSync.Write(m_icSync.TrailerID);
