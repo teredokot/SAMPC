@@ -316,16 +316,13 @@ void ScrSetInterior(RPCParameters *rpcParams)
 
 void ScrSetCameraPos(RPCParameters *rpcParams)
 {
-	PCHAR Data = reinterpret_cast<PCHAR>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-	PlayerID sender = rpcParams->sender;
+	RakNet::BitStream in(rpcParams->input,
+		BYTES_TO_BITS(rpcParams->numberOfBitsOfData), false);
+	VECTOR vecPos, vecRot;
 
-	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
-	VECTOR vecPos;
-	bsData.Read(vecPos.X);
-	bsData.Read(vecPos.Y);
-	bsData.Read(vecPos.Z);
-	pGame->GetCamera()->SetPosition(vecPos.X,vecPos.Y,vecPos.Z,0.0f,0.0f,0.0f);
+	if(in.Read(vecPos) && in.Read(vecRot))
+		pGame->GetCamera()->SetPosition(vecPos.X, vecPos.Y,
+			vecPos.Z, vecRot.X, vecRot.Y, vecRot.Z);
 }
 
 //----------------------------------------------------

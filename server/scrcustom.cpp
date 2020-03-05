@@ -1915,25 +1915,28 @@ static cell AMX_NATIVE_CALL n_SetPlayerDrunkLevel(AMX* amx, cell* params)
 
 //----------------------------------------------------------------------------------
 
-// native SetPlayerCameraPos(playerid,x,y,z)
+// native SetPlayerCameraPos(playerid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 static cell AMX_NATIVE_CALL n_SetPlayerCameraPos(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(4);
-	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
-	RakNet::BitStream bsParams;
+	CHECK_PARAMS(7);
 
-	VECTOR vecPos;
+	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
+
+	RakNet::BitStream out;
+	VECTOR vecPos, vecRot;
+
 	vecPos.X = amx_ctof(params[2]);
 	vecPos.Y = amx_ctof(params[3]);
 	vecPos.Z = amx_ctof(params[4]);
 
-	bsParams.Write(vecPos.X);
-	bsParams.Write(vecPos.Y);
-	bsParams.Write(vecPos.Z);
+	vecRot.X = amx_ctof(params[5]);
+	vecRot.Y = amx_ctof(params[6]);
+	vecRot.Z = amx_ctof(params[7]);
 
-	pNetGame->GetRakServer()->RPC(RPC_ScrSetCameraPos , &bsParams, HIGH_PRIORITY, 
-		RELIABLE, 0, pNetGame->GetRakServer()->GetPlayerIDFromIndex(params[1]), false, false);
+	out.Write(vecPos);
+	out.Write(vecRot);
 
+	pNetGame->SendToPlayer(params[1], RPC_ScrSetCameraPos, &out);
 	return 1;
 }
 
