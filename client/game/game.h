@@ -156,7 +156,7 @@ public:
 
 
 	DWORD GetWeaponInfo(int iWeapon, int iUnk);
-	void DisableEnterExits();
+	void DisableEnterExits(bool bDisable = true);
 
 	CGame();
 	~CGame() {};

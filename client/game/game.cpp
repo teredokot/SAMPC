@@ -845,7 +845,7 @@ void CGame::SetDrunkLevel(float fLevel)
 }
 //-----------------------------------------------------------
 
-void CGame::DisableEnterExits()
+void CGame::DisableEnterExits(bool bDisable)
 {
 	DWORD pEnExPool = *(DWORD *)0x96A7D8;
 	DWORD pEnExEntries = *(DWORD *)pEnExPool;
@@ -860,8 +860,16 @@ void CGame::DisableEnterExits()
 	BYTE *pEnExPoolSlot;
 	while(x!=iNumEnEx) {
 		pEnExPoolSlot = (((BYTE *)pEnExEntries) + (60*x));
-		_asm mov eax, pEnExPoolSlot
-		_asm and word ptr [eax+48], 0
+		if (bDisable)
+		{
+			_asm mov eax, pEnExPoolSlot
+			_asm and word ptr[eax + 48], 0
+		}
+		else
+		{
+			_asm mov eax, pEnExPoolSlot
+			_asm or word ptr[eax + 48], 4000h
+		}
 		x++;
 	}   
 }

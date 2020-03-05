@@ -132,9 +132,7 @@ void InitGame(RPCParameters *rpcParams)
 	pGame->SetGravity(pNetGame->m_fGravity);
 
 	// Disable the enter/exits if needed.
-	if(pNetGame->m_bDisableEnterExits) {
-		pGame->DisableEnterExits();
-	}
+	pGame->DisableEnterExits(pNetGame->m_bDisableEnterExits);
 	
 	pNetGame->SetGameState(GAMESTATE_CONNECTED);
 	pPlayerPool->GetLocalPlayer()->HandleClassSelection();
