@@ -3967,12 +3967,14 @@ static cell AMX_NATIVE_CALL n_CreateMenu(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(6);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (!pMenuPool) return -1;
+	if (!pMenuPool)
+		return -1;
 	char* szMenuTitle;
+	float fX = amx_ctof(params[3]), fY = amx_ctof(params[4]),
+		fCol1Width = amx_ctof(params[5]), fCol2Width = amx_ctof(params[6]);
 	amx_StrParam(amx, params[1], szMenuTitle);
-	BYTE menuid = pMenuPool->New((szMenuTitle != 0) ? (szMenuTitle) : (""), amx_ctof(params[3]), amx_ctof(params[4]), params[2], amx_ctof(params[5]), amx_ctof(params[6]));
-	if (menuid == 0xFF) return -1;
-	return menuid;
+	BYTE menuid = pMenuPool->New((szMenuTitle != 0) ? (szMenuTitle) : (""), fX, fY, params[2], fCol1Width, fCol2Width);
+	return menuid != 0xFF ? (menuid) : (-1);
 }
 
 // native DestroyMenu(Menu:menuid);
@@ -3980,9 +3982,9 @@ static cell AMX_NATIVE_CALL n_DestroyMenu(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(1);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (!pMenuPool) return 0;
-	if (pMenuPool->Delete(params[1])) return 1;
-	return 0;
+	if (!pMenuPool)
+		return 0;
+	return pMenuPool->Delete(params[1]);
 }
 
 // native AddMenuItem(Menu:menuid, column, item[]);
@@ -3990,12 +3992,15 @@ static cell AMX_NATIVE_CALL n_AddMenuItem(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(3);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (!pMenuPool) return 0;
+	if (!pMenuPool)
+		return 0;
+	CMenu* pMenu = pMenuPool->GetAt(params[1]);
+	if (!pMenu)
+		return 0;
 	char* szItemText;
 	amx_StrParam(amx, params[3], szItemText);
-	BYTE ret = pMenuPool->GetAt((BYTE)params[1])->AddMenuItem(params[2], szItemText);
-	if (ret == 0xFF) return -1;
-	return ret;
+	BYTE ret = pMenu->AddMenuItem(params[2], szItemText ? (szItemText) : (""));
+	return ret != 0xFF ? (ret) : (-1);
 }
 
 // native SetMenuColumnHeader(Menu:menuid, column, header[]);
@@ -4003,10 +4008,14 @@ static cell AMX_NATIVE_CALL n_SetMenuColumnHeader(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(3);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (!pMenuPool) return 0;
+	if (!pMenuPool)
+		return 0;
+	CMenu* pMenu = pMenuPool->GetAt(params[1]);
+	if (!pMenu)
+		return 0;
 	char* szItemText;
 	amx_StrParam(amx, params[3], szItemText);
-	pMenuPool->GetAt((BYTE)params[1])->SetColumnTitle(params[2], szItemText);
+	pMenu->SetColumnTitle(params[2], szItemText ? (szItemText) : (""));
 	return 1;
 }
 
@@ -4014,10 +4023,16 @@ static cell AMX_NATIVE_CALL n_SetMenuColumnHeader(AMX *amx, cell *params)
 static cell AMX_NATIVE_CALL n_ShowMenuForPlayer(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(2);
-	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[2])) return 0;
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (!pMenuPool) return 0;
-	pMenuPool->GetAt((BYTE)params[1])->ShowForPlayer((BYTE)params[2]);
+	if (!pMenuPool)
+		return 0;
+	CMenu* pMenu = pMenuPool->GetAt(params[1]);
+	if (!pMenu)
+		return 0;
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (!pPlayerPool && !pPlayerPool->GetSlotState(params[2]))
+		return 0;
+	pMenu->ShowForPlayer((BYTE)params[2]);
 	pMenuPool->SetPlayerMenu((BYTE)params[2], (BYTE)params[1]);
 	return 1;
 }
@@ -4026,10 +4041,16 @@ static cell AMX_NATIVE_CALL n_ShowMenuForPlayer(AMX *amx, cell *params)
 static cell AMX_NATIVE_CALL n_HideMenuForPlayer(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(2);
-	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[2])) return 0;
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (!pMenuPool) return 0;
-	pMenuPool->GetAt((BYTE)params[1])->HideForPlayer((BYTE)params[2]);
+	if (!pMenuPool)
+		return 0;
+	CMenu* pMenu = pMenuPool->GetAt(params[1]);
+	if (!pMenu)
+		return 0;
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (!pPlayerPool && !pPlayerPool->GetSlotState(params[2]))
+		return 0;
+	pMenu->HideForPlayer((BYTE)params[2]);
 	pMenuPool->SetPlayerMenu((BYTE)params[2], (BYTE)params[1]);
 	return 1;
 }
@@ -4039,38 +4060,37 @@ static cell AMX_NATIVE_CALL n_IsValidMenu(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(1);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (pMenuPool && pMenuPool->GetSlotState(params[1])) return 1;
-	return 0;
+	if (!pMenuPool)
+		return 0;
+	return pMenuPool->GetSlotState(params[1]);
 }
 
 // native DisableMenu(Menu:menuid);
 static cell AMX_NATIVE_CALL n_DisableMenu(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(1);
-
-	CMenu* pMenu = 0;
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (pMenuPool && (pMenu = pMenuPool->GetAt((BYTE)params[1])) != 0)
-	{
-		pMenu->DisableInteraction();
-		return 1;
-	}
-	return 0;
+	if (!pMenuPool)
+		return 0;
+	CMenu* pMenu = pMenuPool->GetAt(params[1]);
+	if (!pMenu)
+		return 0;
+	pMenu->DisableInteraction();
+	return 1;
 }
 
 // native DisableMenuRow(Menu:menuid, row);
 static cell AMX_NATIVE_CALL n_DisableMenuRow(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(2);
-
-	CMenu* pMenu = 0;
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (pMenuPool && (pMenu = pMenuPool->GetAt((BYTE)params[1])) != 0)
-	{
-		pMenu->DisableRow((BYTE)params[2]);
-		return 1;
-	}
-	return 0;
+	if (!pMenuPool)
+		return 0;
+	CMenu* pMenu = pMenuPool->GetAt(params[1]);
+	if (!pMenu)
+		return 0;
+	pMenu->DisableRow(params[2]);
+	return 1;
 }
 
 // native Menu:GetPlayerMenu(playerid);
@@ -4078,7 +4098,9 @@ static cell AMX_NATIVE_CALL n_GetPlayerMenu(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(1);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
-	if (!pMenuPool) return 255;
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (!pMenuPool && !pPlayerPool && !pPlayerPool->GetSlotState(params[2]))
+		return 255;
 	return pMenuPool->GetPlayerMenu((BYTE)params[1]);
 }
 
