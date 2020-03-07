@@ -79,6 +79,7 @@ public:
 	int OnIncomingConnection(cell playerid, char* ip, cell port);
 	int OnPlayerClickMap(cell playerid, float fX, float fY, float fZ);
 	int OnTrailerUpdate(cell playerid, cell vehicleid);
+	int OnRconLoginAttempt(char* szIP, char* szPassword, cell success);
 };
 
 //----------------------------------------------------------------------------------

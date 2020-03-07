@@ -1157,3 +1157,27 @@ int CFilterScripts::OnTrailerUpdate(cell playerid, cell vehicleid)
 	}
 	return (int)ret;
 }
+
+int CFilterScripts::OnRconLoginAttempt(char* szIP, char* szPassword, cell success)
+{
+	int idx;
+	cell ret = 1;
+
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++)
+	{
+		if (!m_pFilterScripts[i])
+			continue;
+
+		if (!amx_FindPublic(m_pFilterScripts[i], "OnRconLoginAttempt", &idx))
+		{
+			cell amx_addr1, amx_addr2, * phys_addr;
+			amx_Push(m_pFilterScripts[i], success);
+			amx_PushString(m_pFilterScripts[i], &amx_addr2, &phys_addr, szPassword, 0, 0);
+			amx_PushString(m_pFilterScripts[i], &amx_addr1, &phys_addr, szIP, 0, 0);
+			amx_Exec(m_pFilterScripts[i], &ret, idx);
+			amx_Release(m_pFilterScripts[i], amx_addr1);
+			amx_Release(m_pFilterScripts[i], amx_addr2);
+		}
+	}
+	return (int)ret;
+}

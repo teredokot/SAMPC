@@ -907,3 +907,21 @@ int CGameMode::OnTrailerUpdate(cell playerid, cell vehicleid)
 	}
 	return (int)ret;
 }
+
+int CGameMode::OnRconLoginAttempt(char* szIP, char* szPassword, cell success)
+{
+	CHECK_INIT();
+	int idx = 0;
+	cell ret = 1;
+	if (!amx_FindPublic(&m_amx, "OnRconLoginAttempt", &idx))
+	{
+		cell amx_addr1, amx_addr2, *phys_addr;
+		amx_Push(&m_amx, success);
+		amx_PushString(&m_amx, &amx_addr2, &phys_addr, szPassword, 0, 0);
+		amx_PushString(&m_amx, &amx_addr1, &phys_addr, szIP, 0, 0);
+		amx_Exec(&m_amx, &ret, idx);
+		amx_Release(&m_amx, amx_addr1);
+		amx_Release(&m_amx, amx_addr2);
+	}
+	return (int)ret;
+}

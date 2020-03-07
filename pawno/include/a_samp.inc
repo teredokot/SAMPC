@@ -469,6 +469,7 @@ forward OnPlayerExitedMenu(playerid);
 forward OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid);
 forward OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
 forward OnPlayerInfoChange(playerid);
+forward OnRconLoginAttempt(ip[], password[], success);
 forward OnPlayerUpdate(playerid);
 forward OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ);
 forward OnIncomingConnection(playerid, ip_address[], port);
