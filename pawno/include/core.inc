@@ -7,7 +7,6 @@
   #endinput
 #endif
 #define _core_included
-#pragma library Core
 
 native heapspace();
 

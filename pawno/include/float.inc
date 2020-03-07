@@ -11,7 +11,6 @@
   #endinput
 #endif
 #define _Float_included
-#pragma library Float
 
 /* Different methods of rounding */
 enum floatround_method {
