@@ -900,6 +900,8 @@ void MenuSelect(RPCParameters *rpcParams)
 
 	if(pGameMode) pGameMode->OnPlayerSelectedMenuRow(bytePlayerID, byteRow);
 	if(pFilters) pFilters->OnPlayerSelectedMenuRow(bytePlayerID, byteRow);
+
+	pNetGame->GetMenuPool()->ResetPlayer(bytePlayerID);
 }
 
 void MenuQuit(RPCParameters *rpcParams)
@@ -911,6 +913,8 @@ void MenuQuit(RPCParameters *rpcParams)
 
 	if(pGameMode) pGameMode->OnPlayerExitedMenu(bytePlayerID);
 	if(pFilters) pFilters->OnPlayerExitedMenu(bytePlayerID);
+
+	pNetGame->GetMenuPool()->ResetPlayer(bytePlayerID);
 }
 
 //----------------------------------------------------

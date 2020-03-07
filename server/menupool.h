@@ -57,6 +57,12 @@ public:
 	{
 		if (bytePlayer < MAX_PLAYERS && byteMenu < MAX_MENUS) m_bytePlayerMenu[bytePlayer] = byteMenu;
 	}
+
+	void ResetForPlayer(BYTE bytePlayer)
+	{
+		if (bytePlayer < MAX_PLAYERS)
+			m_bytePlayerMenu[bytePlayer] = 255;
+	}
 };
 
 //----------------------------------------------------
