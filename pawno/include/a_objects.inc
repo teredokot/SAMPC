@@ -26,5 +26,6 @@ native IsValidPlayerObject(playerid, playerobjectid);
 native DestroyPlayerObject(playerid, playerobjectid);
 native MovePlayerObject(playerid, playerobjectid, Float:x, Float:y, Float:z, Float:speed);
 native StopPlayerObject(playerid, playerobjectid);
+native GetPlayerObjectModel(playerid, objectid);
 native IsPlayerObjectMoving(playerid, playerobjectid);
 native AttachPlayerObjectToPlayer(playerid, playerobjectid, toplayerid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz);

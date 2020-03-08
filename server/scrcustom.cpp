@@ -3972,6 +3972,24 @@ static cell AMX_NATIVE_CALL n_StopPlayerObject(AMX *amx, cell *params)
 	return 0;
 }
 
+// native GetPlayerObjectModel(playerid, objectid)
+static cell n_GetPlayerObjectModel(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+
+	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
+		return 0;
+
+	CObject* pObject = NULL;
+	CObjectPool* pObjectPool = pNetGame->GetObjectPool();
+	if (pObjectPool && (pObject = pObjectPool->GetAtIndividual(params[1], params[2])) != NULL)
+		return pObject->m_iModel;
+	else
+		return -1;
+
+	return 0;
+}
+
 // Menus
 
 // native Menu:CreateMenu(title[], columns, Float:X, Float:Y, Float:column1width, Float:column2width = 0.0);
@@ -5063,6 +5081,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(IsPlayerObjectMoving),
 	{ "MovePlayerObject",			n_MovePlayerObject },
 	{ "StopPlayerObject",			n_StopPlayerObject },
+	DEFINE_NATIVE(GetPlayerObjectModel),
 
 	{ "AttachObjectToPlayer",		n_AttachObjectToPlayer },
 	{ "AttachPlayerObjectToPlayer",	n_AttachPlayerObjectToPlayer },
