@@ -68,6 +68,7 @@ CNetGame::CNetGame()
 	m_fGlobalMarkerRadius = 10000.0f;
 	m_fNameTagDrawDistance = 70.0f;
 	m_bDisableEnterExits = false;
+	m_uiMaxRconAttempt = 3;
 
 	m_iCurrentGameModeIndex = 0;
 	m_iCurrentGameModeRepeat = 0;
@@ -1092,61 +1093,87 @@ void CNetGame::Packet_RemotePortRefused(Packet* packet)
 
 void CNetGame::Packet_InGameRcon(Packet* packet)
 {
-	CPlayer* pPlayer = GetPlayerPool()->GetAt((BYTE)packet->playerIndex);
-	if (pPlayer)
+	CPlayer* pPlayer = m_pPlayerPool->GetAt(packet->playerIndex);
+	if (pPlayer == NULL)
+		return;
+
+	RakNet::BitStream in(packet->data, packet->length, false);
+	if (in.GetNumberOfUnreadBits() < 9)
+		return;
+
+	in.IgnoreBits(8);
+
+	unsigned long ulLen = 0;
+	if (!in.Read(ulLen) || (ulLen < 0 && ulLen > 127))
+		return;
+
+	char szCmd[128];
+	if (!in.Read(szCmd, ulLen))
+		return;
+	szCmd[ulLen] = 0;
+
+	char* szName = GetPlayerPool()->GetPlayerName(packet->playerIndex);
+	if (!m_pPlayerPool->IsAdmin(packet->playerIndex))
 	{
-		DWORD dwCmdLen;
-		memcpy(&dwCmdLen, &packet->data[1], 4);
-		char* cmd = (char*)malloc(dwCmdLen+1);
-		memcpy(cmd, &packet->data[5], dwCmdLen);
-		cmd[dwCmdLen] = 0;
+		pPlayer->m_uiRconAttempt++;
 
 		in_addr in;
 		in.s_addr = packet->playerId.binaryAddress;
 		char* szIP = inet_ntoa(in);
 
-		if(GetPlayerPool()->IsAdmin((BYTE)packet->playerIndex))
+		char* szCtx, * szPassword = NULL;
+		char* szSubCmd = strtok_s(szCmd, " ", &szCtx);
+		bool bSuccess = false;
+
+		if (szSubCmd != NULL && stricmp(szSubCmd, "login") == 0)
 		{
-			if (strlen(cmd) == 0)
+			szPassword = strtok_s(NULL, " ", &szCtx);
+			if (szPassword != NULL && strcmp(szPassword, pConsole->GetStringVariable("rcon_password")) == 0)
 			{
-				SendClientMessage(packet->playerId, 0xFFFFFFFF, "You forgot the RCON command!");
-				free(cmd);
-				return;
+				GetPlayerPool()->SetAdmin(packet->playerIndex);
+				logprintf("RCON (In-Game): Player #%d (%s) has logged in.", packet->playerIndex, szName);
+				SendClientMessage(packet->playerId, 0xFFFFFFFF, "SERVER: You are logged in as admin.");
+				bSuccess = true;
 			}
-			logprintf("RCON (In-Game): Player [%s] sent command: %s", GetPlayerPool()->GetPlayerName((BYTE)packet->playerIndex), cmd);
-			byteRconUser = (BYTE)packet->playerIndex;
-			pConsole->Execute(cmd);
-			byteRconUser = INVALID_ID;
-		} else {
-			char* szTemp = strtok(cmd, " ");
-			if (szTemp)
+			else
 			{
-				if (stricmp(szTemp, "login") == 0)
-				{
-					bool bSuccess = false;
-					szTemp = strtok(NULL, " ");
-					if (szTemp)
-					{
-						if(strcmp(szTemp, pConsole->GetStringVariable("rcon_password")) == 0)
-						{
-							GetPlayerPool()->SetAdmin((BYTE)packet->playerIndex);						
-							logprintf("RCON (In-Game): Player #%d (%s) has logged in.", packet->playerIndex, GetPlayerPool()->GetPlayerName((BYTE)packet->playerIndex));
-							SendClientMessage(packet->playerId, 0xFFFFFFFF,"SERVER: You are logged in as admin.");
-							bSuccess = true;
-						} else {
-							logprintf("RCON (In-Game): Player #%d (%s) <%s> failed login.", packet->playerIndex, GetPlayerPool()->GetPlayerName((BYTE)packet->playerIndex), szTemp, pConsole->GetStringVariable("rcon_password"));
-							SendClientMessage(packet->playerId, 0xFFFFFFFF,"SERVER: Bad admin password. Repeated attempts will get you banned.");
-							bSuccess = false;
-						}
-					}
-					if (m_pFilterScripts)
-						m_pFilterScripts->OnRconLoginAttempt(szIP, (szTemp) ? (szTemp) : (""), bSuccess);
-					if (m_pGameMode)
-						m_pGameMode->OnRconLoginAttempt(szIP, (szTemp) ? (szTemp) : (""), bSuccess);
-				}
+				logprintf("RCON (In-Game): Player #%d (%s) <%s> failed login. (Attempt: %d/%d)", packet->playerIndex,
+					szName, szPassword, pPlayer->m_uiRconAttempt, m_uiMaxRconAttempt);
+				SendClientMessage(packet->playerId, 0xFFFFFFFF, "SERVER: Bad admin password. Repeated attempts will get you banned.");
 			}
 		}
-		free(cmd);
+		else
+		{
+			logprintf("RCON (In-Game): Player #%d (%s) try to use RCON. (Attempt: %d/%d)", packet->playerIndex,
+				szName, pPlayer->m_uiRconAttempt, m_uiMaxRconAttempt);
+			SendClientMessage(packet->playerId, 0xFFFFFFFF, "SERVER: You are not logged in. Repeated attempts will get you banned.");
+		}
+
+		if (!bSuccess && pPlayer->m_uiRconAttempt >= m_uiMaxRconAttempt)
+		{
+			logprintf("RCON (In-Game): Player #%d (%s) has been banned.", packet->playerIndex, szName);
+			AddBan(szName, szIP, "RCON BAN");
+			KickPlayer(packet->playerIndex);
+		}
+
+		szPassword = (szPassword != NULL) ? (szPassword) : ("");
+
+		if (m_pFilterScripts)
+			m_pFilterScripts->OnRconLoginAttempt(szIP, szPassword, bSuccess);
+		if (m_pGameMode)
+			m_pGameMode->OnRconLoginAttempt(szIP, szPassword, bSuccess);
+	}
+	else
+	{
+		if (ulLen == 0)
+		{
+			SendClientMessage(packet->playerId, 0xFFFFFFFF, "You forgot the RCON command!");
+			return;
+		}
+		logprintf("RCON (In-Game): Player [%s] sent command: %s", szName, szCmd);
+		byteRconUser = packet->playerIndex;
+		pConsole->Execute(szCmd);
+		byteRconUser = INVALID_ID;
 	}
 }
 

@@ -206,6 +206,7 @@ public:
 	DWORD					m_SpectateID; // Vehicle or player id
 
 	char m_szClientVersion[12];
+	unsigned int m_uiRconAttempt;
 
 	ONFOOT_SYNC_DATA* GetOnFootSyncData() { return &m_ofSync; }
 	INCAR_SYNC_DATA* GetInCarSyncData() { return &m_icSync; }

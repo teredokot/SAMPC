@@ -333,6 +333,7 @@ native SetTimerEx(const funcname[], interval, repeat, const params[], {Float,_}:
 native KillTimer(timerid);
 native GetTickCount();
 native GetMaxPlayers();
+native SetMaxRconLoginAttempt(max_attempt);
 native CallRemoteFunction(const funcname[], const params[], {Float,_}:...);
 native CallLocalFunction(const funcname[], const params[], {Float,_}:...);
 native Float:VectorSize(Float:x, Float:y, Float:z);

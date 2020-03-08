@@ -2512,6 +2512,18 @@ static cell AMX_NATIVE_CALL n_KillTimer(AMX *amx, cell *params)
 	return 1;
 }
 
+// native SetMaxRconAttempt(max_attempt)
+static cell n_SetMaxRconLoginAttempt(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	if (0 < params[1])
+	{
+		pNetGame->m_uiMaxRconAttempt = params[1];
+		return 1;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native GetTickCount()
@@ -4791,6 +4803,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "format",					n_format },
 	{ "SetTimer",				n_SetTimer },
 	{ "KillTimer",				n_KillTimer },
+	DEFINE_NATIVE(SetMaxRconLoginAttempt),
 	{ "GetTickCount",			n_GetTickCount },
 	{ "GetMaxPlayers",			n_GetMaxPlayers },
 	{ "SetTimerEx",				n_SetTimerEx },

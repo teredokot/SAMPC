@@ -92,7 +92,8 @@ public:
 	float m_fGlobalMarkerRadius;
 	float m_fNameTagDrawDistance; // The distance which players will start rendering nametags
 	bool m_bDisableEnterExits; // Interior enter/exits disabled?
-	
+	unsigned int m_uiMaxRconAttempt;
+
 	long long m_longSynchedWeapons;
 	
 	#ifndef WIN32
