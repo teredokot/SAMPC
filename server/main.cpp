@@ -30,6 +30,9 @@ BOOL		bGameModeFinished=FALSE;
 
 unsigned int _uiRndSrvChallenge;
 
+bool g_bDBLogging = true;
+bool g_bDBLogQueries = true;
+
 #ifdef WIN32
 extern LONG WINAPI exc_handler(_EXCEPTION_POINTERS* exc_inf);
 #endif
@@ -367,6 +370,8 @@ int main (int argc, char** argv)
 	//pConsole->AddVariable("myriad", CON_VARTYPE_BOOL, 0, &bGameMod);
 	pConsole->AddVariable("chatlogging", CON_VARTYPE_INT, 0, &iChatLogging);
 	pConsole->AddVariable("playertimeout", CON_VARTYPE_INT, 0, &iPlayerTimeout, ServerTimeOutChanged);
+	pConsole->AddVariable("db_logging", CON_VARTYPE_INT, 0, &g_bDBLogging);
+	pConsole->AddVariable("db_log_queries", CON_VARTYPE_INT, 0, &g_bDBLogQueries);
 
 	// Add 16 gamemode variables.
 	int x=0;

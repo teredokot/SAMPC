@@ -236,8 +236,8 @@
     <ClCompile Include="runutil.cpp" />
     <ClCompile Include="scrcore.cpp" />
     <ClCompile Include="scrcustom.cpp" />
+    <ClCompile Include="scrdatabase.cpp" />
     <ClCompile Include="scrtimers.cpp" />
-    <ClCompile Include="sqlite_amx.c" />
     <ClCompile Include="textdrawpool.cpp" />
     <ClCompile Include="vehicle.cpp" />
     <ClCompile Include="vehiclepool.cpp" />

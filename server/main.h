@@ -125,9 +125,13 @@ typedef struct _SERVER_SETTINGS {
 #include <raknet/BitStream.h>
 #include <raknet/PacketEnumerations.h>
 #include <raknet/SAMPRPC.h>
+#include <raknet/DS_Map.h>
 
 // amx
 #include <amx/amx.h>
+
+// SQLite3
+#include <sqlite/sqlite3.h>
 
 // SA:MP
 
@@ -169,6 +173,9 @@ extern CRcon *pRcon;
 
 extern BYTE byteRconUser;
 extern BOOL bRconSocketReply;
+
+extern bool g_bDBLogging;
+extern bool g_bDBLogQueries;
 
 // -------------------
 // FUNCTION PROTOTYPES

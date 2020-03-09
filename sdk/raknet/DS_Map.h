@@ -74,6 +74,7 @@ namespace DataStructures
 		// Must add
 		void SetNew(const key_type &key, const data_type &data);
 		bool Has(const key_type &key);
+		bool HasEx(const key_type& key);
 		bool Delete(const key_type &key);
 		data_type& operator[] ( const unsigned int position ) const;
 		key_type GetKeyAtIndex( const unsigned int position ) const;
@@ -245,6 +246,14 @@ namespace DataStructures
 		index=mapNodeList.GetIndexFromKey(key, &objectExists);
 		if (objectExists)
 			SaveLastSearch(key,index);
+		return objectExists;
+	}
+
+	template <class key_type, class data_type, int (*key_comparison_func)(const key_type&, const key_type&)>
+	bool Map<key_type, data_type, key_comparison_func>::HasEx(const key_type& key)
+	{
+		bool objectExists = false;
+		mapNodeList.GetIndexFromKey(key, &objectExists);
 		return objectExists;
 	}
 

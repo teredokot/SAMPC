@@ -23,7 +23,6 @@
     <ClCompile Include="scrcustom.cpp" />
     <ClCompile Include="scrcore.cpp" />
     <ClCompile Include="scrtimers.cpp" />
-    <ClCompile Include="sqlite_amx.c" />
     <ClCompile Include="textdrawpool.cpp" />
     <ClCompile Include="vehicle.cpp" />
     <ClCompile Include="vehiclepool.cpp" />
@@ -243,6 +242,7 @@
     <ClCompile Include="..\sdk\raknet\TelnetTransport.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
+    <ClCompile Include="scrdatabase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="console.h" />
