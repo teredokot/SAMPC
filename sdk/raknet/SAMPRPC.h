@@ -119,6 +119,7 @@
 #define RPC_ScrEnableStuntBonus			"ec"
 #define RPC_ScrSetVehicle				"sv"
 #define RPC_ScrSetPlayer				"sp"
+#define RPC_ScrVehicleVelocity			"vv"
 
 // netrpc (server)
 #define RPC_ClientJoin					"xx"

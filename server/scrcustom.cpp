@@ -1071,6 +1071,58 @@ static cell n_SetVehicleEngineState(AMX* amx, cell* params)
 	return 0;
 }
 
+// native GetVehicleVelocity(vehicleid, &Float:x, &Float:y, &Float:z)
+static cell n_GetVehicleVelocity(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+
+	CVehicle* pVehicle = NULL;
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (0 <= params[1] && pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		cell* cptr;
+		amx_GetAddr(amx, params[2], &cptr);
+		*cptr = amx_ftoc(pVehicle->m_vecMoveSpeed.X);
+		amx_GetAddr(amx, params[3], &cptr);
+		*cptr = amx_ftoc(pVehicle->m_vecMoveSpeed.Y);
+		amx_GetAddr(amx, params[4], &cptr);
+		*cptr = amx_ftoc(pVehicle->m_vecMoveSpeed.Z);
+
+		return 1;
+	}
+	return 0;
+}
+
+// native SetVehicleVelocity(vehicleid, Float:X, Float:Y, Float:Z)
+static cell n_SetVehicleVelocity(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (0 <= params[1] && pPool != NULL && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+		float fX, fY, fZ;
+
+		fX = amx_ctof(params[2]);
+		fY = amx_ctof(params[3]);
+		fZ = amx_ctof(params[4]);
+
+		out.Write(params[1]);
+		out.Write(fX);
+		out.Write(fY);
+		out.Write(fZ);
+
+		bool bRet = false;
+		if (pNetGame->GetRakServer())
+			bRet = pNetGame->GetRakServer()->RPC(RPC_ScrVehicleVelocity, &out,
+				HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+
+		return bRet;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 // native TogglePlayerSpectating(playerid, toggle);
 static cell AMX_NATIVE_CALL n_TogglePlayerSpectating(AMX *amx, cell *params)
@@ -5028,6 +5080,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetVehicleParamsCarWindows),
 	DEFINE_NATIVE(ToggleTaxiLight),
 	DEFINE_NATIVE(SetVehicleEngineState),
+	DEFINE_NATIVE(GetVehicleVelocity),
+	DEFINE_NATIVE(SetVehicleVelocity),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

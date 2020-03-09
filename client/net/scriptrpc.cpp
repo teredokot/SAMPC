@@ -1660,6 +1660,29 @@ static void ScrSetPlayer(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrVehicleVelocity(RPCParameters* rpcParams)
+{
+	RakNet::BitStream in(rpcParams->input,
+		BYTES_TO_BITS(rpcParams->numberOfBitsOfData), false);
+
+	int iVehicleId = -1;
+	float fX = 0.0f, fY = 0.0f, fZ = 0.0f;
+
+	if (!in.Read(iVehicleId) && iVehicleId < 0)
+		return;
+
+	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(iVehicleId);
+	if (pVehicle == NULL && in.GetNumberOfUnreadBits() < 96)
+		return;
+	
+	in.Read(fX);
+	in.Read(fY);
+	in.Read(fZ);
+
+	pVehicle->SetMoveSpeedVector({ fX, fY, fZ });
+	pVehicle->ApplyMoveSpeed();
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1737,6 +1760,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrEnableStuntBonus);
 	REGISTER_STATIC_RPC(pRakClient, ScrSetVehicle);
 	REGISTER_STATIC_RPC(pRakClient, ScrSetPlayer);
+	REGISTER_STATIC_RPC(pRakClient, ScrVehicleVelocity);
 }
 
 //----------------------------------------------------
@@ -1815,6 +1839,7 @@ void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient, ScrEnableStuntBonus);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetVehicle);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetPlayer);
+	UNREGISTER_STATIC_RPC(pRakClient, ScrVehicleVelocity);
 }
 
 //----------------------------------------------------

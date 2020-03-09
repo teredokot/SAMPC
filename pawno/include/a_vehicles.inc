@@ -36,3 +36,5 @@ native SetVehicleVirtualWorld(vehicleid, worldid);
 native GetVehicleVirtualWorld(vehicleid);
 native ToggleTaxiLight(vehicleid, toggle);
 native SetVehicleEngineState(vehicleid, engine_state);
+native SetVehicleVelocity(vehicleid, Float:X, Float:Y, Float:Z);
+native GetVehicleVelocity(vehicleid, &Float:x, &Float:y, &Float:z);

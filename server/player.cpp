@@ -613,6 +613,7 @@ void CPlayer::StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync)
 		
 		pVehicle->Update(m_bytePlayerID,&matWorld,fVehicleHealth,m_icSync.TrailerID);
 
+		memcpy(&pVehicle->m_vecMoveSpeed, &m_icSync.vecMoveSpeed, sizeof(VECTOR));
 	}
 
 	m_icSync.byteCurrentWeapon = CheckWeapon(m_icSync.byteCurrentWeapon);
