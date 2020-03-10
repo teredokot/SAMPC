@@ -474,6 +474,8 @@ void CPlayer::StoreOnFootFullSyncData(ONFOOT_SYNC_DATA *pofSync)
 	m_fHealth = (float)m_ofSync.byteHealth;
 	m_fArmour = (float)m_ofSync.byteArmour;
 	
+	memcpy(&m_vecMoveSpeed, &m_ofSync.vecMoveSpeed, sizeof(VECTOR));
+
 	m_ofSync.byteCurrentWeapon = CheckWeapon(m_ofSync.byteCurrentWeapon);
 		
 	// Determine the slot of the current weapon.

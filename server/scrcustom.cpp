@@ -4349,6 +4349,58 @@ static cell AMX_NATIVE_CALL n_GetPlayerWantedLevel(AMX *amx, cell *params)
 	return 0;
 }
 
+// native GetPlayerVelocity(playerid, &Float:x, &Float:y, &Float:z)
+static cell n_GetPlayerVelocity(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+
+	CPlayer* pPlayer = NULL;
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool != NULL && (pPlayer = pPool->GetAt(params[1])) != NULL)
+	{
+		cell* cptr;
+		amx_GetAddr(amx, params[2], &cptr);
+		*cptr = amx_ftoc(pPlayer->m_vecMoveSpeed.X);
+		amx_GetAddr(amx, params[3], &cptr);
+		*cptr = amx_ftoc(pPlayer->m_vecMoveSpeed.Y);
+		amx_GetAddr(amx, params[4], &cptr);
+		*cptr = amx_ftoc(pPlayer->m_vecMoveSpeed.Z);
+
+		return 1;
+	}
+	return 0;
+}
+
+// native SetPlayerVelocity(playerid, Float:X, Float:Y, Float:Z)
+static cell n_SetPlayerVelocity(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool != NULL && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+		float fX, fY, fZ;
+
+		fX = amx_ctof(params[2]);
+		fY = amx_ctof(params[3]);
+		fZ = amx_ctof(params[4]);
+
+		out.Write(params[1]);
+		out.Write(fX);
+		out.Write(fY);
+		out.Write(fZ);
+
+		bool bSend = false;
+		if (pNetGame->GetRakServer())
+			bSend = pNetGame->GetRakServer()->RPC(RPC_ScrPlayerVelocity, &out,
+				HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+
+		return bSend;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 static cell AMX_NATIVE_CALL n_TextDrawCreate(AMX *amx, cell *params)
@@ -5023,6 +5075,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "ForceClassSelection",	n_ForceClassSelection },
 	{ "SetPlayerWantedLevel",	n_SetPlayerWantedLevel },
 	{ "GetPlayerWantedLevel",	n_GetPlayerWantedLevel },
+	DEFINE_NATIVE(GetPlayerVelocity),
+	DEFINE_NATIVE(SetPlayerVelocity),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

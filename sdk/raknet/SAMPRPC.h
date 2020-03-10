@@ -120,6 +120,7 @@
 #define RPC_ScrSetVehicle				"sv"
 #define RPC_ScrSetPlayer				"sp"
 #define RPC_ScrVehicleVelocity			"vv"
+#define RPC_ScrPlayerVelocity			"pv"
 
 // netrpc (server)
 #define RPC_ClientJoin					"xx"

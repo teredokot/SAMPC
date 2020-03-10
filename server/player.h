@@ -223,6 +223,7 @@ public:
 	float	m_fHealth;
 	float	m_fArmour;
 	VECTOR  m_vecPos;
+	VECTOR	m_vecMoveSpeed;
 	float	m_fRotation;
 	BOOL	m_bCanTeleport;
 	float m_fWorldBounds[4];

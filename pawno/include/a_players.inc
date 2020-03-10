@@ -119,3 +119,5 @@ native TogglePlayerSpectating(playerid, toggle);
 native PlayerSpectatePlayer(playerid, toplayerid, mode);
 native PlayerSpectateVehicle(playerid, vehicleid, mode);
 native CreateExplosionForPlayer(playerid, Float:x, Float:y, Float:z, type, Float:radius);
+native SetPlayerVelocity(playerid, Float:X, Float:Y, Float:Z);
+native GetPlayerVelocity(playerid, &Float:x, &Float:y, &Float:z);
