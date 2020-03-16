@@ -4455,6 +4455,19 @@ static cell n_GetPlayerVehicleSeat(AMX* amx, cell* params)
 	return -2;
 }
 
+// native GetPlayerCameraMode(playerid)
+static cell n_GetPlayerCameraMode(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayer* pPlayer = NULL;
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && (pPlayer = pPlayerPool->GetAt(params[1])) != NULL)
+	{
+		return pPlayer->GetAimSyncData()->byteCamMode;
+	}
+	return -1;
+}
+
 //----------------------------------------------------------------------------------
 
 static cell AMX_NATIVE_CALL n_TextDrawCreate(AMX *amx, cell *params)
@@ -5134,6 +5147,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetPlayerSkillLevel),
 	DEFINE_NATIVE(GetPlayerSurfingVehicleID),
 	DEFINE_NATIVE(GetPlayerVehicleSeat),
+	DEFINE_NATIVE(GetPlayerCameraMode),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },
