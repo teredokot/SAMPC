@@ -351,18 +351,6 @@ enum {
   #error Unsupported cell size
 #endif
 
-#ifdef WIN32
-#define amx_StrParam(amx,param,result)                                      \
-    do {                                                                    \
-      cell *amx_cstr_; int amx_length_;                                     \
-      amx_GetAddr((amx), (param), &amx_cstr_);                              \
-      amx_StrLen(amx_cstr_, &amx_length_);                                  \
-      if (amx_length_ > 0 &&                                                \
-          ((result) = (char*)_malloca((amx_length_ + 1) * sizeof(*(result)))) != NULL) \
-        amx_GetString((char*)(result), amx_cstr_, sizeof(*(result))>1, amx_length_ + 1); \
-      else (result) = NULL;                                                 \
-    } while (0)
-#else
 #define amx_StrParam(amx,param,result)                                      \
     do {                                                                    \
       cell *amx_cstr_; int amx_length_;                                     \
@@ -373,7 +361,6 @@ enum {
         amx_GetString((char*)(result), amx_cstr_, sizeof(*(result))>1, amx_length_ + 1); \
       else (result) = NULL;                                                 \
     } while (0)
-#endif
 
 uint16_t * AMXAPI amx_Align16(uint16_t *v);
 uint32_t * AMXAPI amx_Align32(uint32_t *v);
