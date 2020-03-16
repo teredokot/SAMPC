@@ -154,7 +154,7 @@ public:
 	float GetHudVertScale() { return *(float *)0x859524; };
 	float GetHudHorizScale() { return *(float *)0x859520; };
 
-
+	void SetWeaponSkill(unsigned char ucSkill, unsigned int uiLevel);
 	DWORD GetWeaponInfo(int iWeapon, int iUnk);
 	void DisableEnterExits(bool bDisable = true);
 

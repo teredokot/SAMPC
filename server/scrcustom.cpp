@@ -4401,6 +4401,27 @@ static cell n_SetPlayerVelocity(AMX* amx, cell* params)
 	return 0;
 }
 
+// native SetPlayerSkillLevel(playerid, skill, level)
+static cell n_SetPlayerSkillLevel(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(3);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool != NULL && pPool->GetSlotState(params[1]))
+	{
+		if (params[2] < 0 || params[2] > 10)
+			return 0;
+
+		RakNet::BitStream out;
+		
+		out.Write<int>(2);
+		out.Write((unsigned char)params[2]);
+		out.Write((unsigned int)params[3]);
+
+		return (cell)pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 static cell AMX_NATIVE_CALL n_TextDrawCreate(AMX *amx, cell *params)
@@ -5077,6 +5098,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetPlayerWantedLevel",	n_GetPlayerWantedLevel },
 	DEFINE_NATIVE(GetPlayerVelocity),
 	DEFINE_NATIVE(SetPlayerVelocity),
+	DEFINE_NATIVE(SetPlayerSkillLevel),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

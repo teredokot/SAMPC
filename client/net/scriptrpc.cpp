@@ -1653,10 +1653,22 @@ static void ScrSetPlayer(RPCParameters* rpcParams)
 	switch (iOP)
 	{
 	case 1:
+	{
 		float fDrunkLevel = 0.0f;
 		in.Read(fDrunkLevel);
 		pGame->SetDrunkLevel(fDrunkLevel);
 		break;
+	}
+	case 2:
+	{
+		unsigned char ucSkill = 0;
+		unsigned int uiLevel = 0;
+		in.Read(ucSkill);
+		in.Read(uiLevel);
+		pChatWindow->AddDebugMessage("skill %d %d", ucSkill, uiLevel);
+		pGame->SetWeaponSkill(ucSkill, uiLevel);
+		break;
+	}
 	}
 }
 

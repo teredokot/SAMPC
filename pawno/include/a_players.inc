@@ -31,6 +31,18 @@
 #define SPECTATE_TYPE_PLAYER	(1)
 #define SPECTATE_TYPE_VEHICLE	(2)
 
+#define WEAPONSKILL_PISTOL 			(0)
+#define WEAPONSKILL_PISTOL_SILENCED	(1)
+#define WEAPONSKILL_DESERT_EAGLE 	(2)
+#define WEAPONSKILL_SHOTGUN 		(3)
+#define WEAPONSKILL_SAWNOFF_SHOTGUN (4)
+#define WEAPONSKILL_SPAS12_SHOTGUN 	(5)
+#define WEAPONSKILL_MICRO_UZI 		(6)
+#define WEAPONSKILL_MP5 			(7)
+#define WEAPONSKILL_AK47 			(8)
+#define WEAPONSKILL_M4 				(9)
+#define WEAPONSKILL_SNIPERRIFLE 	(10)
+
 native GetPlayerCount();
 native GetPlayerIDFromName(const name[]);
 native SetSpawnInfo(playerid, teamid, skinid, Float:x, Float:y, Float:z, Float:a, weap1, ammo1, weap2, ammo2, weap3, ammo3);
@@ -121,3 +133,4 @@ native PlayerSpectateVehicle(playerid, vehicleid, mode);
 native CreateExplosionForPlayer(playerid, Float:x, Float:y, Float:z, type, Float:radius);
 native SetPlayerVelocity(playerid, Float:X, Float:Y, Float:Z);
 native GetPlayerVelocity(playerid, &Float:x, &Float:y, &Float:z);
+native SetPlayerSkillLevel(playerid, skill, level);
