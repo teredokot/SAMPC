@@ -4422,6 +4422,20 @@ static cell n_SetPlayerSkillLevel(AMX* amx, cell* params)
 	return 0;
 }
 
+// native GetPlayerSurfingVehicleID(playerid)
+static cell n_GetPlayerSurfingVehicleID(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayer* pPlayer = NULL;
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && (pPlayer = pPlayerPool->GetAt(params[1])) != NULL)
+	{
+		VEHICLEID usId = pPlayer->GetOnFootSyncData()->SurfVehicleId;
+		return (usId != 0) ? (usId) : (INVALID_VEHICLE);
+	}
+	return INVALID_VEHICLE;
+}
+
 //----------------------------------------------------------------------------------
 
 static cell AMX_NATIVE_CALL n_TextDrawCreate(AMX *amx, cell *params)
@@ -5099,6 +5113,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerVelocity),
 	DEFINE_NATIVE(SetPlayerVelocity),
 	DEFINE_NATIVE(SetPlayerSkillLevel),
+	DEFINE_NATIVE(GetPlayerSurfingVehicleID),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

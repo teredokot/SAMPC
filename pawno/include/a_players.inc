@@ -134,3 +134,4 @@ native CreateExplosionForPlayer(playerid, Float:x, Float:y, Float:z, type, Float
 native SetPlayerVelocity(playerid, Float:X, Float:Y, Float:Z);
 native GetPlayerVelocity(playerid, &Float:x, &Float:y, &Float:z);
 native SetPlayerSkillLevel(playerid, skill, level);
+native GetPlayerSurfingVehicleID(playerid);
