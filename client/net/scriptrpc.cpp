@@ -1665,8 +1665,14 @@ static void ScrSetPlayer(RPCParameters* rpcParams)
 		unsigned int uiLevel = 0;
 		in.Read(ucSkill);
 		in.Read(uiLevel);
-		pChatWindow->AddDebugMessage("skill %d %d", ucSkill, uiLevel);
 		pGame->SetWeaponSkill(ucSkill, uiLevel);
+		break;
+	}
+	case 3:
+	{
+		unsigned char ucWeaponId = 0;
+		in.Read(ucWeaponId);
+		pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed()->SetArmedWeapon(ucWeaponId);
 		break;
 	}
 	}

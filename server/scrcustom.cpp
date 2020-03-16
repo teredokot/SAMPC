@@ -4468,6 +4468,39 @@ static cell n_GetPlayerCameraMode(AMX* amx, cell* params)
 	return -1;
 }
 
+// native SetPlayerArmedWeapon(playerid, weaponid)
+static cell n_SetPlayerArmedWeapon(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+	CPlayer* pPlayer = NULL;
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && (pPlayer = pPlayerPool->GetAt(params[1])) != NULL)
+	{
+		bool bResult = false;
+		for (unsigned int i = 0; i < 13; i++)
+			if (pPlayer->GetSlotWeapon(i) == params[2])
+			{
+				bResult = true;
+				break;
+			}
+		if (!bResult)
+			return -1;
+
+		RakNet::BitStream out;
+		
+		out.Write<int>(3);
+		out.Write((unsigned char)params[2]);
+
+		bResult = false;
+		RakServerInterface* pServer = pNetGame->GetRakServer();
+		if (pServer)
+			bResult = pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out);
+
+		return (bResult) ? (1) : (-2);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 static cell AMX_NATIVE_CALL n_TextDrawCreate(AMX *amx, cell *params)
@@ -5148,6 +5181,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerSurfingVehicleID),
 	DEFINE_NATIVE(GetPlayerVehicleSeat),
 	DEFINE_NATIVE(GetPlayerCameraMode),
+	DEFINE_NATIVE(SetPlayerArmedWeapon),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },
