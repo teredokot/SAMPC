@@ -90,6 +90,8 @@ CPlayer::CPlayer()
 	m_fWorldBounds[2] = 20000.0f;
 	m_fWorldBounds[3] = -20000.0f;
 
+	m_uiMsgRecv = 0;
+
 	BYTE i;
 	for (i = 0; i < 13; i++)
 	{
@@ -177,12 +179,24 @@ void CPlayer::UpdatePosition(float x, float y, float z)
 void CPlayer::Process(float fElapsedTime)
 {
 	static float fLastSync = 0.0;
+	static float fLastMsg = 0.0f;
 	m_fGameTime += fElapsedTime;
 	if(IsActive()) {
 		if(m_byteUpdateFromNetwork != UPDATE_TYPE_NONE)  {
 			BroadcastSyncData();
 			m_byteUpdateFromNetwork = UPDATE_TYPE_NONE;
 		}
+
+		// Update every 1 second
+		if (m_fGameTime - fLastMsg >= 1.0f)
+		{
+			fLastMsg = m_fGameTime;
+			RakServerInterface* pInf = pNetGame->GetRakServer();
+			RakNetStatisticsStruct* rss = pInf->GetStatistics(pInf->GetPlayerIDFromIndex(m_bytePlayerID));
+			if(rss)
+				m_uiMsgRecv = rss->messagesReceived - m_uiMsgRecv;
+		}
+
 		
 		if (m_byteTime) // If this player has private time
 		{

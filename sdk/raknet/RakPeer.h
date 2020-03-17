@@ -32,6 +32,36 @@
 class HuffmanEncodingTree;
 class PluginInterface;
 
+/// \internal
+	/// \brief Holds the clock differences between systems, along with the ping
+struct PingAndClockDifferential
+{
+	unsigned short pingTime;
+	RakNetTime clockDifferential;
+};
+
+/// \internal
+/// \brief All the information representing a connected system system
+struct RemoteSystemStruct
+{
+	bool isActive; // Is this structure in use?
+	PlayerID playerId;  /// The remote system associated with this reliability layer
+	PlayerID myExternalPlayerId;  /// Your own IP, as reported by the remote system
+	ReliabilityLayer reliabilityLayer;  /// The reliability layer associated with this player
+	bool weInitiatedTheConnection; /// True if we started this connection via Connect.  False if someone else connected to us.
+	PingAndClockDifferential pingAndClockDifferential[PING_TIMES_ARRAY_SIZE];  /// last x ping times and calculated clock differentials with it
+	int pingAndClockDifferentialWriteIndex;  /// The index we are writing into the pingAndClockDifferential circular buffer
+	unsigned short lowestPing; ///The lowest ping value encountered
+	RakNetTime nextPingTime;  /// When to next ping this player
+	RakNetTime lastReliableSend; /// When did the last reliable send occur.  Reliable sends must occur at least once every timeoutTime/2 units to notice disconnects
+	RakNet::BitStream staticData; /// static data.  This cannot be a pointer because it might be accessed in another thread.
+	RakNetTime connectionTime; /// connection time, if active.
+	unsigned char AESKey[16]; /// Security key.
+	bool setAESKey; /// true if security is enabled.
+	RPCMap rpcMap; /// Mapping of RPC calls to single byte integers to save transmission bandwidth.
+	enum ConnectMode { NO_ACTION, DISCONNECT_ASAP, DISCONNECT_ASAP_SILENTLY, DISCONNECT_ON_NO_ACK, REQUESTED_CONNECTION, HANDLING_CONNECTION_REQUEST, UNVERIFIED_SENDER, SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET, CONNECTED } connectMode;
+};
+
 // Sucks but this struct has to be outside the class.  Inside and DevCPP won't let you refer to the struct as RakPeer::PlayerIDAndIndex while GCC
 // forces you to do RakPeer::PlayerIDAndIndex
 struct PlayerIDAndIndex{PlayerID playerId;unsigned index;};
@@ -473,36 +503,6 @@ public:
 	/// \internal
 	RPCMap *GetRPCMap( const PlayerID playerId);
 
-	/// \internal
-	/// \brief Holds the clock differences between systems, along with the ping
-	struct PingAndClockDifferential
-	{
-		unsigned short pingTime;
-		RakNetTime clockDifferential;
-	};
-
-	/// \internal
-	/// \brief All the information representing a connected system system
-	struct RemoteSystemStruct
-	{
-		bool isActive; // Is this structure in use?
-		PlayerID playerId;  /// The remote system associated with this reliability layer
-		PlayerID myExternalPlayerId;  /// Your own IP, as reported by the remote system
-		ReliabilityLayer reliabilityLayer;  /// The reliability layer associated with this player
-		bool weInitiatedTheConnection; /// True if we started this connection via Connect.  False if someone else connected to us.
-		PingAndClockDifferential pingAndClockDifferential[ PING_TIMES_ARRAY_SIZE ];  /// last x ping times and calculated clock differentials with it
-		int pingAndClockDifferentialWriteIndex;  /// The index we are writing into the pingAndClockDifferential circular buffer
-		unsigned short lowestPing; ///The lowest ping value encountered
-		RakNetTime nextPingTime;  /// When to next ping this player
-		RakNetTime lastReliableSend; /// When did the last reliable send occur.  Reliable sends must occur at least once every timeoutTime/2 units to notice disconnects
-		RakNet::BitStream staticData; /// static data.  This cannot be a pointer because it might be accessed in another thread.
-		RakNetTime connectionTime; /// connection time, if active.
-		unsigned char AESKey[ 16 ]; /// Security key.
-		bool setAESKey; /// true if security is enabled.
-		RPCMap rpcMap; /// Mapping of RPC calls to single byte integers to save transmission bandwidth.
-		enum ConnectMode {NO_ACTION, DISCONNECT_ASAP, DISCONNECT_ASAP_SILENTLY, DISCONNECT_ON_NO_ACK, REQUESTED_CONNECTION, HANDLING_CONNECTION_REQUEST, UNVERIFIED_SENDER, SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET, CONNECTED} connectMode;
-	};
-
 protected:
 
 #ifdef _WIN32
@@ -524,14 +524,16 @@ protected:
 
 	//void RemoveFromRequestedConnectionsList( const PlayerID playerId );
 	bool SendConnectionRequest( const char* host, unsigned short remotePort, char* passwordData, int passwordDataLength );
+public:
 	///Get the reliability layer associated with a playerID.  
 	/// \param[in] playerID The player identifier 
 	/// \return 0 if none
 	RemoteSystemStruct *GetRemoteSystemFromPlayerID( const PlayerID playerID, bool calledFromNetworkThread, bool onlyActive) const;
+protected:
 	///Parse out a connection request packet
-	void ParseConnectionRequestPacket( RakPeer::RemoteSystemStruct *remoteSystem, PlayerID playerId, const char *data, int byteSize);
+	void ParseConnectionRequestPacket( RemoteSystemStruct *remoteSystem, PlayerID playerId, const char *data, int byteSize);
 	///When we get a connection request from an ip / port, accept it unless full
-	void OnConnectionRequest( RakPeer::RemoteSystemStruct *remoteSystem, unsigned char *AESKey, bool setAESKey );
+	void OnConnectionRequest( RemoteSystemStruct *remoteSystem, unsigned char *AESKey, bool setAESKey );
 	///Send a reliable disconnect packet to this player and disconnect them when it is delivered
 	void NotifyAndFlagForDisconnect( const PlayerID playerId, bool performImmediate, unsigned char orderingChannel );
 	///Returns how many remote systems initiated a connection to us
@@ -676,7 +678,7 @@ protected:
 	// void UpdateOutgoingFrequencyTable(RakNet::BitStream * bitStream);
 	void GenerateSYNCookieRandomNumber( void );
 	void SecuredConnectionResponse( const PlayerID playerId );
-	void SecuredConnectionConfirmation( RakPeer::RemoteSystemStruct * remoteSystem, char* data );
+	void SecuredConnectionConfirmation( RemoteSystemStruct * remoteSystem, char* data );
 	bool RunUpdateCycle( void );
 	// void RunMutexedUpdateCycle(void);
 

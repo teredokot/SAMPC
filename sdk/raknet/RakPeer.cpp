@@ -1447,7 +1447,7 @@ PlayerID RakPeer::GetPlayerIDFromIndex( int index )
 	// remoteSystemList in user thread
 	//if ( index >= 0 && index < remoteSystemListSize )
 	if ( index >= 0 && index < maximumNumberOfPeers )
-		if (remoteSystemList[ index ].connectMode==RakPeer::RemoteSystemStruct::CONNECTED) // Don't give the user players that aren't fully connected, since sends will fail
+		if (remoteSystemList[ index ].connectMode==RemoteSystemStruct::CONNECTED) // Don't give the user players that aren't fully connected, since sends will fail
 			return remoteSystemList[ index ].playerId;
 
 	return UNASSIGNED_PLAYER_ID;
@@ -2585,7 +2585,7 @@ void RakPeer::IPToPlayerID( const char* host, unsigned short remotePort, PlayerI
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-RakPeer::RemoteSystemStruct *RakPeer::GetRemoteSystemFromPlayerID( const PlayerID playerID, bool calledFromNetworkThread, bool onlyActive ) const
+RemoteSystemStruct *RakPeer::GetRemoteSystemFromPlayerID( const PlayerID playerID, bool calledFromNetworkThread, bool onlyActive ) const
 {
 	unsigned i;
 
@@ -2628,7 +2628,7 @@ RakPeer::RemoteSystemStruct *RakPeer::GetRemoteSystemFromPlayerID( const PlayerI
 	return 0;
 }
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void RakPeer::ParseConnectionRequestPacket( RakPeer::RemoteSystemStruct *remoteSystem, PlayerID playerId, const char *data, int byteSize )
+void RakPeer::ParseConnectionRequestPacket( RemoteSystemStruct *remoteSystem, PlayerID playerId, const char *data, int byteSize )
 {
 	// If we are full tell the sender.
 	if ( !AllowIncomingConnections() )
@@ -2682,7 +2682,7 @@ void RakPeer::ParseConnectionRequestPacket( RakPeer::RemoteSystemStruct *remoteS
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 extern unsigned int _uiRndSrvChallenge;
 
-void RakPeer::OnConnectionRequest( RakPeer::RemoteSystemStruct *remoteSystem, unsigned char *AESKey, bool setAESKey )
+void RakPeer::OnConnectionRequest( RemoteSystemStruct *remoteSystem, unsigned char *AESKey, bool setAESKey )
 {
 	// Already handled by caller
 	//if ( AllowIncomingConnections() )
@@ -2760,7 +2760,7 @@ unsigned short RakPeer::GetNumberOfRemoteInitiatedConnections( void ) const
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-RakPeer::RemoteSystemStruct * RakPeer::AssignPlayerIDToRemoteSystemList( const PlayerID playerId, RemoteSystemStruct::ConnectMode connectionMode )
+RemoteSystemStruct * RakPeer::AssignPlayerIDToRemoteSystemList( const PlayerID playerId, RemoteSystemStruct::ConnectMode connectionMode )
 {
 	RemoteSystemStruct * remoteSystem;
 	unsigned i,j;
@@ -3201,7 +3201,7 @@ void RakPeer::SecuredConnectionResponse( const PlayerID playerId )
 #endif
 }
 
-void RakPeer::SecuredConnectionConfirmation( RakPeer::RemoteSystemStruct * remoteSystem, char* data )
+void RakPeer::SecuredConnectionConfirmation( RemoteSystemStruct * remoteSystem, char* data )
 {
 #if !defined(_COMPATIBILITY_1)
 	int i, j;
@@ -3429,7 +3429,7 @@ bool RakPeer::ValidSendTarget(PlayerID playerId, bool broadcast)
 	//for ( remoteSystemIndex = 0; remoteSystemIndex < remoteSystemListSize; remoteSystemIndex++ )
 	{
 		if ( remoteSystemList[ remoteSystemIndex ].isActive &&
-			remoteSystemList[ remoteSystemIndex ].connectMode==RakPeer::RemoteSystemStruct::CONNECTED && // Not fully connected players are not valid user-send targets because the reliability layer wasn't reset yet
+			remoteSystemList[ remoteSystemIndex ].connectMode==RemoteSystemStruct::CONNECTED && // Not fully connected players are not valid user-send targets because the reliability layer wasn't reset yet
 			( ( broadcast == false && remoteSystemList[ remoteSystemIndex ].playerId == playerId ) ||
 			( broadcast == true && remoteSystemList[ remoteSystemIndex ].playerId != playerId ) )
 			)
@@ -3812,7 +3812,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 	Packet *packet;
 	PlayerID playerId;
 	unsigned i;
-	RakPeer::RemoteSystemStruct *remoteSystem;
+	RemoteSystemStruct *remoteSystem;
 	playerId.binaryAddress = binaryAddress;
 	playerId.port = port;
 
@@ -3868,12 +3868,12 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 				// You might get this when already connected because of cross-connections
 				remoteSystem=rakPeer->GetRemoteSystemFromPlayerID( playerId, true, true );
 				if (remoteSystem==0)
-					remoteSystem=rakPeer->AssignPlayerIDToRemoteSystemList(playerId, RakPeer::RemoteSystemStruct::UNVERIFIED_SENDER);
+					remoteSystem=rakPeer->AssignPlayerIDToRemoteSystemList(playerId, RemoteSystemStruct::UNVERIFIED_SENDER);
 
 				if (remoteSystem)
 				{
 					RakNetTimeNS time = RakNet::GetTimeNS();
-					remoteSystem->connectMode=RakPeer::RemoteSystemStruct::REQUESTED_CONNECTION;
+					remoteSystem->connectMode=RemoteSystemStruct::REQUESTED_CONNECTION;
 					remoteSystem->weInitiatedTheConnection=true;
 
 					RakNet::BitStream temp;
@@ -3992,12 +3992,12 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 			rakPeer->messageHandlerList[i]->OnDirectSocketReceive(data, length*8, playerId);
 
 		// If this guy is already connected and they initiated the connection, ignore the connection request
-		RakPeer::RemoteSystemStruct *rss = rakPeer->GetRemoteSystemFromPlayerID( playerId, true, true );
+		RemoteSystemStruct *rss = rakPeer->GetRemoteSystemFromPlayerID( playerId, true, true );
 		if (rss==0 || rss->weInitiatedTheConnection==true)
 		{
 			// Assign new remote system
 			if (rss==0)
-				rss=rakPeer->AssignPlayerIDToRemoteSystemList(playerId, RakPeer::RemoteSystemStruct::UNVERIFIED_SENDER);
+				rss=rakPeer->AssignPlayerIDToRemoteSystemList(playerId, RemoteSystemStruct::UNVERIFIED_SENDER);
 
 			unsigned char c[2];
 			if (rss) // If this guy is already connected remote system will be 0
@@ -4016,9 +4016,9 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 		else if (rss!=0)
 		{
 			// If this is an existing connection, and they are already fully connected (not in progress), reply with connection attempt failed
-			if (rss->connectMode==RakPeer::RemoteSystemStruct::CONNECTED ||
-				rss->connectMode==RakPeer::RemoteSystemStruct::DISCONNECT_ASAP ||
-				rss->connectMode==RakPeer::RemoteSystemStruct::DISCONNECT_ASAP_SILENTLY)
+			if (rss->connectMode==RemoteSystemStruct::CONNECTED ||
+				rss->connectMode==RemoteSystemStruct::DISCONNECT_ASAP ||
+				rss->connectMode==RemoteSystemStruct::DISCONNECT_ASAP_SILENTLY)
 			{
 				char c[2];
 				c[0] = ID_CONNECTION_ATTEMPT_FAILED;
@@ -4046,10 +4046,10 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 		sprintf(szBuffer, "ClLength: %d\n", length);
 #endif
 		OutputDebugString(szBuffer);
-		if (remoteSystem->connectMode==RakPeer::RemoteSystemStruct::SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET)
+		if (remoteSystem->connectMode==RemoteSystemStruct::SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET)
 			OutputDebugString("Boo\n");
 */
-		if (remoteSystem->connectMode==RakPeer::RemoteSystemStruct::SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET && length >= 8 && (length%8)==0)
+		if (remoteSystem->connectMode==RemoteSystemStruct::SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET && length >= 8 && (length%8)==0)
 		{
 			remoteSystem->reliabilityLayer.SetEncryptionKey( remoteSystem->AESKey );
 /*
@@ -4061,7 +4061,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 */
 		}
 #else
-		if (remoteSystem->connectMode==RakPeer::RemoteSystemStruct::SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET && (length%16)==0)
+		if (remoteSystem->connectMode==RemoteSystemStruct::SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET && (length%16)==0)
 			remoteSystem->reliabilityLayer.SetEncryptionKey( remoteSystem->AESKey );
 #endif
 
@@ -4159,7 +4159,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 bool RakPeer::RunUpdateCycle( void )
 {
-	RakPeer::RemoteSystemStruct * remoteSystem;
+	RemoteSystemStruct * remoteSystem;
 	unsigned remoteSystemIndex;
 	Packet *packet;
 	RakNetTime ping, lastPing;

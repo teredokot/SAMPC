@@ -596,6 +596,11 @@ bool RakServer::IsNetworkSimulatorActive( void )
 	return RakPeer::IsNetworkSimulatorActive();
 }
 
+RemoteSystemStruct* RakServer::GetRemoteSystemFromPlayerID(const PlayerID playerID, bool calledFromNetworkThread, bool onlyActive) const
+{
+	return RakPeer::GetRemoteSystemFromPlayerID(playerID, calledFromNetworkThread, onlyActive);
+}
+
 #ifdef _MSC_VER
 #pragma warning( pop )
 #endif

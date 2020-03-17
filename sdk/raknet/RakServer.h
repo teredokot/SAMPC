@@ -447,6 +447,7 @@ public:
 	/// \return If you previously called ApplyNetworkSimulator
 	virtual bool IsNetworkSimulatorActive( void );
 
+	RemoteSystemStruct* GetRemoteSystemFromPlayerID(const PlayerID playerID, bool calledFromNetworkThread, bool onlyActive) const;
 private:
 	unsigned int seed, nextSeed;
 	RakNetTime broadcastPingsTime, nextSeedUpdate;

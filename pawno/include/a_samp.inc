@@ -435,6 +435,16 @@ native GangZoneFlashForAll(gangzoneid, color);
 native GangZoneStopFlashForPlayer(playerid, gangzoneid);
 native GangZoneStopFlashForAll(gangzoneid);
 
+native NetStats_GetConnectedTime(playerid);
+native NetStats_MessagesReceived(playerid);
+native NetStats_BytesReceived(playerid);
+native NetStats_MessagesSent(playerid);
+native NetStats_BytesSent(playerid);
+native NetStats_MessagesRecvPerSecond(playerid);
+native Float:NetStats_PacketLossPercent(playerid);
+native NetStats_ConnectionStatus(playerid);
+native NetStats_GetIpPort(playerid, ip_port[], ip_port_len);
+
 forward OnGameModeInit();
 forward OnGameModeExit();
 forward OnFilterScriptInit();

@@ -207,6 +207,7 @@ public:
 
 	char m_szClientVersion[12];
 	unsigned int m_uiRconAttempt;
+	unsigned int m_uiMsgRecv;
 
 	ONFOOT_SYNC_DATA* GetOnFootSyncData() { return &m_ofSync; }
 	INCAR_SYNC_DATA* GetInCarSyncData() { return &m_icSync; }

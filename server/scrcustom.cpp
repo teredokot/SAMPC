@@ -4849,6 +4849,225 @@ static cell AMX_NATIVE_CALL n_GetServerVarAsBool(AMX *amx, cell *params)
 	return (int)pConsole->GetBoolVariable(szParam);
 }
 
+// native NetStats_GetConnectedTime(playerid)
+static cell n_NetStats_GetConnectedTime(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool->GetSlotState(params[1]))
+	{
+		RakServerInterface* pSvr = pNetGame->GetRakServer();
+		if (pSvr == NULL)
+			return 0;
+
+		PlayerID id = pSvr->GetPlayerIDFromIndex(params[1]);
+		if (id == UNASSIGNED_PLAYER_ID)
+			return 0;
+
+		RakNetStatisticsStruct* rss = NULL;
+		rss = pSvr->GetStatistics(id);
+		if (rss == 0)
+			return 0;
+
+		return rss->connectionStartTime;
+	}
+	return 0;
+}
+
+// native NetStats_MessagesReceived(playerid)
+static cell n_NetStats_MessagesReceived(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool->GetSlotState(params[1]))
+	{
+		RakServerInterface* pSvr = pNetGame->GetRakServer();
+		if (pSvr == NULL)
+			return 0;
+
+		PlayerID id = pSvr->GetPlayerIDFromIndex(params[1]);
+		if (id == UNASSIGNED_PLAYER_ID)
+			return 0;
+
+		RakNetStatisticsStruct* rss = NULL;
+		rss = pSvr->GetStatistics(id);
+		if (rss == 0)
+			return 0;
+
+		return
+			(rss->duplicateMessagesReceived +
+			rss->invalidMessagesReceived +
+			rss->messagesReceived);
+	}
+	return 0;
+}
+
+// native NetStats_BytesReceived(playerid)
+static cell n_NetStats_BytesReceived(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool->GetSlotState(params[1]))
+	{
+		RakServerInterface* pSvr = pNetGame->GetRakServer();
+		if (pSvr == NULL)
+			return 0;
+
+		PlayerID id = pSvr->GetPlayerIDFromIndex(params[1]);
+		if (id == UNASSIGNED_PLAYER_ID)
+			return 0;
+
+		RakNetStatisticsStruct* rss = NULL;
+		rss = pSvr->GetStatistics(id);
+		if (rss == 0)
+			return 0;
+
+		return BITS_TO_BYTES(rss->bitsReceived + rss->bitsWithBadCRCReceived);
+	}
+	return 0;
+}
+
+// native NetStats_MessagesSent(playerid)
+static cell n_NetStats_MessagesSent(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool->GetSlotState(params[1]))
+	{
+		RakServerInterface* pSvr = pNetGame->GetRakServer();
+		if (pSvr == NULL)
+			return 0;
+
+		PlayerID id = pSvr->GetPlayerIDFromIndex(params[1]);
+		if (id == UNASSIGNED_PLAYER_ID)
+			return 0;
+
+		RakNetStatisticsStruct* rss = NULL;
+		rss = pSvr->GetStatistics(id);
+		if (rss == 0)
+			return 0;
+
+		return
+			(rss->messagesSent[SYSTEM_PRIORITY] +
+			rss->messagesSent[HIGH_PRIORITY] +
+			rss->messagesSent[MEDIUM_PRIORITY] +
+			rss->messagesSent[LOW_PRIORITY]);
+	}
+	return 0;
+}
+
+// native NetStats_BytesSent(playerid)
+static cell n_NetStats_BytesSent(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool->GetSlotState(params[1]))
+	{
+		RakServerInterface* pSvr = pNetGame->GetRakServer();
+		if (pSvr == NULL)
+			return 0;
+
+		PlayerID id = pSvr->GetPlayerIDFromIndex(params[1]);
+		if (id == UNASSIGNED_PLAYER_ID)
+			return 0;
+
+		RakNetStatisticsStruct* rss = NULL;
+		rss = pSvr->GetStatistics(id);
+		if (rss == 0)
+			return 0;
+
+		return BITS_TO_BYTES(rss->totalBitsSent);
+	}
+	return 0;
+}
+
+// native NetStats_MessagesRecvPerSecond(playerid)
+static cell n_NetStats_MessagesRecvPerSecond(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayer* pPlayer = NULL;
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool && (pPlayer = pPool->GetAt(params[1])) != NULL)
+	{
+		return pPlayer->m_uiMsgRecv;
+	}
+	return 0;
+}
+
+// native NetStats_PacketLossPercent(playerid)
+static cell n_NetStats_PacketLossPercent(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool->GetSlotState(params[1]))
+	{
+		RakServerInterface* pSvr = pNetGame->GetRakServer();
+		if (pSvr == NULL)
+			return 0;
+
+		PlayerID id = pSvr->GetPlayerIDFromIndex(params[1]);
+		if (id == UNASSIGNED_PLAYER_ID)
+			return 0;
+
+		RakNetStatisticsStruct* rss = NULL;
+		rss = pSvr->GetStatistics(id);
+		if (rss == 0)
+			return 0;
+
+		float fResult = 100.0f * (float)rss->messagesTotalBitsResent / (float)rss->totalBitsSent;
+
+		return amx_ftoc(fResult);
+	}
+	return 0;
+}
+
+// native NetStats_ConnectionStatus(playerid)
+static cell n_NetStats_ConnectionStatus(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool->GetSlotState(params[1]))
+	{
+		RakServerInterface* pSvr = pNetGame->GetRakServer();
+		if (pSvr == NULL)
+			return -1;
+
+		PlayerID id = pSvr->GetPlayerIDFromIndex(params[1]);
+		if (id == UNASSIGNED_PLAYER_ID)
+			return -1;
+
+		RemoteSystemStruct* rss = NULL;
+		rss = pSvr->GetRemoteSystemFromPlayerID(id);
+		return (rss != 0) ? ((cell)rss->connectMode) : (-1);
+	}
+	return -1;
+}
+
+// native NetStats_GetIpPort(playerid, ip_port[], ip_port_len)
+static cell n_NetStats_GetIpPort(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(3);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (0 <= params[1] && pPool->GetSlotState(params[1]))
+	{
+		RakServerInterface* pSvr = pNetGame->GetRakServer();
+		if (pSvr == NULL)
+			return -1;
+
+		PlayerID id = pSvr->GetPlayerIDFromIndex(params[1]);
+		if (id == UNASSIGNED_PLAYER_ID)
+			return -1;
+
+		char szBuffer[22];
+		unsigned short usPort = 0;
+		pSvr->GetPlayerIPFromID(id, szBuffer, &usPort);
+		sprintf_s(szBuffer, "%s:%d", szBuffer, usPort);
+
+		return set_amxstring(amx, params[2], szBuffer, params[3]);
+	}
+	return -1;
+}
+
 //----------------------------------------------------------------------------------
 
 // native EnableStuntBonusForAll(enable)
@@ -5108,6 +5327,16 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetServerVarAsInt",		n_GetServerVarAsInt },
 	{ "GetServerVarAsBool",		n_GetServerVarAsBool },
 
+	// NetStats
+	DEFINE_NATIVE(NetStats_GetConnectedTime),
+	DEFINE_NATIVE(NetStats_MessagesReceived),
+	DEFINE_NATIVE(NetStats_BytesReceived),
+	DEFINE_NATIVE(NetStats_MessagesSent),
+	DEFINE_NATIVE(NetStats_BytesSent),
+	DEFINE_NATIVE(NetStats_MessagesRecvPerSecond),
+	DEFINE_NATIVE(NetStats_PacketLossPercent),
+	DEFINE_NATIVE(NetStats_ConnectionStatus),
+	DEFINE_NATIVE(NetStats_GetIpPort),
 
 	// Player
 	{ "GetPlayerIDFromName", n_GetPlayerIDFromName },

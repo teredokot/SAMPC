@@ -25,6 +25,8 @@
 #include "RakNetStatistics.h" 
 #include "Export.h"
 
+struct RemoteSystemStruct;
+
 /// This is a user-interface class to act as a game server.  All it does is implement some functionality on top of RakPeer.
 /// See the individual functions for what the class can do.
 /// \brief Defines the functions used by a game server
@@ -442,6 +444,8 @@ public:
 	/// Returns if you previously called ApplyNetworkSimulator
 	/// \return If you previously called ApplyNetworkSimulator
 	virtual bool IsNetworkSimulatorActive( void )=0;
+
+	virtual RemoteSystemStruct* GetRemoteSystemFromPlayerID(const PlayerID playerID, bool calledFromNetworkThread = true, bool onlyActive = false) const = 0;
 };
 
 #endif
