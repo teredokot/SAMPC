@@ -62,7 +62,7 @@ CGameMode::~CGameMode()
 }
 
 //----------------------------------------------------------------------------------
-
+void PrintMissingNatives(AMX* amx, const char* szScriptName);
 bool CGameMode::Load(char* pFileName)
 {
 	if (m_bInitialised)
@@ -93,6 +93,8 @@ bool CGameMode::Load(char* pFileName)
 	amx_sampDbInit(&m_amx);
 
 	pPlugins->DoAmxLoad(&m_amx);
+
+	PrintMissingNatives(&m_amx, pFileName);
 
 	m_bInitialised = true;
 

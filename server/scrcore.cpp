@@ -186,3 +186,37 @@ char* format_amxstring(AMX *amx, cell *params, int parm, int &len)
 }
 
 //----------------------------------------------------------------------------------
+
+void PrintMissingNatives(AMX* amx, const char* szScriptName)
+{
+	#define USENAMETABLE(hdr) \
+		((hdr)->defsize==sizeof(AMX_FUNCSTUBNT))
+	#define NUMENTRIES(hdr,field,nextfield) \
+		(unsigned)(((hdr)->nextfield - (hdr)->field) / (hdr)->defsize)
+	#define GETENTRY(hdr,table,index) \
+		(AMX_FUNCSTUB *)((unsigned char*)(hdr) + (unsigned)(hdr)->table + (unsigned)index*(hdr)->defsize)
+	#define GETENTRYNAME(hdr,entry) \
+		( USENAMETABLE(hdr) \
+			? (char *)((unsigned char*)(hdr) + (unsigned)((AMX_FUNCSTUBNT*)(entry))->nameofs) \
+			: ((AMX_FUNCSTUB*)(entry))->name )
+
+	AMX_FUNCSTUB* func;
+	AMX_HEADER* hdr;
+	int i, numnatives;
+
+	hdr = (AMX_HEADER*)amx->base;
+	assert(hdr != NULL);
+	assert(hdr->magic == AMX_MAGIC);
+	assert(hdr->natives <= hdr->libraries);
+	numnatives = NUMENTRIES(hdr, natives, libraries);
+
+	func = GETENTRY(hdr, natives, 0);
+	for (i = 0; i < numnatives; i++)
+	{
+		if (func->address == 0)
+		{
+			logprintf("Script[%s]: \"%s\" native function not found.", szScriptName, GETENTRYNAME(hdr, func));
+		}
+		func = (AMX_FUNCSTUB*)((unsigned char*)func + hdr->defsize);
+	}
+}

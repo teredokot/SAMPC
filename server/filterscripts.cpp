@@ -30,6 +30,8 @@ int amx_CustomInit(AMX *amx);
 int amx_sampDbInit(AMX* amx);
 //int amx_sampDbCleanup(AMX *amx);
 
+void PrintMissingNatives(AMX* amx, const char* szScriptName);
+
 extern CNetGame* pNetGame;
  
 //----------------------------------------------------------------------------------
@@ -93,6 +95,8 @@ bool CFilterScripts::LoadFilterScript(char* pFileName)
 	amx_sampDbInit(amx);
 
 	pPlugins->DoAmxLoad(amx);
+
+	PrintMissingNatives(amx, szFilterScriptFile);
 
 	int tmp;
 	if (!amx_FindPublic(amx, "OnFilterScriptInit", &tmp))
