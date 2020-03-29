@@ -96,14 +96,14 @@ BYTE TaskEnterVehicleDriver_HookJmpCode[]	= {0xFF,0x25,0xBB,0x19,0x69,0x00,0x90}
 BYTE TaskExitVehicle_HookJmpCode[]	= {0xFF,0x25,0xBA,0xB8,0x63,0x00,0x90};//0x63B8BA
 BYTE RadarTranslateColor_HookJmpCode[] = {0xFF,0x25,0x79,0x4A,0x58,0x00,0x90}; // 584A79
 BYTE CheatProcessHook_JmpCode[] = {0xFF,0x25,0xAA,0x85,0x43,0x00,0x90}; // 4385AA
-BYTE AddVehicleHook_HookJmpCode[] = {0xFF,0x25,0x33,0x14,0x42,0x00}; // 421433
+//BYTE AddVehicleHook_HookJmpCode[] = {0xFF,0x25,0x33,0x14,0x42,0x00}; // 421433
 BYTE SetFarClip_HookJmpCode[] =  {0xFF,0x25,0x61,0x36,0x53,0x00,0x90,0x90,0x90}; // 533661
 BYTE CGameShutdown_HookJmpCode[] = {0xFF,0x25,0xF1,0xC8,0x53,0x00,0x90}; // 53C8F1
 BYTE PedDamage_HookJmpCode[] = {0xFF,0x25,0xBC,0x5A,0x4B,0x00}; // 4B5ABC
 BYTE VehicleAudio_HookJmpCode[] = {0xFF,0x25,0x74,0x22,0x50,0x00,0x90,0x90,0x90,0x90}; // 502274
-BYTE GenTaskAlloc_HookJmpCode[] = {0xFF,0x25,0x61,0x38,0x4C,0x00}; // 4C3861
+//BYTE GenTaskAlloc_HookJmpCode[] = {0xFF,0x25,0x61,0x38,0x4C,0x00}; // 4C3861
 BYTE GetText_HookJmpCode[]	= {0xFF, 0x25, 0x43, 0x00, 0x6A, 0x00, 0x90, 0x90, 0x90}; //, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90}; // 0x6A004325
-BYTE PedSay_HookJmpCode[]	= {0xFF, 0x25, 0xD8, 0xFF, 0x5E, 0x00, 0x90}; //5EFFD8
+//BYTE PedSay_HookJmpCode[]	= {0xFF, 0x25, 0xD8, 0xFF, 0x5E, 0x00, 0x90}; //5EFFD8
 
 //-----------------------------------------------------------
 
@@ -304,7 +304,7 @@ NUDE TaskUseGun_Hook()
 
 //-----------------------------------------------------------
 
-NUDE TaskOnFoot1_Hook()
+/*NUDE TaskOnFoot1_Hook()
 {
 	_asm mov eax, [esp+4]
 	_asm pushad
@@ -459,7 +459,7 @@ NUDE AllVehicles_ProcessControl_WaterTurret_Hook()
 
 	_asm retn 4
 
-}
+}*/
 
 //-----------------------------------------------------------
 
@@ -727,7 +727,7 @@ NUDE TaskExitVehicle()
 
 //-----------------------------------------------------------
 
-NUDE AddVehicleHook()
+/*NUDE AddVehicleHook()
 {
 	_asm pushad
 
@@ -740,7 +740,7 @@ NUDE AddVehicleHook()
 	_asm popad
 	_asm mov eax, 0x421446
 	_asm jmp eax
-}
+}*/
 
 //-----------------------------------------------------------
 
@@ -773,14 +773,14 @@ NUDE CheatProcessorHook()
 
 //-----------------------------------------------------------
 
-NUDE SetFarClipHook()
+/*NUDE SetFarClipHook()
 {
 	_asm fld fFarClip
 	_asm push esi
 	_asm mov esi, [esp+8]
 	_asm mov edx, dwFarClipReturnAddr
 	_asm jmp edx	
-}
+}*/
 
 //-----------------------------------------------------------
 // We use this to trap and exit the game
@@ -907,7 +907,7 @@ NUDE Tank_Call_To_IsPlayer()
 		_asm retn
 	}
 }
-*/
+
 
 BOOL _stdcall IsLocalPlayerFiring() {
 	if (pNetGame) {
@@ -918,7 +918,7 @@ BOOL _stdcall IsLocalPlayerFiring() {
 		}
 	} else return TRUE;
 	return FALSE;
-}
+}*/
 
 NUDE CCameraCamShake_Sniper_Hook()
 {
@@ -963,7 +963,7 @@ exitFn:
 
 //-----------------------------------------------------------
 
-NUDE SetForegroundWindowCrashFixHook()
+/*NUDE SetForegroundWindowCrashFixHook()
 {
 	__asm
 	{
@@ -1018,7 +1018,7 @@ NUDE GenTaskAlloc_Hook()
 	_asm mov eax, fs:0
 	_asm mov edx, 0x4C3876
 	_asm jmp edx
-}
+}*/
 
 //-----------------------------------------------------------
 extern DWORD dwFogEnabled;
@@ -1101,7 +1101,7 @@ do_process_cols:
 
 //-----------------------------------------------------------
 
-DWORD dwSayParam1;
+/*DWORD dwSayParam1;
 DWORD dwSayParam2;
 float fSayParam3;
 DWORD dwSayParam4;
@@ -1136,7 +1136,7 @@ NUDE CPed_Say_Hook()
     _asm test ax, ax
 	_asm mov edx, 0x5EFFE7
 	_asm jmp edx
-}
+}*/
 
 //-----------------------------------------------------------
 
@@ -1186,13 +1186,40 @@ NUDE PickUpPickup_Hook()
 
 //-----------------------------------------------------------
 
+BYTE priCol, secCol;
+CPlayerPed* pPlayerPed;
+void ProcessOutgoingEvent(int iEventType, DWORD dwParam1, DWORD dwParam2, DWORD dwParam3);
+NUDE PaynSpray_Hook()
+{
+	/*_asm mov al, [edi + 435h]
+	_asm mov secCol, al
+	_asm mov al, [edi + 434h]
+	_asm mov priCol, al*/
+	_asm {
+		mov eax, 0x4C8500
+		call eax
+		mov al, [esp + 27h]
+		mov priCol, al
+		mov al, [esp + 1Fh]
+		mov secCol, al
+		pushad
+	}
+
+	pPlayerPed = pGame->FindPlayerPed();
+	if(pPlayerPed->IsInVehicle())
+		ProcessOutgoingEvent(3, pPlayerPed->GetCurrentVehicleID(), priCol, secCol);
+
+	_asm {
+		popad
+		mov eax, 0x44B12A
+		jmp eax
+	}
+}
+
 void InstallMethodHook(	DWORD dwInstallAddress,
 						DWORD dwHookFunction )
 {
-	DWORD oldProt, oldProt2;
-	VirtualProtect((LPVOID)dwInstallAddress,4,PAGE_EXECUTE_READWRITE,&oldProt);
 	*(PDWORD)dwInstallAddress = (DWORD)dwHookFunction;
-	VirtualProtect((LPVOID)dwInstallAddress,4,oldProt,&oldProt2);
 }
 
 //-----------------------------------------------------------
@@ -1203,52 +1230,21 @@ void InstallHook( DWORD dwInstallAddress,
 				  BYTE * pbyteJmpCode,
 				  int iJmpCodeSize )
 {
-	DWORD oldProt, oldProt2;
-
 	// Install the pointer to procaddr.
-	VirtualProtect((PVOID)dwHookStorage,4,PAGE_EXECUTE_READWRITE,&oldProt);
 	*(PDWORD)dwHookStorage = (DWORD)dwHookFunction;
-	VirtualProtect((PVOID)dwHookStorage,4,oldProt,&oldProt2);
 
 	// Install the Jmp code.
-	VirtualProtect((PVOID)dwInstallAddress,iJmpCodeSize,PAGE_EXECUTE_READWRITE,&oldProt);		
 	memcpy((PVOID)dwInstallAddress,pbyteJmpCode,iJmpCodeSize);
-	VirtualProtect((PVOID)dwInstallAddress,iJmpCodeSize,oldProt,&oldProt2);	
 }
 
 //-----------------------------------------------------------
 
 void InstallCallHook(DWORD dwInstallAddress, DWORD dwHookFunction, BYTE byteJumpCode = 0xE8)
 {
-	DWORD oldProt, oldProt2;
 	DWORD disp = dwHookFunction - (dwInstallAddress + 5);
 
-	VirtualProtect((LPVOID)dwInstallAddress,5,PAGE_EXECUTE_READWRITE,&oldProt);
 	*(PBYTE)(dwInstallAddress) = byteJumpCode;
 	*(PDWORD)(dwInstallAddress+1) = (DWORD)disp;
-	VirtualProtect((LPVOID)dwInstallAddress,5,oldProt,&oldProt2);
-}
-
-//-----------------------------------------------------------
-
-void InstallGameAndGraphicsLoopHooks()
-{	
-	//UnFuck(0x53EB13,4);
-	*(int *)0x53EB13 = dwGraphicsLoop - 0x53EB12 - 5; // relative addr
-
-	InstallHook(0x58C246,(DWORD)GameProcessHook,
-		0x53BED1,GameProcess_HookJmpCode,sizeof(GameProcess_HookJmpCode));
-
-	// For fixing fogging issues (needed for both debug and net)
-	InstallMethodHook(0x86D1B0,(DWORD)CPed_Render_Hook); // This is PlayerPed
-	InstallMethodHook(0x86C0F0,(DWORD)CPed_Render_Hook);
-	InstallMethodHook(0x86C168,(DWORD)CPed_Render_Hook);
-	InstallMethodHook(0x86C248,(DWORD)CPed_Render_Hook);
-	InstallMethodHook(0x86C3A0,(DWORD)CPed_Render_Hook);
-
-	/*
-	InstallHook(0x5EFFE0,(DWORD)CPed_Say_Hook,
-		0x5EFFD8,PedSay_HookJmpCode,sizeof(PedSay_HookJmpCode));*/
 }
 
 //-----------------------------------------------------------
@@ -1261,7 +1257,22 @@ void GameInstallHooks()
 	// Above code replaced by a new method which should avoid
 	// stack corruption of the return value
 	
-	InstallGameAndGraphicsLoopHooks();
+	//UnFuck(0x53EB13,4);
+	*(int*)0x53EB13 = dwGraphicsLoop - 0x53EB12 - 5; // relative addr
+
+	InstallHook(0x58C246, (DWORD)GameProcessHook,
+		0x53BED1, GameProcess_HookJmpCode, sizeof(GameProcess_HookJmpCode));
+
+	// For fixing fogging issues (needed for both debug and net)
+	InstallMethodHook(0x86D1B0, (DWORD)CPed_Render_Hook); // This is PlayerPed
+	InstallMethodHook(0x86C0F0, (DWORD)CPed_Render_Hook);
+	InstallMethodHook(0x86C168, (DWORD)CPed_Render_Hook);
+	InstallMethodHook(0x86C248, (DWORD)CPed_Render_Hook);
+	InstallMethodHook(0x86C3A0, (DWORD)CPed_Render_Hook);
+
+	/*
+	InstallHook(0x5EFFE0,(DWORD)CPed_Say_Hook,
+		0x5EFFD8,PedSay_HookJmpCode,sizeof(PedSay_HookJmpCode));*/
 
 	InstallMethodHook(0x86D190,(DWORD)CPlayerPed_ProcessControl_Hook);
 	InstallMethodHook(0x86D744,(DWORD)TaskUseGun_Hook);
@@ -1334,6 +1345,8 @@ void GameInstallHooks()
 	InstallCallHook(0x5021AE, (DWORD)VehicleHorn_Hook);
     
 	InstallHook(0x6A0050, (DWORD)GetText_Hook, 0x6A0043, GetText_HookJmpCode, sizeof (GetText_HookJmpCode));
+
+	InstallCallHook(0x44B125, (DWORD)PaynSpray_Hook, 0xE9);
 }
 
 //-----------------------------------------------------------

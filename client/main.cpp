@@ -80,7 +80,6 @@ char dbgstr[256];
 // backwards
 //----------------------------------------------------
 
-extern void InstallGameAndGraphicsLoopHooks();
 extern void InitScripting();
 extern void ApplyDebugLevelPatches();
 

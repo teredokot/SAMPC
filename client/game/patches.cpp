@@ -551,6 +551,13 @@ void ApplyInGamePatches()
 	// Disable pop-up stats menu
 	*(BYTE*)0x58FC2C = 0xEB;
 
+	// Make Pay 'n' Spray always free
+	*(bool*)0x96C009 = true;
+
+	// Disable Pay 'n' Spray messages
+	//memset((void*)0x44ACAE, 0x90, 5);
+	*(BYTE*)0x447B80 = 0xC3;
+
 	// Rest of the stuff
 	RelocateScanListHack();
 	
