@@ -169,6 +169,8 @@ public:
 	float		GetAimZ();
 	void		SetAimZ(float fAimZ);
 
+	void SetFightingStyle(unsigned char style, unsigned char move);
+
 	PED_TYPE    *m_pPed;
 	BYTE		m_bytePlayerNumber;
 	DWORD		m_dwMarkerID;

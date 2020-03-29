@@ -1959,3 +1959,35 @@ void CPlayerPed::ProcessVehicleHorn()
 }
 
 //-----------------------------------------------------------
+
+void CPlayerPed::SetFightingStyle(unsigned char style, unsigned char move)
+{
+	// from OPCODE_07FE
+	if (m_pPed)
+	{
+		*(BYTE*)(m_pPed + 0x72D) = style;
+		switch (move)
+		{
+		//case 0:
+		default:
+			*(BYTE*)(m_pPed + 0x72E) = 0;
+			break;
+		case 1:
+			*(BYTE*)(m_pPed + 0x72E) = 1;
+			break;
+		case 2:
+			*(BYTE*)(m_pPed + 0x72E) = 2;
+			break;
+		case 3:
+			*(BYTE*)(m_pPed + 0x72E) = 4;
+			break;
+		case 4:
+			*(BYTE*)(m_pPed + 0x72E) = 8;
+			break;
+		case 5:
+			*(BYTE*)(m_pPed + 0x72E) = 15;
+			break;
+		}
+	}
+}
+

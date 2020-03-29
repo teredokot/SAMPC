@@ -1675,6 +1675,14 @@ static void ScrSetPlayer(RPCParameters* rpcParams)
 		pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed()->SetArmedWeapon(ucWeaponId);
 		break;
 	}
+	case 4:
+	{
+		unsigned char style, move;
+		in.Read(style);
+		in.Read(move);
+		pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed()->SetFightingStyle(style, move);
+		break;
+	}
 	}
 }
 

@@ -927,6 +927,22 @@ static cell AMX_NATIVE_CALL n_GetPlayerSkin(AMX *amx, cell *params)
 	return 0;
 }
 
+static cell n_SetPlayerFightingStyle(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(3);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+		out.Write<int>(4);
+		out.Write((unsigned char)params[2]);
+		out.Write((unsigned char)params[3]);
+		pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out);
+		return 1;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)
@@ -5421,6 +5437,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerVehicleSeat),
 	DEFINE_NATIVE(GetPlayerCameraMode),
 	DEFINE_NATIVE(SetPlayerArmedWeapon),
+	DEFINE_NATIVE(SetPlayerFightingStyle),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },
