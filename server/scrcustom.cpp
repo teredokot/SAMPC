@@ -5117,6 +5117,15 @@ static cell AMX_NATIVE_CALL n_SetNameTagDrawDistance(AMX *amx, cell *params)
 	return 1;
 }
 
+// native DisableNameTagLOS()
+static cell n_DisableNameTagLOS(AMX* amx, cell* params)
+{
+	if (pNetGame)
+		pNetGame->m_bNameTagLOS = false;
+
+	return 1;
+}
+
 //----------------------------------------------------------------------------------
 
 // native CreatePlayerPickup(pickupid,playerid,model,type,Float:PosX,Float:PosY,Float:PosZ)
@@ -5298,6 +5307,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "UsePlayerPedAnims",		n_UsePlayerPedAnims },
 	{ "DisableInteriorEnterExits", n_DisableInteriorEnterExits },
 	{ "SetNameTagDrawDistance", n_SetNameTagDrawDistance },
+	DEFINE_NATIVE(DisableNameTagLOS),
 
 	// Zones
 	{ "EnableZoneNames",		n_EnableZoneNames },

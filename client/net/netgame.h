@@ -83,6 +83,7 @@ public:
 	int			m_iCheckLoadedStuff;
 	int			m_iGameState;
 	BOOL		m_bLanMode;
+	bool		m_bNameTagLOS;
 
 	char		m_szHostName[256];
 	char		m_szHostOrIp[256];

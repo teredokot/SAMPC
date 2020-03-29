@@ -42,7 +42,7 @@ typedef float (*FindGroundZForCoord_t)(float x, float y);
 static FindGroundZForCoord_t FindGroundZForCoord = (FindGroundZForCoord_t)0x569660;
 
 MATRIX4X4 matPlayer,matTest,matLocal;
-D3DXVECTOR3 PlayerPos;
+//D3DXVECTOR3 PlayerPos;
 
 VECTOR vecCam;
 VECTOR vecColPoint;
@@ -81,24 +81,27 @@ void __stdcall RenderPlayerTags()
 						PlayerPed->GetMatrix(&matPlayer);
 			
 						// -- LINE OF SIGHT TESTING --
-													
-						PlayerPos.x = matPlayer.pos.X;
-						PlayerPos.y = matPlayer.pos.Y;
-						PlayerPos.z = matPlayer.pos.Z;
+						
+						if (pNetGame->m_bNameTagLOS)
+						{
+							CAMERA_AIM* pCam = GameGetInternalAim();
+							dwHitEntity = ScriptCommand(&get_line_of_sight,
+								matPlayer.pos.X, matPlayer.pos.Y, matPlayer.pos.Z,
+								pCam->pos1x, pCam->pos1y, pCam->pos1z,
+								1, 1, 0, 0, 0);
+						}
+						else
+							dwHitEntity = 1;
 
-						CAMERA_AIM *pCam = GameGetInternalAim();
-						dwHitEntity = ScriptCommand( &get_line_of_sight,
-							PlayerPos.x, PlayerPos.y, PlayerPos.z,
-							pCam->pos1x, pCam->pos1y, pCam->pos1z,
-							1, 0, 0, 0, 0 );
-
-						if(dwHitEntity) {
+						if (dwHitEntity) {
 							sprintf_s(szBuffer, "%s(%d)", pPlayerPool->GetPlayerName(x), x);
-							pPlayerTags->Draw(&PlayerPos,szBuffer,
+							pPlayerTags->Draw(
+								{matPlayer.pos.X, matPlayer.pos.Y, matPlayer.pos.Z},
+								szBuffer,
 								Player->GetPlayerColorAsARGB(),
-								Player->GetReportedHealth(),Player->GetReportedArmour(),
+								Player->GetReportedHealth(), Player->GetReportedArmour(),
 								Player->GetDistanceFromLocalPlayer());
-						}			
+						}		
 					}						
 				}
 			}

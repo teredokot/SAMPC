@@ -361,6 +361,7 @@ native GetPickupType(pickupid);
 native GetPickupCount();
 native ShowNameTags(show);
 native ShowPlayerMarkers(show);
+native DisableNameTagLOS();
 native GameModeExit();
 native SetWorldTime(hour);
 native GetWeaponName(weaponid, const buffer[], length);

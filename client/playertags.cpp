@@ -71,9 +71,9 @@ void CPlayerTags::End()
 	m_pOldStates->Apply();
 }
 
-void CPlayerTags::Draw(D3DXVECTOR3* pPlayerPos, char* pNameText, DWORD dwColor, float fHealth, float fArmor, float fDistanceFromLocalPlayer)
+void CPlayerTags::Draw(D3DXVECTOR3 PlayerPos, char* pNameText, DWORD dwColor, float fHealth, float fArmor, float fDistanceFromLocalPlayer)
 {
-	D3DXVECTOR3 TagPos = *pPlayerPos;
+	D3DXVECTOR3 TagPos = PlayerPos;
 	TagPos.z += 1.0f + (fDistanceFromLocalPlayer * 0.05f);
 	
 	D3DVIEWPORT9 Viewport;

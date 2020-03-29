@@ -71,6 +71,7 @@ public:
 
 	CScriptTimers* GetTimers() { return m_pScriptTimers; };
 
+	bool m_bNameTagLOS;
 	bool m_bShowPlayerMarkers;
 	bool m_bShowNameTags;
 	bool m_bTirePopping;

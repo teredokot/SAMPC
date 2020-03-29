@@ -31,7 +31,7 @@ public:
 
 	void Begin();
 	void End();
-	void Draw(D3DXVECTOR3* pPlayerPos, char* pNameText, DWORD dwColor, float fHealth, float fArmor, float fDistanceFromLocalPlayer);
+	void Draw(D3DXVECTOR3 PlayerPos, char* pNameText, DWORD dwColor, float fHealth, float fArmor, float fDistanceFromLocalPlayer);
 	void DeleteDeviceObjects();
 	void RestoreDeviceObjects();
 };

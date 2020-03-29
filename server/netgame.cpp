@@ -69,6 +69,7 @@ CNetGame::CNetGame()
 	m_fNameTagDrawDistance = 70.0f;
 	m_bDisableEnterExits = false;
 	m_uiMaxRconAttempt = 3;
+	m_bNameTagLOS = true;
 
 	m_iCurrentGameModeIndex = 0;
 	m_iCurrentGameModeRepeat = 0;
@@ -389,6 +390,7 @@ void CNetGame::Init(BOOL bFirst = false)
 	m_bShowPlayerMarkers = TRUE;
 	m_bTirePopping = TRUE;
 	m_bUseCJWalk = FALSE;
+	m_bNameTagLOS = true;
 
 	// Set the default world time for clients.
 	m_byteWorldTime = 12; // 12:00
@@ -1280,6 +1282,7 @@ void CNetGame::InitGameForPlayer(BYTE bytePlayerID)
 	bsInitGame.Write(m_bStuntBonus);
 	bsInitGame.Write(m_fNameTagDrawDistance);
 	bsInitGame.Write(m_bDisableEnterExits);
+	bsInitGame.Write(m_bNameTagLOS);
 	
 	char* szHostName = pConsole->GetStringVariable("hostname");
 	if(szHostName) {

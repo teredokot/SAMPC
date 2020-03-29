@@ -88,6 +88,7 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_bUseCJWalk = FALSE;
 	m_bDisableEnterExits = false;
 	m_fNameTagDrawDistance = 70.0f;
+	m_bNameTagLOS = true;
 
 	int i;
 	for (i = 0; i < 32; i++) m_dwMapIcon[i] = NULL;

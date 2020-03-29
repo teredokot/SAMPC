@@ -114,6 +114,7 @@ void InitGame(RPCParameters *rpcParams)
 	bsInitGame.Read(bStuntBonus);
 	bsInitGame.Read(pNetGame->m_fNameTagDrawDistance);
 	bsInitGame.Read(pNetGame->m_bDisableEnterExits);
+	bsInitGame.Read(pNetGame->m_bNameTagLOS);
 
 	size_t uiHostLen;
 	bsInitGame.Read(uiHostLen);
