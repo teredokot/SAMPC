@@ -943,6 +943,23 @@ static cell n_SetPlayerFightingStyle(AMX* amx, cell* params)
 	return 0;
 }
 
+// native SetPlayerMaxHealth(playerid, Float:max_health)
+static cell n_SetPlayerMaxHealth(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+		float fVal = amx_ctof(params[2]);
+		out.Write<int>(5);
+		out.Write(fVal);
+		pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out);
+		return 1;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)
@@ -5438,6 +5455,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerCameraMode),
 	DEFINE_NATIVE(SetPlayerArmedWeapon),
 	DEFINE_NATIVE(SetPlayerFightingStyle),
+	DEFINE_NATIVE(SetPlayerMaxHealth),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

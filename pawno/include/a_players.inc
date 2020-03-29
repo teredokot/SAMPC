@@ -139,3 +139,4 @@ native GetPlayerVehicleSeat(playerid);
 native GetPlayerCameraMode(playerid);
 native SetPlayerArmedWeapon(playerid, weaponid);
 native SetPlayerFightingStyle(playerid, style, moves = 6);
+native SetPlayerMaxHealth(playerid, Float:max_health);

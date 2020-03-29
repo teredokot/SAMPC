@@ -880,3 +880,8 @@ void CGame::SetWeaponSkill(unsigned char ucSkill, unsigned int uiLevel)
 {
 	*(float*)(0xB79380 + (ucSkill * 4 + 276)) = uiLevel;
 }
+
+void CGame::SetMaxHealth(float fMax)
+{
+	*(float*)0xB793E0 = fMax;
+}

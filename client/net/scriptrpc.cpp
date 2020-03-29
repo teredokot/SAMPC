@@ -1683,6 +1683,13 @@ static void ScrSetPlayer(RPCParameters* rpcParams)
 		pNetGame->GetPlayerPool()->GetLocalPlayer()->GetPlayerPed()->SetFightingStyle(style, move);
 		break;
 	}
+	case 5:
+	{
+		float fVal = 0.0f;
+		in.Read(fVal);
+		pGame->SetMaxHealth(fVal);
+		break;
+	}
 	}
 }
 

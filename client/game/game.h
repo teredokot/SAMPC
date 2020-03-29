@@ -158,6 +158,8 @@ public:
 	DWORD GetWeaponInfo(int iWeapon, int iUnk);
 	void DisableEnterExits(bool bDisable = true);
 
+	void SetMaxHealth(float fMax);
+
 	CGame();
 	~CGame() {};
 };
