@@ -26,7 +26,7 @@ extern CSpawnScreen *pSpawnScreen;
 extern CNetStats *pNetStats;
 extern CSvrNetStats	*pSvrNetStats;
 extern CScoreBoard *pScoreBoard;
-extern CNewPlayerTags *pNewPlayerTags;
+extern CPlayerTags *pPlayerTags;
 extern CLabel	*pLabel;
 extern CHelpDialog	*pHelpDialog;
 
@@ -63,7 +63,7 @@ void __stdcall RenderPlayerTags()
 {
 	if(pNetGame && pNetGame->m_bShowPlayerTags)
 	{
-		pNewPlayerTags->Begin();
+		pPlayerTags->Begin();
 
 		CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 		pGame->FindPlayerPed()->GetMatrix(&matLocal);
@@ -94,7 +94,7 @@ void __stdcall RenderPlayerTags()
 
 						if(dwHitEntity) {
 							sprintf_s(szBuffer, "%s(%d)", pPlayerPool->GetPlayerName(x), x);
-							pNewPlayerTags->Draw(&PlayerPos,szBuffer,
+							pPlayerTags->Draw(&PlayerPos,szBuffer,
 								Player->GetPlayerColorAsARGB(),
 								Player->GetReportedHealth(),Player->GetReportedArmour(),
 								Player->GetDistanceFromLocalPlayer());
@@ -104,7 +104,7 @@ void __stdcall RenderPlayerTags()
 			}
 		}
 
-		pNewPlayerTags->End();
+		pPlayerTags->End();
 
 				/*
 				#ifdef _DEBUG

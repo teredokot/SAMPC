@@ -221,7 +221,6 @@
     <ClCompile Include="helpdialog.cpp" />
     <ClCompile Include="label.cpp" />
     <ClCompile Include="netstats.cpp" />
-    <ClCompile Include="newplayertags.cpp" />
     <ClCompile Include="runutil.cpp" />
     <ClCompile Include="scoreboard.cpp" />
     <ClCompile Include="spawnscreen.cpp" />
@@ -386,6 +385,7 @@
     <ClCompile Include="..\sdk\raknet\_findfirst.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
+    <ClCompile Include="playertags.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="net\gangzonepool.h">
@@ -578,7 +578,6 @@
     <ClInclude Include="mod.h" />
     <ClInclude Include="label.h" />
     <ClInclude Include="netstats.h" />
-    <ClInclude Include="newplayertags.h" />
     <ClInclude Include="outputdebugstring.h" />
     <ClInclude Include="runutil.h" />
     <ClInclude Include="scoreboard.h" />
@@ -867,6 +866,7 @@
     <ClInclude Include="..\sdk\raknet\BigTypes.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
+    <ClInclude Include="playertags.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\sdk\detours\detours.lib">

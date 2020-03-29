@@ -17,15 +17,15 @@ struct HealthBarVertices1_s
 	D3DCOLOR c;
 };
 
-class CNewPlayerTags
+class CPlayerTags
 {
 private:
 	IDirect3DDevice9* m_pDevice;
 	IDirect3DStateBlock9* m_pOldStates;
 	IDirect3DStateBlock9* m_pNewStates;
 public:
-	CNewPlayerTags(IDirect3DDevice9* pDevice);
-	~CNewPlayerTags();
+	CPlayerTags(IDirect3DDevice9* pDevice);
+	~CPlayerTags();
 
 	BOOL m_DrawPlayerIDs;
 

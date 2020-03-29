@@ -3,8 +3,6 @@
 //
 
 #include "main.h"
-#include "newplayertags.h"
-#include <stdio.h>
 
 extern CGame *pGame;
 extern CChatWindow *pChatWindow;
@@ -36,7 +34,7 @@ HealthBarVertices1_s HealthBarVertices1[4] =
 
 extern D3DXMATRIX matView, matProj;
 
-CNewPlayerTags::CNewPlayerTags(IDirect3DDevice9* pDevice)
+CPlayerTags::CPlayerTags(IDirect3DDevice9* pDevice)
 {
 	m_pDevice			= pDevice;
 	m_pOldStates		= NULL;
@@ -44,13 +42,13 @@ CNewPlayerTags::CNewPlayerTags(IDirect3DDevice9* pDevice)
 	m_DrawPlayerIDs		= FALSE;
 }
 
-CNewPlayerTags::~CNewPlayerTags()
+CPlayerTags::~CPlayerTags()
 {
 	if (m_pOldStates) m_pOldStates->Release();
 	if (m_pNewStates) m_pNewStates->Release();
 }
 
-void CNewPlayerTags::Begin()
+void CPlayerTags::Begin()
 {
 	if ((!m_pOldStates) || (!m_pNewStates))
 	{
@@ -62,7 +60,7 @@ void CNewPlayerTags::Begin()
 	m_pNewStates->Apply();
 }
 
-void CNewPlayerTags::End()
+void CPlayerTags::End()
 {
 	if (!m_pOldStates)
 	{
@@ -73,7 +71,7 @@ void CNewPlayerTags::End()
 	m_pOldStates->Apply();
 }
 
-void CNewPlayerTags::Draw(D3DXVECTOR3* pPlayerPos, char* pNameText, DWORD dwColor, float fHealth, float fArmor, float fDistanceFromLocalPlayer)
+void CPlayerTags::Draw(D3DXVECTOR3* pPlayerPos, char* pNameText, DWORD dwColor, float fHealth, float fArmor, float fDistanceFromLocalPlayer)
 {
 	D3DXVECTOR3 TagPos = *pPlayerPos;
 	TagPos.z += 1.0f + (fDistanceFromLocalPlayer * 0.05f);
@@ -185,13 +183,13 @@ void CNewPlayerTags::Draw(D3DXVECTOR3* pPlayerPos, char* pNameText, DWORD dwColo
 	}
 }
 
-void CNewPlayerTags::DeleteDeviceObjects()
+void CPlayerTags::DeleteDeviceObjects()
 {
 	SAFE_RELEASE(m_pOldStates);
 	SAFE_RELEASE(m_pNewStates);
 }
 
-void CNewPlayerTags::RestoreDeviceObjects()
+void CPlayerTags::RestoreDeviceObjects()
 {
 	if (!m_pOldStates)
 	{

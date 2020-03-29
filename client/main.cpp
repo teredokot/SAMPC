@@ -36,7 +36,7 @@ IDirect3DDevice9		*pD3DDevice	= NULL;
 //D3DMATRIX				matView;
 
 HANDLE					hInstance=0;
-CNewPlayerTags			*pNewPlayerTags=NULL;
+CPlayerTags				*pPlayerTags=NULL;
 CScoreBoard				*pScoreBoard=NULL;
 CLabel					*pLabel=NULL;
 CNetStats				*pNetStats=NULL;
@@ -318,7 +318,7 @@ void DoInitStuff()
 			pDeathWindow = new CDeathWindow(pD3DDevice);
 			pSpawnScreen = new CSpawnScreen(pD3DDevice);
 			//pPlayerTags = new CPlayerTags(pD3DDevice);
-			pNewPlayerTags = new CNewPlayerTags(pD3DDevice);
+			pPlayerTags = new CPlayerTags(pD3DDevice);
 			pScoreBoard = new CScoreBoard(pD3DDevice, FALSE);
 			pNetStats = new CNetStats(pD3DDevice);
 			pSvrNetStats = new CSvrNetStats(pD3DDevice);
@@ -526,8 +526,8 @@ void d3d9DestroyDeviceObjects()
 	if (pDialogResourceManager)
 		pDialogResourceManager->OnLostDevice();
 
-	if (pNewPlayerTags)
-		pNewPlayerTags->DeleteDeviceObjects();
+	if (pPlayerTags)
+		pPlayerTags->DeleteDeviceObjects();
 
 	if (pScoreBoard)
 		pScoreBoard->DeleteDeviceObjects();
@@ -553,8 +553,8 @@ void d3d9RestoreDeviceObjects()
 	if (pDialogResourceManager)
 		pDialogResourceManager->OnResetDevice();
 
-	if (pNewPlayerTags)
-		pNewPlayerTags->RestoreDeviceObjects();
+	if (pPlayerTags)
+		pPlayerTags->RestoreDeviceObjects();
 
 	if (pScoreBoard)
 		pScoreBoard->RestoreDeviceObjects();
