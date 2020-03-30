@@ -36,10 +36,9 @@ class RakPeerInterface;
 /// 
 struct RAK_DLL_EXPORT RPCNode
 {
- 
  	/// String identifier of the RPC
-	char *uniqueIdentifier;
-	
+	//char *uniqueIdentifier;
+
  /// Force casting of member functions to void *
 	union
 	{

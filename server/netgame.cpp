@@ -686,7 +686,7 @@ void CNetGame::UpdateNetwork()
 }
 
 bool CNetGame::SendToPlayer(unsigned int uiPlayerId,
-	char* szUniqId, RakNet::BitStream* pBitStream)
+	short szUniqId, RakNet::BitStream* pBitStream)
 {
 	if (m_pRak == 0)
 		return false;
@@ -786,7 +786,7 @@ void CNetGame::BroadcastData( RakNet::BitStream *bitStream,
 
 //--------------------------------------------------------
 
-void CNetGame::BroadcastDistanceRPC( char *szUniqueID, 
+void CNetGame::BroadcastDistanceRPC( short szUniqueID, 
 									 RakNet::BitStream *bitStream,
 									 PacketReliability reliability,
 								     BYTE byteExcludedPlayer,

@@ -135,44 +135,28 @@ void PacketLogger::OnInternalPacket(InternalPacket *internalPacket, unsigned fra
 		{
 			bool hasTimestamp;
 			unsigned int bitsOfData;
-			bool nameIsEncoded;
-			unsigned char uniqueIdentifier[256];
-			RPCIndex rpcIndex;
-			RPCMap *rpcMap;
+			//bool nameIsEncoded;
+			//unsigned char uniqueIdentifier[256];
+			//RPCIndex rpcIndex;
+			short uniqueId;
+			//RPCMap *rpcMap;
 			RakNet::BitStream rpcDecode(internalPacket->data, BITS_TO_BYTES(internalPacket->dataBitLength), false);
 			rpcDecode.IgnoreBits(8);
 			if (internalPacket->data[0]==ID_TIMESTAMP)
 				rpcDecode.IgnoreBits(sizeof(unsigned char)+sizeof(RakNetTime));
-			rpcDecode.Read(nameIsEncoded);
-			if (nameIsEncoded)
-			{
-				stringCompressor->DecodeString((char*)uniqueIdentifier, 256, &rpcDecode);
-			}
-			else
-			{
-				rpcDecode.ReadCompressed( rpcIndex );
-				RPCNode *rpcNode;
-				rpcMap = rakPeer->GetRPCMap(isSend==true ? remoteSystemID : UNASSIGNED_PLAYER_ID);
-				if (rpcMap)
-					rpcNode = rpcMap->GetNodeFromIndex(rpcIndex);
-				else
-					rpcNode=0;
-
-				if (rpcMap && rpcNode)
-					strcpy((char*)uniqueIdentifier, rpcNode->uniqueIdentifier);
-				else
-					strcpy((char*)uniqueIdentifier, "[UNKNOWN]");
-			}
+			
+			rpcDecode.ReadCompressed(uniqueId);
+			
 			rpcDecode.Read(hasTimestamp);
 			rpcDecode.ReadCompressed(bitsOfData);
 			
 			if (hasTimestamp)
-				sprintf(str, "%s,RpT,%5i,%5i,%s,%5i,%i,%u:%i,%u:%i\n",sendType, internalPacket->messageNumber,frameNumber,
-				uniqueIdentifier, internalPacket->dataBitLength,time,
+				sprintf(str, "%s,RpT,%5i,%5i,%5i,%5i,%i,%u:%i,%u:%i\n",sendType, internalPacket->messageNumber,frameNumber,
+				uniqueId, internalPacket->dataBitLength,time,
 				localPlayerId.binaryAddress, localPlayerId.port, remoteSystemID.binaryAddress, remoteSystemID.port);
 			else
-				sprintf(str, "%s,Rpc,%5i,%5i,%s,%5i,%i,%u:%i,%u:%i\n",sendType, internalPacket->messageNumber,frameNumber,
-				uniqueIdentifier, internalPacket->dataBitLength,time,
+				sprintf(str, "%s,Rpc,%5i,%5i,%5i,%5i,%i,%u:%i,%u:%i\n",sendType, internalPacket->messageNumber,frameNumber,
+				uniqueId, internalPacket->dataBitLength,time,
 				localPlayerId.binaryAddress, localPlayerId.port, remoteSystemID.binaryAddress, remoteSystemID.port);
 		}
 		else

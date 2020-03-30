@@ -25,6 +25,8 @@
 #include "NetworkTypes.h"
 #include "Export.h"
 
+#include "SAMPRPC.h"
+
 /// \ingroup RAKNET_RPC 
 /// \internal
 /// \brief A container class for a list of RPCNodes
@@ -34,14 +36,11 @@ public:
 	RPCMap();
 	~RPCMap();
 	void Clear(void);
-    RPCNode *GetNodeFromIndex(RPCIndex index);
-	RPCNode *GetNodeFromFunctionName(char *uniqueIdentifier);
-	RPCIndex GetIndexFromFunctionName(char *uniqueIdentifier);
-	void AddIdentifierWithFunction(char *uniqueIdentifier, void *functionPointer, bool isPointerToMember);
-	void AddIdentifierAtIndex(char *uniqueIdentifier, RPCIndex insertionIndex);
-	void RemoveNode(char *uniqueIdentifier);
+	RPCNode* GetNodeFromID(short uniqueIdentifier);
+	void AddIdentifierWithFunction(short uniqueIdentifier, void *functionPointer, bool isPointerToMember);
+	void RemoveNode(short uniqueIdentifier);
 protected:
-	DataStructures::List<RPCNode *> rpcSet;
+	RPCNode* rpcSet[eRPCTable::MAX_RPC_ID_AVAILABLE];
 };
 
 #endif

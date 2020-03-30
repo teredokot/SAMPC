@@ -350,22 +350,22 @@ bool RakClient::DeleteCompressionLayer( bool inputLayer )
 	return RakPeer::DeleteCompressionLayer( inputLayer );
 }
 
-void RakClient::RegisterAsRemoteProcedureCall( char* uniqueID, void ( *functionPointer ) ( RPCParameters *rpcParms ) )
+void RakClient::RegisterAsRemoteProcedureCall( short uniqueID, void ( *functionPointer ) ( RPCParameters *rpcParms ) )
 {
 	RakPeer::RegisterAsRemoteProcedureCall( uniqueID, functionPointer );
 }
 
-void RakClient::RegisterClassMemberRPC( char* uniqueID, void *functionPointer )
+void RakClient::RegisterClassMemberRPC( short uniqueID, void *functionPointer )
 {
 	RakPeer::RegisterClassMemberRPC( uniqueID, functionPointer );
 }
 
-void RakClient::UnregisterAsRemoteProcedureCall( char* uniqueID )
+void RakClient::UnregisterAsRemoteProcedureCall( short uniqueID )
 {
 	RakPeer::UnregisterAsRemoteProcedureCall( uniqueID );
 }
 
-bool RakClient::RPC( char* uniqueID, const char *data, unsigned int bitLength, PacketPriority priority, PacketReliability reliability, char orderingChannel, bool shiftTimestamp, NetworkID networkID, RakNet::BitStream *replyFromTarget )
+bool RakClient::RPC( short uniqueID, const char *data, unsigned int bitLength, PacketPriority priority, PacketReliability reliability, char orderingChannel, bool shiftTimestamp, NetworkID networkID, RakNet::BitStream *replyFromTarget )
 {
 	if ( remoteSystemList == 0 )
 		return false;
@@ -373,7 +373,7 @@ bool RakClient::RPC( char* uniqueID, const char *data, unsigned int bitLength, P
 	return RakPeer::RPC( uniqueID, data, bitLength, priority, reliability, orderingChannel, remoteSystemList[ 0 ].playerId, false, shiftTimestamp, networkID, replyFromTarget );
 }
 
-bool RakClient::RPC( char* uniqueID, RakNet::BitStream *parameters, PacketPriority priority, PacketReliability reliability, char orderingChannel, bool shiftTimestamp, NetworkID networkID, RakNet::BitStream *replyFromTarget )
+bool RakClient::RPC( short uniqueID, RakNet::BitStream *parameters, PacketPriority priority, PacketReliability reliability, char orderingChannel, bool shiftTimestamp, NetworkID networkID, RakNet::BitStream *replyFromTarget )
 {
 	if ( remoteSystemList == 0 )
 		return false;
@@ -382,7 +382,7 @@ bool RakClient::RPC( char* uniqueID, RakNet::BitStream *parameters, PacketPriori
 }
 
 // SAMPSRV (adding this just as a tag for next RakNet upgrade)
-bool RakClient::RPC( char* uniqueID, RakNet::BitStream *parameters, PacketPriority priority, PacketReliability reliability, char orderingChannel, bool shiftTimestamp )
+bool RakClient::RPC( short uniqueID, RakNet::BitStream *parameters, PacketPriority priority, PacketReliability reliability, char orderingChannel, bool shiftTimestamp )
 {
 	if ( remoteSystemList == 0 )
 		return false;

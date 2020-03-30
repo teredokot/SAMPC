@@ -37,9 +37,9 @@ namespace RakNet
 /// \sa NetworkIDGenerator.h
 typedef unsigned char UniqueIDType;
 typedef unsigned short PlayerIndex;
-typedef unsigned char RPCIndex;
-const int MAX_RPC_MAP_SIZE=((RPCIndex)-1)-1;
-const int UNDEFINED_RPC_INDEX=((RPCIndex)-1);
+//typedef short RPCIndex;
+//const int MAX_RPC_MAP_SIZE=((RPCIndex)-1)-1;
+//const short UNDEFINED_RPC_INDEX = (-1);
 
 /// First byte of a network message
 typedef unsigned char MessageID;

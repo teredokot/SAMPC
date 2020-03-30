@@ -1040,41 +1040,18 @@ unsigned short RakPeer::GetMaximumNumberOfPeers( void ) const
 // This can be called whether the client is active or not, and registered functions stay registered unless unregistered with
 // UnregisterAsRemoteProcedureCall
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void RakPeer::RegisterAsRemoteProcedureCall( char* uniqueID, void ( *functionPointer ) ( RPCParameters *rpcParms ) )
+void RakPeer::RegisterAsRemoteProcedureCall( short uniqueID, void ( *functionPointer ) ( RPCParameters *rpcParms ) )
 {
-	if ( uniqueID == 0 || uniqueID[ 0 ] == 0 || functionPointer == 0 )
+	if ( (uniqueID > 0  && MAX_RPC_ID_AVAILABLE <= uniqueID) || functionPointer == 0 )
 		return;
 
 	rpcMap.AddIdentifierWithFunction(uniqueID, (void*)functionPointer, false);
 
-	/*
-	char uppercaseUniqueID[ 256 ];
-
-	int counter = 0;
-
-	while ( uniqueID[ counter ] )
-	{
-		uppercaseUniqueID[ counter ] = ( char ) toupper( uniqueID[ counter ] );
-		counter++;
-	}
-
-	uppercaseUniqueID[ counter ] = 0;
-
-	// Each id must be unique
-//#ifdef _DEBUG
-//	assert( rpcTree.IsIn( RPCNode( uppercaseUniqueID, functionName ) ) == false );
-//#endif
-
-	if (rpcTree.IsIn( RPCNode( uppercaseUniqueID, functionName ) ))
-		return;
-
-	rpcTree.Add( RPCNode( uppercaseUniqueID, functionName ) );
-	*/
 }
 
-void RakPeer::RegisterClassMemberRPC( char* uniqueID, void *functionPointer )
+void RakPeer::RegisterClassMemberRPC( short uniqueID, void *functionPointer )
 {
-	if ( uniqueID == 0 || uniqueID[ 0 ] == 0 || functionPointer == 0 )
+	if ((uniqueID > 0 && MAX_RPC_ID_AVAILABLE <= uniqueID) || functionPointer == 0)
 		return;
 
 	rpcMap.AddIdentifierWithFunction(uniqueID, functionPointer, true);
@@ -1089,41 +1066,15 @@ void RakPeer::RegisterClassMemberRPC( char* uniqueID, void *functionPointer )
 // uniqueID: A null terminated string to identify this procedure.  Must match the parameter
 // passed to RegisterAsRemoteProcedureCall
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void RakPeer::UnregisterAsRemoteProcedureCall( char* uniqueID )
+void RakPeer::UnregisterAsRemoteProcedureCall( short uniqueID )
 {
-	if ( uniqueID == 0 || uniqueID[ 0 ] == 0 )
+	if (uniqueID > 0 && MAX_RPC_ID_AVAILABLE <= uniqueID)
 		return;
 
-// Don't call this while running because if you remove RPCs and add them they will not match the indices on the other systems anymore
-#ifdef _DEBUG
-	assert(IsActive()==false);
-	//assert( strlen( uniqueID ) < 256 );
-#endif
+	// Don't call this while running because if you remove RPCs and add them they will not match the indices on the other systems anymore
+	RakAssert(IsActive()==false);
 
 	rpcMap.RemoveNode(uniqueID);
-
-	/*
-	char uppercaseUniqueID[ 256 ];
-
-	strcpy( uppercaseUniqueID, uniqueID );
-
-	int counter = 0;
-
-	while ( uniqueID[ counter ] )
-	{
-		uppercaseUniqueID[ counter ] = ( char ) toupper( uniqueID[ counter ] );
-		counter++;
-	}
-
-	uppercaseUniqueID[ counter ] = 0;
-
-	// Unique ID must exist
-#ifdef _DEBUG
-	assert( rpcTree.IsIn( RPCNode( uppercaseUniqueID, 0 ) ) == true );
-#endif
-
-	rpcTree.Del( RPCNode( uppercaseUniqueID, 0 ) );
-	*/
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1146,23 +1097,14 @@ void RakPeer::UnregisterAsRemoteProcedureCall( char* uniqueID )
 // networkID: For static functions, pass UNASSIGNED_NETWORK_ID.  For member functions, you must derive from NetworkIDGenerator and pass the value returned by NetworkIDGenerator::GetNetworkID for that object.
 // replyFromTarget: If 0, this function is non-blocking.  Otherwise it will block while waiting for a reply from the target procedure, which is remtely written to RPCParameters::replyToSender and copied to replyFromTarget.  The block will return early on disconnect or if the sent packet is unreliable and more than 3X the ping has elapsed.
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-bool RakPeer::RPC( char* uniqueID, const char *data, unsigned int bitLength, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, bool shiftTimestamp, NetworkID networkID, RakNet::BitStream *replyFromTarget )
+bool RakPeer::RPC( short uniqueID, const char *data, unsigned int bitLength, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, bool shiftTimestamp, NetworkID networkID, RakNet::BitStream *replyFromTarget )
 {
-#ifdef _DEBUG
-	assert( uniqueID && uniqueID[ 0 ] );
-	assert(orderingChannel >=0 && orderingChannel < 32);
-#endif
+	RakAssert( 0 <= uniqueID && uniqueID < MAX_RPC_ID_AVAILABLE );
+	RakAssert(orderingChannel >=0 && orderingChannel < 32);
 
-	if ( uniqueID == 0 )
+	if (uniqueID > 0 && MAX_RPC_ID_AVAILABLE <= uniqueID)
 		return false;
 
-	if ( strlen( uniqueID ) > 256 )
-	{
-#ifdef _DEBUG
-		assert( 0 );
-#endif
-		return false; // Unique ID is too long
-	}
 	if (replyFromTarget && blockOnRPCReply==true)
 	{
 		// TODO - this should be fixed eventually
@@ -1177,7 +1119,7 @@ bool RakPeer::RPC( char* uniqueID, const char *data, unsigned int bitLength, Pac
 	unsigned sendListSize;
 
 	// All this code modifies bcs->data and bcs->numberOfBitsToSend in order to transform an RPC request into an actual packet for SendImmediate
-	RPCIndex rpcIndex; // Index into the list of RPC calls so we know what number to encode in the packet
+//	RPCIndex rpcIndex; // Index into the list of RPC calls so we know what number to encode in the packet
 //	char *userData; // RPC ID (the name of it) and a pointer to the data sent by the user
 //	int extraBuffer; // How many data bytes were allocated to hold the RPC header
 	unsigned remoteSystemIndex, sendListIndex; // Iterates into the list of remote systems
@@ -1244,23 +1186,10 @@ bool RakPeer::RPC( char* uniqueID, const char *data, unsigned int bitLength, Pac
 			outgoingBitStream.Write((unsigned char) ID_TIMESTAMP);
 			outgoingBitStream.Write(RakNet::GetTime());
 		}
+		
 		outgoingBitStream.Write((unsigned char) ID_RPC);
-		if (routeSend)
-			rpcIndex=UNDEFINED_RPC_INDEX;
-		else
-			rpcIndex=remoteSystemList[sendList[sendListIndex]].rpcMap.GetIndexFromFunctionName(uniqueID); // Lots of trouble but we can only use remoteSystem->[whatever] in this thread so that is why this command was buffered
-		if (rpcIndex!=UNDEFINED_RPC_INDEX)
-		{
-			// We have an RPC name to an index mapping, so write the index
-			outgoingBitStream.Write(false);
-			outgoingBitStream.WriteCompressed(rpcIndex);
-		}
-		else
-		{
-			// No mapping, so write the encoded RPC name
-			outgoingBitStream.Write(true);
-			stringCompressor->EncodeString(uniqueID, 256, &outgoingBitStream);
-		}
+		outgoingBitStream.WriteCompressed(uniqueID);
+
 		outgoingBitStream.Write((bool) ((replyFromTarget!=0)==true));
 		outgoingBitStream.WriteCompressed( bitLength );
 		if (networkID==UNASSIGNED_NETWORK_ID)
@@ -1395,7 +1324,7 @@ bool RakPeer::RPC( char* uniqueID, const char *data, unsigned int bitLength, Pac
 #ifdef _MSC_VER
 #pragma warning( disable : 4701 ) // warning C4701: local variable <variable name> may be used without having been initialized
 #endif
-bool RakPeer::RPC( char* uniqueID, RakNet::BitStream *bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, bool shiftTimestamp, NetworkID networkID, RakNet::BitStream *replyFromTarget )
+bool RakPeer::RPC( short uniqueID, RakNet::BitStream *bitStream, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, bool shiftTimestamp, NetworkID networkID, RakNet::BitStream *replyFromTarget )
 {
 	if (bitStream)
 		return RPC(uniqueID, (const char*) bitStream->GetData(), bitStream->GetNumberOfBitsUsed(), priority, reliability, orderingChannel, playerId, broadcast, shiftTimestamp, networkID, replyFromTarget);
@@ -2889,12 +2818,13 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 	// The data
 
 	RakNet::BitStream incomingBitStream( (unsigned char *) data, length, false );
-	char uniqueIdentifier[ 256 ];
+//	char uniqueIdentifier[ 256 ];
 //	unsigned int bitLength;
 	unsigned char *userData;
 	//bool hasTimestamp;
-	bool nameIsEncoded, networkIDIsEncoded;
-	RPCIndex rpcIndex;
+	bool /*nameIsEncoded,*/ networkIDIsEncoded;
+//	RPCIndex rpcIndex;
+	short uniqueId;
 	RPCNode *node;
 	RPCParameters rpcParms;
 	NetworkID networkID;
@@ -2909,41 +2839,16 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 	incomingBitStream.IgnoreBits(8);
 	if (data[0]==ID_TIMESTAMP)
 		incomingBitStream.IgnoreBits(8*(sizeof(RakNetTime)+sizeof(unsigned char)));
-	if ( incomingBitStream.Read( nameIsEncoded ) == false )
+
+	if ( incomingBitStream.ReadCompressed(uniqueId) == false )
 	{
-#ifdef _DEBUG
-		assert( 0 ); // bitstream was not long enough.  Some kind of internal error
-#endif
+		RakAssert(0); // Not received an RPC unique id
 		return false;
 	}
 
-	if (nameIsEncoded)
-	{
-		if ( stringCompressor->DecodeString(uniqueIdentifier, 256, &incomingBitStream) == false )
-		{
-#ifdef _DEBUG
-			assert( 0 ); // bitstream was not long enough.  Some kind of internal error
-#endif
-			return false;
-		}
-
-		rpcIndex = rpcMap.GetIndexFromFunctionName(uniqueIdentifier);
-	}
-	else
-	{
-		if ( incomingBitStream.ReadCompressed( rpcIndex ) == false )
-		{
-#ifdef _DEBUG
-			assert( 0 ); // bitstream was not long enough.  Some kind of internal error
-#endif
-			return false;
-		}
-	}
 	if ( incomingBitStream.Read( blockingCommand ) == false )
 	{
-#ifdef _DEBUG
-		assert( 0 ); // bitstream was not long enough.  Some kind of internal error
-#endif
+		RakAssert( 0 ); // bitstream was not long enough.  Some kind of internal error
 		return false;
 	}
 
@@ -2959,17 +2864,14 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 
 	if ( incomingBitStream.ReadCompressed( rpcParms.numberOfBitsOfData ) == false )
 	{
-#ifdef _DEBUG
-		assert( 0 ); // bitstream was not long enough.  Some kind of internal error
-#endif
+		RakAssert( 0 ); // bitstream was not long enough.  Some kind of internal error
 		return false;
 	}
 
 	if ( incomingBitStream.Read( networkIDIsEncoded ) == false )
 	{
-#ifdef _DEBUG
-		assert( 0 ); // bitstream was not long enough.  Some kind of internal error
-#endif
+
+		RakAssert( 0 ); // bitstream was not long enough.  Some kind of internal error
 		return false;
 	}
 
@@ -2977,26 +2879,22 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 	{
 		if ( incomingBitStream.Read( networkID ) == false )
 		{
-#ifdef _DEBUG
-			assert( 0 ); // bitstream was not long enough.  Some kind of internal error
-#endif
+			RakAssert( 0 ); // bitstream was not long enough.  Some kind of internal error
 			return false;
 		}
 	}
 
-	if (rpcIndex==UNDEFINED_RPC_INDEX)
+	if (uniqueId > 0 && MAX_RPC_ID_AVAILABLE <= uniqueId)
 	{
-		// Unregistered function
+		// Invalid RPC ID
 		RakAssert(0);
 		return false;
 	}
 
-	node = rpcMap.GetNodeFromIndex(rpcIndex);
+	node = rpcMap.GetNodeFromID(uniqueId);
 	if (node==0)
 	{
-#ifdef _DEBUG
-		assert( 0 ); // Should never happen except perhaps from threading errors?  No harm in checking anyway
-#endif
+		RakAssert( 0 ); // Should never happen except perhaps from threading errors?  No harm in checking anyway
 		return false;
 	}
 
@@ -3006,7 +2904,7 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 		// If this hits then this pointer was registered as a class member function but the packet does not have an NetworkID.
 		// Most likely this means this system registered a function with REGISTER_CLASS_MEMBER_RPC and the remote system called it
 		// using the unique ID for a function registered with REGISTER_STATIC_RPC.
-		assert(0);
+		RakAssert(0);
 		return false;
 	}
 
@@ -3015,18 +2913,8 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 		// If this hits then this pointer was not registered as a class member function but the packet does have an NetworkID.
 		// Most likely this means this system registered a function with REGISTER_STATIC_RPC and the remote system called it
 		// using the unique ID for a function registered with REGISTER_CLASS_MEMBER_RPC.
-		assert(0);
+		RakAssert(0);
 		return false;
-	}
-
-	if (nameIsEncoded && GetRemoteSystemFromPlayerID(playerId, false, true))
-	{
-		// Send ID_RPC_MAPPING to the sender so they know what index to use next time
-		RakNet::BitStream rpcMapBitStream;
-		rpcMapBitStream.Write((unsigned char)ID_RPC_MAPPING);
-		stringCompressor->EncodeString(node->uniqueIdentifier, 256, &rpcMapBitStream);
-        rpcMapBitStream.WriteCompressed(rpcIndex);
-		SendBuffered( (const char*)rpcMapBitStream.GetData(), rpcMapBitStream.GetNumberOfBitsUsed(), HIGH_PRIORITY, UNRELIABLE, 0, playerId, false, RemoteSystemStruct::NO_ACTION );
 	}
 
 	// Call the function
@@ -3048,9 +2936,7 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 	{
 		if ( incomingBitStream.GetNumberOfUnreadBits() == 0 )
 		{
-#ifdef _DEBUG
-			assert( 0 );
-#endif
+			RakAssert( 0 );
 			return false; // No data was appended!
 		}
 
@@ -3072,9 +2958,7 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 		// into a bitstream for reading
 		if ( incomingBitStream.ReadBits( ( unsigned char* ) userData, rpcParms.numberOfBitsOfData, false ) == false )
 		{
-#ifdef _DEBUG
-			assert( 0 );
-#endif
+			RakAssert( 0 );
 			#if defined(_COMPATIBILITY_1)
 			delete [] userData;
 			#endif
@@ -4663,17 +4547,6 @@ bool RakPeer::RunUpdateCycle( void )
 						delete [] data;
 
 					//	AddPacketToProducer(packet);
-					}
-					else if ( (unsigned char) data[ 0 ] == ID_RPC_MAPPING )
-					{
-						RakNet::BitStream inBitStream( (unsigned char *) data, byteSize, false );
-						RPCIndex index;
-						char output[256];
-						inBitStream.IgnoreBits(8);
-						stringCompressor->DecodeString(output, 255, &inBitStream);
-						inBitStream.ReadCompressed(index);
-                        remoteSystem->rpcMap.AddIdentifierAtIndex((char*)output,index);
-						delete [] data;
 					}
 					else if ( (unsigned char) data[ 0 ] == ID_REQUEST_STATIC_DATA )
 					{
