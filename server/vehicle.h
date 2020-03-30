@@ -76,6 +76,12 @@ public:
 	DWORD					m_dwLastSeenOccupiedTick;
 	DWORD					m_dwLastRespawnedTick;
 
+	bool m_bOnItsSide;
+	bool m_bUpsideDown;
+	bool m_bSirenOn;
+	bool m_bWrecked;
+	bool m_bSunked;
+
 	void Process(float fElapsedTime);
 
 	CVehicle(int iModel,VECTOR *vecPos,float fRotation,int iColor1,int iColor2, int iRespawnTime);

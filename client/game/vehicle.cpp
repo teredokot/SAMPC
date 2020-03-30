@@ -834,5 +834,31 @@ void CVehicle::ToggleEngine(bool bToggle)
 	((void(__thiscall*)(VEHICLE_TYPE*, bool))0x41BDD0)(m_pVehicle, bToggle);
 }
 
+bool CVehicle::IsUpsideDown()
+{
+	DWORD dwThis = (DWORD)m_pVehicle;
+	DWORD dwFunc = 0x6D1D90;
+	bool bRet = false;
+	_asm {
+		mov ecx, dwThis
+		call dwFunc
+		mov bRet, al
+	}
+	return bRet;
+}
+
+bool CVehicle::IsOnItsSide()
+{
+	DWORD dwThis = (DWORD)m_pVehicle;
+	DWORD dwFunc = 0x6D1DD0;
+	bool bRet = false;
+	_asm {
+		mov ecx, dwThis
+		call dwFunc
+		mov bRet, al
+	}
+	return bRet;
+}
+
 //-----------------------------------------------------------
 // EOF

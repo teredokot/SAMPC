@@ -94,6 +94,7 @@ typedef struct _INCAR_SYNC_DATA
 	VEHICLEID TrailerID;
 	DWORD dwHydraThrustAngle;
 	FLOAT fTrainSpeed;
+	unsigned char ucInfo;
 } INCAR_SYNC_DATA;
 
 #pragma pack(1)

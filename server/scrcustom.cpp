@@ -1617,6 +1617,71 @@ static cell AMX_NATIVE_CALL n_SetVehiclePos(AMX *amx, cell *params)
 	}
 }
 
+// native IsVehicleOnItsSide(vehicleid)
+static cell n_IsVehicleOnItsSide(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle = NULL;
+	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		return pVehicle->m_bOnItsSide;
+	}
+	return 0;
+}
+
+// native IsVehicleUpsideDown(vehicleid)
+static cell n_IsVehicleUpsideDown(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle = NULL;
+	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		return pVehicle->m_bUpsideDown;
+	}
+	return 0;
+}
+
+// native GetVehicleSirenState(vehicle)
+static cell n_GetVehicleSirenState(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle = NULL;
+	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		return pVehicle->m_bSirenOn;
+	}
+	return -1;
+}
+
+// native IsVehicleWrecked(vehicle)
+static cell n_IsVehicleWrecked(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle = NULL;
+	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		return pVehicle->m_bWrecked;
+	}
+	return 0;
+}
+
+// native IsVehicleInWater(vehicle)
+static cell n_IsVehicleSunked(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle = NULL;
+	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		return pVehicle->m_bSunked;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SendClientMessage(playerid, color, const message[])
@@ -5515,6 +5580,12 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetVehicleEngineState),
 	DEFINE_NATIVE(GetVehicleVelocity),
 	DEFINE_NATIVE(SetVehicleVelocity),
+
+	DEFINE_NATIVE(IsVehicleOnItsSide),
+	DEFINE_NATIVE(IsVehicleUpsideDown),
+	DEFINE_NATIVE(GetVehicleSirenState),
+	DEFINE_NATIVE(IsVehicleWrecked),
+	DEFINE_NATIVE(IsVehicleSunked),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

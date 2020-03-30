@@ -798,6 +798,18 @@ void CLocalPlayer::SendInCarFullSyncData()
 				icSync.byteCurrentWeapon = byteCurrentWeapon;
 		}
 
+		icSync.ucInfo = 0;
+		if (pGameVehicle->IsOnItsSide())
+			icSync.ucInfo |= 0x01;
+		if (pGameVehicle->IsUpsideDown())
+			icSync.ucInfo |= 0x02;
+		if (pGameVehicle->IsSirenOn())
+			icSync.ucInfo |= 0x04;
+		if (pGameVehicle->IsWrecked())
+			icSync.ucInfo |= 0x08;
+		if (pGameVehicle->HasSunk())
+			icSync.ucInfo |= 0x10;
+
 		// send
 		bsVehicleSync.Write((BYTE)ID_VEHICLE_SYNC);
 		bsVehicleSync.Write((PCHAR)&icSync,sizeof(INCAR_SYNC_DATA));

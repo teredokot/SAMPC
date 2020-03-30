@@ -630,6 +630,12 @@ void CPlayer::StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync)
 		pVehicle->Update(m_bytePlayerID,&matWorld,fVehicleHealth,m_icSync.TrailerID);
 
 		memcpy(&pVehicle->m_vecMoveSpeed, &m_icSync.vecMoveSpeed, sizeof(VECTOR));
+
+		pVehicle->m_bOnItsSide = (m_icSync.ucInfo & 0x01);
+		pVehicle->m_bUpsideDown = (m_icSync.ucInfo & 0x02);
+		pVehicle->m_bSirenOn = (m_icSync.ucInfo & 0x04);
+		pVehicle->m_bWrecked = (m_icSync.ucInfo & 0x08);
+		pVehicle->m_bSunked = (m_icSync.ucInfo & 0x10);
 	}
 
 	m_icSync.byteCurrentWeapon = CheckWeapon(m_icSync.byteCurrentWeapon);
