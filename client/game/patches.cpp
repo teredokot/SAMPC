@@ -349,7 +349,7 @@ void ApplyInGamePatches()
 
 	// Anti-pause
 	//UnFuck(0x561AF0,7);
-	memset((PVOID)0x561AF0,0x90,7);
+	//memset((PVOID)0x561AF0,0x90,7);
 	
 	// Unknown from CPlayerPed::ProcessControl causes crash
 	//UnFuck(0x609C08,39);
