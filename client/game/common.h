@@ -240,6 +240,10 @@ typedef struct _VEHICLE_TYPE
 	PADDING(_pad247, 1517); // 2512-4029
 } VEHICLE_TYPE;
 
+typedef struct {
+	PADDING(pad_0_to_D78, 0xD78);
+} CAMERA_TYPE; // size = 0xD78
+
 //-----------------------------------------------------------
 
 #define FADE_OUT						0

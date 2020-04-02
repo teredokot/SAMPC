@@ -43,6 +43,9 @@
 #define WEAPONSKILL_M4 				(9)
 #define WEAPONSKILL_SNIPERRIFLE 	(10)
 
+#define CAMERA_MOVE (1)
+#define CAMERA_CUT	(2)
+
 native GetPlayerCount();
 native GetPlayerIDFromName(const name[]);
 native SetSpawnInfo(playerid, teamid, skinid, Float:x, Float:y, Float:z, Float:a, weap1, ammo1, weap2, ammo2, weap3, ammo3);
@@ -140,3 +143,5 @@ native GetPlayerCameraMode(playerid);
 native SetPlayerArmedWeapon(playerid, weaponid);
 native SetPlayerFightingStyle(playerid, style, moves = 6);
 native SetPlayerMaxHealth(playerid, Float:max_health);
+native InterpolateCameraPos(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = CAMERA_CUT);
+native InterpolateCameraLookAt(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = CAMERA_CUT);

@@ -1751,6 +1751,33 @@ static void ScrPlayerVelocity(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrInterpolateCamera(RPCParameters* rpcParams)
+{
+	RakNet::BitStream in(rpcParams->input, BITS_TO_BYTES(rpcParams->numberOfBitsOfData), false);
+
+	BYTE type, mode;
+	VECTOR from, to;
+	FLOAT time;
+	
+	in.Read(type);
+	in.Read(from.X);
+	in.Read(from.Y);
+	in.Read(from.Z);
+	in.Read(to.X);
+	in.Read(to.Y);
+	in.Read(to.Z);
+	in.Read(time);
+	in.Read(mode);
+
+	if (0.0f < time && (mode == 1 || mode == 2))
+	{
+		if (type)
+			pGame->GetCamera()->InterpolateCameraPos(&from, &to, time, mode);
+		else
+			pGame->GetCamera()->InterpolateCameraLookAt(&from, &to, time, mode);
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1830,6 +1857,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrSetPlayer);
 	REGISTER_STATIC_RPC(pRakClient, ScrVehicleVelocity);
 	REGISTER_STATIC_RPC(pRakClient, ScrPlayerVelocity);
+	REGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
 }
 
 //----------------------------------------------------
@@ -1909,7 +1937,7 @@ void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetVehicle);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetPlayer);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrVehicleVelocity);
-	UNREGISTER_STATIC_RPC(pRakClient, ScrPlayerVelocity);
+	UNREGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
 }
 
 //----------------------------------------------------

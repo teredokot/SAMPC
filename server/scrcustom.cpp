@@ -960,6 +960,56 @@ static cell n_SetPlayerMaxHealth(AMX* amx, cell* params)
 	return 0;
 }
 
+static cell n_InterpolateCameraPos(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(9);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+		
+		out.Write<BYTE>(1);
+		out.Write<float>(amx_ctof(params[2]));
+		out.Write<float>(amx_ctof(params[3]));
+		out.Write<float>(amx_ctof(params[4]));
+
+		out.Write<float>(amx_ctof(params[5]));
+		out.Write<float>(amx_ctof(params[6]));
+		out.Write<float>(amx_ctof(params[7]));
+
+		out.Write<float>((float)params[8]);
+		out.Write<BYTE>(params[9]);
+
+		return pNetGame->SendToPlayer(params[1], RPC_ScrInterpolateCamera, &out);
+	}
+	return 0;
+}
+
+static cell n_InterpolateCameraLookAt(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(9);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+
+		out.Write<BYTE>(0);
+		out.Write<float>(amx_ctof(params[2]));
+		out.Write<float>(amx_ctof(params[3]));
+		out.Write<float>(amx_ctof(params[4]));
+
+		out.Write<float>(amx_ctof(params[5]));
+		out.Write<float>(amx_ctof(params[6]));
+		out.Write<float>(amx_ctof(params[7]));
+
+		out.Write<float>((float)params[8]);
+		out.Write<BYTE>(params[9]);
+
+		return pNetGame->SendToPlayer(params[1], RPC_ScrInterpolateCamera, &out);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)
@@ -5521,6 +5571,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetPlayerArmedWeapon),
 	DEFINE_NATIVE(SetPlayerFightingStyle),
 	DEFINE_NATIVE(SetPlayerMaxHealth),
+	DEFINE_NATIVE(InterpolateCameraPos),
+	DEFINE_NATIVE(InterpolateCameraLookAt),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

@@ -16,8 +16,11 @@
 class CCamera
 {
 public:
+	CAMERA_TYPE* m_pCamera;
 	MATRIX4X4 *m_matPos;
 public:
+	void InterpolateCameraPos(VECTOR* from, VECTOR* to, FLOAT time, BYTE mode);
+	void InterpolateCameraLookAt(VECTOR* from, VECTOR* to, FLOAT time, BYTE mode);
 	void SetBehindPlayer();
 	void SetPosition(float fX, float fY, float fZ, float fRotationX, float fRotationY, float fRotationZ);	// tested
 	void LookAtPoint(float fX, float fY, float fZ, int iType);
@@ -25,7 +28,11 @@ public:
 	void Fade(int iInOut);
 	void GetMatrix(PMATRIX4X4 Matrix);
 	
-	CCamera(){ m_matPos = (MATRIX4X4 *)ADDR_CAMERA; };
+	CCamera()
+	{
+		m_matPos = (MATRIX4X4 *)ADDR_CAMERA;
+		m_pCamera = (CAMERA_TYPE*)0xB6F028;
+	};
 	~CCamera(){};
 };
 

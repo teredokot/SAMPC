@@ -127,6 +127,7 @@ enum eRPCTable
 	RPC_ACAuthResponse,
 	RPC_ACAuthEngineLoaded,
 	RPC_ACServerProtected,
+	RPC_ScrInterpolateCamera,
 
 	MAX_RPC_ID_AVAILABLE
 };

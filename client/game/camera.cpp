@@ -67,3 +67,13 @@ void CCamera::GetMatrix(PMATRIX4X4 Matrix)
 	Matrix->pos.Y = m_matPos->pos.Y;
 	Matrix->pos.Z = m_matPos->pos.Z;
 }
+
+void CCamera::InterpolateCameraPos(VECTOR* from, VECTOR* to, FLOAT time, BYTE mode)
+{
+	((void(__thiscall*)(CAMERA_TYPE*, VECTOR*, VECTOR*, FLOAT, BYTE))0x50D160)(m_pCamera, from, to, time, mode);
+}
+
+void CCamera::InterpolateCameraLookAt(VECTOR* from, VECTOR* to, FLOAT time, BYTE mode)
+{
+	((void(__thiscall*)(CAMERA_TYPE*, VECTOR*, VECTOR*, FLOAT, BYTE))0x50D1D0)(m_pCamera, from, to, time, mode);
+}
