@@ -342,6 +342,20 @@ void con_unloadfs()
 	}
 }
 
+static void con_clear()
+{
+#ifdef WIN32
+	DWORD mode;
+	HANDLE hnd = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleMode(hnd, &mode);
+	SetConsoleMode(hnd, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+#endif
+	printf("\033[2J\033[1;1H");
+#ifdef WIN32
+	SetConsoleMode(hnd, mode);
+#endif
+}
+
 #define CON_CMDFLAG_DEBUG		1
 #define CON_CMDFLAG_HIDDEN		2
 
@@ -371,6 +385,7 @@ struct ConsoleCommand_s
 	{"loadfs",		0,	con_loadfs},
 	{"unloadfs",	0,	con_unloadfs},
 	{"reloadfs",	0,	con_reloadfs},
+	{"cls", 0, con_clear},
 };
 
 void con_cmdlist()
