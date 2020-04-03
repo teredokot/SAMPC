@@ -860,5 +860,16 @@ bool CVehicle::IsOnItsSide()
 	return bRet;
 }
 
+void CVehicle::SetLightState(BOOL bState)
+{
+	if (bState) {
+		ScriptCommand(&set_vehicle_lights_on, m_dwGTAId, 1);
+		ScriptCommand(&force_vehicle_lights, m_dwGTAId, 2);
+	} else {
+		ScriptCommand(&set_vehicle_lights_on, m_dwGTAId, 0);
+		ScriptCommand(&force_vehicle_lights, m_dwGTAId, 1);
+	}
+}
+
 //-----------------------------------------------------------
 // EOF

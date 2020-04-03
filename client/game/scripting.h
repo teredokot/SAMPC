@@ -276,6 +276,8 @@ const SCRIPT_COMMAND detach_trailer_from_cab			= { 0x7AC, "ii" };
 const SCRIPT_COMMAND is_trailer_on_cab					= { 0x7AB, "ii" };
 const SCRIPT_COMMAND enable_heli_magnet					= { 0x0788, "ii" };
 //const SCRIPT_COMMAND create_icon_marker_without_sphere	= { 0x04CE, "fffii" };
+const SCRIPT_COMMAND set_vehicle_lights_on				= { 0x0919, "ii" };
+const SCRIPT_COMMAND force_vehicle_lights				= { 0x067F, "ii" };
 
 const SCRIPT_COMMAND get_player_weapon_ammo				= { 0x0419, "iiv" };
 const SCRIPT_COMMAND set_player_weapon_ammo				= { 0x017A, "iii" };

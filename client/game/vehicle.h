@@ -95,6 +95,7 @@ public:
 	void ToggleEngine(bool bToggle);
 	bool IsUpsideDown();
 	bool IsOnItsSide();
+	void SetLightState(BOOL bState);
 
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;

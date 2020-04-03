@@ -1636,10 +1636,19 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 		break;
 	}
 	case 4:
+	{
 		int iEngineState = 0;
 		in.Read(iEngineState);
 		pVehicle->ToggleEngine(!!iEngineState);
 		break;
+	}
+	case 5:
+	{
+		unsigned char ucState = 0;
+		in.Read(ucState);
+		pVehicle->SetLightState(ucState);
+		break;
+	}
 	}
 }
 

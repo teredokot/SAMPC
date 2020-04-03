@@ -1732,6 +1732,25 @@ static cell n_IsVehicleSunked(AMX* amx, cell* params)
 	return 0;
 }
 
+// native SetVehicleLightState(vehicleid, light_state)
+static cell n_SetVehicleLightState(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (0 < params[1] && pPool && pPool->GetSlotState(params[1]))
+	{
+		unsigned char ucState = (params[2]) ? (1) : (0);
+		RakNet::BitStream out;
+
+		out.Write<int>(5);
+		out.Write((VEHICLEID)params[1]);
+		out.Write(ucState);
+
+		return pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SendClientMessage(playerid, color, const message[])
@@ -5638,6 +5657,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetVehicleSirenState),
 	DEFINE_NATIVE(IsVehicleWrecked),
 	DEFINE_NATIVE(IsVehicleSunked),
+	DEFINE_NATIVE(SetVehicleLightState),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

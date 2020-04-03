@@ -43,3 +43,5 @@ native IsVehicleUpsideDown(vehicleid);
 native GetVehicleSirenState(vehicle);
 native IsVehicleWrecked(vehicle);
 native IsVehicleSunked(vehicle);
+native SetVehicleLightState(vehicleid, light_state);
+
