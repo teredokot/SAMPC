@@ -1751,6 +1751,33 @@ static cell n_SetVehicleLightState(AMX* amx, cell* params)
 	return 0;
 }
 
+// native SetVehicleRespawnDelay(vehicleid, respawn_delay)
+static cell n_SetVehicleRespawnDelay(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(2);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle;
+	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[2])) != NULL && -1 <= params[2])
+	{
+		pVehicle->m_SpawnInfo.iRespawnDelay = (int)params[2];
+		return 1;
+	}
+	return 0;
+}
+
+// native GetVehicleRespawnDelay(vehicleid)
+static cell n_GetVehicleRespawnDelay(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(1);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle;
+	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[2])) != NULL)
+	{
+		return pVehicle->m_SpawnInfo.iRespawnDelay;
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SendClientMessage(playerid, color, const message[])
@@ -5658,6 +5685,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(IsVehicleWrecked),
 	DEFINE_NATIVE(IsVehicleSunked),
 	DEFINE_NATIVE(SetVehicleLightState),
+	DEFINE_NATIVE(SetVehicleRespawnDelay),
+	DEFINE_NATIVE(GetVehicleRespawnDelay),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

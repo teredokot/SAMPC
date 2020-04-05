@@ -44,4 +44,5 @@ native GetVehicleSirenState(vehicle);
 native IsVehicleWrecked(vehicle);
 native IsVehicleSunked(vehicle);
 native SetVehicleLightState(vehicleid, light_state);
-
+native SetVehicleRespawnDelay(vehicleid, respawn_delay);
+native GetVehicleRespawnDelay(vehicleid);
