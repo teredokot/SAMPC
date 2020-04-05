@@ -46,3 +46,5 @@ native IsVehicleSunked(vehicle);
 native SetVehicleLightState(vehicleid, light_state);
 native SetVehicleRespawnDelay(vehicleid, respawn_delay);
 native GetVehicleRespawnDelay(vehicleid);
+native SetVehicleSpawnPos(vehicleid, Float:x, Float:y, Float:z);
+native GetVehicleSpawnPos(vehicleid, &Float:x, &Float:y, &Float:z);

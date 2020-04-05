@@ -1757,7 +1757,7 @@ static cell n_SetVehicleRespawnDelay(AMX* amx, cell* params)
 	CHECK_PARAMS(2);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle;
-	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[2])) != NULL && -1 <= params[2])
+	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[1])) != NULL && -1 <= params[2])
 	{
 		pVehicle->m_SpawnInfo.iRespawnDelay = (int)params[2];
 		return 1;
@@ -1771,9 +1771,45 @@ static cell n_GetVehicleRespawnDelay(AMX* amx, cell* params)
 	CHECK_PARAMS(1);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle;
-	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[2])) != NULL)
+	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[1])) != NULL)
 	{
 		return pVehicle->m_SpawnInfo.iRespawnDelay;
+	}
+	return 0;
+}
+
+// native SetVehicleSpawnPos(vehicleid, Float:x, Float:y, Float:z)
+static cell n_SetVehicleSpawnPos(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle;
+	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		pVehicle->m_SpawnInfo.vecPos.X = amx_ctof(params[2]);
+		pVehicle->m_SpawnInfo.vecPos.Y = amx_ctof(params[3]);
+		pVehicle->m_SpawnInfo.vecPos.Z = amx_ctof(params[4]);
+		return 1;
+	}
+	return 0;
+}
+
+// native GetVehicleSpawnPos(vehicleid, &Float:x, &Float:y, &Float:z)
+static cell n_GetVehicleSpawnPos(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(4);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	CVehicle* pVehicle;
+	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		cell* cptr;
+		amx_GetAddr(amx, params[2], &cptr);
+		*cptr = amx_ftoc(pVehicle->m_SpawnInfo.vecPos.X);
+		amx_GetAddr(amx, params[3], &cptr);
+		*cptr = amx_ftoc(pVehicle->m_SpawnInfo.vecPos.Y);
+		amx_GetAddr(amx, params[4], &cptr);
+		*cptr = amx_ftoc(pVehicle->m_SpawnInfo.vecPos.Z);
+		return 1;
 	}
 	return 0;
 }
@@ -5687,6 +5723,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetVehicleLightState),
 	DEFINE_NATIVE(SetVehicleRespawnDelay),
 	DEFINE_NATIVE(GetVehicleRespawnDelay),
+	DEFINE_NATIVE(GetVehicleSpawnPos),
+	DEFINE_NATIVE(SetVehicleSpawnPos),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },
