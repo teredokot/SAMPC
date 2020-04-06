@@ -42,7 +42,10 @@ CFilterScripts::CFilterScripts()
 
 	m_iFilterScriptCount = 0;
 	for (int i=0; i<MAX_FILTER_SCRIPTS; i++)
+	{
 		m_pFilterScripts[i] = NULL;
+		m_szFilterScriptName[i][0] = { 0 };
+	}
 }
 
 //----------------------------------------------------------------------------------
@@ -86,6 +89,8 @@ bool CFilterScripts::LoadFilterScript(char* pFileName)
 		return false;
 	}
 
+	strcpy(m_szFilterScriptName[iSlot], pFileName);
+
 	amx_CoreInit(amx);
 	amx_FloatInit(amx);
 	amx_StringInit(amx);
@@ -101,8 +106,6 @@ bool CFilterScripts::LoadFilterScript(char* pFileName)
 	int tmp;
 	if (!amx_FindPublic(amx, "OnFilterScriptInit", &tmp))
 		amx_Exec(amx, (cell*)&tmp, tmp);
-		
-	strcpy(m_szFilterScriptName[iSlot], pFileName);
 
 	m_iFilterScriptCount++;
 
@@ -135,6 +138,8 @@ bool CFilterScripts::LoadFilterScriptFromMemory(char* pFileName, char* pFileData
 		return false;
 	}
 
+	strcpy(m_szFilterScriptName[iSlot], pFileName);
+
 	amx_CoreInit(amx);
 	amx_FloatInit(amx);
 	amx_StringInit(amx);
@@ -148,9 +153,7 @@ bool CFilterScripts::LoadFilterScriptFromMemory(char* pFileName, char* pFileData
 	int tmp;
 	if (!amx_FindPublic(amx, "OnFilterScriptInit", &tmp))
 		amx_Exec(amx, (cell*)&tmp, tmp);
-		
-	strcpy(m_szFilterScriptName[iSlot], pFileName);
-
+	
 	m_iFilterScriptCount++;
 
 	return true;
@@ -213,6 +216,18 @@ void CFilterScripts::RemoveFilterScript(int iIndex)
 	amx_CoreCleanup(m_pFilterScripts[iIndex]);
 	SAFE_DELETE(m_pFilterScripts[iIndex]);
 	m_szFilterScriptName[iIndex][0] = '\0';
+}
+
+char* CFilterScripts::GetFilterScriptName(AMX* amx)
+{
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++)
+	{
+		if (m_pFilterScripts[i] == amx)
+		{
+			return &m_szFilterScriptName[i][0];
+		}
+	}
+	return "";
 }
 
 //----------------------------------------------------------------------------------

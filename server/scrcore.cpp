@@ -220,3 +220,16 @@ void PrintMissingNatives(AMX* amx, const char* szScriptName)
 		func = (AMX_FUNCSTUB*)((unsigned char*)func + hdr->defsize);
 	}
 }
+
+char* GetScriptName(AMX* amx)
+{
+	CFilterScripts* pFS = pNetGame->GetFilterScripts();
+	CGameMode* pGM = pNetGame->GetGameMode();
+
+	if (pGM != NULL && pGM->GetGameModePointer() == amx)
+		return pGM->GetFileName();
+	if (pFS != NULL)
+		return pFS->GetFilterScriptName(amx);
+
+	return "";
+}

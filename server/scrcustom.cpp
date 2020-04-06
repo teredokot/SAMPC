@@ -14,12 +14,36 @@
 
 #include "main.h"
 
-#define CHECK_PARAMS(n) { if (params[0] != (n * sizeof(cell))) { logprintf("SCRIPT: Bad parameter count (Count is %d, Should be %d): ", params[0] / sizeof(cell), n); return 0; } }
+char* GetScriptName(AMX* amx);
+
+#define CHECK_PARAMS(amx,fn,c) \
+	{ \
+		if ((params[0]) != ((c) * (sizeof(cell)))) \
+		{ \
+			logprintf("[%s.amx] " fn ": Bad parameter count (Count is %d, Should be %d)", \
+				(GetScriptName(amx)), params[0] / sizeof(cell), c); \
+			return 0; \
+		} \
+	}
+
+#define CHECK_PARAMS_BETWEEN(amx,fn,l,h) \
+	{ \
+		if ((params[0]) < ((l) * sizeof(cell))) { \
+			logprintf("[%s.amx] " fn ": Bad parameter count (%d < %d)", \
+				(GetScriptName(amx)), ((params[0]) / (sizeof(cell))), (l)); \
+			return 0; \
+		} else if ((params[0]) > ((h) * (sizeof(cell)))) { \
+			logprintf("[%s.amx] " fn ": Bad parameter count (%d > %d)", \
+				(GetScriptName(amx)), ((params[0]) / (sizeof(cell))), (h)); \
+			return 0; \
+		} \
+	}
+
 #define DEFINE_NATIVE(func) {#func, n_##func}
 
 char* format_amxstring(AMX *amx, cell *params, int parm, int &len);
 int set_amxstring(AMX *amx,cell amx_addr,const char *source,int max);
-bool ContainsInvalidNickChars(PCHAR szString);
+bool ContainsInvalidNickChars(char* szString);
 
 extern BOOL bGameModeFinished;
 extern CNetGame* pNetGame;
@@ -43,7 +67,7 @@ static cell AMX_NATIVE_CALL n_GameModeExit(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetGameModeText(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SetGameModeText", 1);
 
 	char* szGameModeText;
 	amx_StrParam(amx, params[1], szGameModeText);
@@ -63,7 +87,7 @@ static cell AMX_NATIVE_CALL n_SetTeamCount(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_AddPlayerClass(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(11);
+	CHECK_PARAMS(amx, "AddPlayerClass", 11);
 	PLAYER_SPAWN_INFO Spawn;
 
 	Spawn.byteTeam = 255; // Auto team assignment for the old AddPlayerClass
@@ -88,7 +112,7 @@ static cell AMX_NATIVE_CALL n_AddPlayerClass(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_AddPlayerClassEx(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(12);
+	CHECK_PARAMS(amx, "AddPlayerClassEx", 12);
 	PLAYER_SPAWN_INFO Spawn;
 
 	// BASE INFO
@@ -114,7 +138,7 @@ static cell AMX_NATIVE_CALL n_AddPlayerClassEx(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_AddStaticVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(7);
+	CHECK_PARAMS(amx, "AddStaticVehicle", 7);
 
 	VECTOR vecPos;
 	vecPos.X = amx_ctof(params[2]);
@@ -131,7 +155,7 @@ static cell AMX_NATIVE_CALL n_AddStaticVehicle(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_AddStaticVehicleEx(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(8);
+	CHECK_PARAMS(amx, "AddStaticVehicleEx", 8);
 
 	VECTOR vecPos;
 	vecPos.X = amx_ctof(params[2]);
@@ -148,7 +172,7 @@ static cell AMX_NATIVE_CALL n_AddStaticVehicleEx(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetVehicleToRespawn(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SetVehicleToRespawn", 1);
 
 	CVehicle* pVehicle;
 	pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
@@ -169,7 +193,7 @@ static cell AMX_NATIVE_CALL n_SetVehicleToRespawn(AMX *amx, cell *params)
 // native LinkVehicleToInterior
 static cell AMX_NATIVE_CALL n_LinkVehicleToInterior(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "LinkVehicleToInterior", 2);
 	CVehicle* pVehicle;
 	pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 
@@ -192,7 +216,7 @@ static cell AMX_NATIVE_CALL n_LinkVehicleToInterior(AMX *amx, cell *params)
 // native AddVehicleComponent(vehicleid, componentid);
 static cell AMX_NATIVE_CALL n_AddVehicleComponent(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "AddVehicleComponent", 2);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 	if (!pVehicle)
@@ -228,7 +252,7 @@ static cell AMX_NATIVE_CALL n_AddVehicleComponent(AMX *amx, cell *params)
 // native RemoveVehicleComponent(vehicleid, componentid);
 static cell AMX_NATIVE_CALL n_RemoveVehicleComponent(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "RemoveVehicleComponent", 2);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 	if (!pVehicle)
@@ -261,7 +285,7 @@ static cell AMX_NATIVE_CALL n_RemoveVehicleComponent(AMX *amx, cell *params)
 // native ChangeVehicleColor(vehicleid, color1, color2);
 static cell AMX_NATIVE_CALL n_ChangeVehicleColor(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "ChangeVehicleColor", 3);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 	
@@ -289,7 +313,7 @@ static cell AMX_NATIVE_CALL n_ChangeVehicleColor(AMX *amx, cell *params)
 // native ChangeVehiclePaintjob(vehicleid, paintjobid);
 static cell AMX_NATIVE_CALL n_ChangeVehiclePaintjob(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "ChangeVehiclePaintjob", 2);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 	if (!pVehicle)
@@ -317,7 +341,7 @@ static cell AMX_NATIVE_CALL n_ChangeVehiclePaintjob(AMX *amx, cell *params)
 // Not sure if that's faster than a bounds check
 static cell AMX_NATIVE_CALL n_SetVehicleNumberPlate(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetVehicleNumberPlate", 2);
 
 	if (pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[1]))
 	{
@@ -345,7 +369,7 @@ static cell AMX_NATIVE_CALL n_SetVehicleNumberPlate(AMX *amx, cell *params)
 // native GetVehicleModel(vehicleid);
 static cell AMX_NATIVE_CALL n_GetVehicleModel(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetVehicleModel", 1);
 
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
 	if (pVehiclePool && pVehiclePool->GetSlotState((VEHICLEID)params[1])) {
@@ -356,7 +380,7 @@ static cell AMX_NATIVE_CALL n_GetVehicleModel(AMX *amx, cell *params)
 
 static cell n_GetVehicleInterior(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetVehicleInterior", 1);
 
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle = (pVehiclePool) ? (pVehiclePool->GetAt(params[1])) : (0);
@@ -369,7 +393,7 @@ static cell n_GetVehicleInterior(AMX* amx, cell* params)
 
 static cell n_GetVehicleColor(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GetVehicleColor", 3);
 
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle = (pVehiclePool) ? (pVehiclePool->GetAt(params[1])) : (0);
@@ -388,7 +412,7 @@ static cell n_GetVehicleColor(AMX* amx, cell* params)
 // native GetVehiclePaintjob(vehicleid);
 static cell n_GetVehiclePaintjob(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetVehiclePaintjob", 1);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
 	if (pVehicle)
@@ -403,7 +427,7 @@ static cell n_GetVehiclePaintjob(AMX* amx, cell* params)
 
 static cell AMX_NATIVE_CALL n_AddStaticPickup(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "AddStaticPickup", 5);
 	VECTOR vecPos;
 	vecPos.X = amx_ctof(params[3]);
 	vecPos.Y = amx_ctof(params[4]);
@@ -418,7 +442,7 @@ static cell AMX_NATIVE_CALL n_AddStaticPickup(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_CreatePickup(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "CreatePickup", 5);
 	VECTOR vecPos;
 	vecPos.X = amx_ctof(params[3]);
 	vecPos.Y = amx_ctof(params[4]);
@@ -432,7 +456,7 @@ static cell AMX_NATIVE_CALL n_CreatePickup(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_DestroyPickup(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "DestroyPickup", 1);
 	return pNetGame->GetPickupPool()->Destroy(params[1]);
 }
 
@@ -449,7 +473,7 @@ static cell n_DestroyAllPickups(AMX* amx, cell* params)
 // native IsValidPickup(pickupid);
 static cell n_IsValidPickup(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsValidPickup", 1);
 
 	return (cell)pNetGame->GetPickupPool()->IsValid(params[1]);
 }
@@ -457,7 +481,7 @@ static cell n_IsValidPickup(AMX* amx, cell* params)
 // native IsStaticPickup(pickupid);
 static cell n_IsPickupStatic(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsStaticPickup", 1);
 
 	return (cell)pNetGame->GetPickupPool()->IsStatic(params[1]);
 }
@@ -465,7 +489,7 @@ static cell n_IsPickupStatic(AMX* amx, cell* params)
 // native GetPickupPos(pickupid, &Float:x, &Float:y, &Float:z);
 static cell n_GetPickupPos(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetPickupPos", 4);
 	if (pNetGame->GetPickupPool()->IsValid(params[1]))
 	{
 		PICKUP pickup = pNetGame->GetPickupPool()->Get(params[1]);
@@ -485,7 +509,7 @@ static cell n_GetPickupPos(AMX* amx, cell* params)
 // native GetPickupModel(pickupid);
 static cell n_GetPickupModel(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPickupModel", 1);
 	if (pNetGame->GetPickupPool()->IsValid(params[1]))
 	{
 		return pNetGame->GetPickupPool()->Get(params[1]).iModel;
@@ -496,7 +520,7 @@ static cell n_GetPickupModel(AMX* amx, cell* params)
 // native GetPickupType(pickupid);
 static cell n_GetPickupType(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPickupType", 1);
 	if (pNetGame->GetPickupPool()->IsValid(params[1]))
 	{
 		return pNetGame->GetPickupPool()->Get(params[1]).iType;
@@ -513,7 +537,7 @@ static cell n_GetPickupCount(AMX* amx, cell* params)
 // native GetPlayerWorldBounds(playerid,&Float:x_max,&Float:y_max,&Float:x_min,&Float:y_min);
 static cell n_GetPlayerWorldBounds(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "GetPlayerWorldBounds", 5);
 	
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 	if (pPlayer == NULL)
@@ -535,7 +559,7 @@ static cell n_GetPlayerWorldBounds(AMX* amx, cell* params)
 // native SetPlayerWorldBounds(playerid,Float:x_max,Float:y_max,Float:x_min,Float:y_min);
 static cell AMX_NATIVE_CALL n_SetPlayerWorldBounds(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "SetPlayerWorldBounds", 5);
 
 	RakNet::BitStream bsBounds;
 	
@@ -562,7 +586,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerWorldBounds(AMX *amx, cell *params)
 // native Kick(playerid)
 static cell AMX_NATIVE_CALL n_Kick(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "Kick", 1);
 
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) {
 		pNetGame->KickPlayer((BYTE)params[1]);
@@ -576,7 +600,7 @@ static cell AMX_NATIVE_CALL n_Kick(AMX *amx, cell *params)
 // native Ban(playerid)
 static cell AMX_NATIVE_CALL n_Ban(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "Ban", 1);
 
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) {
 		RakServerInterface* pRak = pNetGame->GetRakServer();
@@ -596,7 +620,7 @@ static cell AMX_NATIVE_CALL n_Ban(AMX *amx, cell *params)
 // native BanEx(playerid, reason)
 static cell AMX_NATIVE_CALL n_BanEx(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "BanEx", 2);
 
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) {
 		RakServerInterface* pRak = pNetGame->GetRakServer();
@@ -617,7 +641,7 @@ static cell AMX_NATIVE_CALL n_BanEx(AMX *amx, cell *params)
 
 static cell n_RemoveBan(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "RemoveBan", 1);
 
 	char* szIP;
 	amx_StrParam(amx, params[1], szIP);
@@ -631,7 +655,7 @@ static cell n_RemoveBan(AMX* amx, cell* params)
 
 static cell n_IsBanned(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsBanned", 1);
 	char* szIP;
 	amx_StrParam(amx, params[1], szIP);
 	if (pNetGame->GetRakServer() && szIP)
@@ -644,7 +668,7 @@ static cell n_IsBanned(AMX* amx, cell* params)
 // native BlockIpAddress(ip_address[], timems)
 static cell n_BlockIpAddress(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "BlockIpAddress", 2);
 
 	char* szIP;
 	amx_StrParam(amx, params[1], szIP);
@@ -659,7 +683,7 @@ static cell n_BlockIpAddress(AMX* amx, cell* params)
 // native UnBlockIpAddress(ip_address[])
 static cell n_UnBlockIpAddress(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "UnBlockIpAddress", 1);
 
 	char* szIP;
 	amx_StrParam(amx, params[1], szIP);
@@ -675,7 +699,7 @@ static cell n_UnBlockIpAddress(AMX* amx, cell* params)
 // native IsPlayerAdmin(playerid)
 static cell AMX_NATIVE_CALL n_IsPlayerAdmin(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsPlayerAdmin", 1);
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 
 	if (pPlayerPool->GetSlotState((BYTE)params[1]))
@@ -688,7 +712,7 @@ static cell AMX_NATIVE_CALL n_IsPlayerAdmin(AMX *amx, cell *params)
 // native SetPlayerAdmin(playerid, toggle)
 static cell n_SetPlayerAdmin(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerAdmin", 2);
 
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (pPool && pPool->GetSlotState(params[1]))
@@ -701,7 +725,7 @@ static cell n_SetPlayerAdmin(AMX* amx, cell* params)
 
 static cell n_GetPlayerIDFromName(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerIDFromName", 1);
 
 	char* szSearchName = 0;
 	amx_StrParam(amx, params[1], szSearchName);
@@ -737,7 +761,7 @@ static cell n_GetPlayerPoolSize(AMX* amx, cell* params)
 // native GetPlayerVersion(playerid, version[], len)
 static cell n_GetPlayerVersion(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GetPlayerVersion", 3);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 	if (pPlayer)
@@ -751,7 +775,7 @@ static cell n_GetPlayerVersion(AMX* amx, cell* params)
 // native SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Float:rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)
 static cell AMX_NATIVE_CALL n_SetSpawnInfo(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(13);
+	CHECK_PARAMS(amx, "SetSpawnInfo", 13);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -785,7 +809,7 @@ static cell AMX_NATIVE_CALL n_SetSpawnInfo(AMX *amx, cell *params)
 // native SetSpawnInfo(playerid)
 static cell AMX_NATIVE_CALL n_SpawnPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SpawnPlayer", 1);
 
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
 	{
@@ -803,7 +827,7 @@ static cell AMX_NATIVE_CALL n_SpawnPlayer(AMX *amx, cell *params)
 // native ForceClassSelection(playerid);
 static cell AMX_NATIVE_CALL n_ForceClassSelection(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "ForceClassSelection", 1);
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
 	{
 		RakNet::BitStream bsData;
@@ -819,7 +843,7 @@ static cell AMX_NATIVE_CALL n_ForceClassSelection(AMX *amx, cell *params)
 // native GetPlayerTeam(playerid)
 static cell AMX_NATIVE_CALL n_GetPlayerTeam(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerTeam", 1);
 
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 
@@ -836,7 +860,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerTeam(AMX *amx, cell *params)
 //native SetPlayerName(playerid, name[])
 static cell AMX_NATIVE_CALL n_SetPlayerName(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerName", 2);
 
 	if (pNetGame->GetPlayerPool()->GetSlotState(BYTE(params[1])))
 	{
@@ -887,7 +911,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerName(AMX *amx, cell *params)
 // native SetPlayerSkin(playerid, skin)
 static cell AMX_NATIVE_CALL n_SetPlayerSkin(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerSkin", 2);
 
 	if(pNetGame->GetPlayerPool()->GetSlotState(BYTE(params[1])))
 	{
@@ -917,7 +941,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerSkin(AMX *amx, cell *params)
 // native GetPlayerSkin(playerid)
 static cell AMX_NATIVE_CALL n_GetPlayerSkin(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerSkin", 1);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -929,7 +953,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerSkin(AMX *amx, cell *params)
 
 static cell n_SetPlayerFightingStyle(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SetPlayerFightingStyle", 3);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (pPool && pPool->GetSlotState(params[1]))
 	{
@@ -946,7 +970,7 @@ static cell n_SetPlayerFightingStyle(AMX* amx, cell* params)
 // native SetPlayerMaxHealth(playerid, Float:max_health)
 static cell n_SetPlayerMaxHealth(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerMaxHealth", 2);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (pPool && pPool->GetSlotState(params[1]))
 	{
@@ -962,7 +986,7 @@ static cell n_SetPlayerMaxHealth(AMX* amx, cell* params)
 
 static cell n_InterpolateCameraPos(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(9);
+	CHECK_PARAMS(amx, "InterpolateCameraPos", 9);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (pPool && pPool->GetSlotState(params[1]))
 	{
@@ -987,7 +1011,7 @@ static cell n_InterpolateCameraPos(AMX* amx, cell* params)
 
 static cell n_InterpolateCameraLookAt(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(9);
+	CHECK_PARAMS(amx, "InterpolateCameraLookAt", 9);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (pPool && pPool->GetSlotState(params[1]))
 	{
@@ -1016,7 +1040,7 @@ static cell n_InterpolateCameraLookAt(AMX* amx, cell* params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerVirtualWorld(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerVirtualWorld", 2);
 
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
 	{
@@ -1032,7 +1056,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerVirtualWorld(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerVirtualWorld(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerVirtualWorld", 1);
 
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
 	{
@@ -1047,7 +1071,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerVirtualWorld(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetVehicleVirtualWorld(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetVehicleVirtualWorld", 2);
 
 	if (pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[1]))
 	{
@@ -1063,7 +1087,7 @@ static cell AMX_NATIVE_CALL n_SetVehicleVirtualWorld(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetVehicleVirtualWorld(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetVehicleVirtualWorld", 1);
 
 	if (pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[1]))
 	{
@@ -1075,7 +1099,7 @@ static cell AMX_NATIVE_CALL n_GetVehicleVirtualWorld(AMX *amx, cell *params)
 // native RepairVehicle(vehicleid)
 static cell n_RepairVehicle(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "RepairVehicle", 1);
 
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	if (pPool && pPool->GetSlotState(params[1]))
@@ -1094,7 +1118,7 @@ static cell n_RepairVehicle(AMX* amx, cell* params)
 // native SetVehicleParamsCarWindows(vehicleid, driver, passenger, backleft, backright)
 static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "SetVehicleParamsCarWindows", 5);
 
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 	if (pVehiclePool && pVehiclePool->GetSlotState(params[1]))
@@ -1117,7 +1141,7 @@ static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
 // native ToggleTaxiLight(vehicleid, toggle)
 static cell n_ToggleTaxiLight(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "ToggleTaxiLight", 2);
 
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 	if (pVehiclePool && pVehiclePool->GetSlotState(params[1]))
@@ -1137,7 +1161,7 @@ static cell n_ToggleTaxiLight(AMX* amx, cell* params)
 // native SetVehicleEngineState(vehicleid, engine_state)
 static cell n_SetVehicleEngineState(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetVehicleEngineState", 2);
 
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 	if (pVehiclePool && pVehiclePool->GetSlotState(params[1]))
@@ -1157,7 +1181,7 @@ static cell n_SetVehicleEngineState(AMX* amx, cell* params)
 // native GetVehicleVelocity(vehicleid, &Float:x, &Float:y, &Float:z)
 static cell n_GetVehicleVelocity(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetVehicleVelocity", 4);
 
 	CVehicle* pVehicle = NULL;
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
@@ -1179,7 +1203,7 @@ static cell n_GetVehicleVelocity(AMX* amx, cell* params)
 // native SetVehicleVelocity(vehicleid, Float:X, Float:Y, Float:Z)
 static cell n_SetVehicleVelocity(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetVehicleVelocity", 4);
 
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	if (0 <= params[1] && pPool != NULL && pPool->GetSlotState(params[1]))
@@ -1210,7 +1234,7 @@ static cell n_SetVehicleVelocity(AMX* amx, cell* params)
 // native TogglePlayerSpectating(playerid, toggle);
 static cell AMX_NATIVE_CALL n_TogglePlayerSpectating(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TogglePlayerSpectating", 2);
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
 	{
 		CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
@@ -1231,7 +1255,7 @@ static cell AMX_NATIVE_CALL n_TogglePlayerSpectating(AMX *amx, cell *params)
 // native PlayerSpectateVehicle(playerid, vehicleid, mode = SPECTATE_MODE_NORMAL);
 static cell AMX_NATIVE_CALL n_PlayerSpectateVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "PlayerSpectateVehicle", 3);
 
 	//printf("n_PlayerSpectateVehicle(%u,%u,%u)",params[1],params[2],params[3]);
 
@@ -1256,7 +1280,7 @@ static cell AMX_NATIVE_CALL n_PlayerSpectateVehicle(AMX *amx, cell *params)
 // native PlayerSpectatePlayer(playerid, vehicleid, mode = SPECTATE_MODE_NORMAL);
 static cell AMX_NATIVE_CALL n_PlayerSpectatePlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "PlayerSpectatePlayer", 3);
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])
 		&& pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[2]))
 	{
@@ -1279,7 +1303,7 @@ static cell AMX_NATIVE_CALL n_PlayerSpectatePlayer(AMX *amx, cell *params)
 // native SetPlayerTeam(playerid, team)
 static cell AMX_NATIVE_CALL n_SetPlayerTeam(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerTeam", 2);
 
 	//CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 
@@ -1303,7 +1327,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerTeam(AMX *amx, cell *params)
 // native GetPlayerPos(playerid, &Float:x, &Float:y, &Float:z)
 static cell AMX_NATIVE_CALL n_GetPlayerPos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetPlayerPos", 4);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 
@@ -1328,7 +1352,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerPos(AMX *amx, cell *params)
 // native SetPlayerPos(playerid, Float:x, Float:y, Float:z)
 static cell AMX_NATIVE_CALL n_SetPlayerPos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetPlayerPos", 4);
 
 	if(pNetGame->GetPlayerPool()->GetSlotState(BYTE(params[1])))
 	{
@@ -1359,7 +1383,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerPos(AMX *amx, cell *params)
 // native SetPlayerPosFindZ(playerid, Float:x, Float:y, Float:z)
 static cell AMX_NATIVE_CALL n_SetPlayerPosFindZ(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetPlayerPosFindZ", 4);
 
 	if(pNetGame->GetPlayerPool()->GetSlotState(BYTE(params[1])))
 	{
@@ -1389,7 +1413,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerPosFindZ(AMX *amx, cell *params)
 // native GetPlayerHealth(playerid, &Float:health)
 static cell AMX_NATIVE_CALL n_GetPlayerHealth(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GetPlayerHealth", 2);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 
@@ -1410,7 +1434,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerHealth(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerHealth(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerHealth", 2);
 
 	if(pNetGame->GetPlayerPool()->GetSlotState(BYTE(params[1])))
 	{
@@ -1437,7 +1461,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerHealth(AMX *amx, cell *params)
 // native PutPlayerInVehicle(playerid, vehicleid, seatid)
 static cell AMX_NATIVE_CALL n_PutPlayerInVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "PutPlayerInVehicle", 3);
 
 	if(pNetGame->GetPlayerPool()->GetSlotState(params[1]) && pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[2]))
 	{
@@ -1467,7 +1491,7 @@ static cell AMX_NATIVE_CALL n_PutPlayerInVehicle(AMX *amx, cell *params)
 // native RemovePlayerFromVehicle(playerid)
 static cell AMX_NATIVE_CALL n_RemovePlayerFromVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "RemovePlayerFromVehicle", 1);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	RakNet::BitStream bsParams;
@@ -1484,7 +1508,7 @@ static cell AMX_NATIVE_CALL n_RemovePlayerFromVehicle(AMX *amx, cell *params)
 // native IsPlayerInVehicle(playerid, vehicleid)
 static cell AMX_NATIVE_CALL n_IsPlayerInVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "IsPlayerInVehicle", 2);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (!pPlayer) return 0;
@@ -1505,7 +1529,7 @@ static cell AMX_NATIVE_CALL n_IsPlayerInVehicle(AMX *amx, cell *params)
 // native IsPlayerInAnyVehicle(playerid)
 static cell AMX_NATIVE_CALL n_IsPlayerInAnyVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsPlayerInAnyVehicle", 1);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (!pPlayer) return 0;
@@ -1524,7 +1548,7 @@ static cell AMX_NATIVE_CALL n_IsPlayerInAnyVehicle(AMX *amx, cell *params)
 // native GetPlayerName(playerid, const name[], len)
 static cell AMX_NATIVE_CALL n_GetPlayerName(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GetPlayerName", 3);
 	BYTE bytePlayerID = (BYTE)params[1];
 	if (bytePlayerID > MAX_PLAYERS || !pNetGame->GetPlayerPool()->GetSlotState(bytePlayerID)) return 0;
 	return set_amxstring(amx, params[2], pNetGame->GetPlayerPool()->
@@ -1536,7 +1560,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerName(AMX *amx, cell *params)
 // native GetWeaponName(weaponid, const name[], len)
 static cell AMX_NATIVE_CALL n_GetWeaponName(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GetWeaponName", 3);
 	if(params[1] > WEAPON_COLLISION) return 0;
 
 	return set_amxstring(amx,params[2],pNetGame->GetWeaponName(params[1]),params[3]);
@@ -1553,7 +1577,7 @@ static cell n_GetVehiclePoolSize(AMX* amx, cell* params)
 // native IsValidVehicle(vehicleid);
 static cell n_IsValidVehicle(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsValidVehicle", 1);
 
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 	if (pVehiclePool && pVehiclePool->GetSlotState((VEHICLEID)params[1]))
@@ -1565,7 +1589,7 @@ static cell n_IsValidVehicle(AMX* amx, cell* params)
 // native CreateVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawndelay)
 static cell AMX_NATIVE_CALL n_CreateVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(8);
+	CHECK_PARAMS(amx, "CreateVehicle", 8);
 
 	VECTOR vecPos;
 	vecPos.X = amx_ctof(params[2]);
@@ -1593,7 +1617,7 @@ static cell AMX_NATIVE_CALL n_CreateVehicle(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_DestroyVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "DestroyVehicle", 1);
 
 	CVehiclePool*	pVehiclePool = pNetGame->GetVehiclePool();
 	if (pVehiclePool->GetAt((VEHICLEID)params[1]))
@@ -1614,7 +1638,7 @@ static cell AMX_NATIVE_CALL n_DestroyVehicle(AMX *amx, cell *params)
 // native GetVehiclePos(vehicleid, &Float:x, &Float:y, &Float:z)
 static cell AMX_NATIVE_CALL n_GetVehiclePos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetVehiclePos", 4);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 
@@ -1639,7 +1663,7 @@ static cell AMX_NATIVE_CALL n_GetVehiclePos(AMX *amx, cell *params)
 // native SetVehiclePos(vehicleid, Float:x, Float:y, Float:z)
 static cell AMX_NATIVE_CALL n_SetVehiclePos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetVehiclePos", 4);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 
@@ -1670,7 +1694,7 @@ static cell AMX_NATIVE_CALL n_SetVehiclePos(AMX *amx, cell *params)
 // native IsVehicleOnItsSide(vehicleid)
 static cell n_IsVehicleOnItsSide(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsVehicleOnItsSide", 1);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle = NULL;
 	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
@@ -1683,7 +1707,7 @@ static cell n_IsVehicleOnItsSide(AMX* amx, cell* params)
 // native IsVehicleUpsideDown(vehicleid)
 static cell n_IsVehicleUpsideDown(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsVehicleUpsideDown", 1);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle = NULL;
 	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
@@ -1696,7 +1720,7 @@ static cell n_IsVehicleUpsideDown(AMX* amx, cell* params)
 // native GetVehicleSirenState(vehicle)
 static cell n_GetVehicleSirenState(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetVehicleSirenState", 1);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle = NULL;
 	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
@@ -1709,7 +1733,7 @@ static cell n_GetVehicleSirenState(AMX* amx, cell* params)
 // native IsVehicleWrecked(vehicle)
 static cell n_IsVehicleWrecked(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsVehicleWrecked", 1);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle = NULL;
 	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
@@ -1722,7 +1746,7 @@ static cell n_IsVehicleWrecked(AMX* amx, cell* params)
 // native IsVehicleInWater(vehicle)
 static cell n_IsVehicleSunked(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsVehicleSunked", 1);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle = NULL;
 	if (pPool != NULL && (pVehicle = pPool->GetAt(params[1])) != NULL)
@@ -1735,7 +1759,7 @@ static cell n_IsVehicleSunked(AMX* amx, cell* params)
 // native SetVehicleLightState(vehicleid, light_state)
 static cell n_SetVehicleLightState(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetVehicleLightState", 2);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	if (0 < params[1] && pPool && pPool->GetSlotState(params[1]))
 	{
@@ -1754,7 +1778,7 @@ static cell n_SetVehicleLightState(AMX* amx, cell* params)
 // native SetVehicleRespawnDelay(vehicleid, respawn_delay)
 static cell n_SetVehicleRespawnDelay(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetVehicleRespawnDelay", 2);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle;
 	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[1])) != NULL && -1 <= params[2])
@@ -1768,7 +1792,7 @@ static cell n_SetVehicleRespawnDelay(AMX* amx, cell* params)
 // native GetVehicleRespawnDelay(vehicleid)
 static cell n_GetVehicleRespawnDelay(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetVehicleRespawnDelay", 1);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle;
 	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[1])) != NULL)
@@ -1781,7 +1805,7 @@ static cell n_GetVehicleRespawnDelay(AMX* amx, cell* params)
 // native SetVehicleSpawnPos(vehicleid, Float:x, Float:y, Float:z)
 static cell n_SetVehicleSpawnPos(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetVehicleSpawnPos", 4);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle;
 	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[1])) != NULL)
@@ -1797,7 +1821,7 @@ static cell n_SetVehicleSpawnPos(AMX* amx, cell* params)
 // native GetVehicleSpawnPos(vehicleid, &Float:x, &Float:y, &Float:z)
 static cell n_GetVehicleSpawnPos(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetVehicleSpawnPos", 4);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle;
 	if (0 < params[1] && pPool && (pVehicle = pPool->GetAt(params[1])) != NULL)
@@ -1819,7 +1843,7 @@ static cell n_GetVehicleSpawnPos(AMX* amx, cell* params)
 // native SendClientMessage(playerid, color, const message[])
 static cell AMX_NATIVE_CALL n_SendClientMessage(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SendClientMessage", 3);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	PlayerID pidPlayer = pNetGame->GetRakServer()->GetPlayerIDFromIndex(params[1]);
 	char* szMessage;
@@ -1834,7 +1858,7 @@ static cell AMX_NATIVE_CALL n_SendClientMessage(AMX *amx, cell *params)
 // native SendPlayerMessageToPlayer(playerid, senderid, const message[])
 static cell AMX_NATIVE_CALL n_SendPlayerMessageToPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SendPlayerMessageToPlayer", 3);
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])
 		&& pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[2]))
 	{	
@@ -1858,7 +1882,7 @@ static cell AMX_NATIVE_CALL n_SendPlayerMessageToPlayer(AMX *amx, cell *params)
 // native SendPlayerMessageToAll(senderid, const message[])
 static cell AMX_NATIVE_CALL n_SendPlayerMessageToAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SendPlayerMessageToAll", 2);
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
 	{	
 		char* szMessage;
@@ -1880,6 +1904,7 @@ static cell AMX_NATIVE_CALL n_SendPlayerMessageToAll(AMX *amx, cell *params)
 // native SendClientMessageToAll(color, const message[])
 static cell AMX_NATIVE_CALL n_SendClientMessageToAll(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "SendClientMessageToAll", 2);
 	char* szMessage;
 	amx_StrParam(amx, params[2], szMessage);
 	pNetGame->SendClientMessageToAll(params[1],szMessage);
@@ -1892,7 +1917,7 @@ static cell AMX_NATIVE_CALL n_SendClientMessageToAll(AMX *amx, cell *params)
 // native SendDeathMessage(killer,killee,weapon)
 static cell AMX_NATIVE_CALL n_SendDeathMessage(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SendDeathMessage", 3);
 	RakServerInterface* pRak = pNetGame->GetRakServer();
 	RakNet::BitStream bsDM;
 	bsDM.Write((BYTE)params[1]);
@@ -1908,7 +1933,7 @@ static cell AMX_NATIVE_CALL n_SendDeathMessage(AMX *amx, cell *params)
 // native SendDeathMessageToPlayer(playerid, killer, killee, weapon)
 static cell n_SendDeathMessageToPlayer(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SendDeathMessageToPlayer", 4);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1]))
 		return 0;
@@ -1926,7 +1951,7 @@ static cell n_SendDeathMessageToPlayer(AMX* amx, cell* params)
 // native SetPlayerColor(playerid, color)
 static cell AMX_NATIVE_CALL n_SetPlayerColor(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerColor", 2);
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(pPlayer) {
 		pPlayer->SetPlayerColor(params[2]);
@@ -1941,7 +1966,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerColor(AMX *amx, cell *params)
 // native GetPlayerColor(playerid)
 static cell AMX_NATIVE_CALL n_GetPlayerColor(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerColor", 1);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(pPlayer) {
@@ -1956,7 +1981,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerColor(AMX *amx, cell *params)
 // native GetPlayerVehicleID(playerid)
 static cell AMX_NATIVE_CALL n_GetPlayerVehicleID(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerVehicleID", 1);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(pPlayer) {
@@ -1970,7 +1995,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerVehicleID(AMX *amx, cell *params)
 // native SetPlayerCheckpoint(playerid, Float:x, Float:y, Float:z, Float:size)
 static cell AMX_NATIVE_CALL n_SetPlayerCheckpoint(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "SetPlayerCheckpoint", 5);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -1988,7 +2013,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerCheckpoint(AMX *amx, cell *params)
 // native DisablePlayerCheckpoint(playerid)
 static cell AMX_NATIVE_CALL n_DisablePlayerCheckpoint(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "DisablePlayerCheckpoint", 1);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -2005,7 +2030,7 @@ static cell AMX_NATIVE_CALL n_DisablePlayerCheckpoint(AMX *amx, cell *params)
 // native IsPlayerInCheckpoint(playerid)
 static cell AMX_NATIVE_CALL n_IsPlayerInCheckpoint(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsPlayerInCheckpoint", 1);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -2020,7 +2045,7 @@ static cell AMX_NATIVE_CALL n_IsPlayerInCheckpoint(AMX *amx, cell *params)
 // native SetPlayerRaceCheckpoint(playerid, tpye, Float:x, Float:y, Float:z, Float:nx, Float:ny, Float:nz, Float:size)
 static cell AMX_NATIVE_CALL n_SetPlayerRaceCheckpoint(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(9);
+	CHECK_PARAMS(amx, "SetPlayerRaceCheckpoint", 9);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -2039,7 +2064,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerRaceCheckpoint(AMX *amx, cell *params)
 // native DisablePlayerRaceCheckpoint(playerid)
 static cell AMX_NATIVE_CALL n_DisablePlayerRaceCheckpoint(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "DisablePlayerRaceCheckpoint", 1);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -2056,7 +2081,7 @@ static cell AMX_NATIVE_CALL n_DisablePlayerRaceCheckpoint(AMX *amx, cell *params
 // native IsPlayerInRaceCheckpoint(playerid)
 static cell AMX_NATIVE_CALL n_IsPlayerInRaceCheckpoint(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsPlayerInRaceCheckpoint", 1);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -2071,7 +2096,7 @@ static cell AMX_NATIVE_CALL n_IsPlayerInRaceCheckpoint(AMX *amx, cell *params)
 // native GameTextForAll(strtext,displaytime,style)
 static cell AMX_NATIVE_CALL n_GameTextForAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GameTextForAll", 3);
 	char *szMessage;
 	int iLength;
 	int iTime;
@@ -2100,7 +2125,7 @@ static cell AMX_NATIVE_CALL n_GameTextForAll(AMX *amx, cell *params)
 // native GameTextForPlayer(playerid,strtext,displaytime,style)
 static cell AMX_NATIVE_CALL n_GameTextForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GameTextForPlayer", 4);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	char *szMessage;
 	int iLength;
@@ -2130,7 +2155,7 @@ static cell AMX_NATIVE_CALL n_GameTextForPlayer(AMX *amx, cell *params)
 // native SetPlayerInterior(playerid,interiorid)
 static cell AMX_NATIVE_CALL n_SetPlayerInterior(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerInterior", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	RakNet::BitStream bsParams;
 	BYTE byteInteriorID = (BYTE)params[2];
@@ -2147,7 +2172,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerInterior(AMX *amx, cell *params)
 // native GetPlayerInterior(playerid,interiorid)
 static cell AMX_NATIVE_CALL n_GetPlayerInterior(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerInterior", 1);
 
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
@@ -2161,7 +2186,8 @@ static cell AMX_NATIVE_CALL n_GetPlayerInterior(AMX *amx, cell *params)
 // native SetPlayerSpecialAction(playerid,actionid)
 
 static cell AMX_NATIVE_CALL n_SetPlayerSpecialAction(AMX *amx, cell *params)
-{	
+{
+	CHECK_PARAMS(amx, "SetPlayerSpecialAction", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	RakNet::BitStream bsParams;
 	bsParams.Write((BYTE)params[2]);
@@ -2174,7 +2200,8 @@ static cell AMX_NATIVE_CALL n_SetPlayerSpecialAction(AMX *amx, cell *params)
 // native GetPlayerSpecialAction(playerid)
 
 static cell AMX_NATIVE_CALL n_GetPlayerSpecialAction(AMX *amx, cell *params)
-{	
+{
+	CHECK_PARAMS(amx, "GetPlayerSpecialAction", 1);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return SPECIAL_ACTION_NONE;
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(pPlayer) {
@@ -2188,7 +2215,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerSpecialAction(AMX *amx, cell *params)
 // native GetPlayerDrunkLevel(playerid)
 static cell AMX_NATIVE_CALL n_GetPlayerDrunkLevel(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerDrunkLevel", 1);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 	if (!pPlayer)
@@ -2200,7 +2227,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerDrunkLevel(AMX* amx, cell* params)
 // native SetPlayerDrunkLevel(playerid, level)
 static cell AMX_NATIVE_CALL n_SetPlayerDrunkLevel(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerDrunkLevel", 2);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 	if (!pPlayer)
@@ -2220,7 +2247,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerDrunkLevel(AMX* amx, cell* params)
 // native SetPlayerCameraPos(playerid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 static cell AMX_NATIVE_CALL n_SetPlayerCameraPos(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(7);
+	CHECK_PARAMS(amx, "SetPlayerCameraPos", 7);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 
@@ -2247,7 +2274,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerCameraPos(AMX *amx, cell *params)
 // native SetPlayerCameraLookAt(playerid,x,y,z)
 static cell AMX_NATIVE_CALL n_SetPlayerCameraLookAt(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetPlayerCameraLookAt", 4);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	RakNet::BitStream bsParams;
 
@@ -2271,7 +2298,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerCameraLookAt(AMX *amx, cell *params)
 // native SetCameraBehindPlayer(playerid)
 static cell AMX_NATIVE_CALL n_SetCameraBehindPlayer(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SetCameraBehindPlayer", 1);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	RakNet::BitStream bsParams;
 	RakServerInterface* pRak = pNetGame->GetRakServer();
@@ -2286,7 +2313,7 @@ static cell AMX_NATIVE_CALL n_SetCameraBehindPlayer(AMX *amx, cell *params)
 // native TogglePlayerControllable(playerid, toggle);
 static cell AMX_NATIVE_CALL n_TogglePlayerControllable(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TogglePlayerControllable", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 
 	RakNet::BitStream bsParams;
@@ -2303,7 +2330,7 @@ static cell AMX_NATIVE_CALL n_TogglePlayerControllable(AMX *amx, cell *params)
 // native SetVehicleParametersForPlayer(vehicleid,playerid,objective,doorslocked)
 static cell AMX_NATIVE_CALL n_SetVehicleParamsForPlayer(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetVehicleParametersForPlayer", 4);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[2]) ||
 		!pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[1])) return 0;
 	RakNet::BitStream bsParams;
@@ -2326,7 +2353,7 @@ static cell AMX_NATIVE_CALL n_SetVehicleParamsForPlayer(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerScore(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerScore", 2);
 	BYTE bytePlayerID = (BYTE)params[1];
 	int iScore = (int)params[2];
 
@@ -2343,7 +2370,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerScore(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerScore(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerScore", 1);
 	BYTE bytePlayerID = (BYTE)params[1];
 	if (!pNetGame->GetPlayerPool()->GetSlotState(bytePlayerID)) return 0;
 
@@ -2355,7 +2382,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerScore(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GivePlayerMoney(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GivePlayerMoney", 2);
 	RakNet::BitStream bsMoney;
 	bsMoney.Write((int)params[2]);
 
@@ -2374,7 +2401,7 @@ static cell AMX_NATIVE_CALL n_GivePlayerMoney(AMX *amx, cell *params)
 
 static cell n_SetPlayerMoney(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerMoney", 2);
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (pPlayerPool && pPlayerPool->GetSlotState(params[1]))
 	{
@@ -2389,7 +2416,7 @@ static cell n_SetPlayerMoney(AMX* amx, cell* params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerMoney(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerMoney", 1);
 	BYTE bytePlayerID = (BYTE)params[1];
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
@@ -2405,7 +2432,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerMoney(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_ResetPlayerMoney(AMX *amx, cell *params)
 {		
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "ResetPlayerMoney", 1);
 	RakNet::BitStream bsMoney;
 
 	BYTE bytePlayerID = (BYTE)params[1];
@@ -2426,7 +2453,7 @@ static cell AMX_NATIVE_CALL n_ResetPlayerMoney(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerAmmo(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerAmmo", 1);
 	BYTE bytePlayerID = (BYTE)params[1];
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
@@ -2442,7 +2469,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerAmmo(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerAmmo(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SetPlayerAmmo", 3);
 	BYTE bytePlayerID = (BYTE)params[1];
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
@@ -2464,7 +2491,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerAmmo(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerWeaponData(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetPlayerWeaponData", 4);
 	BYTE bIndex = (BYTE)params[2];
 	if (bIndex >= 13) return 0;
 
@@ -2508,7 +2535,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerWeaponData(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_IsPlayerConnected(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsPlayerConnected", 1);
 	BYTE bytePlayerID = (BYTE)params[1];
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
@@ -2524,7 +2551,7 @@ static cell AMX_NATIVE_CALL n_IsPlayerConnected(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerState(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerState", 1);
 	BYTE bytePlayerID = (BYTE)params[1];
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
 
@@ -2540,7 +2567,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerState(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerFacingAngle(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerFacingAngle", 2);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 
@@ -2558,7 +2585,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerFacingAngle(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerFacingAngle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GetPlayerFacingAngle", 2);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 
@@ -2579,7 +2606,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerFacingAngle(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_ResetPlayerWeapons(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "ResetPlayerWeapons", 1);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 
@@ -2594,7 +2621,7 @@ static cell AMX_NATIVE_CALL n_ResetPlayerWeapons(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GivePlayerWeapon(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GivePlayerWeapon", 3);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 
@@ -2612,7 +2639,7 @@ static cell AMX_NATIVE_CALL n_GivePlayerWeapon(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetWorldTime(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SetWorldTime", 1);
 	BYTE byteHour = (BYTE)params[1];
 	pNetGame->SetWorldTime(byteHour);
 	return 1;
@@ -2623,7 +2650,7 @@ static cell AMX_NATIVE_CALL n_SetWorldTime(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerTime(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SetPlayerTime", 3);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(!pPlayer) return 0;	
@@ -2638,7 +2665,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerTime(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerTime(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GetPlayerTime", 3);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 
@@ -2672,7 +2699,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerTime(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TogglePlayerClock(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TogglePlayerClock", 2);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(!pPlayer) return 0;	
@@ -2686,7 +2713,7 @@ static cell AMX_NATIVE_CALL n_TogglePlayerClock(AMX *amx, cell *params)
 // native print(const string[])
 static cell AMX_NATIVE_CALL n_print(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "print", 1);
 
 	char* msg;
 	amx_StrParam(amx, params[1], msg);
@@ -2700,6 +2727,7 @@ static cell AMX_NATIVE_CALL n_print(AMX* amx, cell* params)
 // native printf(const format[], {Float,_}:...)
 static cell AMX_NATIVE_CALL n_printf(AMX *amx, cell *params)
 {
+	CHECK_PARAMS_BETWEEN(amx, "printf", 1, 51);
 	int len;
 	logprintf("%s",format_amxstring(amx, params, 1, len));
 
@@ -2762,8 +2790,9 @@ static cell AMX_NATIVE_CALL n_printf(AMX *amx, cell *params)
 // native format(output[], len, const format[], {Float,_}:...)
 static cell AMX_NATIVE_CALL n_format(AMX *amx, cell *params)
 {
-  int len;
-  return set_amxstring(amx, params[1], format_amxstring(amx, params, 3, len), params[2]);
+	CHECK_PARAMS(amx, "format", 53);
+	int len;
+	return set_amxstring(amx, params[1], format_amxstring(amx, params, 3, len), params[2]);
 }
 
 //----------------------------------------------------------------------------------
@@ -2771,7 +2800,7 @@ static cell AMX_NATIVE_CALL n_format(AMX *amx, cell *params)
 // native SetTimer(funcname[], interval, repeating)
 static cell AMX_NATIVE_CALL n_SetTimer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SetTimer", 3);
 
 	char* szFuncName;
 	amx_StrParam(amx, params[1], szFuncName);
@@ -2787,7 +2816,7 @@ static cell AMX_NATIVE_CALL n_SetTimer(AMX *amx, cell *params)
 // native KillTimer(timerid)
 static cell AMX_NATIVE_CALL n_KillTimer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "KillTimer", 1);
 
 	pNetGame->GetTimers()->Kill(params[1]);
 
@@ -2797,7 +2826,7 @@ static cell AMX_NATIVE_CALL n_KillTimer(AMX *amx, cell *params)
 // native SetMaxRconAttempt(max_attempt)
 static cell n_SetMaxRconLoginAttempt(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SetMaxRconAttempt", 1);
 	if (0 < params[1])
 	{
 		pNetGame->m_uiMaxRconAttempt = params[1];
@@ -2811,7 +2840,7 @@ static cell n_SetMaxRconLoginAttempt(AMX* amx, cell* params)
 // native GetTickCount()
 static cell AMX_NATIVE_CALL n_GetTickCount(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(0);
+	CHECK_PARAMS(amx, "GetTickCount", 0);
 
 	return (cell)GetTickCount();
 }
@@ -2820,7 +2849,7 @@ static cell AMX_NATIVE_CALL n_GetTickCount(AMX *amx, cell *params)
 // native GetMaxPlayers()
 static cell AMX_NATIVE_CALL n_GetMaxPlayers(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(0);
+	CHECK_PARAMS(amx, "GetMaxPlayers", 0);
 	
 	extern CConsole *pConsole;
 	return pConsole->GetIntVariable("maxplayers");
@@ -2840,6 +2869,7 @@ static cell AMX_NATIVE_CALL n_GetMaxPlayers(AMX *amx, cell *params)
 // native GetMaxPlayers()
 static cell AMX_NATIVE_CALL n_LimitGlobalChatRadius(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "LimitGlobalChatRadius", 1);
 	float fRadius = amx_ctof(params[1]);
 
 	pNetGame->m_bLimitGlobalChatRadius = TRUE;
@@ -2850,7 +2880,7 @@ static cell AMX_NATIVE_CALL n_LimitGlobalChatRadius(AMX *amx, cell *params)
 
 static cell n_LimitPlayerMarkerRadius(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "LimitPlayerMarkerRadius", 1);
 
 	pNetGame->m_bLimitGlobalMarkerRadius = TRUE;
 	pNetGame->m_fGlobalMarkerRadius = amx_ctof(params[1]);
@@ -2862,7 +2892,7 @@ static cell n_LimitPlayerMarkerRadius(AMX* amx, cell* params)
 // native GetVehicleZAngle(vehicleid, &Float:z_angle)
 static cell AMX_NATIVE_CALL n_GetVehicleZAngle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GetVehicleZAngle", 2);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 
@@ -2890,7 +2920,7 @@ static cell AMX_NATIVE_CALL n_GetVehicleZAngle(AMX *amx, cell *params)
 // native SetVehicleZAngle(vehicleid, Float:z_angle)
 static cell AMX_NATIVE_CALL n_SetVehicleZAngle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetVehicleZAngle", 2);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 
@@ -2917,7 +2947,7 @@ static cell AMX_NATIVE_CALL n_SetVehicleZAngle(AMX *amx, cell *params)
 // native PlayerPlaySound(playerid, soundid, Float:x, Float:y, Float:z)
 static cell AMX_NATIVE_CALL n_PlayerPlaySound(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "PlayerPlaySound", 5);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 
@@ -2939,7 +2969,7 @@ static cell AMX_NATIVE_CALL n_PlayerPlaySound(AMX *amx, cell *params)
 // native ShowNameTags(show)
 static cell AMX_NATIVE_CALL n_ShowNameTags(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "ShowNameTags", 1);
 	pNetGame->m_bShowNameTags = (bool)params[1];
 	return 1;
 }
@@ -2949,7 +2979,7 @@ static cell AMX_NATIVE_CALL n_ShowNameTags(AMX *amx, cell *params)
 // native ShowPlayerNameTagForPlayer(playerid, showplayerid, show)
 static cell AMX_NATIVE_CALL n_ShowPlayerNameTagForPlayer(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "ShowPlayerNameTagForPlayer", 3);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]) ||
 		!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[2])) return 0;
@@ -2969,7 +2999,7 @@ static cell AMX_NATIVE_CALL n_ShowPlayerNameTagForPlayer(AMX *amx, cell *params)
 // native ShowPlayerMarkers(show)
 static cell AMX_NATIVE_CALL n_ShowPlayerMarkers(AMX *amx, cell *params)
 {	
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "ShowPlayerMarkers", 1);
 	pNetGame->m_bShowPlayerMarkers = (bool)params[1];
 	return 1;
 }
@@ -2979,7 +3009,7 @@ static cell AMX_NATIVE_CALL n_ShowPlayerMarkers(AMX *amx, cell *params)
 // native AllowInteriorWeapons(allow)
 static cell AMX_NATIVE_CALL n_AllowInteriorWeapons(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "AllowInteriorWeapons", 1);
 	pNetGame->m_bAllowWeapons = (bool)params[1];
 	return 1;
 }
@@ -2989,6 +3019,7 @@ static cell AMX_NATIVE_CALL n_AllowInteriorWeapons(AMX *amx, cell *params)
 // native UsePlayerPedAnims()
 static cell AMX_NATIVE_CALL n_UsePlayerPedAnims(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "UsePlayerPedAnims", 0);
 	pNetGame->m_bUseCJWalk = TRUE;
 	return 1;
 }
@@ -2998,7 +3029,7 @@ static cell AMX_NATIVE_CALL n_UsePlayerPedAnims(AMX *amx, cell *params)
 // native GetPlayerIP(playerid, const ip[], len)
 static cell AMX_NATIVE_CALL n_GetPlayerIp(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GetPlayerIp", 3);
 	
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) {
 		RakServerInterface* pRak = pNetGame->GetRakServer();
@@ -3014,7 +3045,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerIp(AMX *amx, cell *params)
 // native GetPlayerPing(playerid)
 static cell AMX_NATIVE_CALL n_GetPlayerPing(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerPing", 1);
 	
 	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) {
 		RakServerInterface* pRak = pNetGame->GetRakServer();
@@ -3028,7 +3059,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerPing(AMX *amx, cell *params)
 // native GetPlayerWeapon(playerid)
 static cell AMX_NATIVE_CALL n_GetPlayerWeapon(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerWeapon", 1);
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(!pPlayer) return -1;	
 	BYTE byteState = pPlayer->GetState();
@@ -3042,16 +3073,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerWeapon(AMX *amx, cell *params)
 // native SetTimerEx(funcname[], interval, repeating, parameter)
 static cell AMX_NATIVE_CALL n_SetTimerEx(AMX *amx, cell *params)
 {
-	if (params[0] < 4 * sizeof (cell))
-	{
-		logprintf("SCRIPT: Bad parameter count (%d < 4): ", params[0]);
-		return 0;
-	}
-	else if (params[0] > 260 * sizeof (cell))
-	{
-		logprintf("SCRIPT: Bad parameter count (%d > 260): ", params[0]);
-		return 0;
-	}
+	CHECK_PARAMS_BETWEEN(amx, "SetTimerEx", 4, 54);
 
 	char* szFuncName;
 	amx_StrParam(amx, params[1], szFuncName);
@@ -3067,7 +3089,7 @@ static cell AMX_NATIVE_CALL n_SetTimerEx(AMX *amx, cell *params)
 // native VectorSize(Float:x, Float:y, Float:z)
 static cell n_VectorSize(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "VectorSize", 3);
 	float x = amx_ctof(params[1]);
 	float y = amx_ctof(params[2]);
 	float z = amx_ctof(params[3]);
@@ -3078,7 +3100,7 @@ static cell n_VectorSize(AMX *amx, cell *params)
 // native SendRconCommand(command[])
 static cell AMX_NATIVE_CALL n_SendRconCommand( AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SendRconCommand", 1);
 	extern CConsole *pConsole;
 	char* szCommand;
 	amx_StrParam(amx, params[1], szCommand);
@@ -3090,7 +3112,7 @@ static cell AMX_NATIVE_CALL n_SendRconCommand( AMX *amx, cell *params)
 // native GetPlayerArmour(playerid, &Float:armour)
 static cell AMX_NATIVE_CALL n_GetPlayerArmour(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GetPlayerArmour", 2);
 
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 
@@ -3111,7 +3133,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerArmour(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerArmour(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerArmour", 2);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	float fArmour = amx_ctof(params[2]);
@@ -3130,7 +3152,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerArmour(AMX *amx, cell *params)
 // Sets a players radar blip color for another player
 static cell AMX_NATIVE_CALL n_SetPlayerMarkerForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SetPlayerMarkerForPlayer", 3);
 
 	if (pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]) &&
 		pNetGame->GetPlayerPool()->GetAt((BYTE)params[2]))
@@ -3155,7 +3177,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerMarkerForPlayer(AMX *amx, cell *params)
 // native SetPlayerMapIcon(playerid, iconid, Float:x, Float:y, Float:z, icontype, color)
 static cell AMX_NATIVE_CALL n_SetPlayerMapIcon(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(7); // Playerid,
+	CHECK_PARAMS(amx, "SetPlayerMapIcon", 7); // Playerid,
 	if ((BYTE)params[2] >= 32) return 0;
 	
 	//CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
@@ -3188,7 +3210,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerMapIcon(AMX *amx, cell *params)
 // native RemovePlayerMapIcon(playerid, iconid)
 static cell AMX_NATIVE_CALL n_RemovePlayerMapIcon(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2); // Playerid, 
+	CHECK_PARAMS(amx, "RemovePlayerMapIcon", 2); // Playerid, 
 	
 	//CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(!pNetGame->GetPlayerPool()->GetAt((BYTE)params[1])) return 0;
@@ -3209,7 +3231,7 @@ static cell AMX_NATIVE_CALL n_RemovePlayerMapIcon(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerKeys(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetPlayerKeys", 4);
 
 	CPlayer * pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer) {
@@ -3260,7 +3282,8 @@ static cell AMX_NATIVE_CALL n_GetPlayerKeys(AMX *amx, cell *params)
 
 // native EnableTirePopping(enable)
 static cell AMX_NATIVE_CALL n_EnableTirePopping(AMX *amx, cell *params)
-{	
+{
+	CHECK_PARAMS(amx, "EnableTirePopping", 1);
 	pNetGame->m_bTirePopping = (bool)params[1];
 	//char szPopping[128];
 	//sprintf(szPopping, "%s", (params[1] == 1) ? "True" : "False");
@@ -3274,7 +3297,7 @@ static cell AMX_NATIVE_CALL n_EnableTirePopping(AMX *amx, cell *params)
 // native SetWeather(weather)
 static cell AMX_NATIVE_CALL n_SetWeather(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SetWeather", 1);
 
 	
 	pNetGame->SetWeather((BYTE)params[1]);
@@ -3290,7 +3313,7 @@ static cell AMX_NATIVE_CALL n_SetWeather(AMX *amx, cell *params)
 // native SetPlayerWeather(playerid, weather)
 static cell AMX_NATIVE_CALL n_SetPlayerWeather(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerWeather", 2);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	RakNet::BitStream bsWeather;
@@ -3306,28 +3329,28 @@ static cell AMX_NATIVE_CALL n_SetPlayerWeather(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_asin(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "asin", 1);
 	float fResult = (float)(asin(amx_ctof(params[1])) * 180 / PI);
 	return amx_ftoc(fResult);
 }
 
 static cell AMX_NATIVE_CALL n_acos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "acos", 1);
 	float fResult = (float)(acos(amx_ctof(params[1])) * 180 / PI);
 	return amx_ftoc(fResult);
 }
 
 static cell AMX_NATIVE_CALL n_atan(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "atan", 1);
 	float fResult = (float)(atan(amx_ctof(params[1])) * 180 / PI);
 	return amx_ftoc(fResult);
 }
 
 static cell AMX_NATIVE_CALL n_atan2(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "atan2", 2);
 	float fResult = (float)(atan2(amx_ctof(params[1]), amx_ctof(params[2])) * 180 / PI);
 	return amx_ftoc(fResult);
 }
@@ -3337,7 +3360,7 @@ static cell AMX_NATIVE_CALL n_atan2(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetGravity(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SetGravity", 1);
 
 	float fGravity = amx_ctof(params[1]);
 
@@ -3351,7 +3374,7 @@ static cell AMX_NATIVE_CALL n_SetGravity(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetVehicleHealth(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetVehicleHealth", 2);
 
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 	if (pVehicle)
@@ -3368,7 +3391,7 @@ static cell AMX_NATIVE_CALL n_SetVehicleHealth(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetVehicleHealth(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GetVehicleHealth", 2);
 
 	CVehicle* Vehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1]);
 
@@ -3390,7 +3413,7 @@ static cell AMX_NATIVE_CALL n_GetVehicleHealth(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_ApplyAnimation(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(9);
+	CHECK_PARAMS(amx, "ApplyAnimation", 9);
 	RakNet::BitStream bsSend;
 
 	char *szAnimLib;
@@ -3438,7 +3461,7 @@ static cell AMX_NATIVE_CALL n_ApplyAnimation(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_ClearAnimations(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "ClearAnimations", 1);
 	RakNet::BitStream bsSend;
 	
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
@@ -3456,7 +3479,7 @@ static cell AMX_NATIVE_CALL n_ClearAnimations(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_AllowPlayerTeleport(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "AllowPlayerTeleport", 2);
 	
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if(!pPlayer) return 0;
@@ -3477,7 +3500,7 @@ static cell AMX_NATIVE_CALL n_AllowPlayerTeleport(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_AllowAdminTeleport(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "AllowAdminTeleport", 1);
 	
 	if (params[1])
 	{
@@ -3494,7 +3517,7 @@ static cell AMX_NATIVE_CALL n_AllowAdminTeleport(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_AttachTrailerToVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "AttachTrailerToVehicle", 2);
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 
 	if ( pVehiclePool->GetAt((VEHICLEID)params[1]) && pVehiclePool->GetAt((VEHICLEID)params[2]) )
@@ -3511,7 +3534,7 @@ static cell AMX_NATIVE_CALL n_AttachTrailerToVehicle(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_DetachTrailerFromVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "DetachTrailerFromVehicle", 1);
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 
 	if ( pVehiclePool->GetAt((VEHICLEID)params[1]) && pVehiclePool->GetAt((VEHICLEID)params[2]) )
@@ -3527,7 +3550,7 @@ static cell AMX_NATIVE_CALL n_DetachTrailerFromVehicle(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_IsTrailerAttachedToVehicle(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsTrailerAttachedToVehicle", 1);
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 	if ( pVehiclePool->GetAt((VEHICLEID)params[1])->m_TrailerID != 0 )
 	{
@@ -3540,7 +3563,7 @@ static cell AMX_NATIVE_CALL n_IsTrailerAttachedToVehicle(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetVehicleTrailer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetVehicleTrailer", 1);
 	if (!pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[1])) return 0;
 	return (cell)pNetGame->GetVehiclePool()->GetAt((VEHICLEID)params[1])->m_TrailerID;
 }
@@ -3549,16 +3572,7 @@ cell* get_amxaddr(AMX *amx, cell amx_addr);
 // native CallRemoteFunction(functionname[], paramlist[], parameters...)
 static cell AMX_NATIVE_CALL n_CallRemoteFunction(AMX *amx, cell *params)
 {
-	if (params[0] < 2 * sizeof (cell))
-	{
-		logprintf("SCRIPT: Bad parameter count (%d < 2): ", params[0]);
-		return 0;
-	}
-	else if (params[0] > 258 * sizeof (cell))
-	{
-		logprintf("SCRIPT: Bad parameter count (%d > 258): ", params[0]);
-		return 0;
-	}
+	CHECK_PARAMS_BETWEEN(amx, "CallRemoteFunction", 2, 52);
 	int iLength;
 	char* szFuncName; //[32];
 	char* szParamList; //[16];
@@ -3674,16 +3688,7 @@ static cell AMX_NATIVE_CALL n_CallRemoteFunction(AMX *amx, cell *params)
 // native CallLocalFunction(functionname[], paramlist[], parameters...)
 static cell AMX_NATIVE_CALL n_CallLocalFunction(AMX *amx, cell *params)
 {
-	if (params[0] < 2 * sizeof (cell))
-	{
-		logprintf("SCRIPT: Bad parameter count (%d < 2): ", params[0]);
-		return 0;
-	}
-	else if (params[0] > 258 * sizeof (cell))
-	{
-		logprintf("SCRIPT: Bad parameter count (%d > 258): ", params[0]);
-		return 0;
-	}
+	CHECK_PARAMS_BETWEEN(amx, "CallLocalFunction", 2, 52);
 	int iLength;
 	char* szFuncName; //[32];
 	char* szParamList; //[16];
@@ -3760,7 +3765,7 @@ static cell AMX_NATIVE_CALL n_CallLocalFunction(AMX *amx, cell *params)
 // native SetDeathDropAmount(amount)
 static cell AMX_NATIVE_CALL n_SetDeathDropAmount(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "SetDeathDropAmount", 1);
 	pNetGame->m_iDeathDropMoney = params[1];
 	return 1;
 }
@@ -3769,6 +3774,7 @@ static cell AMX_NATIVE_CALL n_SetDeathDropAmount(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetGravity(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "GetGravity", 0);
 	return amx_ftoc(pNetGame->m_fGravity);
 }
 
@@ -3778,7 +3784,7 @@ static cell AMX_NATIVE_CALL n_GetGravity(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_CreateObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(7);
+	CHECK_PARAMS(amx, "CreateObject", 7);
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 	VECTOR vecPos, vecRot;
 
@@ -3809,7 +3815,7 @@ static cell AMX_NATIVE_CALL n_CreateObject(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetObjectPos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetObjectPos", 4);
 
 	VECTOR vecPos;
 	vecPos.X = amx_ctof(params[2]);
@@ -3834,7 +3840,7 @@ static cell AMX_NATIVE_CALL n_SetObjectPos(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetObjectPos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetObjectPos", 4);
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 	CObject*		pObject		= pObjectPool->GetAt((BYTE)params[1]);
 
@@ -3856,7 +3862,7 @@ static cell AMX_NATIVE_CALL n_GetObjectPos(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetObjectRot(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetObjectRot", 4);
 
 	VECTOR vecRot;
 	vecRot.X = amx_ctof(params[2]);
@@ -3883,7 +3889,7 @@ static cell AMX_NATIVE_CALL n_SetObjectRot(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetObjectRot(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetObjectRot", 4);
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 	CObject*		pObject		= pObjectPool->GetAt((BYTE)params[1]);
 
@@ -3904,7 +3910,7 @@ static cell AMX_NATIVE_CALL n_GetObjectRot(AMX *amx, cell *params)
 // native GetObjectModel(objectid)
 static cell n_GetObjectModel(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetObjectModel", 1);
 
 	CObject* pObject = pNetGame->GetObjectPool()->GetAt(params[1]);
 	if (!pObject)
@@ -3915,7 +3921,7 @@ static cell n_GetObjectModel(AMX* amx, cell* params)
 
 static cell AMX_NATIVE_CALL n_IsValidObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsValidObject", 1);
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 
 	if (pObjectPool->GetAt((BYTE)params[1]))
@@ -3928,7 +3934,7 @@ static cell AMX_NATIVE_CALL n_IsValidObject(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_DestroyObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "DestroyObject", 1);
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 
 	if (pObjectPool->GetAt((BYTE)params[1]))
@@ -3947,7 +3953,7 @@ static cell AMX_NATIVE_CALL n_DestroyObject(AMX *amx, cell *params)
 // native IsObjectMoving(objectid)
 static cell n_IsObjectMoving(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsObjectMoving", 1);
 
 	CObject* pObject = pNetGame->GetObjectPool()->GetAt(params[1]);
 	if (!pObject)
@@ -3958,7 +3964,7 @@ static cell n_IsObjectMoving(AMX* amx, cell* params)
 
 static cell AMX_NATIVE_CALL n_MoveObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "MoveObject", 5);
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 	BYTE byteObject = (BYTE)params[1];
 	CObject* pObject = pObjectPool->GetAt(byteObject);
@@ -3992,7 +3998,7 @@ static cell AMX_NATIVE_CALL n_MoveObject(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_StopObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "StopObject", 1);
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 	BYTE byteObject = (BYTE)params[1];
 	CObject* pObject = pObjectPool->GetAt(byteObject);
@@ -4021,7 +4027,7 @@ static cell AMX_NATIVE_CALL n_StopObject(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_CreatePlayerObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(8);
+	CHECK_PARAMS(amx, "CreatePlayerObject", 8);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 	VECTOR vecPos, vecRot;
@@ -4045,7 +4051,7 @@ static cell AMX_NATIVE_CALL n_CreatePlayerObject(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerObjectPos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "SetPlayerObjectPos", 5);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]) ||
 		!pNetGame->GetObjectPool()->GetPlayerSlotState((BYTE)params[1], (BYTE)params[2])) return 0;
@@ -4073,7 +4079,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerObjectPos(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerObjectPos(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "GetPlayerObjectPos", 5);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	CObject* pObject = pNetGame->GetObjectPool()->GetAtIndividual((BYTE)params[1], (BYTE)params[2]);
 
@@ -4095,7 +4101,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerObjectPos(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerObjectRot(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "SetPlayerObjectRot", 5);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]) ||
 		!pNetGame->GetObjectPool()->GetPlayerSlotState((BYTE)params[1], (BYTE)params[2])) return 0;
@@ -4124,7 +4130,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerObjectRot(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerObjectRot(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "GetPlayerObjectRot", 5);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	CObject* pObject = pNetGame->GetObjectPool()->GetAtIndividual((BYTE)params[1], (BYTE)params[2]);
 
@@ -4145,7 +4151,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerObjectRot(AMX *amx, cell *params)
 static cell AMX_NATIVE_CALL n_IsValidPlayerObject(AMX *amx, cell *params)
 {
 
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "IsValidPlayerObject", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 
 	if (pNetGame->GetObjectPool()->GetAtIndividual((BYTE)params[1], (BYTE)params[2]))
@@ -4158,7 +4164,7 @@ static cell AMX_NATIVE_CALL n_IsValidPlayerObject(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_DestroyPlayerObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "DestroyPlayerObject", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 
@@ -4178,7 +4184,7 @@ static cell AMX_NATIVE_CALL n_DestroyPlayerObject(AMX *amx, cell *params)
 // native IsPlayerObjectMoving(playerid, playerobjectid)
 static cell n_IsPlayerObjectMoving(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "IsPlayerObjectMoving", 2);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
 		return 0;
@@ -4192,7 +4198,7 @@ static cell n_IsPlayerObjectMoving(AMX* amx, cell* params)
 
 static cell AMX_NATIVE_CALL n_MovePlayerObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(6);
+	CHECK_PARAMS(amx, "MovePlayerObject", 6);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 	BYTE bytePlayer = (BYTE)params[1];
@@ -4228,7 +4234,7 @@ static cell AMX_NATIVE_CALL n_MovePlayerObject(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_StopPlayerObject(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "StopPlayerObject", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1])) return 0;
 	CObjectPool*	pObjectPool = pNetGame->GetObjectPool();
 	BYTE bytePlayer = (BYTE)params[1];
@@ -4257,7 +4263,7 @@ static cell AMX_NATIVE_CALL n_StopPlayerObject(AMX *amx, cell *params)
 // native GetPlayerObjectModel(playerid, objectid)
 static cell n_GetPlayerObjectModel(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GetPlayerObjectModel", 2);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
 		return 0;
@@ -4277,7 +4283,7 @@ static cell n_GetPlayerObjectModel(AMX* amx, cell* params)
 // native Menu:CreateMenu(title[], columns, Float:X, Float:Y, Float:column1width, Float:column2width = 0.0);
 static cell AMX_NATIVE_CALL n_CreateMenu(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(6);
+	CHECK_PARAMS(amx, "CreateMenu", 6);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return -1;
@@ -4292,7 +4298,7 @@ static cell AMX_NATIVE_CALL n_CreateMenu(AMX *amx, cell *params)
 // native DestroyMenu(Menu:menuid);
 static cell AMX_NATIVE_CALL n_DestroyMenu(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "DestroyMenu", 1);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return 0;
@@ -4302,7 +4308,7 @@ static cell AMX_NATIVE_CALL n_DestroyMenu(AMX *amx, cell *params)
 // native AddMenuItem(Menu:menuid, column, item[]);
 static cell AMX_NATIVE_CALL n_AddMenuItem(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "AddMenuItem", 3);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return 0;
@@ -4318,7 +4324,7 @@ static cell AMX_NATIVE_CALL n_AddMenuItem(AMX *amx, cell *params)
 // native SetMenuColumnHeader(Menu:menuid, column, header[]);
 static cell AMX_NATIVE_CALL n_SetMenuColumnHeader(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SetMenuColumnHeader", 3);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return 0;
@@ -4334,7 +4340,7 @@ static cell AMX_NATIVE_CALL n_SetMenuColumnHeader(AMX *amx, cell *params)
 // native ShowMenuForPlayer(Menu:menuid, playerid);
 static cell AMX_NATIVE_CALL n_ShowMenuForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "ShowMenuForPlayer", 2);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return 0;
@@ -4352,7 +4358,7 @@ static cell AMX_NATIVE_CALL n_ShowMenuForPlayer(AMX *amx, cell *params)
 // native HideMenuForPlayer(Menu:menuid, playerid);
 static cell AMX_NATIVE_CALL n_HideMenuForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "HideMenuForPlayer", 2);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return 0;
@@ -4370,7 +4376,7 @@ static cell AMX_NATIVE_CALL n_HideMenuForPlayer(AMX *amx, cell *params)
 // native IsValidMenu(Menu:menuid);
 static cell AMX_NATIVE_CALL n_IsValidMenu(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "IsValidMenu", 1);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return 0;
@@ -4380,7 +4386,7 @@ static cell AMX_NATIVE_CALL n_IsValidMenu(AMX *amx, cell *params)
 // native DisableMenu(Menu:menuid);
 static cell AMX_NATIVE_CALL n_DisableMenu(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "DisableMenu", 1);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return 0;
@@ -4394,7 +4400,7 @@ static cell AMX_NATIVE_CALL n_DisableMenu(AMX *amx, cell *params)
 // native DisableMenuRow(Menu:menuid, row);
 static cell AMX_NATIVE_CALL n_DisableMenuRow(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "DisableMenuRow", 2);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	if (!pMenuPool)
 		return 0;
@@ -4408,7 +4414,7 @@ static cell AMX_NATIVE_CALL n_DisableMenuRow(AMX *amx, cell *params)
 // native Menu:GetPlayerMenu(playerid);
 static cell AMX_NATIVE_CALL n_GetPlayerMenu(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerMenu", 1);
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (!pMenuPool && !pPlayerPool && !pPlayerPool->GetSlotState(params[2]))
@@ -4418,7 +4424,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerMenu(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_CreateExplosion(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(5);
+	CHECK_PARAMS(amx, "CreateExplosion", 5);
 
 	RakNet::BitStream bsParams;
 
@@ -4435,7 +4441,7 @@ static cell AMX_NATIVE_CALL n_CreateExplosion(AMX *amx, cell *params)
 
 static cell n_CreateExplosionForPlayer(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(6);
+	CHECK_PARAMS(amx, "CreateExplosionForPlayer", 6);
 
 	if (pNetGame->GetPlayerPool()->GetSlotState(params[1]))
 	{
@@ -4472,7 +4478,7 @@ static cell AMX_NATIVE_CALL n_SetDisabledWeapons(AMX *amx, cell *params)
 // native EnableZoneNames(enable);
 static cell AMX_NATIVE_CALL n_EnableZoneNames(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "EnableZoneNames", 1);
 	pNetGame->m_bZoneNames = (bool)params[1];
 	return 1;
 }
@@ -4480,7 +4486,7 @@ static cell AMX_NATIVE_CALL n_EnableZoneNames(AMX *amx, cell *params)
 // native AttachObjectToPlayer( objectid, playerid, Float:OffsetX, Float:OffsetY, Float:OffsetZ, Float:rX, Float:rY, Float:rZ )
 static cell AMX_NATIVE_CALL n_AttachObjectToPlayer( AMX *amx, cell *params )
 {
-	CHECK_PARAMS(8);
+	CHECK_PARAMS(amx, "AttachObjectToPlayer", 8);
 
 	if ( pNetGame->GetObjectPool()->GetAt( (BYTE)params[1] ) && 
 		 pNetGame->GetPlayerPool()->GetAt( (BYTE)params[2] ) )
@@ -4518,7 +4524,7 @@ static cell AMX_NATIVE_CALL n_AttachObjectToPlayer( AMX *amx, cell *params )
 //native AttachPlayerObjectToPlayer(objectplayer, objectid, attachplayer, Float:OffsetX, Float:OffsetY, Float:OffsetZ, Float:rX, Float:rY, Float:rZ);
 static cell AMX_NATIVE_CALL n_AttachPlayerObjectToPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(9);
+	CHECK_PARAMS(amx, "AttachPlayerObjectToPlayer", 9);
 
 	if (pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]) &&
 		pNetGame->GetObjectPool()->GetAtIndividual((BYTE)params[1], (BYTE)params[2]) && 
@@ -4557,7 +4563,7 @@ static cell AMX_NATIVE_CALL n_AttachPlayerObjectToPlayer(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_SetPlayerWantedLevel(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerWantedLevel", 2);
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
 	{
@@ -4573,7 +4579,7 @@ static cell AMX_NATIVE_CALL n_SetPlayerWantedLevel(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetPlayerWantedLevel(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerWantedLevel", 1);
 	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer) return pPlayer->GetWantedLevel();
 	return 0;
@@ -4582,7 +4588,7 @@ static cell AMX_NATIVE_CALL n_GetPlayerWantedLevel(AMX *amx, cell *params)
 // native GetPlayerVelocity(playerid, &Float:x, &Float:y, &Float:z)
 static cell n_GetPlayerVelocity(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetPlayerVelocity", 4);
 
 	CPlayer* pPlayer = NULL;
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
@@ -4604,7 +4610,7 @@ static cell n_GetPlayerVelocity(AMX* amx, cell* params)
 // native SetPlayerVelocity(playerid, Float:X, Float:Y, Float:Z)
 static cell n_SetPlayerVelocity(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "SetPlayerVelocity", 4);
 
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool != NULL && pPool->GetSlotState(params[1]))
@@ -4634,7 +4640,7 @@ static cell n_SetPlayerVelocity(AMX* amx, cell* params)
 // native SetPlayerSkillLevel(playerid, skill, level)
 static cell n_SetPlayerSkillLevel(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "SetPlayerSkillLevel", 3);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool != NULL && pPool->GetSlotState(params[1]))
 	{
@@ -4655,7 +4661,7 @@ static cell n_SetPlayerSkillLevel(AMX* amx, cell* params)
 // native GetPlayerSurfingVehicleID(playerid)
 static cell n_GetPlayerSurfingVehicleID(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerSurfingVehicleID", 1);
 	CPlayer* pPlayer = NULL;
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && (pPlayer = pPlayerPool->GetAt(params[1])) != NULL)
@@ -4669,7 +4675,7 @@ static cell n_GetPlayerSurfingVehicleID(AMX* amx, cell* params)
 // native GetPlayerVehicleSeat(playerid)
 static cell n_GetPlayerVehicleSeat(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerVehicleSeat", 1);
 	CPlayer* pPlayer = NULL;
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && (pPlayer = pPlayerPool->GetAt(params[1])) != NULL)
@@ -4688,7 +4694,7 @@ static cell n_GetPlayerVehicleSeat(AMX* amx, cell* params)
 // native GetPlayerCameraMode(playerid)
 static cell n_GetPlayerCameraMode(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetPlayerCameraMode", 1);
 	CPlayer* pPlayer = NULL;
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && (pPlayer = pPlayerPool->GetAt(params[1])) != NULL)
@@ -4701,7 +4707,7 @@ static cell n_GetPlayerCameraMode(AMX* amx, cell* params)
 // native SetPlayerArmedWeapon(playerid, weaponid)
 static cell n_SetPlayerArmedWeapon(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "SetPlayerArmedWeapon", 2);
 	CPlayer* pPlayer = NULL;
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && (pPlayer = pPlayerPool->GetAt(params[1])) != NULL)
@@ -4735,7 +4741,7 @@ static cell n_SetPlayerArmedWeapon(AMX* amx, cell* params)
 
 static cell AMX_NATIVE_CALL n_TextDrawCreate(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "TextDrawCreate", 3);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw)
 	{
@@ -4749,7 +4755,7 @@ static cell AMX_NATIVE_CALL n_TextDrawCreate(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawSetString(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawSetString", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4764,7 +4770,7 @@ static cell AMX_NATIVE_CALL n_TextDrawSetString(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawLetterSize(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "TextDrawLetterSize", 3);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4776,7 +4782,7 @@ static cell AMX_NATIVE_CALL n_TextDrawLetterSize(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawTextSize(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "TextDrawTextSize", 3);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4788,7 +4794,7 @@ static cell AMX_NATIVE_CALL n_TextDrawTextSize(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawAlignment(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawAlignment", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4800,7 +4806,7 @@ static cell AMX_NATIVE_CALL n_TextDrawAlignment(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawColor(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawColor", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4812,7 +4818,7 @@ static cell AMX_NATIVE_CALL n_TextDrawColor(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawUseBox(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawUseBox", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4824,7 +4830,7 @@ static cell AMX_NATIVE_CALL n_TextDrawUseBox(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawBoxColor(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawBoxColor", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4836,7 +4842,7 @@ static cell AMX_NATIVE_CALL n_TextDrawBoxColor(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawSetShadow(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawSetShadow", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4848,7 +4854,7 @@ static cell AMX_NATIVE_CALL n_TextDrawSetShadow(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawSetOutline(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawSetOutline", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4860,7 +4866,7 @@ static cell AMX_NATIVE_CALL n_TextDrawSetOutline(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawBackgroundColor(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawBackgroundColor", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4872,7 +4878,7 @@ static cell AMX_NATIVE_CALL n_TextDrawBackgroundColor(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawFont(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawFont", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4884,7 +4890,7 @@ static cell AMX_NATIVE_CALL n_TextDrawFont(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawSetProportional(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawSetProportional", 2);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4896,7 +4902,7 @@ static cell AMX_NATIVE_CALL n_TextDrawSetProportional(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawShowForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawShowForPlayer", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[2]))
@@ -4909,7 +4915,7 @@ static cell AMX_NATIVE_CALL n_TextDrawShowForPlayer(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawHideForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "TextDrawHideForPlayer", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw->GetSlotState(params[2]))
@@ -4922,7 +4928,7 @@ static cell AMX_NATIVE_CALL n_TextDrawHideForPlayer(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawShowForAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "TextDrawShowForAll", 1);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw && pTextDraw->GetSlotState(params[1]))
 	{
@@ -4934,7 +4940,7 @@ static cell AMX_NATIVE_CALL n_TextDrawShowForAll(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawHideForAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "TextDrawHideForAll", 1);
 	CTextDrawPool* pTextDraw = pNetGame->GetTextDrawPool();
 	if (pTextDraw->GetSlotState(params[1]))
 	{
@@ -4946,7 +4952,7 @@ static cell AMX_NATIVE_CALL n_TextDrawHideForAll(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_TextDrawDestroy(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "TextDrawDestroy", 1);
 	if (!pNetGame->GetTextDrawPool()->GetSlotState(params[1])) return 0;
 	pNetGame->GetTextDrawPool()->Delete(params[1]);
 	return 1;
@@ -4956,7 +4962,7 @@ static cell AMX_NATIVE_CALL n_TextDrawDestroy(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneCreate(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GangZoneCreate", 4);
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool) return -1;
 	WORD ret = pGangZonePool->New(amx_ctof(params[1]), amx_ctof(params[2]), amx_ctof(params[3]), amx_ctof(params[4]));
@@ -4966,7 +4972,7 @@ static cell AMX_NATIVE_CALL n_GangZoneCreate(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneDestroy(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GangZoneDestroy", 1);
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[1])) return 0;
 	pGangZonePool->Delete(params[1]);
@@ -4975,7 +4981,7 @@ static cell AMX_NATIVE_CALL n_GangZoneDestroy(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneShowForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GangZoneShowForPlayer", 3);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[2])) return 0;
@@ -4985,7 +4991,7 @@ static cell AMX_NATIVE_CALL n_GangZoneShowForPlayer(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneShowForAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GangZoneShowForAll", 2);
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[1])) return 0;
 	pGangZonePool->ShowForAll(params[1], params[2]);
@@ -4994,7 +5000,7 @@ static cell AMX_NATIVE_CALL n_GangZoneShowForAll(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneHideForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GangZoneHideForPlayer", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[2])) return 0;
@@ -5004,7 +5010,7 @@ static cell AMX_NATIVE_CALL n_GangZoneHideForPlayer(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneHideForAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GangZoneHideForAll", 1);
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[1])) return 0;
 	pGangZonePool->HideForAll(params[1]);
@@ -5013,7 +5019,7 @@ static cell AMX_NATIVE_CALL n_GangZoneHideForAll(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneFlashForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GangZoneFlashForPlayer", 3);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[2])) return 0;
@@ -5023,7 +5029,7 @@ static cell AMX_NATIVE_CALL n_GangZoneFlashForPlayer(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneFlashForAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GangZoneFlashForAll", 2);
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[1])) return 0;
 	pGangZonePool->FlashForAll(params[1], params[2]);
@@ -5032,7 +5038,7 @@ static cell AMX_NATIVE_CALL n_GangZoneFlashForAll(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneStopFlashForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "GangZoneStopFlashForPlayer", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[2])) return 0;
@@ -5042,7 +5048,7 @@ static cell AMX_NATIVE_CALL n_GangZoneStopFlashForPlayer(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GangZoneStopFlashForAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GangZoneStopFlashForAll", 1);
 	CGangZonePool *pGangZonePool = pNetGame->GetGangZonePool();
 	if (!pGangZonePool || !pGangZonePool->GetSlotState(params[1])) return 0;
 	pGangZonePool->StopFlashForAll(params[1]);
@@ -5054,7 +5060,7 @@ static cell AMX_NATIVE_CALL n_GangZoneStopFlashForAll(AMX *amx, cell *params)
 
 static cell AMX_NATIVE_CALL n_GetServerVarAsString(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "GetServerVarAsString", 3);
 	char *szParam = 0, *szValue = 0;
 	amx_StrParam(amx,params[1],szParam);
 	szValue = pConsole->GetStringVariable(szParam);
@@ -5064,7 +5070,7 @@ static cell AMX_NATIVE_CALL n_GetServerVarAsString(AMX *amx, cell *params)
 // native GetServerVarAsInt(const varname[])
 static cell AMX_NATIVE_CALL n_GetServerVarAsInt(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetServerVarAsInt", 1);
 	char *szParam;
 	amx_StrParam(amx,params[1],szParam);
 	return pConsole->GetIntVariable(szParam);
@@ -5073,7 +5079,7 @@ static cell AMX_NATIVE_CALL n_GetServerVarAsInt(AMX *amx, cell *params)
 // native GetServerVarAsBool(const varname[])
 static cell AMX_NATIVE_CALL n_GetServerVarAsBool(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "GetServerVarAsBool", 1);
 	char *szParam;
 	amx_StrParam(amx,params[1],szParam);
 	return (int)pConsole->GetBoolVariable(szParam);
@@ -5082,7 +5088,7 @@ static cell AMX_NATIVE_CALL n_GetServerVarAsBool(AMX *amx, cell *params)
 // native NetStats_GetConnectedTime(playerid)
 static cell n_NetStats_GetConnectedTime(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "NetStats_GetConnectedTime", 1);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool->GetSlotState(params[1]))
 	{
@@ -5107,7 +5113,7 @@ static cell n_NetStats_GetConnectedTime(AMX* amx, cell* params)
 // native NetStats_MessagesReceived(playerid)
 static cell n_NetStats_MessagesReceived(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "NetStats_MessagesReceived", 1);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool->GetSlotState(params[1]))
 	{
@@ -5135,7 +5141,7 @@ static cell n_NetStats_MessagesReceived(AMX* amx, cell* params)
 // native NetStats_BytesReceived(playerid)
 static cell n_NetStats_BytesReceived(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "NetStats_BytesReceived", 1);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool->GetSlotState(params[1]))
 	{
@@ -5160,7 +5166,7 @@ static cell n_NetStats_BytesReceived(AMX* amx, cell* params)
 // native NetStats_MessagesSent(playerid)
 static cell n_NetStats_MessagesSent(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "NetStats_MessagesSent", 1);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool->GetSlotState(params[1]))
 	{
@@ -5189,7 +5195,7 @@ static cell n_NetStats_MessagesSent(AMX* amx, cell* params)
 // native NetStats_BytesSent(playerid)
 static cell n_NetStats_BytesSent(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "NetStats_BytesSent", 1);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool->GetSlotState(params[1]))
 	{
@@ -5214,7 +5220,7 @@ static cell n_NetStats_BytesSent(AMX* amx, cell* params)
 // native NetStats_MessagesRecvPerSecond(playerid)
 static cell n_NetStats_MessagesRecvPerSecond(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "NetStats_MessagesRecvPerSecond", 1);
 	CPlayer* pPlayer = NULL;
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool && (pPlayer = pPool->GetAt(params[1])) != NULL)
@@ -5227,7 +5233,7 @@ static cell n_NetStats_MessagesRecvPerSecond(AMX* amx, cell* params)
 // native NetStats_PacketLossPercent(playerid)
 static cell n_NetStats_PacketLossPercent(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "NetStats_PacketLossPercent", 1);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool->GetSlotState(params[1]))
 	{
@@ -5254,7 +5260,7 @@ static cell n_NetStats_PacketLossPercent(AMX* amx, cell* params)
 // native NetStats_ConnectionStatus(playerid)
 static cell n_NetStats_ConnectionStatus(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "NetStats_ConnectionStatus", 1);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool->GetSlotState(params[1]))
 	{
@@ -5276,7 +5282,7 @@ static cell n_NetStats_ConnectionStatus(AMX* amx, cell* params)
 // native NetStats_GetIpPort(playerid, ip_port[], ip_port_len)
 static cell n_NetStats_GetIpPort(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(3);
+	CHECK_PARAMS(amx, "NetStats_GetIpPort", 3);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	if (0 <= params[1] && pPool->GetSlotState(params[1]))
 	{
@@ -5303,7 +5309,7 @@ static cell n_NetStats_GetIpPort(AMX* amx, cell* params)
 // native EnableStuntBonusForAll(enable)
 static cell AMX_NATIVE_CALL n_EnableStuntBonusForAll(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(1);
+	CHECK_PARAMS(amx, "EnableStuntBonusForAll", 1);
 	if (params[1] != 1) params[1] = 0;
 
 	pNetGame->m_bStuntBonus = (bool)params[1];
@@ -5317,7 +5323,7 @@ static cell AMX_NATIVE_CALL n_EnableStuntBonusForAll(AMX *amx, cell *params)
 // native EnableStuntBonusForPlayer(playerid, enable)
 static cell AMX_NATIVE_CALL n_EnableStuntBonusForPlayer(AMX *amx, cell *params)
 {
-	CHECK_PARAMS(2);
+	CHECK_PARAMS(amx, "EnableStuntBonusForPlayer", 2);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 	if (params[2] != 1) params[2] = 0;
 
@@ -5334,6 +5340,7 @@ static cell AMX_NATIVE_CALL n_EnableStuntBonusForPlayer(AMX *amx, cell *params)
 // native DisableInteriorEnterExits()
 static cell AMX_NATIVE_CALL n_DisableInteriorEnterExits(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "DisableInteriorEnterExits", 0);
 	pNetGame->m_bDisableEnterExits = true;
 
 	return 1;
@@ -5342,6 +5349,7 @@ static cell AMX_NATIVE_CALL n_DisableInteriorEnterExits(AMX *amx, cell *params)
 // native SetNameTagDrawDistance(Float:distance)
 static cell AMX_NATIVE_CALL n_SetNameTagDrawDistance(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "SetNameTagDrawDistance", 1);
 	pNetGame->m_fNameTagDrawDistance = amx_ctof(params[1]);
 
 	return 1;
@@ -5350,6 +5358,7 @@ static cell AMX_NATIVE_CALL n_SetNameTagDrawDistance(AMX *amx, cell *params)
 // native DisableNameTagLOS()
 static cell n_DisableNameTagLOS(AMX* amx, cell* params)
 {
+	CHECK_PARAMS(amx, "DisableNameTagLOS", 0);
 	if (pNetGame)
 		pNetGame->m_bNameTagLOS = false;
 
@@ -5361,6 +5370,7 @@ static cell n_DisableNameTagLOS(AMX* amx, cell* params)
 // native CreatePlayerPickup(pickupid,playerid,model,type,Float:PosX,Float:PosY,Float:PosZ)
 static cell AMX_NATIVE_CALL n_CreatePlayerPickup(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "CreatePlayerPickup", 7);
 	int iPickupId = params[1];
 	if(!pNetGame->GetPlayerPool()) return 0;
 	if(!pNetGame->GetPlayerPool()->GetSlotState(params[2])) return 0;
@@ -5386,6 +5396,7 @@ static cell AMX_NATIVE_CALL n_CreatePlayerPickup(AMX *amx, cell *params)
 // native DestroyPlayerPickup(pickupid,playerid)
 static cell AMX_NATIVE_CALL n_DestroyPlayerPickup(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "DestroyPlayerPickup", 2);
 	int iPickupId = params[1];
 	if(!pNetGame->GetPlayerPool()) return 0;
 	if(!pNetGame->GetPlayerPool()->GetSlotState(params[2])) return 0;
@@ -5403,6 +5414,7 @@ static cell AMX_NATIVE_CALL n_DestroyPlayerPickup(AMX *amx, cell *params)
 // native IsPlayerInRangeOfPoint(playerid,Float:fRange,Float:PosX,Float:PosY,Float:PosZ)
 static cell AMX_NATIVE_CALL n_IsPlayerInRangeOfPoint(AMX *amx, cell *params)
 {
+	CHECK_PARAMS(amx, "IsPlayerInRangeOfPoint", 5);
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
 	if(!pPlayerPool) return 0;
@@ -5434,7 +5446,7 @@ static cell AMX_NATIVE_CALL n_IsPlayerInRangeOfPoint(AMX *amx, cell *params)
 // native Float:GetPlayerDistanceFromPoint(playerid, Float:X, Float:Y, Float:Z)
 static cell n_GetPlayerDistanceFromPoint(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetPlayerDistanceFromPoint", 4);
 
 	float fResult = 0.0f;
 
@@ -5455,7 +5467,7 @@ static cell n_GetPlayerDistanceFromPoint(AMX* amx, cell* params)
 // native Float:GetVehicleDistanceFromPoint(vehicleid, Float:X, Float:Y, Float:Z)
 static cell n_GetVehicleDistanceFromPoint(AMX* amx, cell* params)
 {
-	CHECK_PARAMS(4);
+	CHECK_PARAMS(amx, "GetVehicleDistanceFromPoint", 4);
 
 	float fResult = 0.0f;
 

@@ -32,6 +32,8 @@ public:
 	bool UnloadOneFilterScript(char* pFilterScript);
 	void RemoveFilterScript(int iIndex);
 	void UnloadFilterScripts();
+	char* GetFilterScriptName(AMX* amx);
+
 	void Frame(float fElapsedTime);
 	
 	AMX* GetFilterScript(DWORD dwIndex) { return m_pFilterScripts[dwIndex]; };
