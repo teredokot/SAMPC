@@ -357,11 +357,14 @@ bool ReliabilityLayer::HandleSocketReceiveFromConnectedPlayer( const char *buffe
 	socketData.Read(hasAcks);
 	if (hasAcks)
 	{
+		printf("Has acks!\n");
 		MessageNumberType messageNumber;
 		if (incomingAcks.Deserialize(&socketData)==false)
 			return false;
+		printf("Incomming acks size %d\n", incomingAcks.Size());
 		for (i=0; i<incomingAcks.ranges.Size();i++)
 		{
+			printf("%d. Acks min: %d | max: %d\n", i, incomingAcks.ranges[i].minIndex, incomingAcks.ranges[i].maxIndex);
 			if (incomingAcks.ranges[i].minIndex>incomingAcks.ranges[i].maxIndex)
 			{
 				RakAssert(incomingAcks.ranges[i].minIndex<=incomingAcks.ranges[i].maxIndex);
