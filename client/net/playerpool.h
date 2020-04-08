@@ -13,7 +13,7 @@
 #define NO_TEAM 255
 
 //----------------------------------------------------
-#pragma pack(1)
+
 class CPlayerPool
 {
 private:

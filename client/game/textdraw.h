@@ -13,7 +13,6 @@ Version: $Id: textdraw.h,v 1.3 2008-02-11 22:30:15 kyecvs Exp $
 
 //-----------------------------------------------------------
 
-#pragma pack(1)
 typedef struct _TEXT_DRAW_DATA
 {
 	float fLetterWidth;		// -4
@@ -43,7 +42,6 @@ typedef struct _TEXT_DRAW_DATA
 
 //-----------------------------------------------------------
 
-#pragma pack(1)
 typedef struct _TEXT_DRAW_TRANSMIT
 {
 	float fLetterWidth;
@@ -74,8 +72,6 @@ typedef struct _TEXT_DRAW_TRANSMIT
 } TEXT_DRAW_TRANSMIT;
 
 //----------------------------------------------------
-
-#pragma pack(1)
 
 class CTextDraw
 {

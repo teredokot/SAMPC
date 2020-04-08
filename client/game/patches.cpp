@@ -573,7 +573,6 @@ void ApplyInGamePatches()
 
 //----------------------------------------------------------
 
-#pragma pack(1)
 typedef struct _PED_MODEL
 {
 	DWORD func_tbl;

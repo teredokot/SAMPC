@@ -23,7 +23,6 @@
 
 #define MAX_PICKUPS 400
 
-#pragma pack(1)
 typedef struct _PICKUP
 {
 	int iModel;

@@ -32,7 +32,6 @@
 
 //----------------------------------------------------
 
-#pragma pack(1)
 class CRemotePlayer
 {
 private:

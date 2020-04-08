@@ -15,7 +15,6 @@
 #ifndef SAMPSRV_VEHICLE_H
 #define SAMPSRV_VEHICLE_H
 
-#pragma pack(1)
 typedef struct _VEHICLE_SPAWN_INFO
 {
 	int iVehicleType;
@@ -27,7 +26,6 @@ typedef struct _VEHICLE_SPAWN_INFO
 	int iInterior;
 } VEHICLE_SPAWN_INFO;
 
-#pragma pack(1)
 typedef struct _CAR_MOD_INFO
 {
 	BYTE byteCarMod0;
@@ -51,7 +49,6 @@ typedef struct _CAR_MOD_INFO
 
 //----------------------------------------------------
 
-#pragma pack(1)
 class CVehicle
 {
 public:

@@ -11,7 +11,6 @@
 
 #define INVALID_VEHICLE_ID	0xFFFF
 
-#pragma pack(1)
 typedef struct _VEHICLE_SPAWN_INFO
 {
 	int iVehicleType;
@@ -26,7 +25,6 @@ typedef struct _VEHICLE_SPAWN_INFO
 
 //----------------------------------------------------
 
-#pragma pack(1)
 class CVehiclePool
 {
 public:

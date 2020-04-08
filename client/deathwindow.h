@@ -11,7 +11,6 @@
 
 #define MAX_DISP_DEATH_MESSAGES	5
 
-#pragma pack(1)
 typedef struct _DEATH_WINDOW_ENTRY
 {
 	CHAR szKiller[MAX_PLAYER_NAME+1];
@@ -26,7 +25,6 @@ typedef struct _DEATH_WINDOW_ENTRY
 
 //----------------------------------------------------
 
-#pragma pack(1)
 class CDeathWindow
 {
 private:

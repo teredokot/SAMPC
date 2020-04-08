@@ -45,7 +45,6 @@
 #define PACK_VEHICLE_HEALTH(f)		(BYTE)(f / 4)
 #define UNPACK_VEHICLE_HEALTH(b)	(float)b * 4
 
-#pragma pack(1)
 typedef struct _C_VECTOR1 {
 	// New format, 24 bits for each of X, Y, Z = 72 bits/9 bytes
 	char data[9];
@@ -54,7 +53,6 @@ typedef struct _C_VECTOR1 {
 	// short X,Y,Z;
 } C_VECTOR1;
 
-#pragma pack(1)
 typedef struct _PLAYER_SPAWN_INFO
 {
 	BYTE byteTeam;
@@ -65,7 +63,6 @@ typedef struct _PLAYER_SPAWN_INFO
 	int iSpawnWeaponsAmmo[3];
 } PLAYER_SPAWN_INFO;
 
-#pragma pack(1)
 typedef struct _ONFOOT_SYNC_DATA
 {
 	WORD lrAnalog;
@@ -82,7 +79,6 @@ typedef struct _ONFOOT_SYNC_DATA
 	VEHICLEID SurfVehicleId;
 } ONFOOT_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _AIM_SYNC_DATA
 {
 	BYTE byteCamMode;
@@ -94,7 +90,6 @@ typedef struct _AIM_SYNC_DATA
 	float fAimZ;
 } AIM_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _INCAR_SYNC_DATA
 {
 	VEHICLEID VehicleID;
@@ -118,7 +113,6 @@ typedef struct _INCAR_SYNC_DATA
 	unsigned char ucInfo;
 } INCAR_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _PASSENGER_SYNC_DATA
 {
 	VEHICLEID VehicleID;
@@ -133,7 +127,6 @@ typedef struct _PASSENGER_SYNC_DATA
 	VECTOR vecPos;
 } PASSENGER_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _SPECTATOR_SYNC_DATA
 {
 	WORD lrAnalog;
@@ -142,7 +135,6 @@ typedef struct _SPECTATOR_SYNC_DATA
 	VECTOR vecPos;
 } SPECTATOR_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _TRAILER_SYNC_DATA
 {
 	C_VECTOR1 cvecRoll;
@@ -153,7 +145,6 @@ typedef struct _TRAILER_SYNC_DATA
 
 //----------------------------------------------------
 
-#pragma pack(1)
 class CPlayer
 {
 private:

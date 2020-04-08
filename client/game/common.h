@@ -66,7 +66,7 @@ typedef struct _MATRIX4X4 {
 #define IN_VEHICLE(x) ((x->dwStateFlags & 256) >> 8)
 
 //-----------------------------------------------------------
-#pragma pack(1)
+
 typedef struct _WEAPON_SLOT_TYPE
 {
 	DWORD dwType;
@@ -77,7 +77,7 @@ typedef struct _WEAPON_SLOT_TYPE
 } WEAPON_SLOT_TYPE;  // MUST BE EXACTLY ALIGNED TO 28 bytes
 
 //-----------------------------------------------------------
-#pragma pack(1)
+
 typedef struct _PED_TASKS_TYPE
 {
 	DWORD * pdwPed;
@@ -97,7 +97,7 @@ typedef struct _PED_TASKS_TYPE
 } PED_TASKS_TYPE;
 
 //-----------------------------------------------------------
-#pragma pack(1)
+
 typedef struct _ENTITY_TYPE
 {
 	// ENTITY STUFF
@@ -123,7 +123,7 @@ typedef struct _ENTITY_TYPE
 } ENTITY_TYPE;
 
 //-----------------------------------------------------------
-#pragma pack(1)
+
 typedef struct _PED_TYPE
 {
 	ENTITY_TYPE entity; // 0-184
@@ -175,7 +175,7 @@ typedef struct _PED_TYPE
 } PED_TYPE;
 
 //-----------------------------------------------------------
-#pragma pack(1)
+
 typedef struct _VEHICLE_TYPE
 {
 	ENTITY_TYPE entity; // 0-184

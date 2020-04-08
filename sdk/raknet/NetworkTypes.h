@@ -21,8 +21,8 @@
 #include "RakNetDefines.h"
 #include "Export.h"
 
-#pragma pack(push)
-#pragma pack(1)
+//#pragma pack(push)
+//#pragma pack(1)
 
 /// Forward declaration
 namespace RakNet
@@ -258,7 +258,7 @@ const int PING_TIMES_ARRAY_SIZE = 5;
 /// \param[in] functionName The function name
 #define UNREGISTER_CLASS_MEMBER_RPC(networkObject, className, functionName) (networkObject)->UnregisterAsRemoteProcedureCall((#className "_" #functionName))
 
-#pragma pack(pop)
+//#pragma pack(pop)
 
 #endif
 

@@ -25,7 +25,6 @@
 #define SPECIAL_ACTION_STOPUSECELLPHONE 13
 #define SPECIAL_ACTION_URINATE			68
 
-#pragma pack(1)
 typedef struct _PLAYER_SPAWN_INFO
 {
 	BYTE byteTeam;
@@ -36,7 +35,6 @@ typedef struct _PLAYER_SPAWN_INFO
 	int iSpawnWeaponsAmmo[3];
 } PLAYER_SPAWN_INFO;
 
-#pragma pack(1)
 typedef struct _ONFOOT_SYNC_DATA
 {
 	WORD lrAnalog;
@@ -61,7 +59,6 @@ enum eWeaponState
 	WS_RELOADING = 3,
 };
 
-#pragma pack(1)
 typedef struct _AIM_SYNC_DATA
 {
 	BYTE byteCamMode;
@@ -73,7 +70,6 @@ typedef struct _AIM_SYNC_DATA
 	float fAimZ;
 } AIM_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _INCAR_SYNC_DATA
 {
 	VEHICLEID VehicleID;
@@ -97,7 +93,6 @@ typedef struct _INCAR_SYNC_DATA
 	unsigned char ucInfo;
 } INCAR_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _PASSENGER_SYNC_DATA
 {
 	VEHICLEID VehicleID;
@@ -112,7 +107,6 @@ typedef struct _PASSENGER_SYNC_DATA
 	VECTOR vecPos;
 } PASSENGER_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _SPECTATOR_SYNC_DATA
 {
 	WORD lrAnalog;
@@ -121,7 +115,6 @@ typedef struct _SPECTATOR_SYNC_DATA
 	VECTOR vecPos;
 } SPECTATOR_SYNC_DATA;
 
-#pragma pack(1)
 typedef struct _TRAILER_SYNC_DATA
 {
 	C_VECTOR1 cvecRoll;
@@ -132,7 +125,6 @@ typedef struct _TRAILER_SYNC_DATA
 
 //----------------------------------------------------------
 
-#pragma pack(1)
 class CLocalPlayer
 {
 public:
