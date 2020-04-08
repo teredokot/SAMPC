@@ -260,6 +260,14 @@ namespace DataStructures
 		// Allocate memory for copy
 		if ( original_copy.Size() == 0 )
 		{
+			// FIX: Clear() only frees array when allocation_size is bigger than 32,
+			// setting allocation_size back to 0 and Push()-ing new values will allocate a new one
+			// and old one gets eaten by a sexy black hole.
+			if (array)
+			{
+				delete[] array;
+				array = 0;
+			}
 			allocation_size = 0;
 		}
 
