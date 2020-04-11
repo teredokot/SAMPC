@@ -673,7 +673,8 @@ void GameDebugAddMessage(char *szFormat, ...)
 
 	// move in the new line
 	screen_buf[NUM_SCREEN_LINES - 1] = (PCHAR)malloc(256);
-	strcpy(screen_buf[NUM_SCREEN_LINES - 1], tmp_buf);	
+	if(screen_buf[NUM_SCREEN_LINES - 1] != NULL)
+		strcpy_s(screen_buf[NUM_SCREEN_LINES - 1], 256, tmp_buf);	
 }
 
 //----------------------------------------------------------

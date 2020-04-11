@@ -136,7 +136,7 @@ bool TableSerializer::DeserializeCell(RakNet::BitStream *in, DataStructures::Tab
 			if (in->Read(value)==false || value > 10000000)
 				return false; // Sanity check to max binary cell of 10 megabytes
 			in->AlignReadToByteBoundary();
-			if (BITS_TO_BYTES(in->GetNumberOfUnreadBits())<value)
+			if (BITS_TO_BYTES(in->GetNumberOfUnreadBits())<(BitSize_t)value)
 				return false;
 			cell->Set((char*) in->GetData()+BITS_TO_BYTES(in->GetReadOffset()), value);
 			in->IgnoreBits(BYTES_TO_BITS(value));

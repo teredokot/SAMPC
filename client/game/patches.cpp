@@ -174,8 +174,8 @@ BOOL ApplyPreGamePatches()
 	// Loading screens
 	//UnFuck(0x866CD8,10);
 	//UnFuck(0x866CCC,10);
-	strcpy((PCHAR)0x866CD8,"title");
-	strcpy((PCHAR)0x866CCC,"title");
+	strcpy_s((PCHAR)0x866CD8,11,"title");
+	strcpy_s((PCHAR)0x866CCC,8,"title");
 
 	// Modify the streaming memory hardcoded values
 	//UnFuck(0x5B8E6A,4);

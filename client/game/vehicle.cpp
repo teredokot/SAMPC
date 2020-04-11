@@ -809,9 +809,10 @@ void CVehicle::ToggleWindow(unsigned char ucDoorId, bool bOpen)
 {
 	DWORD dwThis = (DWORD)m_pVehicle;
 	DWORD dwFunc = bOpen ? (0x6D3080) : (0x6D30B0);
+	DWORD dwDoorId = (DWORD)ucDoorId;
 
 	_asm mov ecx, dwThis
-	_asm push ucDoorId
+	_asm push dwDoorId
 	_asm call dwFunc
 }
 
@@ -822,9 +823,10 @@ void CVehicle::ToggleTaxiLight(bool bToggle)
 	{
 		DWORD dwThis = (DWORD)m_pVehicle;
 		DWORD dwFunc = 0x6A3740;
+		DWORD dwToggle = (DWORD)bToggle;
 
 		_asm mov ecx, dwThis
-		_asm push bToggle
+		_asm push dwToggle
 		_asm call dwFunc
 	}
 }

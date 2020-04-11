@@ -1262,7 +1262,7 @@ unsigned ReliabilityLayer::GenerateDatagram( RakNet::BitStream *output, int MTUS
 
 			nextPacketBitLength = GetBitStreamHeaderLength( internalPacket ) + internalPacket->dataBitLength;
 
-			if ( output->GetNumberOfBitsUsed() + nextPacketBitLength > maxDataBitSize )
+			if ( output->GetNumberOfBitsUsed() + nextPacketBitLength > (BitSize_t)maxDataBitSize )
 			{
 				resendQueue.PushAtHead( internalPacket ); // Not enough room to use this packet after all!
 
@@ -1342,7 +1342,7 @@ unsigned ReliabilityLayer::GenerateDatagram( RakNet::BitStream *output, int MTUS
 			}
 
 
-			if ( output->GetNumberOfBitsUsed() + nextPacketBitLength > maxDataBitSize )
+			if ( output->GetNumberOfBitsUsed() + nextPacketBitLength > (BitSize_t)maxDataBitSize )
 			{
 				// This output won't fit.
 				sendPacketSet[ i ].PushAtHead( internalPacket ); // Push this back at the head so it is the next thing to go out

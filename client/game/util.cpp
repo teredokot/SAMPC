@@ -777,7 +777,7 @@ void _declspec(noreturn) GameForcedExit(int iReasonCode)
 	// and pretty much corrupt the application's stack.
 
 	srand((unsigned int)time(NULL));
-	int nonse = rand() ^ (rand() << 8);
+	//int nonse = rand() ^ (rand() << 8);
 	// xxxxxxxxxx0xxx0xxxxx0x0xx0xxx = 32 max
 	// 11111111110111011111010110111 = 
 	//                          1000 
@@ -786,12 +786,12 @@ void _declspec(noreturn) GameForcedExit(int iReasonCode)
 	//               100000000000000
 	//            100000000000000000
 
-	nonse &= 0xFFFBBEB7;
+	/*nonse &= 0xFFFBBEB7;
 	nonse |= ((iReasonCode & 0x1) << 3);
 	nonse |= ((iReasonCode & 0x2) << 5);
 	nonse |= ((iReasonCode & 0x4) << 6);
 	nonse |= ((iReasonCode & 0x8) << 11);
-	nonse |= ((iReasonCode & 0x16) << 14);
+	nonse |= ((iReasonCode & 0x16) << 14);*/
 
 	// Go back a certain amount of sp
 	int spBack = ((rand() ^ (rand() << 5)) >> 3) % 0x3F;
@@ -802,21 +802,21 @@ void _declspec(noreturn) GameForcedExit(int iReasonCode)
 	int pfForward = (rand() ^ (rand() << 7)) % 0xFFF;
 	
 	// Write the reason code as an octal number
-	char *pOffs = (char*)(pfForward+0xB7D0BC);
-	/*
+	/*char *pOffs = (char*)(pfForward+0xB7D0BC);
+	
 	// "Internal check failed "
 	memcpy(pOffs, (char*)0x86A5B0, 5);	pOffs+=5;
 	memcpy(pOffs, (char*)0x8689B6, 3);	pOffs+=3;
 	memcpy(pOffs, (char*)0x8749B6, 7); 	pOffs+=7;
 	memcpy(pOffs, (char*)0x858AA5, 7); 	pOffs+=7;
-	*/
+	
 
 	// "Internal error: "
 	memcpy(pOffs, (char*)0x86A5BB, 5);	pOffs+=5;
 	memcpy(pOffs, (char*)0x8689B6, 3);	pOffs+=3;
 	memcpy(pOffs, (char*)0x86B97C, 8); 	pOffs+=8;
 
-	itoa(nonse, (char*)(pOffs), 8);
+	itoa(nonse, (char*)(pOffs), 8);*/
 	// Pass over the dirty work to GameForcedExitHelper
 	__asm
 	{

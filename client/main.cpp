@@ -104,8 +104,6 @@ void LaunchMonitor(PVOID v)
 
 //----------------------------------------------------
 
-#define ARCHIVE_FILE	"samp.saa"
-
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	if(DLL_PROCESS_ATTACH==fdwReason)
@@ -128,9 +126,9 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 			CHAR szArchiveFile[MAX_PATH];
 			GetModuleFileNameA((HMODULE)hInstance, szArchiveFile, MAX_PATH);
 			DWORD dwFileNameLen = strlen(szArchiveFile);
-			while(szArchiveFile[dwFileNameLen] != '\\')
-				dwFileNameLen--;
-			strcpy(szArchiveFile+dwFileNameLen+1, ARCHIVE_FILE);
+			while (szArchiveFile[dwFileNameLen] != '\\')
+				szArchiveFile[dwFileNameLen--] = '\0';
+			strcat_s(szArchiveFile, "samp.saa");
 
 			pFileSystem = new CArchiveFS();
 			if(!pFileSystem->Load(szArchiveFile)) _asm int 3

@@ -878,7 +878,7 @@ void CGame::DisableEnterExits(bool bDisable)
 
 void CGame::SetWeaponSkill(unsigned char ucSkill, unsigned int uiLevel)
 {
-	*(float*)(0xB79380 + (ucSkill * 4 + 276)) = uiLevel;
+	*(float*)(0xB79380 + (ucSkill * 4 + 276)) = (float)uiLevel;
 }
 
 void CGame::SetMaxHealth(float fMax)
