@@ -47,7 +47,7 @@ void con_exec()
 		{
 			logprintf("Unable to exec file '%s'.", tmp);
 		} else {
-			while (fgets(tmp, 1024, f))
+			while (fgets(tmp, sizeof(tmp), f))
 			{
 				int len = strlen(tmp);
 				if (len > 0 && tmp[len-1] == '\n')
