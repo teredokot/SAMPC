@@ -72,6 +72,7 @@ public:
 	int OnPlayerSelectedMenuRow(cell playerid, cell row);
 	int OnVehicleRespray(cell playerid, cell vehicleid, cell color1, cell color2);
 	int OnVehicleMod(cell playerid, cell vehicleid, cell componentid);
+	int OnEnterExitModShop(cell playerid, cell enterexit, cell interiorid);
 	int OnVehiclePaintjob(cell playerid, cell vehicleid, cell paintjobid);
 	int OnPlayerInteriorChange(cell playerid, cell newid, cell oldid);
 	int OnPlayerKeyStateChange(cell playerid, cell newkeys, cell oldkeys);

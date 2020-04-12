@@ -474,6 +474,7 @@ forward OnObjectMoved(objectid);
 forward OnPlayerObjectMoved(playerid, objectid);
 forward OnPlayerPickUpPickup(playerid, pickupid);
 forward OnVehicleMod(playerid, vehicleid, componentid);
+forward OnEnterExitModShop(playerid, enterexit, interiorid);
 forward OnVehiclePaintjob(playerid, vehicleid, paintjobid);
 forward OnVehicleRespray(playerid, vehicleid, color1, color2);
 forward OnPlayerSelectedMenuRow(playerid, row);

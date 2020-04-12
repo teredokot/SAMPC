@@ -1067,7 +1067,29 @@ int CFilterScripts::OnVehicleMod(cell playerid, cell vehicleid, cell componentid
 	return retval;
 }
 
-//----------------------------------------------------------------------------------
+// forward OnEnterExitModShop(playerid, enterexit, interiorid);
+int CFilterScripts::OnEnterExitModShop(cell playerid, cell enterexit, cell interiorid)
+{
+	int idx;
+	cell ret = 1;
+	int retval = 1;
+
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++)
+	{
+		if (m_pFilterScripts[i])
+		{
+			if (!amx_FindPublic(m_pFilterScripts[i], "OnEnterExitModShop", &idx))
+			{
+				amx_Push(m_pFilterScripts[i], interiorid);
+				amx_Push(m_pFilterScripts[i], enterexit);
+				amx_Push(m_pFilterScripts[i], playerid);
+				amx_Exec(m_pFilterScripts[i], &ret, idx);
+				if (!ret) retval = 0;
+			}
+		}
+	}
+	return retval;
+}
 
 // forward OnVehiclePaintjob(playerid, vehicleid, paintjobid);
 int CFilterScripts::OnVehiclePaintjob(cell playerid, cell vehicleid, cell paintjobid)

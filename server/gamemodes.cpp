@@ -822,10 +822,24 @@ int CGameMode::OnVehicleMod(cell playerid, cell vehicleid, cell componentid)
 	return (int)ret;
 }
 
-//----------------------------------------------------------------------------------
+// forward OnEnterExitModShop(playerid, enterexit, interiorid);
+int CGameMode::OnEnterExitModShop(cell playerid, cell enterexit, cell interiorid)
+{
+	CHECK_INIT();
+	int idx;
+	cell ret = 1;
+
+	if (!amx_FindPublic(&m_amx, "OnEnterExitModShop", &idx))
+	{
+		amx_Push(&m_amx, interiorid);
+		amx_Push(&m_amx, enterexit);
+		amx_Push(&m_amx, playerid);
+		amx_Exec(&m_amx, &ret, idx);
+	}
+	return (int)ret;
+}
 
 // forward OnVehiclePaintjob(playerid, vehicleid, paintjobid);
-
 int CGameMode::OnVehiclePaintjob(cell playerid, cell vehicleid, cell paintjobid)
 {
 	CHECK_INIT();

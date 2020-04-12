@@ -763,8 +763,16 @@ void ScmEvent(RPCParameters *rpcParams)
 			pRak->RPC(RPC_ScmEvent, &bsSend, HIGH_PRIORITY, RELIABLE, 0, sender, true, false);
 		}
 	}
-	else 
+	else if (iEvent == EVENT_ENTEREXIT_MODSHOP)
 	{
+		if (!pNetGame->GetPlayerPool()->GetSlotState(dwParams1))
+			return;
+
+		if (pNetGame->GetFilterScripts())
+			pNetGame->GetFilterScripts()->OnEnterExitModShop(bytePlayerID, dwParams2, dwParams3);
+		if (pNetGame->GetGameMode())
+			pNetGame->GetGameMode()->OnEnterExitModShop(bytePlayerID, dwParams2, dwParams3);
+
 		bsSend.Write(bytePlayerID);
 		bsSend.Write(iEvent);
 		bsSend.Write(dwParams1);
@@ -772,6 +780,15 @@ void ScmEvent(RPCParameters *rpcParams)
 		bsSend.Write(dwParams3);
 		pRak->RPC(RPC_ScmEvent, &bsSend, HIGH_PRIORITY, RELIABLE, 0, sender, true, false);
 	}
+	/*else 
+	{
+		bsSend.Write(bytePlayerID);
+		bsSend.Write(iEvent);
+		bsSend.Write(dwParams1);
+		bsSend.Write(dwParams2);
+		bsSend.Write(dwParams3);
+		pRak->RPC(RPC_ScmEvent, &bsSend, HIGH_PRIORITY, RELIABLE, 0, sender, true, false);
+	}*/
 }
 
 void AdminMapTeleport(RPCParameters *rpcParams)
