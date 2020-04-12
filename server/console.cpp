@@ -178,27 +178,33 @@ void con_unbanip()
 
 extern BOOL bGameModeFinished;
 void con_gmx()
-{	
-	// restart with no rotations.
-	//int tmp = pNetGame->GetRepeats;
-	// Gets the name of the next mode to avoid standard cycling
-	char *szMode;
-	szMode = pNetGame->GetNextScriptFile();
-	if (szMode != NULL && pNetGame->SetNextScriptFile(szMode))
+{
+	if (pNetGame && pNetGame->GetGameState() == GAMESTATE_RUNNING)
 	{
-		bGameModeFinished = TRUE;
+		// restart with no rotations.
+		//int tmp = pNetGame->GetRepeats;
+		// Gets the name of the next mode to avoid standard cycling
+		char* szMode;
+		szMode = pNetGame->GetNextScriptFile();
+		if (szMode != NULL && pNetGame->SetNextScriptFile(szMode))
+		{
+			bGameModeFinished = TRUE;
+		}
 	}
 }
 
 void con_changemode()
 {
-	char* arg = strtok(NULL, "");
-	if (arg)
+	if (pNetGame && pNetGame->GetGameState() == GAMESTATE_RUNNING)
 	{
-		if(pNetGame->SetNextScriptFile(arg)) {
-			bGameModeFinished = TRUE;
+		char* arg = strtok(NULL, "");
+		if (arg)
+		{
+			if (pNetGame->SetNextScriptFile(arg)) {
+				bGameModeFinished = TRUE;
+			}
+			// do nothing if we can't set the requested script.
 		}
-		// do nothing if we can't set the requested script.
 	}
 }
 
