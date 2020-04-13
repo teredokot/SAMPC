@@ -94,8 +94,7 @@ public:
 	void UpdateSurfing();
 
 	void Say(unsigned char * szText);
-	void Privmsg(PCHAR szText);
-	void TeamPrivmsg(PCHAR szText);
+
 	void SetID(BYTE bytePlayerID) { m_bytePlayerID = bytePlayerID; };
 	BYTE GetID() { return m_bytePlayerID; };
 	CPlayerPed * GetPlayerPed() { return m_pPlayerPed; };

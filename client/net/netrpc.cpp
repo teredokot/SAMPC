@@ -183,88 +183,6 @@ void Chat(RPCParameters *rpcParams)
 }
 
 //----------------------------------------------------
-// Remote player has sent a private chat message.
-
-void Privmsg(RPCParameters *rpcParams)
-{
-	PCHAR Data = reinterpret_cast<PCHAR>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-	PlayerID sender = rpcParams->sender;
-
-	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
-
-	if(pNetGame->GetGameState() != GAMESTATE_CONNECTED)	return;
-
-	BYTE bytePlayerID;
-	BYTE byteToPlayerID;
-	size_t uiTextLen;
-	CHAR szText[256];
-	CHAR szStr[256];
-
-	bsData.Read(bytePlayerID);
-	bsData.Read(byteToPlayerID);
-	bsData.Read(uiTextLen);
-
-	if(uiTextLen > MAX_CMD_INPUT) return;
-
-	bsData.Read(szText, uiTextLen);
-
-	szText[uiTextLen] = '\0';
-
-	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
-	{
-		sprintf_s(szStr, "PM sent to %s: %s", pPlayerPool->GetPlayerName(byteToPlayerID), szText);
-		pChatWindow->AddClientMessage(D3DCOLOR_ARGB(255,220,24,26), szStr);
-	} else {
-		CRemotePlayer *pRemotePlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-		if(pRemotePlayer) {
-			pRemotePlayer->Privmsg(szText);	
-		}
-	}
-}
-
-//----------------------------------------------------
-// Remote player has sent a team chat message.
-
-void TeamPrivmsg(RPCParameters *rpcParams)
-{
-	PCHAR Data = reinterpret_cast<PCHAR>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-	PlayerID sender = rpcParams->sender;
-
-	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
-
-	if(pNetGame->GetGameState() != GAMESTATE_CONNECTED)	return;
-
-    BYTE bytePlayerID;
-	size_t uiTextLen;
-	CHAR szText[256];
-
-	bsData.Read(bytePlayerID);
-	bsData.Read(uiTextLen);
-
-	if(uiTextLen > MAX_CMD_INPUT) return;
-
-	bsData.Read(szText, uiTextLen);
-
-	szText[uiTextLen] = '\0';
-
-	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
-	{
-		char szTempBuffer[256];
-		sprintf_s(szTempBuffer, "Team PM sent: %s", szText);
-		pChatWindow->AddClientMessage(D3DCOLOR_ARGB(255,220,24,26), szTempBuffer);
-	} else {
-		CRemotePlayer *pRemotePlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-		if(pRemotePlayer) {
-			pRemotePlayer->TeamPrivmsg(szText);
-		}
-	}
-}
-
-//----------------------------------------------------
 // Reply to our class request from the server.
 
 void RequestClass(RPCParameters *rpcParams)
@@ -962,8 +880,6 @@ void RegisterRPCs(RakClientInterface * pRakClient)
 	REGISTER_STATIC_RPC(pRakClient,ServerQuit);	
 	REGISTER_STATIC_RPC(pRakClient,InitGame);
 	REGISTER_STATIC_RPC(pRakClient,Chat);
-	REGISTER_STATIC_RPC(pRakClient,Privmsg);
-	REGISTER_STATIC_RPC(pRakClient,TeamPrivmsg);
 	REGISTER_STATIC_RPC(pRakClient,RequestClass);
 	REGISTER_STATIC_RPC(pRakClient,RequestSpawn);
 	REGISTER_STATIC_RPC(pRakClient,Spawn);
@@ -1001,8 +917,6 @@ void UnRegisterRPCs(RakClientInterface * pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient,ServerQuit);
 	UNREGISTER_STATIC_RPC(pRakClient,InitGame);
 	UNREGISTER_STATIC_RPC(pRakClient,Chat);
-	UNREGISTER_STATIC_RPC(pRakClient,Privmsg);
-	UNREGISTER_STATIC_RPC(pRakClient,TeamPrivmsg);
 	UNREGISTER_STATIC_RPC(pRakClient,RequestClass);
 	UNREGISTER_STATIC_RPC(pRakClient,RequestSpawn);
 	UNREGISTER_STATIC_RPC(pRakClient,Spawn);

@@ -51,8 +51,6 @@ public:
 	int OnVehicleSpawn(cell vehicleid);
 	int OnVehicleDeath(cell vehicleid, cell killerid);
 	int OnPlayerText(cell playerid, unsigned char * szText);
-	int OnPlayerPrivmsg(cell playerid, cell toplayerid, unsigned char * szText);
-	int OnPlayerTeamPrivmsg(cell playerid, unsigned char * szText);
 	int OnPlayerCommandText(cell playerid, unsigned char * szCommandText);
 	int OnPlayerInfoChange(cell playerid);
 	int OnPlayerRequestClass(cell playerid, cell classid);

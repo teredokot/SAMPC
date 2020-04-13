@@ -340,63 +340,6 @@ int CGameMode::OnPlayerText(cell playerid, unsigned char * szText)
 
 //----------------------------------------------------------------------------------
 
-// forward OnPlayerPrivmsg(playerid, toplayerid, text[]);
-int CGameMode::OnPlayerPrivmsg(cell playerid, cell toplayerid, unsigned char * szText)
-{
-	CHECK_INIT();
-
-	int idx;
-	cell ret = 1;	// DEFAULT TO 1!
-	int orig_strlen = strlen((char*)szText) + 1;
-
-	if (!amx_FindPublic(&m_amx, "OnPlayerPrivmsg", &idx))
-	{
-		cell amx_addr, *phys_addr;
-		amx_PushString(&m_amx, &amx_addr, &phys_addr, (char*)szText, 0, 0);
-		amx_Push(&m_amx, toplayerid);
-		amx_Push(&m_amx, playerid);
-		amx_Exec(&m_amx, &ret, idx);
-		amx_GetString((char*)szText, phys_addr, 0, orig_strlen);
-		amx_Release(&m_amx, amx_addr);
-	}
-
-	if (ret && pNetGame->GetPlayerPool()->GetSlotState((BYTE)playerid)) {
-		pNetGame->GetPlayerPool()->GetAt((BYTE)playerid)->Privmsg((BYTE)toplayerid, szText, strlen((char*)szText));
-	}
-
-	return (int)ret;
-}
-
-//----------------------------------------------------------------------------------
-
-// forward OnPlayerTeamPrivmsg(playerid, text[]);
-int CGameMode::OnPlayerTeamPrivmsg(cell playerid, unsigned char * szText)
-{
-	CHECK_INIT();
-
-	int idx;
-	cell ret = 1;	// DEFAULT TO 1!
-	int orig_strlen = strlen((char*)szText) + 1;
-
-	if (!amx_FindPublic(&m_amx, "OnPlayerTeamPrivmsg", &idx))
-	{
-		cell amx_addr, *phys_addr;
-		amx_PushString(&m_amx, &amx_addr, &phys_addr, (char*)szText, 0, 0);
-		amx_Push(&m_amx, playerid);
-		amx_Exec(&m_amx, &ret, idx);
-		amx_GetString((char*)szText, phys_addr, 0, orig_strlen);
-		amx_Release(&m_amx, amx_addr);
-	}
-
-	if (ret && pNetGame->GetPlayerPool()->GetSlotState((BYTE)playerid)) {
-		pNetGame->GetPlayerPool()->GetAt((BYTE)playerid)->TeamPrivmsg(szText, strlen((char*)szText));
-	}
-
-	return (int)ret;
-}
-
-//----------------------------------------------------------------------------------
-
 // forward OnPlayerCommandText(playerid, cmdtext[]);
 int CGameMode::OnPlayerCommandText(cell playerid, unsigned char * szCommandText)
 {

@@ -1094,42 +1094,6 @@ void CLocalPlayer::Say(PCHAR szText)
 
 //----------------------------------------------------------
 
-void CLocalPlayer::Msg(BYTE byteToPlayer, PCHAR szText)
-{
-	if (byteToPlayer == pNetGame->GetPlayerPool()->GetLocalPlayerID()) {
-		pChatWindow->AddInfoMessage("You cannot PM yourself!");
-		return;
-	}
-	if (byteToPlayer > MAX_PLAYERS || !pNetGame->GetPlayerPool()->GetSlotState(byteToPlayer)) {
-		pChatWindow->AddInfoMessage("Enter a valid player ID!");
-		return;
-	}
-
-	size_t uiTextLen = strlen(szText);
-
-	RakNet::BitStream bsSend;
-	bsSend.Write(byteToPlayer);
-	bsSend.Write(uiTextLen);
-	bsSend.Write(szText, uiTextLen);
-
-	pNetGame->GetRakClient()->RPC(RPC_Privmsg,&bsSend,HIGH_PRIORITY,RELIABLE,0,false);
-}
-
-//----------------------------------------------------------
-
-void CLocalPlayer::TeamMsg(PCHAR szText)
-{
-	size_t uiTextLen = strlen(szText);
-
-	RakNet::BitStream bsSend;
-	bsSend.Write(uiTextLen);
-	bsSend.Write(szText, uiTextLen);
-
-	pNetGame->GetRakClient()->RPC(RPC_TeamPrivmsg,&bsSend,HIGH_PRIORITY,RELIABLE,0,false);
-}
-
-//----------------------------------------------------------
-
 void CLocalPlayer::SendEnterVehicleNotification(VEHICLEID VehicleID, BOOL bPassenger)
 {
 	RakNet::BitStream bsSend;

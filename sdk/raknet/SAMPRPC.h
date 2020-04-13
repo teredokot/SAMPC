@@ -25,8 +25,6 @@ enum eRPCTable
 	RPC_SetTimeEx,
 	RPC_ToggleClock,
 	RPC_Chat,
-	RPC_Privmsg,
-	RPC_TeamPrivmsg,
 	RPC_RequestClass,
 	RPC_RequestSpawn,
 	RPC_Spawn,

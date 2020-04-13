@@ -216,8 +216,6 @@ public:
 	CPlayerPed * GetPlayerPed() { return m_pPlayerPed; };
 
 	void Say(PCHAR szText);
-	void Msg(BYTE byteToPlayer, PCHAR szText);
-	void TeamMsg(PCHAR szText);
 
 	void SendExitVehicleNotification(VEHICLEID VehicleID);
 	void SendEnterVehicleNotification(VEHICLEID VehicleID,BOOL bPassenger);

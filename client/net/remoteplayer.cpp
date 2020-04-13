@@ -976,27 +976,6 @@ void CRemotePlayer::Say(unsigned char *szText)
 	pChatWindow->AddChatMessage(szPlayerName,GetPlayerColorAsARGB(),(char*)szText);
 }
 
-
-//----------------------------------------------------
-
-void CRemotePlayer::Privmsg(char *szText)
-{
-	CHAR szStr[256];
-	sprintf_s(szStr, "PM from %s(%d): %s", pNetGame->GetPlayerPool()->GetPlayerName(m_bytePlayerID), m_bytePlayerID, szText);
-	pChatWindow->AddClientMessage(D3DCOLOR_ARGB(255,220,24,26), szStr);
-}
-
-
-//----------------------------------------------------
-
-void CRemotePlayer::TeamPrivmsg(char *szText)
-{
-	CHAR szStr[256];
-	sprintf_s(szStr, "Team PM from %s(%d): %s", pNetGame->GetPlayerPool()->GetPlayerName(m_bytePlayerID), m_bytePlayerID, szText);
-	pChatWindow->AddClientMessage(D3DCOLOR_ARGB(255,220,24,26), szStr);
-}
-
-
 //----------------------------------------------------
 
 float CRemotePlayer::GetDistanceFromRemotePlayer(CRemotePlayer *pFromPlayer)

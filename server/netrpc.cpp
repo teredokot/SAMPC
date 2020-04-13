@@ -197,136 +197,6 @@ void Chat(RPCParameters *rpcParams)
 }
 
 //----------------------------------------------------
-// Sent by client with private message text
-
-void Privmsg(RPCParameters *rpcParams)
-{
-	PCHAR Data = reinterpret_cast<PCHAR>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-	PlayerID sender = rpcParams->sender;
-
-	BYTE byteToPlayerID;
-	unsigned char szText[256];
-	memset(szText,0,256);
-
-	BYTE byteTextLen;
-	CPlayerPool *pPool = pNetGame->GetPlayerPool();
-
-	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
-	bsData.Read(byteToPlayerID);
-	bsData.Read(byteTextLen);
-
-	if(byteTextLen > MAX_CMD_INPUT) return;
-
-	bsData.Read((char*)szText,byteTextLen);
-	szText[byteTextLen] = '\0';
-
-	if (!pPool->GetSlotState(pRak->GetIndexFromPlayerID(sender))) return;
-
-	ReplaceBadChars((char *)szText);
-
-	logprintf("[pm] [%s to %s]: %s",
-		pPool->GetPlayerName(pRak->GetIndexFromPlayerID(sender)),
-		pPool->GetPlayerName(byteToPlayerID),
-		szText);
-
-/*#ifdef RAKRCON
-	/ *char szPm[255];
-	sprintf(szPm, "*** PM from %s to %s: %s.", pPool->GetPlayerName(pRak->GetIndexFromPlayerID(sender)), pPool->GetPlayerName(byteToPlayerID), szText);
-	pRcon->SendEventString(szPm);* /
-
-	RakNet::BitStream bsSend;
-
-	bsData.Write( (BYTE)pRak->GetIndexFromPlayerID( sender ) );
-	bsSend.Write( byteToPlayerID );
-	bsData.Write( byteTextLen );
-	bsData.Write( szText, byteTextLen );
-
-	pRcon->GetRakServer()->RPC( RPC_Privmsg, &bsSend, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false );
-
-#endif*/
-
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
-
-	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-	CGameMode *pGameMode = pNetGame->GetGameMode();
-	
-	if (pPlayer)
-	{	
-		 pNetGame->GetFilterScripts()->OnPlayerPrivmsg((cell)bytePlayerID, (cell)byteToPlayerID, szText);
-		// Send OnPlayerText callback to the GameMode script.
-		if (pGameMode)
-		{
-			pGameMode->OnPlayerPrivmsg((cell)bytePlayerID, (cell)byteToPlayerID, szText);
-		} else {
-			// No pGameMode
-			pPlayer->Privmsg(byteToPlayerID, szText,byteTextLen);
-		}	
-	}
-}
-
-//----------------------------------------------------
-// Sent by client with team chat text
-
-void TeamPrivmsg(RPCParameters *rpcParams)
-{
-	PCHAR Data = reinterpret_cast<PCHAR>(rpcParams->input);
-	int iBitLength = rpcParams->numberOfBitsOfData;
-	PlayerID sender = rpcParams->sender;
-
-	unsigned char szText[256];
-	BYTE byteTextLen;
-	memset(szText,0,256);
-
-	CPlayerPool *pPool = pNetGame->GetPlayerPool();
-
-	RakNet::BitStream bsData(Data,(iBitLength/8)+1,false);
-	bsData.Read(byteTextLen);
-
-	if(byteTextLen > MAX_CMD_INPUT) return;
-
-	bsData.Read((char*)szText,byteTextLen);
-	szText[byteTextLen] = '\0';
-
-	if(!pPool->GetSlotState(pRak->GetIndexFromPlayerID(sender))) return;
-	
-	ReplaceBadChars((char *)szText);
-
-	if(pPool->GetAt(pRak->GetIndexFromPlayerID(sender))->GetTeam() == NO_TEAM) {
-		pNetGame->SendClientMessage(sender, 0xDC181AFF, "You are not on a team!");
-		return;
-	}
-
-	logprintf("[pm] [%s to team]: %s",
-		pPool->GetPlayerName(pRak->GetIndexFromPlayerID(sender)),
-		szText);
-
-/*#ifdef RAKRCON
-	char szTeamPm[255];
-	sprintf(szTeamPm, "*** PM from %s to team: %s.", pPool->GetPlayerName(pRak->GetIndexFromPlayerID(sender)), szText);
-	pRcon->SendEventString(szTeamPm);
-#endif*/
-
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
-
-	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-	CGameMode *pGameMode = pNetGame->GetGameMode();
-	
-	if (pPlayer)
-	{	
-		pNetGame->GetFilterScripts()->OnPlayerTeamPrivmsg((cell)bytePlayerID, szText);
-		// Send OnPlayerText callback to the GameMode script.
-		if (pGameMode)
-		{
-			pGameMode->OnPlayerTeamPrivmsg((cell)bytePlayerID, szText);
-		} else {
-			// No pGameMode
-			pPlayer->TeamPrivmsg(szText,byteTextLen);
-		}	
-	}
-}
-
-//----------------------------------------------------
 // Sent by client who wishes to request a class from
 // the gamelogic handler.
 
@@ -942,8 +812,6 @@ void RegisterRPCs(RakServerInterface * pRakServer)
 
 	REGISTER_STATIC_RPC(pRakServer, ClientJoin);
 	REGISTER_STATIC_RPC(pRakServer, Chat);
-	REGISTER_STATIC_RPC(pRakServer, Privmsg);
-	REGISTER_STATIC_RPC(pRakServer, TeamPrivmsg);
 	REGISTER_STATIC_RPC(pRakServer, RequestClass);
 	REGISTER_STATIC_RPC(pRakServer, RequestSpawn);
 	REGISTER_STATIC_RPC(pRakServer, Spawn);
@@ -971,8 +839,6 @@ void UnRegisterRPCs(RakServerInterface * pRakServer)
 
 	UNREGISTER_STATIC_RPC(pRakServer, ClientJoin);
 	UNREGISTER_STATIC_RPC(pRakServer, Chat);
-	UNREGISTER_STATIC_RPC(pRakServer, Privmsg);
-	UNREGISTER_STATIC_RPC(pRakServer, TeamPrivmsg);
 	UNREGISTER_STATIC_RPC(pRakServer, RequestClass);
 	UNREGISTER_STATIC_RPC(pRakServer, RequestSpawn);
 	UNREGISTER_STATIC_RPC(pRakServer, Spawn);

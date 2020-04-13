@@ -766,46 +766,6 @@ void CPlayer::Say(unsigned char * szText, size_t byteTextLen)
 
 //----------------------------------------------------
 
-void CPlayer::Privmsg(BYTE byteToPlayerID, unsigned char * szText, size_t byteTextLen)
-{
-	PlayerID playerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(m_bytePlayerID);
-	PlayerID toplayerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(byteToPlayerID);
-	RakNet::BitStream bsSend;
-
-	bsSend.Write(m_bytePlayerID);
-	bsSend.Write(byteToPlayerID);
-	bsSend.Write(byteTextLen);
-	bsSend.Write((const char *)szText,byteTextLen);
-
-	pNetGame->GetRakServer()->RPC(RPC_Privmsg,&bsSend,HIGH_PRIORITY,RELIABLE,0,playerid,false,false);
-	pNetGame->GetRakServer()->RPC(RPC_Privmsg,&bsSend,HIGH_PRIORITY,RELIABLE,0,toplayerid,false,false);
-}
-
-//----------------------------------------------------
-
-void CPlayer::TeamPrivmsg(unsigned char * szText, size_t byteTextLen)
-{
-	PlayerID playerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(m_bytePlayerID);
-	RakNet::BitStream bsSend;
-
-	bsSend.Write(m_bytePlayerID);
-	bsSend.Write(byteTextLen);
-	bsSend.Write((const char *)szText,byteTextLen);
-
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-	
-	for (int i=0; i<MAX_PLAYERS; i++) {
-		if(pPlayerPool->GetSlotState(i)) {
-			if(pPlayerPool->GetAt(m_bytePlayerID)->GetTeam() == pPlayerPool->GetAt(i)->GetTeam()) {
-				pNetGame->GetRakServer()->RPC(RPC_TeamPrivmsg,&bsSend,HIGH_PRIORITY,RELIABLE,0,
-					pNetGame->GetRakServer()->GetPlayerIDFromIndex(i),false,false);
-			}
-		}
-	}
-}
-
-//----------------------------------------------------
-
 void CPlayer::HandleDeath(BYTE byteReason, BYTE byteWhoWasResponsible)
 {
 	RakNet::BitStream bsPlayerDeath;

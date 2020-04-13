@@ -504,63 +504,6 @@ int CFilterScripts::OnPlayerText(cell playerid, unsigned char* szText)
 
 //----------------------------------------------------------------------------------
 
-// forward OnPlayerPrivmsg(playerid, toplayerid, text[]);
-int CFilterScripts::OnPlayerPrivmsg(cell playerid, cell toplayerid, unsigned char* szText)
-{
-	int idx;
-	cell ret = 1;	// DEFAULT TO 1!
-
-	int orig_strlen = strlen((char*)szText) + 1;
-
-	for (int i=0; i<MAX_FILTER_SCRIPTS; i++)
-	{
-		if (m_pFilterScripts[i])
-		{
-			if (!amx_FindPublic(m_pFilterScripts[i], "OnPlayerPrivmsg", &idx))
-			{
-				cell amx_addr, *phys_addr;
-				amx_PushString(m_pFilterScripts[i], &amx_addr, &phys_addr, (char*)szText, 0, 0);
-				amx_Push(m_pFilterScripts[i], toplayerid);
-				amx_Push(m_pFilterScripts[i], playerid);
-				amx_Exec(m_pFilterScripts[i], &ret, idx);
-				amx_GetString((char*)szText, phys_addr, 0, orig_strlen);
-				amx_Release(m_pFilterScripts[i], amx_addr);
-				if (!ret) return 0; // Callback returned 0, so exit and don't display the text.
-			}
-		}
-	}
-	return (int)ret;
-}
-
-//----------------------------------------------------------------------------------
-
-// forward OnPlayerTeamPrivmsg(playerid, text[]);
-int CFilterScripts::OnPlayerTeamPrivmsg(cell playerid, unsigned char* szText)
-{
-	int idx;
-	cell ret = 1;	// DEFAULT TO 1!
-
-	int orig_strlen = strlen((char*)szText) + 1;
-
-	for (int i=0; i<MAX_FILTER_SCRIPTS; i++)
-	{
-		if (m_pFilterScripts[i])
-		{
-			if (!amx_FindPublic(m_pFilterScripts[i], "OnPlayerTeamPrivmsg", &idx))
-			{
-				cell amx_addr, *phys_addr;
-				amx_PushString(m_pFilterScripts[i], &amx_addr, &phys_addr, (char*)szText, 0, 0);
-				amx_Push(m_pFilterScripts[i], playerid);
-				amx_Exec(m_pFilterScripts[i], &ret, idx);
-				amx_GetString((char*)szText, phys_addr, 0, orig_strlen);
-				amx_Release(m_pFilterScripts[i], amx_addr);
-				if (!ret) return 0; // Callback returned 0, so exit and don't display the text.
-			}
-		}
-	}
-	return (int)ret;
-}
-
 //----------------------------------------------------------------------------------
 
 // forward OnPlayerCommandText(playerid, cmdtext[]);

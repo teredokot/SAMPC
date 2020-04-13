@@ -243,8 +243,6 @@ public:
 	void Process(float fElapsedTime);
 	void BroadcastSyncData();
 	void Say(unsigned char * szText, size_t byteTextLength);
-	void Privmsg(BYTE byteToPlayerID, unsigned char * szText, size_t byteTextLength);
-	void TeamPrivmsg(unsigned char * szText, size_t byteTextLength);
 	void SetID(BYTE bytePlayerID) { m_bytePlayerID = bytePlayerID; };
 	
 	void StoreOnFootFullSyncData(ONFOOT_SYNC_DATA * pofSync);

@@ -457,8 +457,6 @@ forward OnPlayerDeath(playerid, killerid, reason);
 forward OnVehicleSpawn(vehicleid);
 forward OnVehicleDeath(vehicleid, killerid);
 forward OnPlayerText(playerid, text[]);
-forward OnPlayerPrivmsg(playerid, recieverid, text[]);
-forward OnPlayerTeamPrivmsg(playerid, text[]);
 forward OnPlayerCommandText(playerid, cmdtext[]);
 forward OnPlayerRequestClass(playerid, classid);
 forward OnPlayerEnterVehicle(playerid, vehicleid, ispassenger);

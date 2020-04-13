@@ -57,48 +57,6 @@ void cmdDefaultCmdProc(PCHAR szCmd)
 
 //----------------------------------------------------
 
-void cmdMsg(PCHAR szCmd)
-{
-	if (!strlen(szCmd)) return;
-	
-	char * szDestination;
-	char * szMsg;
-	char* ctx;
-
-	szDestination = strtok_s(szCmd, " ", &ctx);
-	if (!szDestination || !IsNumeric(szDestination)) {
-		pChatWindow->AddInfoMessage("Enter a valid player ID!");
-		return;
-	}
-
-	szMsg = strtok_s(NULL, "", &ctx);
-	if (szMsg == NULL)
-	{
-		pChatWindow->AddInfoMessage("Enter a message!");
-		return;
-	}
-	
-	if(pNetGame) {
-		CLocalPlayer *pLocalPlayer;
-		pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
-		pLocalPlayer->Msg((BYTE)atoi(szDestination), szMsg);
-	}
-}
-
-//----------------------------------------------------
-
-void cmdTeamMsg(PCHAR szCmd)
-{
-	if (!strlen(szCmd)) return;
-	if(pNetGame) {
-		CLocalPlayer *pLocalPlayer;
-		pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
-		pLocalPlayer->TeamMsg(szCmd);
-	}
-}
-
-//----------------------------------------------------
-
 extern BOOL gDisableAllFog;
 
 BOOL bDontProcessVehiclePool=FALSE;
@@ -1445,11 +1403,6 @@ void SetupCommands()
 #ifndef _DEBUG
 	}
 #endif
-
-	pCmdWindow->AddCmdProc("msg",cmdMsg);
-	pCmdWindow->AddCmdProc("pm",cmdMsg);
-	pCmdWindow->AddCmdProc("tmsg",cmdTeamMsg);
-	pCmdWindow->AddCmdProc("tpm",cmdTeamMsg);
 
 	pCmdWindow->AddCmdProc("interior",cmdShowInterior);
 	pCmdWindow->AddCmdProc("cmpstat",cmdCmpStat);
