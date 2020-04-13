@@ -33,7 +33,7 @@ char * AMXAPI aux_StrError(int errnum);
 void AMXPrintError(CGameMode* pGameMode, AMX *amx, int error);
 int amx_CustomInit(AMX *amx);
 int amx_sampDbInit(AMX* amx);
-//int amx_sampDbCleanup(AMX *amx);
+int amx_sampDbCleanup(AMX *amx);
 
 char szGameModeFileName[256];
 
@@ -139,7 +139,7 @@ void CGameMode::Unload()
 	{
 		aux_FreeProgram(&m_amx);
 		pPlugins->DoAmxUnload(&m_amx);
-		//amx_sampDbCleanup(&m_amx);
+		amx_sampDbCleanup(&m_amx);
 		amx_TimeCleanup(&m_amx);
 		amx_FileCleanup(&m_amx);
 		amx_StringCleanup(&m_amx);

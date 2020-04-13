@@ -28,7 +28,7 @@ int AMXAPI aux_LoadProgramFromMemory(AMX* amx, char* filedata);
 int AMXAPI aux_FreeProgram(AMX *amx);
 int amx_CustomInit(AMX *amx);
 int amx_sampDbInit(AMX* amx);
-//int amx_sampDbCleanup(AMX *amx);
+int amx_sampDbCleanup(AMX *amx);
 
 void PrintMissingNatives(AMX* amx, const char* szScriptName);
 
@@ -208,7 +208,7 @@ void CFilterScripts::RemoveFilterScript(int iIndex)
 	// Do the other stuff from before
 	aux_FreeProgram(m_pFilterScripts[iIndex]);
 	pPlugins->DoAmxUnload(m_pFilterScripts[iIndex]);
-	//amx_sampDbCleanup(m_pFilterScripts[iIndex]);
+	amx_sampDbCleanup(m_pFilterScripts[iIndex]);
 	amx_TimeCleanup(m_pFilterScripts[iIndex]);
 	amx_FileCleanup(m_pFilterScripts[iIndex]);
 	amx_StringCleanup(m_pFilterScripts[iIndex]);

@@ -2,6 +2,12 @@
 #include "main.h"
 
 typedef struct {
+	AMX* amx;
+	sqlite3* handle;
+} DBHandle;
+
+typedef struct {
+	AMX* amx;
 	int iRows;
 	int iColumns;
 	char** pszResults;
@@ -9,7 +15,7 @@ typedef struct {
 	int iCurrentRow;
 } DBResult;
 
-static DataStructures::Map<int, sqlite3*> g_mapDBs;
+static DataStructures::Map<int, DBHandle*> g_mapDBs;
 static DataStructures::Map<int, DBResult*> g_mapDBResults;
 
 int set_amxstring(AMX* amx, cell amx_addr, const char* source, int max);
@@ -44,14 +50,20 @@ static cell n_db_open(AMX* amx, cell* params)
 	strcat(path, filename);
 #endif
 
-	sqlite3* db = NULL;
-	if (sqlite3_open(path, &db) != SQLITE_OK)
+	DBHandle* db = NULL;
+	db = (DBHandle*)malloc(sizeof(DBHandle));
+	if (db == NULL)
+		return 0;
+
+	if (sqlite3_open(path, &db->handle) != SQLITE_OK)
 	{
 		if (g_bDBLogging)
 			logprintf("[Error] Can't open sqlite database %s.", path);
 
 		return 0;
 	}
+
+	db->amx = amx;
 
 	int key = 0;
 	while (true)
@@ -79,8 +91,10 @@ static cell n_db_close(AMX* amx, cell* params)
 		return 0;
 	}
 
-	sqlite3* db = g_mapDBs.Get(key);
-	int err = sqlite3_close(db);
+	DBHandle* db = g_mapDBs.Get(key);
+	int err = sqlite3_close(db->handle);
+	db->amx = 0;
+	free(db);
 	g_mapDBs.Delete(key);
 
 	return err == SQLITE_OK;
@@ -98,7 +112,7 @@ static cell n_db_query(AMX* amx, cell* params)
 		return 0;
 	}
 
-	DBResult* result = (DBResult*)calloc(1, sizeof(DBResult));
+	DBResult* result = (DBResult*)malloc(sizeof(DBResult));
 	if (result == NULL)
 		return 0;
 	result->iCurrentRow = 0;
@@ -111,8 +125,8 @@ static cell n_db_query(AMX* amx, cell* params)
 	if (g_bDBLogQueries)
 		logprintf("[db_log_queries]: %s", query);
 
-	sqlite3* db = g_mapDBs.Get(key);
-	if (sqlite3_get_table(db, query, &result->pszResults, &result->iRows,
+	DBHandle* db = g_mapDBs.Get(key);
+	if (sqlite3_get_table(db->handle, query, &result->pszResults, &result->iRows,
 		&result->iColumns, &result->szErrMsg) != SQLITE_OK)
 	{
 		if (g_bDBLogging)
@@ -123,6 +137,8 @@ static cell n_db_query(AMX* amx, cell* params)
 		free(result);
 		return 0;
 	}
+
+	result->amx = amx;
 
 	key = 0;
 	while (true)
@@ -155,6 +171,8 @@ static cell n_db_free_result(AMX* amx, cell* params)
 	sqlite3_free_table(dbresult->pszResults);
 	sqlite3_free(dbresult->szErrMsg);
 	free(dbresult);
+
+	dbresult->amx = 0;
 
 	g_mapDBResults.Delete(key);
 
@@ -497,7 +515,31 @@ int amx_sampDbInit(AMX* amx)
 	return amx_Register(amx, sampDb_Natives, -1);
 }
 
-/*int amx_sampDbCleanup(AMX* amx)
+int amx_sampDbCleanup(AMX* amx)
 {
+	unsigned idx = 0;
+	for (; idx < g_mapDBs.Size(); idx++)
+	{
+		if (g_mapDBs[idx]->amx == amx)
+		{
+			sqlite3_close(g_mapDBs[idx]->handle);
+			delete g_mapDBs[idx];
+			g_mapDBs.RemoveAtIndex(idx);
+		}
+	}
+
+	idx = 0;
+	for (; idx < g_mapDBResults.Size(); idx++)
+	{
+		if (g_mapDBResults[idx]->amx == amx)
+		{
+			sqlite3_free_table(g_mapDBResults[idx]->pszResults);
+			sqlite3_free(g_mapDBResults[idx]->szErrMsg);
+			free(g_mapDBResults[idx]);
+
+			g_mapDBResults.RemoveAtIndex(idx);
+		}
+	}
+
 	return AMX_ERR_NONE;
-}*/
+}
