@@ -97,7 +97,7 @@ void NatPunchthrough::Update(RakPeerInterface *peer)
 {
 	if (connectionRequestList.Size())
 	{
-		RakNetTime time = RakNet::GetTime();
+		RakNet::Time time = RakNet::GetTime();
 		RakNet::BitStream outBitstream;
 		unsigned i;
 		i=0;
@@ -132,22 +132,22 @@ void NatPunchthrough::Update(RakPeerInterface *peer)
 						receiverPing=rakPeer->GetAveragePing(connectionRequestList[i]->receiver);
 						senderPing=rakPeer->GetAveragePing(connectionRequestList[i]->sender);
 						if (receiverPing > senderPing)
-							connectionRequestList[i]->nextActionTime=(RakNetTime)(receiverPing*SEND_TIMESTAMP_DELAY_PING_MULTIPLE);
+							connectionRequestList[i]->nextActionTime=(RakNet::Time)(receiverPing*SEND_TIMESTAMP_DELAY_PING_MULTIPLE);
 						else
-							connectionRequestList[i]->nextActionTime=(RakNetTime)(senderPing*SEND_TIMESTAMP_DELAY_PING_MULTIPLE);
+							connectionRequestList[i]->nextActionTime=(RakNet::Time)(senderPing*SEND_TIMESTAMP_DELAY_PING_MULTIPLE);
 						connectionRequestList[i]->pingCount++;
 					}
 					else
 					{
 						// Send the timestamped message to both systems so they send datagrams to each other simultaneously
 						int receiverPing, senderPing;
-						RakNetTime delayTime;
+						RakNet::Time delayTime;
 						receiverPing=rakPeer->GetAveragePing(connectionRequestList[i]->receiver);
 						senderPing=rakPeer->GetAveragePing(connectionRequestList[i]->sender);
 						if (receiverPing > senderPing)
-							delayTime=(RakNetTime)(receiverPing*SEND_PUNCHTHROUGH_DELAY_PING_MULTIPLE);
+							delayTime=(RakNet::Time)(receiverPing*SEND_PUNCHTHROUGH_DELAY_PING_MULTIPLE);
 						else
-							delayTime=(RakNetTime)(senderPing*SEND_PUNCHTHROUGH_DELAY_PING_MULTIPLE);
+							delayTime=(RakNet::Time)(senderPing*SEND_PUNCHTHROUGH_DELAY_PING_MULTIPLE);
 
 						outBitstream.Reset();
 						outBitstream.Write((MessageID)ID_TIMESTAMP);
@@ -198,8 +198,8 @@ void NatPunchthrough::Update(RakPeerInterface *peer)
 PluginReceiveResult NatPunchthrough::OnReceive(RakPeerInterface *peer, Packet *packet)
 {
 	unsigned char packetId;
-	if (packet->length>sizeof(MessageID)+sizeof(RakNetTime) && packet->data[0]==ID_TIMESTAMP)
-		packetId=packet->data[sizeof(MessageID)+sizeof(RakNetTime)];
+	if (packet->length>sizeof(MessageID)+sizeof(RakNet::Time) && packet->data[0]==ID_TIMESTAMP)
+		packetId=packet->data[sizeof(MessageID)+sizeof(RakNet::Time)];
 	else
 		packetId=packet->data[0];
 
@@ -355,7 +355,7 @@ void NatPunchthrough::OnConnectAtTime(RakPeerInterface *peer, Packet *packet)
 void NatPunchthrough::OnSendOfflineMessageAtTime(RakPeerInterface *peer, Packet *packet)
 {
 	RakNet::BitStream inBitstream(packet->data, packet->length, false);
-	RakNetTime nextActionTime;
+	RakNet::Time nextActionTime;
 	inBitstream.IgnoreBits(8);
 	PlayerID sender;
 	inBitstream.Read(nextActionTime);

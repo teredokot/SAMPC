@@ -226,13 +226,15 @@ Packet* RakClient::Receive( void )
 		}
         else
 		if ( packet->data[ 0 ] == ID_TIMESTAMP &&
-			packet->length == sizeof(unsigned char)+sizeof(unsigned int)+sizeof(unsigned char)+sizeof(unsigned int)+sizeof(unsigned int) )
+			packet->length == (sizeof(unsigned char)+ // ID_TIMESTAMP
+				sizeof(RakNet::Time)+ // timeStamp
+				sizeof(unsigned char)+ // typeId
+				sizeof(unsigned int)+ // in_seed
+				sizeof(unsigned int)) ) // in_nextseed
 		{
-			
-
 			RakNet::BitStream inBitStream(packet->data, packet->length, false);
 		
-			RakNetTime timeStamp;
+			RakNet::Time timeStamp;
 			unsigned char typeId;
 			unsigned int in_seed;
 			unsigned int in_nextSeed;
@@ -541,7 +543,7 @@ void RakClient::RemoveRouterInterface( RouterInterface *routerInterface )
 	RakPeer::RemoveRouterInterface(routerInterface);
 }
 
-void RakClient::SetTimeoutTime( RakNetTime timeMS )
+void RakClient::SetTimeoutTime( RakNet::Time timeMS )
 {
 	RakPeer::SetTimeoutTime( timeMS, GetServerID() );
 }

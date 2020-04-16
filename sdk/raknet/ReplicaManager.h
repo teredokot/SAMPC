@@ -163,7 +163,7 @@ public:
 	/// \param[in] networkID If the remote object had an NetworkID set by the time Replica::SendConstruction was called it is here.
 	/// \param[in] senderId Which PlayerID sent this packet.
 	/// \return See ReplicaReturnResult
-	void SetReceiveConstructionCB(ReplicaReturnResult (* constructionCB)(RakNet::BitStream *inBitStream, RakNetTime timestamp, NetworkID networkID, PlayerID senderId, ReplicaManager *caller));
+	void SetReceiveConstructionCB(ReplicaReturnResult (* constructionCB)(RakNet::BitStream *inBitStream, RakNet::Time timestamp, NetworkID networkID, PlayerID senderId, ReplicaManager *caller));
 
 	/// Optional callback
 	/// Set your callbacks to be called when, after connecting to another system, you get all objects that system is going to send to you when it is done with the first iteration through the object list.
@@ -174,7 +174,7 @@ public:
 	/// \param[in] receiveDownloadCompleteCB The callback function pointer or 0, to call when we get a download complete packet.  You do need to set this if you want to be notified of the download complete packet.
     /// \param[in] inBitStream The bitstream that was written to in the sendDownloadCompleteCB callback
 	/// \return See ReplicaReturnResult
-	void SetDownloadCompleteCB(ReplicaReturnResult (* sendDownloadCompleteCB)(RakNet::BitStream *outBitStream, RakNetTime currentTime, PlayerID senderId, ReplicaManager *caller), ReplicaReturnResult (* receiveDownloadCompleteCB)(RakNet::BitStream *inBitStream, PlayerID senderId, ReplicaManager *caller));
+	void SetDownloadCompleteCB(ReplicaReturnResult (* sendDownloadCompleteCB)(RakNet::BitStream *outBitStream, RakNet::Time currentTime, PlayerID senderId, ReplicaManager *caller), ReplicaReturnResult (* receiveDownloadCompleteCB)(RakNet::BitStream *inBitStream, PlayerID senderId, ReplicaManager *caller));
 
 	/// This channel will be used for all RakPeer::Send calls
 	/// \param[in] channel The channel to use for internal RakPeer::Send calls from this system.  Defaults to 0.
@@ -256,7 +256,7 @@ public:
 	struct RegisteredReplica
 	{
 		Replica *replica; // Pointer to an external object - not allocated here.
-		RakNetTime lastDeserializeTrue; //   For replicatedObjects it's the last time deserialize returned true.
+		RakNet::Time lastDeserializeTrue; //   For replicatedObjects it's the last time deserialize returned true.
 		unsigned char allowedInterfaces; // Replica interface flags
 	};
 
@@ -264,7 +264,7 @@ public:
 	{
 		Replica *replica; // Pointer to an external object - not allocated here.
         bool inScope; // Is replica in scope or not?
-		RakNetTime lastSendTime;
+		RakNet::Time lastSendTime;
 	};
 
 	struct ReceivedCommand
@@ -339,10 +339,10 @@ protected:
 	// Callback pointers.
 
 	// Required callback to handle construction calls
-	ReplicaReturnResult (* _constructionCB)(RakNet::BitStream *inBitStream, RakNetTime timestamp, NetworkID networkID, PlayerID senderId, ReplicaManager *caller);
+	ReplicaReturnResult (* _constructionCB)(RakNet::BitStream *inBitStream, RakNet::Time timestamp, NetworkID networkID, PlayerID senderId, ReplicaManager *caller);
 
 	// Optional callbacks to send and receive download complete.
-	ReplicaReturnResult (* _sendDownloadCompleteCB)(RakNet::BitStream *outBitStream, RakNetTime currentTime, PlayerID senderId, ReplicaManager *caller);
+	ReplicaReturnResult (* _sendDownloadCompleteCB)(RakNet::BitStream *outBitStream, RakNet::Time currentTime, PlayerID senderId, ReplicaManager *caller);
 	ReplicaReturnResult (* _receiveDownloadCompleteCB)(RakNet::BitStream *inBitStream, PlayerID senderId, ReplicaManager *caller);
 
 	// Channel to do send calls on.  All calls are reliable ordered except for Replica::Serialize

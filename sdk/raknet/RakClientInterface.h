@@ -23,6 +23,7 @@
 #include "RakPeerInterface.h"
 #include "BitStream.h"
 #include "RakNetStatistics.h" 
+#include "GetTime.h"
 
 /// This is a user-interface class to act as a game client.  All it does is implement some functionality on top of RakPeer.
 /// See the individual functions for what the class can do.
@@ -351,7 +352,7 @@ public:
 	/// Set the time, in MS, to use before considering ourselves disconnected after not being able to deliver a reliable packet
 	/// Default time is 10,000 or 10 seconds in release and 30,000 or 30 seconds in debug.
 	/// \param[in] timeMS Time, in MS
-	virtual void SetTimeoutTime( RakNetTime timeMS )=0;
+	virtual void SetTimeoutTime( RakNet::Time timeMS )=0;
 
 	/// Set the MTU per datagram.  It's important to set this correctly - otherwise packets will be needlessly split, decreasing performance and throughput.
 	/// Maximum allowed size is MAXIMUM_MTU_SIZE.

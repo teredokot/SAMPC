@@ -409,7 +409,7 @@ void Multiplayer<InterfaceType>::ReceivePong( Packet *packet, InterfaceType *int
 {
 	// Peer or client. Response from a ping for an unconnected system.
 #ifdef _DO_PRINTF
-	RakNetTime time, dataLength;
+	RakNet::Time time, dataLength;
 	memcpy( ( char* ) & time, packet->data + sizeof( unsigned char ), sizeof( unsigned int ) );
 	dataLength = packet->length - sizeof( unsigned char ) - sizeof( unsigned int );
 	printf( "ID_PONG from PlayerID:%u:%u on %p.\nPing is %i\nData is %i bytes long.\n", packet->playerId.binaryAddress, packet->playerId.port, interfaceType, time, dataLength );

@@ -43,7 +43,7 @@ void StatisticsToString( RakNetStatisticsStruct *s, char *buffer, int verbosityL
 
 	else if ( verbosityLevel == 1 )
 	{
-		RakNetTime time = RakNet::GetTime();
+		RakNet::Time time = RakNet::GetTime();
 		double elapsedTime;
 		double bpsSent;
 		double bpsReceived;
@@ -88,7 +88,7 @@ void StatisticsToString( RakNetStatisticsStruct *s, char *buffer, int verbosityL
 	}
 	else
 	{
-		RakNetTime time = RakNet::GetTime();
+		RakNet::Time time = RakNet::GetTime();
 		double elapsedTime;
 		double bpsSent;
 		double bpsReceived;

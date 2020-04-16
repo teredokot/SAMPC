@@ -81,11 +81,11 @@ bool Router::Send( char *data, unsigned bitLength, PacketPriority priority, Pack
 	RakNet::BitStream out;
 
 	// Write timestamp first, if the user had a timestamp
-	if (data[0]==ID_TIMESTAMP && bitLength >= BYTES_TO_BITS(sizeof(MessageID)+sizeof(RakNetTime)))
+	if (data[0]==ID_TIMESTAMP && bitLength >= BYTES_TO_BITS(sizeof(MessageID)+sizeof(RakNet::Time)))
 	{
-		out.Write(data, sizeof(MessageID)+sizeof(RakNetTime));
-		data+=sizeof(MessageID)+sizeof(RakNetTime);
-		bitLength-=BYTES_TO_BITS(sizeof(MessageID)+sizeof(RakNetTime));
+		out.Write(data, sizeof(MessageID)+sizeof(RakNet::Time));
+		data+=sizeof(MessageID)+sizeof(RakNet::Time);
+		bitLength-=BYTES_TO_BITS(sizeof(MessageID)+sizeof(RakNet::Time));
 	}
 
 	SendTree(priority, reliability, orderingChannel, &tree, data, bitLength, &out, recipients);
@@ -151,7 +151,7 @@ PluginReceiveResult Router::OnReceive(RakPeerInterface *peer, Packet *packet)
 #ifdef _DO_PRINTF
 		printf("%i got routed message from %i\n", peer->GetExternalID(packet->playerId).port, packet->playerId.port);
 #endif
-		RakNetTime timestamp;
+		RakNet::Time timestamp;
 		PacketPriority priority;
 		PacketReliability reliability;
 		unsigned char orderingChannel;
@@ -271,8 +271,8 @@ PluginReceiveResult Router::OnReceive(RakPeerInterface *peer, Packet *packet)
 
 			if (packet->data[0]==ID_TIMESTAMP )
 			{
-				memcpy( packet->data + sizeof(RakNetTime)+sizeof(unsigned char), out.GetData()+payloadWriteByteOffset, BITS_TO_BYTES(payloadBitLength) );
-				packet->bitSize=sizeof(RakNetTime)+sizeof(unsigned char)+payloadBitLength;
+				memcpy( packet->data + sizeof(RakNet::Time)+sizeof(unsigned char), out.GetData()+payloadWriteByteOffset, BITS_TO_BYTES(payloadBitLength) );
+				packet->bitSize=sizeof(RakNet::Time)+sizeof(unsigned char)+payloadBitLength;
 			}
 			else
 			{

@@ -84,7 +84,7 @@ void PacketLogger::OnDirectSocketReceive(const char *data, const unsigned bitsUs
 
 	WriteLog(str);
 }
-void PacketLogger::OnInternalPacket(InternalPacket *internalPacket, unsigned frameNumber, PlayerID remoteSystemID, RakNetTime time, bool isSend)
+void PacketLogger::OnInternalPacket(InternalPacket *internalPacket, unsigned frameNumber, PlayerID remoteSystemID, RakNet::Time time, bool isSend)
 {
 	char str[256];
 	char sendType[4];
@@ -115,7 +115,7 @@ void PacketLogger::OnInternalPacket(InternalPacket *internalPacket, unsigned fra
 	else
 	*/
 	{
-		if (internalPacket->data[0]==ID_TIMESTAMP && internalPacket->data[sizeof(unsigned char)+sizeof(RakNetTime)]!=ID_RPC)
+		if (internalPacket->data[0]==ID_TIMESTAMP && internalPacket->data[sizeof(unsigned char)+sizeof(RakNet::Time)]!=ID_RPC)
 		{
 			if (printId==false)
 			{
@@ -131,7 +131,7 @@ void PacketLogger::OnInternalPacket(InternalPacket *internalPacket, unsigned fra
 			}
 
 		}
-		else if (internalPacket->data[0]==ID_RPC || (internalPacket->dataBitLength>(sizeof(unsigned char)+sizeof(RakNetTime))*8 && internalPacket->data[0]==ID_TIMESTAMP && internalPacket->data[sizeof(unsigned char)+sizeof(RakNetTime)]==ID_RPC))
+		else if (internalPacket->data[0]==ID_RPC || (internalPacket->dataBitLength>(sizeof(unsigned char)+sizeof(RakNet::Time))*8 && internalPacket->data[0]==ID_TIMESTAMP && internalPacket->data[sizeof(unsigned char)+sizeof(RakNet::Time)]==ID_RPC))
 		{
 			bool hasTimestamp;
 			unsigned int bitsOfData;
@@ -143,7 +143,7 @@ void PacketLogger::OnInternalPacket(InternalPacket *internalPacket, unsigned fra
 			RakNet::BitStream rpcDecode(internalPacket->data, BITS_TO_BYTES(internalPacket->dataBitLength), false);
 			rpcDecode.IgnoreBits(8);
 			if (internalPacket->data[0]==ID_TIMESTAMP)
-				rpcDecode.IgnoreBits(sizeof(unsigned char)+sizeof(RakNetTime));
+				rpcDecode.IgnoreBits(sizeof(unsigned char)+sizeof(RakNet::Time));
 			
 			rpcDecode.ReadCompressed(uniqueId);
 			

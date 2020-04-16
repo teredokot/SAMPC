@@ -78,7 +78,7 @@ void PluginInterface::OnDirectSocketReceive(const char *data, const unsigned bit
 #ifdef _MSC_VER
 #pragma warning( disable : 4100 ) // warning C4100: <variable name> : unreferenced formal parameter
 #endif
-void PluginInterface::OnInternalPacket(InternalPacket *internalPacket, unsigned frameNumber, PlayerID remoteSystemID, RakNetTime time, bool isSend)
+void PluginInterface::OnInternalPacket(InternalPacket *internalPacket, unsigned frameNumber, PlayerID remoteSystemID, RakNet::Time time, bool isSend)
 {
 }
 

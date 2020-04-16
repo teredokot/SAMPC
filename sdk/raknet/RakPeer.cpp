@@ -623,9 +623,8 @@ void RakPeer::Disconnect( unsigned int blockDuration, unsigned char orderingChan
 {
 	unsigned i,j;
 	bool anyActive;
-	RakNetTime startWaitingTime;
+	RakNet::Time startWaitingTime, time;
 //	PlayerID playerId;
-	RakNetTime time;
 	//unsigned short systemListSize = remoteSystemListSize; // This is done for threading reasons
 	unsigned short systemListSize = maximumNumberOfPeers;
 
@@ -894,7 +893,8 @@ bool RakPeer::Send( RakNet::BitStream * bitStream, PacketPriority priority, Pack
 Packet* RakPeer::Receive( void )
 {
 	Packet *packet = ReceiveIgnoreRPC();
-	while (packet && (packet->data[ 0 ] == ID_RPC || (packet->length>sizeof(unsigned char)+sizeof(RakNetTime) && packet->data[0]==ID_TIMESTAMP && packet->data[sizeof(unsigned char)+sizeof(RakNetTime)]==ID_RPC)))
+	while (packet && (packet->data[ 0 ] == ID_RPC || (packet->length>sizeof(unsigned char)+sizeof(RakNet::Time) &&
+		packet->data[0]==ID_TIMESTAMP && packet->data[sizeof(unsigned char)+sizeof(RakNet::Time)]==ID_RPC)))
 	{
 		// Do RPC calls from the user thread, not the network update thread
 		// If we are currently blocking on an RPC reply, send ID_RPC to the blocker to handle rather than handling RPCs automatically
@@ -967,7 +967,7 @@ Packet* RakPeer::ReceiveIgnoreRPC( void )
 #ifdef _RAKNET_THREADSAFE
 		rakPeerMutexes[packetPool_Mutex].Unlock();
 #endif
-		if ( ( packet->length >= sizeof(unsigned char) + sizeof( RakNetTime ) ) &&
+		if ( ( packet->length >= sizeof(unsigned char) + sizeof( RakNet::Time ) ) &&
 			( (unsigned char) packet->data[ 0 ] == ID_TIMESTAMP ) )
 		{
 			offset = sizeof(unsigned char);
@@ -1237,7 +1237,7 @@ bool RakPeer::RPC( short uniqueID, const char *data, unsigned int bitLength, Pac
 //	if (blockOnRPCReply)
 	{
 //		Packet *p;
-		RakNetTime stopWaitingTime;
+		RakNet::Time stopWaitingTime;
 //		RPCIndex arrivedRPCIndex;
 //		char uniqueIdentifier[256];
 		if (reliability==UNRELIABLE)
@@ -1391,10 +1391,10 @@ PlayerID RakPeer::GetPlayerIDFromIndex( int index )
 // All IP addresses starting with 128.0.0
 // milliseconds - how many ms for a temporary ban.  Use 0 for a permanent ban
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void RakPeer::AddToBanList( const char *IP, RakNetTime milliseconds )
+void RakPeer::AddToBanList( const char *IP, RakNet::Time milliseconds )
 {
 	unsigned index;
-	RakNetTime time = RakNet::GetTime();
+	RakNet::Time time = RakNet::GetTime();
 
 	if ( IP == 0 || IP[ 0 ] == 0 || strlen( IP ) > 15 )
 		return ;
@@ -1509,7 +1509,7 @@ void RakPeer::ClearBanList( void )
 bool RakPeer::IsBanned( const char *IP )
 {
 	unsigned banListIndex, characterIndex;
-	RakNetTime time;
+	RakNet::Time time;
 	BanStruct *temp;
 
 	if ( IP == 0 || IP[ 0 ] == 0 || strlen( IP ) > 15 )
@@ -1607,7 +1607,7 @@ void RakPeer::Ping( const PlayerID target )
 // Description:
 // Send a ping to the specified unconnected system.
 // The remote system, if it is Initialized, will respond with ID_PONG.
-// The final ping time will be encoded in the following sizeof(RakNetTime) bytes.  (Default is 4 bytes - See __GET_TIME_64BIT in NetworkTypes.h
+// The final ping time will be encoded in the following sizeof(RakNet::Time) bytes.  (Default is 4 bytes - See __GET_TIME_64BIT in NetworkTypes.h
 //
 // Parameters:
 // host: Either a dotted IP address or a domain name.  Can be 255.255.255.255 for LAN broadcast.
@@ -1635,7 +1635,7 @@ void RakPeer::Ping( const char* host, unsigned short remotePort, bool onlyReplyO
 	PlayerID playerId;
 	IPToPlayerID( host, remotePort, &playerId );
 
-	RakNet::BitStream bitStream( sizeof(unsigned char) + sizeof(RakNetTime) );
+	RakNet::BitStream bitStream( sizeof(unsigned char) + sizeof(RakNet::Time) );
 	if ( onlyReplyOnAcceptingConnections )
 		bitStream.Write((unsigned char)ID_PING_OPEN_CONNECTIONS);
 	else
@@ -1868,7 +1868,7 @@ PlayerID RakPeer::GetExternalID( const PlayerID target ) const
 // Set the time, in MS, to use before considering ourselves disconnected after not being able to deliver a reliable packet
 // \param[in] time Time, in MS
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void RakPeer::SetTimeoutTime( RakNetTime timeMS, const PlayerID target )
+void RakPeer::SetTimeoutTime( RakNet::Time timeMS, const PlayerID target )
 {
 	RemoteSystemStruct * remoteSystem = GetRemoteSystemFromPlayerID( target, false, true );
 
@@ -2114,7 +2114,7 @@ void RakPeer::SetSplitMessageProgressInterval(int interval)
 // Set to 0 or less to never timeout.  Defaults to 0.
 // timeoutMS How many ms to wait before simply not sending an unreliable message.
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void RakPeer::SetUnreliableTimeout(RakNetTime timeoutMS)
+void RakPeer::SetUnreliableTimeout(RakNet::Time timeoutMS)
 {
 	RakAssert(timeoutMS>=0);
 	unreliableTimeout=timeoutMS;
@@ -2693,7 +2693,7 @@ RemoteSystemStruct * RakPeer::AssignPlayerIDToRemoteSystemList( const PlayerID p
 {
 	RemoteSystemStruct * remoteSystem;
 	unsigned i,j;
-	RakNetTime time = RakNet::GetTime();
+	RakNet::Time time = RakNet::GetTime();
 #ifdef _DEBUG
 	assert(playerId!=UNASSIGNED_PLAYER_ID);
 #endif
@@ -2750,13 +2750,11 @@ RemoteSystemStruct * RakPeer::AssignPlayerIDToRemoteSystemList( const PlayerID p
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void RakPeer::ShiftIncomingTimestamp( unsigned char *data, PlayerID playerId ) const
 {
-#ifdef _DEBUG
-	assert( IsActive() );
-	assert( data );
-#endif
+	RakAssert( IsActive() );
+	RakAssert( data );
 
-	RakNet::BitStream timeBS( data, sizeof(RakNetTime), false);
-	RakNetTime encodedTimestamp;
+	RakNet::BitStream timeBS( data, sizeof(RakNet::Time), false);
+	RakNet::Time encodedTimestamp;
 	timeBS.Read(encodedTimestamp);
 
 	encodedTimestamp = encodedTimestamp - GetBestClockDifferential( playerId );
@@ -2766,10 +2764,10 @@ void RakPeer::ShiftIncomingTimestamp( unsigned char *data, PlayerID playerId ) c
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Thanks to Chris Taylor (cat02e@fsu.edu) for the improved timestamping algorithm
-RakNetTime RakPeer::GetBestClockDifferential( const PlayerID playerId ) const
+RakNet::Time RakPeer::GetBestClockDifferential( const PlayerID playerId ) const
 {
 	int counter, lowestPingSoFar;
-	RakNetTime clockDifferential;
+	RakNet::Time clockDifferential;
 	RemoteSystemStruct *remoteSystem = GetRemoteSystemFromPlayerID( playerId, true, true );
 
 	if ( remoteSystem == 0 )
@@ -2838,7 +2836,7 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 	// Note to self - if I change this format then I have to change the PacketLogger class too
 	incomingBitStream.IgnoreBits(8);
 	if (data[0]==ID_TIMESTAMP)
-		incomingBitStream.IgnoreBits(8*(sizeof(RakNetTime)+sizeof(unsigned char)));
+		incomingBitStream.IgnoreBits(8*(sizeof(RakNet::Time)+sizeof(unsigned char)));
 
 	if ( incomingBitStream.ReadCompressed(uniqueId) == false )
 	{
@@ -3224,10 +3222,10 @@ void RakPeer::PingInternal( const PlayerID target, bool performImmediate )
 	if ( IsActive() == false )
 		return ;
 
-	RakNet::BitStream bitStream(sizeof(unsigned char)+sizeof(RakNetTime));
+	RakNet::BitStream bitStream(sizeof(unsigned char)+sizeof(RakNet::Time));
 	bitStream.Write((unsigned char)ID_INTERNAL_PING);
-	RakNetTimeNS currentTimeNS = RakNet::GetTimeNS();
-	RakNetTime currentTime = RakNet::GetTime();
+	RakNet::Time64 currentTimeNS = RakNet::GetTime64();
+	RakNet::Time currentTime = RakNet::GetTime();
 	bitStream.Write(currentTime);
 	if (performImmediate)
 		SendImmediate( (char*)bitStream.GetData(), bitStream.GetNumberOfBitsUsed(), SYSTEM_PRIORITY, UNRELIABLE, 0, target, false, false, currentTimeNS );
@@ -3239,9 +3237,7 @@ void RakPeer::CloseConnectionInternal( const PlayerID target, bool sendDisconnec
 {
 	unsigned i,j;
 
-#ifdef _DEBUG
-	assert(orderingChannel >=0 && orderingChannel < 32);
-#endif
+	RakAssert(orderingChannel >=0 && orderingChannel < 32);
 
 	if (target==UNASSIGNED_PLAYER_ID)
 		return;
@@ -3356,7 +3352,7 @@ void RakPeer::SendBuffered( const char *data, int numberOfBitsToSend, PacketPrio
 #endif
 }
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-bool RakPeer::SendImmediate( char *data, int numberOfBitsToSend, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, bool useCallerDataAllocation, RakNetTimeNS currentTime )
+bool RakPeer::SendImmediate( char *data, int numberOfBitsToSend, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, bool useCallerDataAllocation, RakNet::Time64 currentTime )
 {
 	unsigned *sendList;
 	unsigned sendListSize;
@@ -3440,7 +3436,7 @@ bool RakPeer::SendImmediate( char *data, int numberOfBitsToSend, PacketPriority 
 		}
 
 		if (reliability==RELIABLE || reliability==RELIABLE_ORDERED || reliability==RELIABLE_SEQUENCED)
-			remoteSystemList[sendList[sendListIndex]].lastReliableSend=(RakNetTime)(currentTime/(RakNetTimeNS)1000);
+			remoteSystemList[sendList[sendListIndex]].lastReliableSend=(RakNet::Time)(currentTime/(RakNet::Time64)1000);
 	}
 
 #if defined(_COMPATIBILITY_1)
@@ -3756,7 +3752,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 
 				if (remoteSystem)
 				{
-					RakNetTimeNS time = RakNet::GetTimeNS();
+					RakNet::Time64 time = RakNet::GetTime64();
 					remoteSystem->connectMode=RemoteSystemStruct::REQUESTED_CONNECTION;
 					remoteSystem->weInitiatedTheConnection=true;
 
@@ -3959,7 +3955,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 			( (unsigned char)data[0] == ID_OPEN_CONNECTION_REQUEST && length <= 2 ) ||
 			( (unsigned char)data[0] == ID_OPEN_CONNECTION_REPLY && length <= 2 ) ||
 			( (unsigned char)data[0] == ID_CONNECTION_ATTEMPT_FAILED && length <= 2 ) ||
-			( ((unsigned char)data[0] == ID_PING_OPEN_CONNECTIONS || (unsigned char)data[0] == ID_PING || (unsigned char)data[0] == ID_PONG) && length >= sizeof(unsigned char)+sizeof(RakNetTime) ) ||
+			( ((unsigned char)data[0] == ID_PING_OPEN_CONNECTIONS || (unsigned char)data[0] == ID_PING || (unsigned char)data[0] == ID_PONG) && length >= sizeof(unsigned char)+sizeof(RakNet::Time) ) ||
 			( (unsigned char)data[0] == ID_ADVERTISE_SYSTEM && length<MAX_OFFLINE_DATA_LENGTH )
 			) )
 			{
@@ -3989,7 +3985,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 
 		// These are all messages from unconnected systems.  Messages here can be any size, but are never processed from connected systems.
 		if ( ( (unsigned char) data[ 0 ] == ID_PING_OPEN_CONNECTIONS
-			|| (unsigned char)(data)[0] == ID_PING)	&& length == sizeof(unsigned char)+sizeof(RakNetTime) )
+			|| (unsigned char)(data)[0] == ID_PING)	&& length == sizeof(unsigned char)+sizeof(RakNet::Time) )
 		{
 			if ( (unsigned char)(data)[0] == ID_PING ||
 				rakPeer->AllowIncomingConnections() ) // Open connections with players
@@ -3997,7 +3993,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 #if !defined(_COMPATIBILITY_1)
 				RakNet::BitStream inBitStream( (unsigned char *) data, length, false );
 				inBitStream.IgnoreBits(8);
-				RakNetTime sendPingTime;
+				RakNet::Time sendPingTime;
 				inBitStream.Read(sendPingTime);
 
 				RakNet::BitStream outBitStream;
@@ -4019,7 +4015,7 @@ void ProcessNetworkPacket( const unsigned int binaryAddress, const unsigned shor
 			}
 		}
 		// UNCONNECTED MESSAGE Pong with no data.  TODO - Problem - this matches a reliable send of other random data.
-		else if ((unsigned char) data[ 0 ] == ID_PONG && length >= sizeof(unsigned char)+sizeof(RakNetTime) && length < sizeof(unsigned char)+sizeof(RakNetTime)+MAX_OFFLINE_DATA_LENGTH)
+		else if ((unsigned char) data[ 0 ] == ID_PONG && length >= sizeof(unsigned char)+sizeof(RakNet::Time) && length < sizeof(unsigned char)+sizeof(RakNet::Time)+MAX_OFFLINE_DATA_LENGTH)
 		{
 			packet=AllocPacket(length);
 			memcpy(packet->data, data, length);
@@ -4046,7 +4042,7 @@ bool RakPeer::RunUpdateCycle( void )
 	RemoteSystemStruct * remoteSystem;
 	unsigned remoteSystemIndex;
 	Packet *packet;
-	RakNetTime ping, lastPing;
+	RakNet::Time ping, lastPing;
 	// int currentSentBytes,currentReceivedBytes;
 //	unsigned numberOfBytesUsed;
 	unsigned numberOfBitsUsed;
@@ -4055,8 +4051,8 @@ bool RakPeer::RunUpdateCycle( void )
 	unsigned char *data;
 	int errorCode;
 	int gotData;
-	RakNetTimeNS timeNS;
-	RakNetTime timeMS;
+	RakNet::Time64 timeNS;
+	RakNet::Time timeMS;
 	PlayerID playerId;
 	BufferedCommandStruct *bcs;
 	bool callerDataAllocationUsed;
@@ -4118,7 +4114,7 @@ bool RakPeer::RunUpdateCycle( void )
 		{
 			// GetTime is a very slow call so do it once and as late as possible
 			if (timeNS==0)
-				timeNS = RakNet::GetTimeNS();
+				timeNS = RakNet::GetTime64();
 
 			callerDataAllocationUsed=SendImmediate((char*)bcs->data, bcs->numberOfBitsToSend, bcs->priority, bcs->reliability, bcs->orderingChannel, bcs->playerId, bcs->broadcast, true, timeNS);
 			if ( callerDataAllocationUsed==false )
@@ -4158,8 +4154,8 @@ bool RakPeer::RunUpdateCycle( void )
 	{
 		if (timeNS==0)
 		{
-			timeNS = RakNet::GetTimeNS();
-			timeMS = (RakNetTime)(timeNS/(RakNetTimeNS)1000);
+			timeNS = RakNet::GetTime64();
+			timeMS = (RakNet::Time)(timeNS/(RakNet::Time)1000);
 		}
 
 		if (rcs->nextRequestTime < timeMS)
@@ -4243,11 +4239,10 @@ bool RakPeer::RunUpdateCycle( void )
 
 			if (timeNS==0)
 			{
-				timeNS = RakNet::GetTimeNS();
-				timeMS = (RakNetTime)(timeNS/(RakNetTimeNS)1000);
+				timeNS = RakNet::GetTime64();
+				timeMS = (RakNet::Time)(timeNS/(RakNet::Time64)1000);
 				//printf("timeNS = %I64i timeMS=%i\n", timeNS, timeMS);
 			}
-
 
 			if (timeMS > remoteSystem->lastReliableSend && timeMS-remoteSystem->lastReliableSend > 5000 && remoteSystem->connectMode==RemoteSystemStruct::CONNECTED)
 			{
@@ -4460,9 +4455,9 @@ bool RakPeer::RunUpdateCycle( void )
 						else
 							delete [] data;
 					}
-					else if ( (unsigned char) data[ 0 ] == ID_CONNECTED_PONG && byteSize == sizeof(unsigned char)+sizeof(RakNetTime)*2 )
+					else if ( (unsigned char) data[ 0 ] == ID_CONNECTED_PONG && byteSize == sizeof(unsigned char)+(sizeof(RakNet::Time)*2) )
 					{
-						RakNetTime sendPingTime, sendPongTime;
+						RakNet::Time sendPingTime, sendPongTime;
 
 						// Copy into the ping times array the current time - the value returned
 						// First extract the sent ping
@@ -4473,8 +4468,8 @@ bool RakPeer::RunUpdateCycle( void )
 						inBitStream.Read(sendPingTime);
 						inBitStream.Read(sendPongTime);
 
-						timeNS = RakNet::GetTimeNS(); // Update the time value to be accurate
-						timeMS = (RakNetTime)(timeNS/(RakNetTimeNS)1000);
+						timeNS = RakNet::GetTime64(); // Update the time value to be accurate
+						timeMS = (RakNet::Time)(timeNS/(RakNet::Time64)1000);
 						if (timeMS > sendPingTime)
 							ping = timeMS - sendPingTime;
 						else
@@ -4501,18 +4496,18 @@ bool RakPeer::RunUpdateCycle( void )
 
 						delete [] data;
 					}
-					else if ( (unsigned char)data[0] == ID_INTERNAL_PING && byteSize == sizeof(unsigned char)+sizeof(RakNetTime) )
+					else if ( (unsigned char)data[0] == ID_INTERNAL_PING && byteSize == sizeof(unsigned char)+sizeof(RakNet::Time) )
 					{
 						RakNet::BitStream inBitStream( (unsigned char *) data, byteSize, false );
  						inBitStream.IgnoreBits(8);
-						RakNetTime sendPingTime;
+						RakNet::Time sendPingTime;
 						inBitStream.Read(sendPingTime);
 
 						RakNet::BitStream outBitStream;
 						outBitStream.Write((unsigned char)ID_CONNECTED_PONG);
 						outBitStream.Write(sendPingTime);
 						timeMS = RakNet::GetTime();
-						timeNS = RakNet::GetTimeNS();
+						timeNS = RakNet::GetTime64();
 						outBitStream.Write(timeMS);
 						SendImmediate( (char*)outBitStream.GetData(), outBitStream.GetNumberOfBitsUsed(), SYSTEM_PRIORITY, UNRELIABLE, 0, playerId, false, false, timeMS );
 
@@ -4771,7 +4766,7 @@ void* UpdateNetworkLoop( void* arguments )
 
 	assert( timerHandle );
 
-	dueTime.QuadPart = -10000 * rakPeer->threadSleepTimer; // 10000 is 1 ms?
+	dueTime.QuadPart = -10000 * (LONGLONG)rakPeer->threadSleepTimer; // 10000 is 1 ms?
 
 	BOOL success = SetWaitableTimer( timerHandle, &dueTime, rakPeer->threadSleepTimer, NULL, NULL, FALSE );
 

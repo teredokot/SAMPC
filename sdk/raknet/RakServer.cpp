@@ -57,7 +57,7 @@ bool RakServer::Start( unsigned short AllowedPlayers, unsigned int depreciated, 
 	RakPeer::SetMaximumIncomingConnections( AllowedPlayers );
 
 	// Random number seed
-	RakNetTime time = RakNet::GetTime();
+	RakNet::Time time = RakNet::GetTime();
 	seedMT( (unsigned int) time );
 	seed = randomMT();
 
@@ -115,7 +115,7 @@ Packet* RakServer::Receive( void )
 
 	if ( RakPeer::IsActive() && occasionalPing )
 	{
-		RakNetTime time = RakNet::GetTime();
+		RakNet::Time time = RakNet::GetTime();
 
 		if ( time > broadcastPingsTime || ( packet && packet->data[ 0 ] == ID_RECEIVED_STATIC_DATA ) )
 		{
@@ -158,7 +158,7 @@ Packet* RakServer::Receive( void )
 	// This is just a regular time based update.  Nowhere else good to put it
 	if ( RakPeer::IsActive() && synchronizedRandomInteger )
 	{
-		RakNetTime time = RakNet::GetTime();
+		RakNet::Time time = RakNet::GetTime();
 
 		if ( time > nextSeedUpdate || ( packet && packet->data[ 0 ] == ID_NEW_INCOMING_CONNECTION ) )
 		{
@@ -536,7 +536,7 @@ void RakServer::AddToBanList( const char *IP )
 	RakPeer::AddToBanList( IP );
 }
 
-void RakServer::AddToBanListEx(const char* IP, RakNetTime ms)
+void RakServer::AddToBanListEx(const char* IP, RakNet::Time ms)
 {
 	RakPeer::AddToBanList(IP, ms);
 }
@@ -561,7 +561,7 @@ bool RakServer::IsActivePlayerID( const PlayerID playerId )
 	return RakPeer::GetRemoteSystemFromPlayerID( playerId, false, true ) != 0;
 }
 
-void RakServer::SetTimeoutTime( RakNetTime timeMS, const PlayerID target )
+void RakServer::SetTimeoutTime( RakNet::Time timeMS, const PlayerID target )
 {
 	RakPeer::SetTimeoutTime(timeMS, target);
 }

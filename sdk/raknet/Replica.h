@@ -21,6 +21,7 @@
 #include "NetworkIDGenerator.h"
 #include "PacketPriority.h"
 #include "ReplicaEnums.h"
+#include "GetTime.h"
 
 /// This is an interface of a replicated object for use in the framework of ReplicaManager
 /// You should derive from this class, implementing the functions to provide the behavior you want.
@@ -42,7 +43,7 @@ public:
 	/// \param[out] outBitStream The data you want to write in the message. If you do not write to outBitStream and return true, then no send call will occur and the system will consider this object as not created on that remote system.
 	/// \param[out] includeTimestamp Set to true to include a timestamp with the message.  This will be reflected in the timestamp parameter of the callback.  Defaults to false.
 	/// \return See ReplicaReturnResult
-	virtual ReplicaReturnResult SendConstruction( RakNetTime currentTime, PlayerID playerId, RakNet::BitStream *outBitStream, bool *includeTimestamp )=0;
+	virtual ReplicaReturnResult SendConstruction( RakNet::Time currentTime, PlayerID playerId, RakNet::BitStream *outBitStream, bool *includeTimestamp )=0;
 
 	/// The purpose of the function is to send a packet containing the data in \a outBitStream to \a playerId telling that system that Dereplicate was called.
 	/// In the code, this is called in the update cycle after you call ReplicaManager::Destruct().  Then, if you write to outBitStream, a message is sent to that participant.
@@ -66,7 +67,7 @@ public:
 	/// \param[in] currentTime The current time that would be returned by RakNet::GetTime().  That's a slow call I do already, so you can use the parameter instead of having to call it yourself.
 	/// \param[in] playerId The participant to send to.
 	/// \return See ReplicaReturnResult
-	virtual ReplicaReturnResult SendScopeChange(bool inScope, RakNet::BitStream *outBitStream, RakNetTime currentTime, PlayerID playerId)=0;
+	virtual ReplicaReturnResult SendScopeChange(bool inScope, RakNet::BitStream *outBitStream, RakNet::Time currentTime, PlayerID playerId)=0;
 
 	/// Called when when we get the SendScopeChange message.  The new scope should have been encoded (by you) into \a inBitStream
 	/// \param[in] inBitStream What was sent in SendScopeChange::outBitStream
@@ -85,14 +86,14 @@ public:
 	/// \param[in] currentTime The current time that would be returned by RakNet::GetTime().  That's a slow call I do already, so you can use the parameter instead of having to call it yourself.
 	/// \param[in] playerId The participant we are sending to.
 	/// \return See ReplicaReturnResult
-	virtual ReplicaReturnResult Serialize(bool *sendTimestamp, RakNet::BitStream *outBitStream, RakNetTime lastSendTime, PacketPriority *priority, PacketReliability *reliability, RakNetTime currentTime, PlayerID playerId)=0;
+	virtual ReplicaReturnResult Serialize(bool *sendTimestamp, RakNet::BitStream *outBitStream, RakNet::Time lastSendTime, PacketPriority *priority, PacketReliability *reliability, RakNet::Time currentTime, PlayerID playerId)=0;
 
 	/// Called when another participant called Serialize with our system as the target
 	/// \param[in] inBitStream What was written to Serialize::outBitStream
 	/// \param[in] timestamp if Serialize::sendTimestamp was set to true, the time the packet was sent.
 	/// \param[in] lastDeserializeTime Last time you returned true from this function for this object, or 0 if never, regardless of \a playerId.
 	/// \param[in] playerId The participant that sent this message to us.
-	virtual ReplicaReturnResult Deserialize(RakNet::BitStream *inBitStream, RakNetTime timestamp, RakNetTime lastDeserializeTime, PlayerID playerId )=0;
+	virtual ReplicaReturnResult Deserialize(RakNet::BitStream *inBitStream, RakNet::Time timestamp, RakNet::Time lastDeserializeTime, PlayerID playerId )=0;
 };
 
 #endif

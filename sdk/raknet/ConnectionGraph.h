@@ -147,7 +147,7 @@ protected:
 	bool DeserializeIgnoreList(DataStructures::OrderedList<PlayerID,PlayerID> &ignoreList, RakNet::BitStream *inBitstream );
 	void SerializeIgnoreListAndBroadcast(RakNet::BitStream *outBitstream, DataStructures::OrderedList<PlayerID,PlayerID> &ignoreList, RakPeerInterface *peer);
 
-	RakNetTime nextWeightUpdate;
+	RakNet::Time nextWeightUpdate;
 	char *pw;
 	DataStructures::OrderedList<PlayerID, PlayerID> participantList;
 

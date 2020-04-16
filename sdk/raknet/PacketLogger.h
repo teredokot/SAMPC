@@ -22,6 +22,7 @@ class RakPeerInterface;
 #include "NetworkTypes.h"
 #include "PluginInterface.h"
 #include "Export.h"
+#include "GetTime.h"
 
 /// \defgroup PACKETLOGGER_GROUP PacketLogger
 /// \ingroup PLUGINS_GROUP
@@ -40,7 +41,7 @@ public:
 	/// Events on low level sends and receives.  These functions may be called from different threads at the same time.
 	virtual void OnDirectSocketSend(const char *data, const unsigned bitsUsed, PlayerID remoteSystemID);
 	virtual void OnDirectSocketReceive(const char *data, const unsigned bitsUsed, PlayerID remoteSystemID);
-	virtual void OnInternalPacket(InternalPacket *internalPacket, unsigned frameNumber, PlayerID remoteSystemID, RakNetTime time, bool isSend);
+	virtual void OnInternalPacket(InternalPacket *internalPacket, unsigned frameNumber, PlayerID remoteSystemID, RakNet::Time time, bool isSend);
 
 	/// Logs out a header for all the data
 	virtual void LogHeader(void);

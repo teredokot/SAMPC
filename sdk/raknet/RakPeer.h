@@ -37,7 +37,7 @@ class PluginInterface;
 struct PingAndClockDifferential
 {
 	unsigned short pingTime;
-	RakNetTime clockDifferential;
+	RakNet::Time clockDifferential;
 };
 
 /// \internal
@@ -52,10 +52,10 @@ struct RemoteSystemStruct
 	PingAndClockDifferential pingAndClockDifferential[PING_TIMES_ARRAY_SIZE];  /// last x ping times and calculated clock differentials with it
 	int pingAndClockDifferentialWriteIndex;  /// The index we are writing into the pingAndClockDifferential circular buffer
 	unsigned short lowestPing; ///The lowest ping value encountered
-	RakNetTime nextPingTime;  /// When to next ping this player
-	RakNetTime lastReliableSend; /// When did the last reliable send occur.  Reliable sends must occur at least once every timeoutTime/2 units to notice disconnects
+	RakNet::Time nextPingTime;  /// When to next ping this player
+	RakNet::Time lastReliableSend; /// When did the last reliable send occur.  Reliable sends must occur at least once every timeoutTime/2 units to notice disconnects
 	RakNet::BitStream staticData; /// static data.  This cannot be a pointer because it might be accessed in another thread.
-	RakNetTime connectionTime; /// connection time, if active.
+	RakNet::Time connectionTime; /// connection time, if active.
 	unsigned char AESKey[16]; /// Security key.
 	bool setAESKey; /// true if security is enabled.
 	RPCMap rpcMap; /// Mapping of RPC calls to single byte integers to save transmission bandwidth.
@@ -265,7 +265,7 @@ public:
 	/// Bans an IP from connecting.  Banned IPs persist between connections but are not saved on shutdown nor loaded on startup.
 	/// param[in] IP Dotted IP address. Can use * as a wildcard, such as 128.0.0.* will ban all IP addresses starting with 128.0.0
 	/// \param[in] milliseconds how many ms for a temporary ban.  Use 0 for a permanent ban
-	void AddToBanList( const char *IP, RakNetTime milliseconds=0 );
+	void AddToBanList( const char *IP, RakNet::Time milliseconds=0 );
 
 	/// Allows a previously banned IP to connect. 
 	/// param[in] Dotted IP address. Can use * as a wildcard, such as 128.0.0.* will banAll IP addresses starting with 128.0.0
@@ -351,7 +351,7 @@ public:
 	/// Default time is 10,000 or 10 seconds in release and 30,000 or 30 seconds in debug.
     /// \param[in] timeMS Time, in MS
 	/// \param[in] target Which system to do this for
-	void SetTimeoutTime( RakNetTime timeMS, const PlayerID target );
+	void SetTimeoutTime( RakNet::Time timeMS, const PlayerID target );
 
 	/// Set the MTU per datagram.  It's important to set this correctly - otherwise packets will be needlessly split, decreasing performance and throughput.
 	/// Maximum allowed size is MAXIMUM_MTU_SIZE.
@@ -410,7 +410,7 @@ public:
 	/// Useful if the network is clogged up.
 	/// Set to 0 or less to never timeout.  Defaults to 0.
 	/// \param[in] timeoutMS How many ms to wait before simply not sending an unreliable message.
-	void SetUnreliableTimeout(RakNetTime timeoutMS);
+	void SetUnreliableTimeout(RakNet::Time timeoutMS);
 
 	// --------------------------------------------------------------------------------------------Compression Functions - Functions related to the compression layer--------------------------------------------------------------------------------------------
 	/// Enables or disables frequency table tracking.  This is required to get a frequency table, which is used in GenerateCompressionLayer()
@@ -543,7 +543,7 @@ protected:
 	///An incoming packet has a timestamp, so adjust it to be relative to this system
 	void ShiftIncomingTimestamp( unsigned char *data, PlayerID playerId ) const;
 	///Get the most probably accurate clock differential for a certain player
-	RakNetTime GetBestClockDifferential( const PlayerID playerId ) const;
+	RakNet::Time GetBestClockDifferential( const PlayerID playerId ) const;
 
 	//void PushPortRefused( const PlayerID target );
 	///Handles an RPC packet.  This is sending an RPC request
@@ -650,13 +650,13 @@ protected:
 	struct BanStruct
 	{
 		char *IP;
-		RakNetTime timeout; // 0 for none
+		RakNet::Time timeout; // 0 for none
 	};
 
 	struct RequestedConnectionStruct
 	{
 		PlayerID playerId;
-		RakNetTime nextRequestTime;
+		RakNet::Time nextRequestTime;
 		unsigned char requestsMade;
 		char *data;
 		unsigned short dataLength;
@@ -711,7 +711,7 @@ protected:
 	// This stores the user send calls to be handled by the update thread.  This way we don't have thread contention over playerIDs
 	void CloseConnectionInternal( const PlayerID target, bool sendDisconnectionNotification, bool performImmediate, unsigned char orderingChannel );
 	void SendBuffered( const char *data, int numberOfBitsToSend, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, RemoteSystemStruct::ConnectMode connectionMode );
-	bool SendImmediate( char *data, int numberOfBitsToSend, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, bool useCallerDataAllocation, RakNetTimeNS currentTime );
+	bool SendImmediate( char *data, int numberOfBitsToSend, PacketPriority priority, PacketReliability reliability, char orderingChannel, PlayerID playerId, bool broadcast, bool useCallerDataAllocation, RakNet::Time64 currentTime );
 	//bool HandleBufferedRPC(BufferedCommandStruct *bcs, RakNetTime time);
 	void ClearBufferedCommands(void);
 	void ClearRequestedConnectionList(void);
@@ -754,7 +754,7 @@ protected:
 	big::u32 publicKeyE;
 	RSA_BIT_SIZE publicKeyN;
 	bool keysLocallyGenerated, usingSecurity;
-	RakNetTime randomNumberExpirationTime;
+	RakNet::Time randomNumberExpirationTime;
 	unsigned char newRandomNumber[ 20 ], oldRandomNumber[ 20 ];
 #endif
     
@@ -764,7 +764,7 @@ protected:
 	bool allowConnectionResponseIPMigration;
 
 	int splitMessageProgressInterval;
-	RakNetTime unreliableTimeout;
+	RakNet::Time unreliableTimeout;
 
 	// The packetSingleProducerConsumer transfers the packets from the network thread to the user thread. The pushedBackPacket holds packets that couldn't be processed
 	// immediately while waiting on blocked RPCs

@@ -349,12 +349,12 @@ void ReplicaManager::SignalSerializeNeeded(Replica *replica, PlayerID playerId, 
 		}
 	}
 }
-void ReplicaManager::SetReceiveConstructionCB(ReplicaReturnResult (* constructionCB)(RakNet::BitStream *inBitStream, RakNetTime timestamp, NetworkID networkID, PlayerID senderId, ReplicaManager *caller))
+void ReplicaManager::SetReceiveConstructionCB(ReplicaReturnResult (* constructionCB)(RakNet::BitStream *inBitStream, RakNet::Time timestamp, NetworkID networkID, PlayerID senderId, ReplicaManager *caller))
 {
 	// Just overwrite the construction callback pointer
 	_constructionCB=constructionCB;
 }
-void ReplicaManager::SetDownloadCompleteCB(ReplicaReturnResult (* sendDownloadCompleteCB)(RakNet::BitStream *outBitStream, RakNetTime currentTime, PlayerID senderId, ReplicaManager *caller), ReplicaReturnResult (* receiveDownloadCompleteCB)(RakNet::BitStream *inBitStream, PlayerID senderId, ReplicaManager *caller))
+void ReplicaManager::SetDownloadCompleteCB(ReplicaReturnResult (* sendDownloadCompleteCB)(RakNet::BitStream *outBitStream, RakNet::Time currentTime, PlayerID senderId, ReplicaManager *caller), ReplicaReturnResult (* receiveDownloadCompleteCB)(RakNet::BitStream *inBitStream, PlayerID senderId, ReplicaManager *caller))
 {
 	// Just overwrite the send and receive download complete pointers.
 	_sendDownloadCompleteCB=sendDownloadCompleteCB;
@@ -456,7 +456,7 @@ void ReplicaManager::Update(RakPeerInterface *peer)
 	ParticipantStruct *participantStruct;
 	unsigned commandListIndex;
 	RakNet::BitStream outBitstream, userDataBitstream;
-	RakNetTime currentTime;
+	RakNet::Time currentTime;
 	bool objectExists;
 	PacketPriority priority;
 	PacketReliability reliability;

@@ -21,6 +21,7 @@
 #include "PacketPriority.h"
 #include "NetworkTypes.h"
 #include "Export.h"
+#include "GetTime.h"
 
 // Forward declarations
 namespace RakNet
@@ -228,7 +229,7 @@ public:
 	/// Bans an IP from connecting.  Banned IPs persist between connections but are not saved on shutdown nor loaded on startup.
 	/// param[in] IP Dotted IP address. Can use * as a wildcard, such as 128.0.0.* will ban all IP addresses starting with 128.0.0
 	/// \param[in] milliseconds how many ms for a temporary ban.  Use 0 for a permanent ban
-	virtual void AddToBanList( const char *IP, RakNetTime milliseconds=0 )=0;
+	virtual void AddToBanList( const char *IP, RakNet::Time milliseconds=0 )=0;
 
 	/// Allows a previously banned IP to connect. 
 	/// param[in] Dotted IP address. Can use * as a wildcard, such as 128.0.0.* will banAll IP addresses starting with 128.0.0
@@ -314,7 +315,7 @@ public:
 	/// Default time is 10,000 or 10 seconds in release and 30,000 or 30 seconds in debug.
 	/// \param[in] timeMS Time, in MS
 	/// \param[in] target Which system to do this for
-	virtual void SetTimeoutTime( RakNetTime timeMS, const PlayerID target )=0;
+	virtual void SetTimeoutTime( RakNet::Time timeMS, const PlayerID target )=0;
 
 	/// Set the MTU per datagram.  It's important to set this correctly - otherwise packets will be needlessly split, decreasing performance and throughput.
 	/// Maximum allowed size is MAXIMUM_MTU_SIZE.
@@ -373,7 +374,7 @@ public:
 	/// Useful if the network is clogged up.
 	/// Set to 0 or less to never timeout.  Defaults to 0.
 	/// \param[in] timeoutMS How many ms to wait before simply not sending an unreliable message.
-	virtual void SetUnreliableTimeout(RakNetTime timeoutMS)=0;
+	virtual void SetUnreliableTimeout(RakNet::Time timeoutMS)=0;
 
 	// --------------------------------------------------------------------------------------------Compression Functions - Functions related to the compression layer--------------------------------------------------------------------------------------------
 	/// Enables or disables frequency table tracking.  This is required to get a frequency table, which is used in GenerateCompressionLayer()

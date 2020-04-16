@@ -124,7 +124,7 @@ public:
 		unsigned systemIdColumnIndex;
 		unsigned lastPingResponseColumnIndex;
 		unsigned nextPingSendColumnIndex;
-		RakNetTime nextRowPingCheck;
+		RakNet::Time nextRowPingCheck;
 		DataStructures::Table table;
 	};
 

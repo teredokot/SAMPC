@@ -15,91 +15,98 @@
 /// option) any later version.
 
 #include "GetTime.h"
-#ifdef _COMPATIBILITY_1
-#include "Compatibility1Includes.h" // Developers of a certain platform will know what to do here.
-#elif defined(_WIN32)
-#include <windows.h>
-#elif defined(_COMPATIBILITY_2)
-#include "Compatibility2Includes.h"
-#include <sys/time.h>
-#include <unistd.h>
-#else
-#include <sys/time.h>
-#include <unistd.h>
-#endif
 
-static bool initialized=false;
 #ifdef _WIN32
-static LARGE_INTEGER yo;
+#include <Windows.h>
 #else
-static timeval tp, initialTime;
+#include <sys/time.h>
+#include <unistd.h>
+static RakNet::Time64 initialTime;
+static bool initialized = false;
 #endif
 
-RakNetTime RakNet::GetTime( void )
+#if defined(GET_TIME_SPIKE_LIMIT) && GET_TIME_SPIKE_LIMIT>0
+/// This constraints timer forward jumps to 1 second, and does not let it jump backwards
+/// See http://support.microsoft.com/kb/274323 where the timer can sometimes jump forward by hours or days
+/// This also has the effect where debugging a sending system won't treat the time spent halted past 1 second as elapsed network time
+#include "SimpleMutex.h"
+static RakNet::Time64 lastNormalizedReturnedValue = 0;
+static RakNet::Time64 lastNormalizedInputValue = 0;
+static RakNet::Time64 NormalizeTime(RakNet::Time64 timeIn)
 {
-	if ( initialized == false )
+	RakNet::Time64 diff, lastNormalizedReturnedValueCopy;
+	static SimpleMutex mutex;
+
+	mutex.Lock();
+	if (timeIn >= lastNormalizedInputValue)
 	{
-#ifdef _WIN32
-		QueryPerformanceFrequency( &yo );
-		// The original code shifted right 10 bits
-		//counts = yo.QuadPart >> 10;
-		// It gives the wrong value since 2^10 is not 1000
-	//	counts = yo.QuadPart;// / 1000;
-#else
-		gettimeofday( &initialTime, 0 );
-#endif
-		
-		initialized = true;
+		diff = timeIn - lastNormalizedInputValue;
+		if (diff > GET_TIME_SPIKE_LIMIT)
+			lastNormalizedReturnedValue += GET_TIME_SPIKE_LIMIT;
+		else
+			lastNormalizedReturnedValue += diff;
 	}
-	
-#ifdef _WIN32
-	LARGE_INTEGER PerfVal;
-	
-	QueryPerformanceCounter( &PerfVal );
-	
-	return (RakNetTime)(PerfVal.QuadPart*1000 / yo.QuadPart);
-#else
-	gettimeofday( &tp, 0 );
-	
-	// Seconds to ms and microseconds to ms
-	return ( tp.tv_sec - initialTime.tv_sec ) * 1000 + ( tp.tv_usec - initialTime.tv_usec ) / 1000;
-	
-#endif
+	else
+		lastNormalizedReturnedValue += GET_TIME_SPIKE_LIMIT;
+
+	lastNormalizedInputValue = timeIn;
+	lastNormalizedReturnedValueCopy = lastNormalizedReturnedValue;
+	mutex.Unlock();
+
+	return lastNormalizedReturnedValueCopy;
 }
-
-
-RakNetTimeNS RakNet::GetTimeNS( void )
-{
-	if ( initialized == false )
-	{
-#ifdef _WIN32
-		QueryPerformanceFrequency( &yo );
-		// The original code shifted right 10 bits
-		//counts = yo.QuadPart >> 10;
-		// It gives the wrong value since 2^10 is not 1000
-		//	counts = yo.QuadPart;// / 1000;
-#else
-		gettimeofday( &initialTime, 0 );
 #endif
 
-		initialized = true;
-	}
-
+RakNet::Time64 RakNet::GetTime64(void)
+{
 #ifdef _WIN32
-	LARGE_INTEGER PerfVal;
+	Time64 curTime;
+	LARGE_INTEGER PerfVal, yo1;
 
-	QueryPerformanceCounter( &PerfVal );
+	QueryPerformanceFrequency(&yo1);
+	QueryPerformanceCounter(&PerfVal);
 
 	__int64 quotient, remainder;
-	quotient=((PerfVal.QuadPart*1000) / yo.QuadPart);
-	remainder=((PerfVal.QuadPart*1000) % yo.QuadPart);
-	//return (PerfVal.QuadPart*1000 / (yo.QuadPart/1000));
-	return quotient*1000 + (remainder*1000 / yo.QuadPart);
+	quotient = ((PerfVal.QuadPart) / yo1.QuadPart);
+	remainder = ((PerfVal.QuadPart) % yo1.QuadPart);
+	curTime = ((Time64)quotient * (Time64)1000000 +
+		(remainder * (Time64)1000000 / yo1.QuadPart));
 
+#if defined(GET_TIME_SPIKE_LIMIT) && GET_TIME_SPIKE_LIMIT>0
+	return NormalizeTime(curTime);
 #else
-	gettimeofday( &tp, 0 );
-
-	return ( tp.tv_sec - initialTime.tv_sec ) * (RakNetTimeNS) 1000000 + ( tp.tv_usec - initialTime.tv_usec );
-
+	return curTime;
 #endif
+
+#else // _WIN32
+	timeval tp;
+	if (initialized == false)
+	{
+		gettimeofday(&tp, 0);
+		initialized = true;
+		initialTime = ((tp.tv_sec) * (Time64)1000000 + (tp.tv_usec));
+	}
+
+	Time64 curTime;
+	gettimeofday(&tp, 0);
+	curTime = =(tp.tv_sec) * (Time64) 1000000 + (tp.tv_usec));
+
+#if defined(GET_TIME_SPIKE_LIMIT) && GET_TIME_SPIKE_LIMIT>0
+	return NormalizeTime(curTime - initialTime);
+#else
+	return curTime - initialTime;
+#endif 
+
+#endif // _WIN32
 }
+
+RakNet::Time32 RakNet::GetTime32(void)
+{
+	return (Time32)(GetTime64() / 1000);
+}
+
+RakNet::Time RakNet::GetTime(void)
+{
+	return (Time)(GetTime64() / 1000);
+}
+

@@ -20,7 +20,7 @@
 
 #include "PacketPriority.h"
 #include "NetworkTypes.h"
-
+#include "GetTime.h"
 
 /// This is the counter used for holding ordered packet numbers, so we can detect out-of-order packets.  It should be large enough that if the variables
 /// were to wrap, the newly wrapped values would no longer be in use.  Warning: Too large of a value wastes bandwidth!
@@ -66,9 +66,9 @@ struct InternalPacket
 	///The size of the array of subsplit packets
 	SplitPacketIndexType splitPacketCount;
 	///When this packet was created
-	RakNetTimeNS creationTime;
+	RakNet::Time64 creationTime;
 	///The next time to take action on this packet
-	RakNetTimeNS nextActionTime;
+	RakNet::Time64 nextActionTime;
 	///How many bits the data is
 	unsigned int dataBitLength;
 	///Buffer is a pointer to the actual data, assuming this packet has data at all

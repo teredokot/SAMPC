@@ -112,13 +112,13 @@ public:
 		// Used by all
 		// 0 means unset.  non-zero means send a connection request or offline message at that time.
 		// If the sender is set, then we send an offline message.  If the reciever is set, we send a connection request.
-		RakNetTime nextActionTime; 
+		RakNet::Time nextActionTime; 
 
 		// Used by sender and facilitator		
 		bool facilitatingConnection;
 		PlayerID receiver;
 		// Used to remove old connection Requests
-		RakNetTime timeoutTime;
+		RakNet::Time timeoutTime;
 
 		// Used only by sender
 		PlayerID facilitator;

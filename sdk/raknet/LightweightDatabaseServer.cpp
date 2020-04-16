@@ -171,7 +171,7 @@ void LightweightDatabaseServer::OnAttach(RakPeerInterface *peer)
 }
 void LightweightDatabaseServer::Update(RakPeerInterface *peer)
 {
-	RakNetTime time=0;
+	RakNet::Time time=0;
 	DatabaseTable *databaseTable;
 	DataStructures::Page<unsigned, DataStructures::Table::Row*, _TABLE_BPLUS_TREE_ORDER> *cur;
 	unsigned i,j;
@@ -441,7 +441,7 @@ void LightweightDatabaseServer::OnPong(RakPeerInterface *peer, Packet *packet)
 	DatabaseTable *databaseTable;
 	unsigned curIndex;
 	PlayerID playerId;
-	RakNetTime time=0;
+	RakNet::Time time=0;
 	for (databaseIndex=0; databaseIndex < database.Size(); databaseIndex++)
 	{
 		databaseTable=database[databaseIndex];
@@ -573,7 +573,7 @@ DataStructures::Table::Row * LightweightDatabaseServer::AddRow(LightweightDataba
 		row->cells[databaseTable->systemIdColumnIndex]->Set((char*)&playerId, sizeof(PlayerID));
 	if (databaseTable->removeRowOnPingFailure)
 	{
-		RakNetTime time = RakNet::GetTime();
+		RakNet::Time time = RakNet::GetTime();
 		row->cells[databaseTable->lastPingResponseColumnIndex]->Set(time);
 		row->cells[databaseTable->nextPingSendColumnIndex]->Set(time+SEND_PING_INTERVAL);
 	}

@@ -35,7 +35,7 @@ namespace RakNet
 #define BYTES_TO_BITS(x) ((x)<<3)
 
 /// \sa NetworkIDGenerator.h
-typedef unsigned char UniqueIDType;
+//typedef unsigned char UniqueIDType;
 typedef unsigned short PlayerIndex;
 //typedef short RPCIndex;
 //const int MAX_RPC_MAP_SIZE=((RPCIndex)-1)-1;
@@ -43,16 +43,6 @@ typedef unsigned short PlayerIndex;
 
 /// First byte of a network message
 typedef unsigned char MessageID;
-
-// Define __GET_TIME_64BIT if you want to use large types for GetTime (takes more bandwidth when you transmit time though!)
-// You would want to do this if your system is going to run long enough to overflow the millisecond counter (over a month)
-#ifdef __GET_TIME_64BIT
-typedef long long RakNetTime;
-typedef long long RakNetTimeNS;
-#else
-typedef unsigned int RakNetTime;
-typedef long long RakNetTimeNS;
-#endif
 
 /// \brief Unique identifier for a system.
 /// Corresponds to a network address

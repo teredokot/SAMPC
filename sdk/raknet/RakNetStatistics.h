@@ -22,6 +22,7 @@
 #include "PacketPriority.h"
 #include "Export.h"
 #include "NetworkTypes.h"
+#include "GetTime.h"
 
 /// \brief Network Statisics Usage 
 ///
@@ -108,7 +109,7 @@ struct RAK_DLL_EXPORT RakNetStatisticsStruct
 	///  Current bits per second
 	double bitsPerSecond;
 	///  connection start time
-	RakNetTime connectionStartTime;
+	RakNet::Time connectionStartTime;
 
 	RakNetStatisticsStruct operator +=(const RakNetStatisticsStruct& other)
 	{

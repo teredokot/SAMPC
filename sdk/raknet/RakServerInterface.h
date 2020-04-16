@@ -380,7 +380,7 @@ public:
 	/// Bans an IP from connecting.  Banned IPs persist between connections.
 	/// param[in] IP Dotted IP address. Can use * as a wildcard, such as 128.0.0.* will banAll IP addresses starting with 128.0.0
 	virtual void AddToBanList( const char *IP )=0;
-	virtual void AddToBanListEx(const char* IP, RakNetTime ms) = 0;
+	virtual void AddToBanListEx(const char* IP, RakNet::Time ms) = 0;
 
 	/// Allows a previously banned IP to connect. 
 	/// param[in] Dotted IP address. Can use * as a wildcard, such as 128.0.0.* will banAll IP addresses starting with 128.0.0
@@ -403,7 +403,7 @@ public:
 	/// Default time is 10,000 or 10 seconds in release and 30,000 or 30 seconds in debug.
 	/// \param[in] timeMS Time, in MS
 	/// \param[in] target Which system to do this for
-	virtual void SetTimeoutTime( RakNetTime timeMS, const PlayerID target )=0;
+	virtual void SetTimeoutTime( RakNet::Time timeMS, const PlayerID target )=0;
 	
 	/// Set the MTU per datagram.  It's important to set this correctly - otherwise packets will be needlessly split, decreasing performance and throughput.
 	/// Maximum allowed size is MAXIMUM_MTU_SIZE.

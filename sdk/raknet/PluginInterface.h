@@ -36,6 +36,7 @@ enum PluginReceiveResult
 
 #include "NetworkTypes.h"
 #include "Export.h"
+#include "GetTime.h"
 
 /// \defgroup PLUGINS_GROUP PluginInterface
 
@@ -100,7 +101,7 @@ public:
 	/// \param[in] remoteSystemID The player we sent or got this packet from
 	/// \param[in] time The current time as returned by RakNet::GetTime()
 	/// \param[in] isSend Is this callback representing a send event or receive event?
-	virtual void OnInternalPacket(InternalPacket *internalPacket, unsigned frameNumber, PlayerID remoteSystemID, RakNetTime time, bool isSend);
+	virtual void OnInternalPacket(InternalPacket *internalPacket, unsigned frameNumber, PlayerID remoteSystemID, RakNet::Time time, bool isSend);
 };
 
 #endif
