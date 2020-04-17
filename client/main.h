@@ -24,7 +24,7 @@
 #define IDC_CHATSCROLL  3
 
 #define MAX_PLAYER_NAME			24
-#define MAX_SETTINGS_STRING		256
+#define MAX_SETTINGS_STRING		100
 
 #define GTASA_VERSION_UNKNOWN	0
 #define GTASA_VERSION_USA10		1
@@ -37,10 +37,10 @@ typedef struct _GAME_SETTINGS {
 	BOOL bDebug;
 	BOOL bPlayOnline;
 	BOOL bWindowedMode;
-	CHAR szConnectPass[MAX_SETTINGS_STRING+1];
-	CHAR szConnectHost[MAX_SETTINGS_STRING+1];
-	CHAR szConnectPort[MAX_SETTINGS_STRING+1];
-	CHAR szNickName[MAX_SETTINGS_STRING+1];
+	CHAR szConnectPass[MAX_SETTINGS_STRING];
+	CHAR szConnectHost[MAX_SETTINGS_STRING];
+	CHAR szConnectPort[6];
+	CHAR szNickName[MAX_PLAYER_NAME];
 } GAME_SETTINGS;
 
 #include <d3d9.h>
@@ -85,8 +85,6 @@ typedef struct _GAME_SETTINGS {
 #include "d3dhook/IDirect3DDevice9Hook.h"
 
 
-void SetStringFromCommandLine(char *szCmdLine, char *szString);
-void InitSettings();
 void QuitGame();
 
 //void UnFuck(DWORD addr, int size);

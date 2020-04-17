@@ -448,7 +448,37 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
 	return;
 }
 
-//----------------------------------------------------
+void SetStringFromCommandLine(char* szCmdLine, char* szString, int iLen)
+{
+	int iCount = 0;
+	while (*szCmdLine == ' ') szCmdLine++;
+	if (*szCmdLine == '"')
+	{
+		szCmdLine++;
+		while (*szCmdLine && *szCmdLine != '"' && iCount < iLen)
+		{
+			*szString = *szCmdLine;
+			szString++; szCmdLine++;
+			iCount++;
+		}
+		*szString = '\0';
+		szCmdLine++;
+	}
+	else
+	{
+		while (*szCmdLine &&
+			*szCmdLine != ' ' &&
+			*szCmdLine != '-' &&
+			*szCmdLine != '/' &&
+			iCount < iLen)
+		{
+			*szString = *szCmdLine;
+			szString++; szCmdLine++;
+			iCount++;
+		}
+		*szString = '\0';
+	}
+}
 
 void InitSettings()
 {
@@ -474,7 +504,7 @@ void InitSettings()
 					break;
 				case 'z':
 					szCmdLine++;
-					SetStringFromCommandLine(szCmdLine,tSettings.szConnectPass);
+					SetStringFromCommandLine(szCmdLine,tSettings.szConnectPass,sizeof(tSettings.szConnectPass));
 					break;
 				/*
 				// We'll do this using ALT+ENTER
@@ -484,15 +514,15 @@ void InitSettings()
 				*/
 				case 'h':
 					szCmdLine++;
-					SetStringFromCommandLine(szCmdLine,tSettings.szConnectHost);
+					SetStringFromCommandLine(szCmdLine,tSettings.szConnectHost,sizeof(tSettings.szConnectHost));
 					break;
 				case 'p':
 					szCmdLine++;
-					SetStringFromCommandLine(szCmdLine,tSettings.szConnectPort);
+					SetStringFromCommandLine(szCmdLine,tSettings.szConnectPort,sizeof(tSettings.szConnectPort));
 					break;
 				case 'n':
 					szCmdLine++;
-					SetStringFromCommandLine(szCmdLine,tSettings.szNickName);
+					SetStringFromCommandLine(szCmdLine,tSettings.szNickName,sizeof(tSettings.szNickName));
 					break;
 			}
 		}
@@ -500,24 +530,6 @@ void InitSettings()
 		szCmdLine++;
 	}
 }
-
-//----------------------------------------------------
-
-void SetStringFromCommandLine(char *szCmdLine, char *szString)
-{
-	while(*szCmdLine == ' ') szCmdLine++;
-	while(*szCmdLine &&
-		  *szCmdLine != ' ' &&
-		  *szCmdLine != '-' &&
-		  *szCmdLine != '/') 
-	{
-		*szString = *szCmdLine;
-		szString++; szCmdLine++;
-	}
-	*szString = '\0';
-}
-
-//----------------------------------------------------
 
 void d3d9DestroyDeviceObjects()
 {
