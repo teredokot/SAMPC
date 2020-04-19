@@ -166,6 +166,9 @@ void CNetGame::ShutdownForGameModeRestart()
 	ResetTextDrawPool();
 	ResetGangZonePool();
 
+	if(pDeathWindow)
+		pDeathWindow->ClearWindow();
+
 	ResetMapIcons();
 	pGame->ToggleCheckpoints(FALSE);
 	pGame->ToggleRaceCheckpoints(FALSE);

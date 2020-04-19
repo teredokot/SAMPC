@@ -104,15 +104,29 @@ void ScrSetPlayerName(RPCParameters *rpcParams)
 	if(byteNickLen > MAX_PLAYER_NAME) return;
 
 	bsData.Read(szNewName, byteNickLen);
-	bsData.Read(byteSuccess);
-
 	szNewName[byteNickLen] = '\0';
 
-	if (byteSuccess == 1) pPlayerPool->SetPlayerName(bytePlayerID, szNewName);
+	// TODO: Remove this
+	// Why would you even send packet from server to tell the client it was a success,
+	// a.k.a. when the nick is not in use?
+	bsData.Read(byteSuccess);
 	
-	// Extra addition which we need to do if this is the local player;
-	if( pPlayerPool->GetLocalPlayerID() == bytePlayerID )
-		pPlayerPool->SetLocalPlayerName( szNewName );
+	if (pPlayerPool->GetLocalPlayerID() == bytePlayerID)
+	{
+		PCHAR szOldNick = pPlayerPool->GetLocalPlayerName();
+		pPlayerPool->SetLocalPlayerName(szNewName);
+
+		if (pDeathWindow)
+			pDeathWindow->ChangeNick(szOldNick, szNewName);
+	}
+	else if(pPlayerPool->GetSlotState(bytePlayerID))
+	{
+		PCHAR szOldNick = pPlayerPool->GetPlayerName(bytePlayerID);
+		pPlayerPool->SetPlayerName(bytePlayerID, szNewName);
+
+		if (pDeathWindow)
+			pDeathWindow->ChangeNick(szOldNick, szNewName);
+	}
 }
 
 void ScrSetPlayerSkin(RPCParameters *rpcParams)

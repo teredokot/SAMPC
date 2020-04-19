@@ -68,6 +68,7 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
 LONG WINAPI exc_handler(_EXCEPTION_POINTERS* exc_inf);
 void d3d9DestroyDeviceObjects();
 void d3d9RestoreDeviceObjects();
+void InitSettings();
 
 UINT uiCounter=0;
 
@@ -321,6 +322,8 @@ void DoInitStuff()
 			pNetStats = new CNetStats(pD3DDevice);
 			pSvrNetStats = new CSvrNetStats(pD3DDevice);
 			pHelpDialog = new CHelpDialog(pD3DDevice);
+
+			pDeathWindow->CreateFonts();
 		}
 		
 		OutputDebugString("Labels creating..");
@@ -551,9 +554,8 @@ void d3d9DestroyDeviceObjects()
 	if (pSpawnScreen)
 		pSpawnScreen->DeleteDeviceObjects();
 
-	if (pDeathWindow && pDeathWindow->m_pD3DFont) pDeathWindow->m_pD3DFont->OnLostDevice();
-	if (pDeathWindow && pDeathWindow->m_pWeaponFont) pDeathWindow->m_pWeaponFont->OnLostDevice();
-	if (pDeathWindow && pDeathWindow->m_pSprite) pDeathWindow->m_pSprite->OnLostDevice();
+	if (pDeathWindow)
+		pDeathWindow->OnLostDevice();
 
 	if (pChatWindow && pChatWindow->m_pChatTextSprite) pChatWindow->m_pChatTextSprite->OnLostDevice();
 }
@@ -578,10 +580,9 @@ void d3d9RestoreDeviceObjects()
 	if (pSpawnScreen)
 		pSpawnScreen->RestoreDeviceObjects();
 
-	if (pDeathWindow && pDeathWindow->m_pD3DFont) pDeathWindow->m_pD3DFont->OnResetDevice();
-	if (pDeathWindow && pDeathWindow->m_pWeaponFont) pDeathWindow->m_pWeaponFont->OnResetDevice();
-	if (pDeathWindow && pDeathWindow->m_pSprite) pDeathWindow->m_pSprite->OnResetDevice();
-
+	if (pDeathWindow)
+		pDeathWindow->OnResetDevice();
+	
 	if (pChatWindow && pChatWindow->m_pChatTextSprite) pChatWindow->m_pChatTextSprite->OnResetDevice();
 }
 

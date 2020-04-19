@@ -11,54 +11,47 @@
 
 #define MAX_DISP_DEATH_MESSAGES	5
 
-typedef struct _DEATH_WINDOW_ENTRY
-{
-	CHAR szKiller[MAX_PLAYER_NAME+1];
-	CHAR szKillee[MAX_PLAYER_NAME+1];
-	DWORD dwKillerColor;
-	DWORD dwKilleeColor;
-	BYTE  byteWeaponType;
-} DEATH_WINDOW_ENTRY;
-
 #define SPECIAL_ENTRY_CONNECT 200
 #define SPECIAL_ENTRY_DISCONNECT 201
-
-//----------------------------------------------------
 
 class CDeathWindow
 {
 private:
+	typedef struct
+	{
+		CHAR szKiller[MAX_PLAYER_NAME];
+		CHAR szKillee[MAX_PLAYER_NAME];
+		DWORD dwKillerColor;
+		DWORD dwKilleeColor;
+		BYTE byteWeaponType;
+	} DEATH_WINDOW_ENTRY;
 
-	BOOL				m_bEnabled;
-	DEATH_WINDOW_ENTRY	m_DeathWindowEntries[MAX_DISP_DEATH_MESSAGES];
-	int					m_iLongestNickLength; // In screen units, longest nick length;
+	IDirect3DDevice9* m_pD3DDevice;
+	ID3DXFont* m_pD3DFont;
+	ID3DXFont* m_pWeaponFont;
+	ID3DXSprite* m_pSprite;
+
+	BOOL m_bFailed;
+	BOOL m_bEnabled;
+	
+	DEATH_WINDOW_ENTRY m_DeathWindowEntries[MAX_DISP_DEATH_MESSAGES];
+	int m_iLongestNickLength; // In screen units, longest nick length;
+
+	void RenderText(PCHAR sz, RECT rect, DWORD dwColor, DWORD dwParams);
+	void RenderWeaponSprite(CHAR WeaponChar, RECT rect, DWORD dwColor);
 
 	void PushBack();
-	void AddToDeathWindowBuffer(CHAR *szKiller,CHAR *szKillee,DWORD dwKillerColor,DWORD dwKilleeColor,BYTE byteWeaponID);
-		
+
 public:
-	void Draw();
-	void AddMessage(CHAR *szKiller, CHAR *szKillee, DWORD dwKillerColor, DWORD dwKilleeColor, BYTE byteWeaponID);
-		
-	void ToggleEnabled() { 
-		if(m_bEnabled) m_bEnabled = FALSE;
-		else m_bEnabled = TRUE;
-	};
-
-	void RenderText(CHAR *sz,RECT rect,DWORD dwColor,DWORD dwParams);
-	void RenderWeaponSprite(CHAR *WeaponChar,RECT rect,DWORD dwColor);
-	PCHAR SpriteIDForWeapon(BYTE byteWeaponID);
-
-	CDeathWindow(IDirect3DDevice9 *pD3DDevice);
+	CDeathWindow(IDirect3DDevice9* pD3DDevice);
 	~CDeathWindow();
 
 	void CreateFonts();
-
-	ID3DXFont		    *m_pD3DFont;
-	ID3DXFont			*m_pWeaponFont;
-	ID3DXSprite			*m_pSprite;
-	IDirect3DDevice9	*m_pD3DDevice;
+	void OnLostDevice();
+	void OnResetDevice();
+	void Draw();
+	void ChangeNick(PCHAR szOldNick, PCHAR szNewNick);
+	void ClearWindow();
+	void AddMessage(PCHAR szKiller, PCHAR szKillee, DWORD dwKillerColor, DWORD dwKilleeColor, BYTE byteWeaponID);
+	void ToggleEnabled();
 };
-
-//----------------------------------------------------
-// EOF

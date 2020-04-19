@@ -89,6 +89,10 @@ void QuitGame();
 
 //void UnFuck(DWORD addr, int size);
 
+extern CGame* pGame;
+extern CChatWindow* pChatWindow;
+extern CDeathWindow* pDeathWindow;
+
 #include "outputdebugstring.h"
 
 //----------------------------------------------------

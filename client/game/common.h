@@ -280,6 +280,7 @@ typedef struct {
 //-----------------------------------------------------------
 
 // ---- weapon id defines ----
+#define WEAPON_FIST						0
 #define WEAPON_BRASSKNUCKLE				1
 #define WEAPON_GOLFCLUB					2
 #define WEAPON_NITESTICK				3
