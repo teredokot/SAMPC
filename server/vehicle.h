@@ -28,7 +28,8 @@ typedef struct _VEHICLE_SPAWN_INFO
 
 typedef struct _CAR_MOD_INFO
 {
-	BYTE byteCarMod0;
+	unsigned char ucCarMod[17];
+	/*BYTE byteCarMod0;
 	BYTE byteCarMod1;
 	BYTE byteCarMod2;
 	BYTE byteCarMod3;
@@ -41,7 +42,7 @@ typedef struct _CAR_MOD_INFO
 	BYTE byteCarMod10;
 	BYTE byteCarMod11;
 	BYTE byteCarMod12;
-	BYTE byteCarMod13;
+	BYTE byteCarMod13;*/
 	BYTE bytePaintJob;
 	int iColor0;
 	int iColor1;

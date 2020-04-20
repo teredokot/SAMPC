@@ -233,17 +233,11 @@ static cell AMX_NATIVE_CALL n_AddVehicleComponent(AMX *amx, cell *params)
 	pRak->RPC(RPC_ScmEvent , &bsData, HIGH_PRIORITY, 
 		RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 
-	BYTE*	pDataStart	= (BYTE*)&pVehicle->m_CarModInfo.byteCarMod0;
-	for(int i = 0; i < 14; i++)
-	{
-		DWORD data = pDataStart[i];
+	int iCompId = Utils::GetTypeByComponentId(params[2]);
+	if (iCompId == -1)
+		return 0;
 
-		if (data == 0)
-		{
-			pDataStart[i] = (BYTE)(params[2]-1000);
-			break;
-		}
-	}
+	pVehicle->m_CarModInfo.ucCarMod[iCompId] = (unsigned char)(params[2] - 1000);
 
 	return 1;
 }
@@ -266,18 +260,14 @@ static cell AMX_NATIVE_CALL n_RemoveVehicleComponent(AMX *amx, cell *params)
 	pRak->RPC(RPC_ScrRemoveComponent , &bsData, HIGH_PRIORITY, 
 		RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 
-	BYTE*	pDataStart	= (BYTE*)&pVehicle->m_CarModInfo.byteCarMod0;
-	BYTE	byteComp = (BYTE)(params[2]-1000);
-	for(int i = 0; i < 14; i++)
-	{
-		DWORD data = pDataStart[i];
-		if (data == byteComp)
-		{
-			pDataStart[i] = 0;
-			break;
-		}
-	}
+	int iCompId = Utils::GetTypeByComponentId(params[2]);
+	if (iCompId == -1)
+		return 0;
 
+	if (pVehicle->m_CarModInfo.ucCarMod[iCompId] == (params[2] - 1000))
+	{
+		pVehicle->m_CarModInfo.ucCarMod[iCompId] = 0;
+	}
 	return 1;
 }
 
@@ -1834,6 +1824,23 @@ static cell n_GetVehicleSpawnPos(AMX* amx, cell* params)
 		amx_GetAddr(amx, params[4], &cptr);
 		*cptr = amx_ftoc(pVehicle->m_SpawnInfo.vecPos.Z);
 		return 1;
+	}
+	return 0;
+}
+
+// native GetVehicleComponentInSlot(vehicleid, slot)
+static cell n_GetVehicleComponentInSlot(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleComponentInSlot", 2);
+	CVehicle* pVehicle;
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (pPool && (pVehicle = pPool->GetAt(params[1])) != NULL)
+	{
+		if ((0 <= params[2] && params[2] < 17) && 
+			pVehicle->m_CarModInfo.ucCarMod[params[2]] != 0)
+		{
+			return pVehicle->m_CarModInfo.ucCarMod[params[2]] + 1000;
+		}
 	}
 	return 0;
 }
@@ -5737,6 +5744,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetVehicleRespawnDelay),
 	DEFINE_NATIVE(GetVehicleSpawnPos),
 	DEFINE_NATIVE(SetVehicleSpawnPos),
+	DEFINE_NATIVE(GetVehicleComponentInSlot),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

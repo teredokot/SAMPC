@@ -383,7 +383,7 @@ void VehicleSpawn(RPCParameters *rpcParams)
 	bool bHasNumberPlate = false;
 	bool bHasCarModInfo = false;
 
-	CAR_MOD_INFO	m_CarModInfo;
+	CAR_MOD_INFO m_CarModInfo;
 	CHAR cNumberPlate[9];
 
 	memset(&m_CarModInfo,0,sizeof(CAR_MOD_INFO));
@@ -424,42 +424,37 @@ void VehicleSpawn(RPCParameters *rpcParams)
 
 	if (iVehicle)
 	{
-		BYTE*	pDataStart	= (BYTE*)&m_CarModInfo.byteCarMod0;
-		for(int i = 0; i < 14; i++)
+		for (int i = 0; i < 17; i++)
 		{
-			DWORD data = pDataStart[i];
-			DWORD v = 0;
+			if (m_CarModInfo.ucCarMod[i] != 0)
+			{
+				DWORD data = m_CarModInfo.ucCarMod[i] + 1000;
+				DWORD v = 0;
 
-			if (data == 0)
-				continue;
+				pGame->RequestModel(data);
+				pGame->LoadRequestedModels();
+				ScriptCommand(&request_car_component, data);
 
-			data += 1000;
-
-			pGame->RequestModel(data);
-			pGame->LoadRequestedModels();
-			ScriptCommand(&request_car_component,data);
-
-			int iWait = 10;
-			while(!ScriptCommand(&is_component_available,data) && iWait) {
-				Sleep(5);
-				iWait--;
+				int iWait = 10;
+				while (!ScriptCommand(&is_component_available, data) && iWait) {
+					Sleep(5);
+					iWait--;
+				}
+				if (!iWait) {
+					//pChatWindow->AddDebugMessage("Timeout on car component.");
+					continue;
+				}
+				//pChatWindow->AddDebugMessage("CarComponent: %u,%u,%u",VehicleID,data,iVehicleType);
+				ScriptCommand(&add_car_component, iVehicle, data, &v);
 			}
-			if(!iWait) {
-				//pChatWindow->AddDebugMessage("Timeout on car component.");
-				continue;
-			}
-			//pChatWindow->AddDebugMessage("CarComponent: %u,%u,%u",VehicleID,data,iVehicleType);
-			ScriptCommand(&add_car_component,iVehicle,data,&v);
 		}
 
-		if(m_CarModInfo.bytePaintJob)
-			ScriptCommand(&change_car_skin,iVehicle,m_CarModInfo.bytePaintJob);
+		if (m_CarModInfo.bytePaintJob)
+			ScriptCommand(&change_car_skin, iVehicle, m_CarModInfo.bytePaintJob);
 
-		if(m_CarModInfo.iColor0 != -1 || m_CarModInfo.iColor1 != -1) 
-			pVehiclePool->GetAt(VehicleID)->SetColor(m_CarModInfo.iColor0,m_CarModInfo.iColor1);
+		if (m_CarModInfo.iColor0 != -1 || m_CarModInfo.iColor1 != -1)
+			pVehiclePool->GetAt(VehicleID)->SetColor(m_CarModInfo.iColor0, m_CarModInfo.iColor1);
 	}
-
-
 }
 
 //----------------------------------------------------

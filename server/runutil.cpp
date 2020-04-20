@@ -7,10 +7,77 @@
 // 
 //----------------------------------------------------
 
+#include "runutil.h"
+
 #include <stdio.h>
 #include <string.h>
 
 //----------------------------------------------------
+
+int Utils::GetTypeByComponentId(short sModelId)
+{
+	switch (sModelId)
+	{
+	case 1000: case 1001: case 1002: case 1003: case 1014: case 1015:
+	case 1016: case 1023: case 1049: case 1050: case 1058: case 1060:
+	case 1138: case 1139: case 1146: case 1147: case 1158: case 1162:
+	case 1163: case 1164:
+		return 0; // CARMODTYPE_SPOILER
+	case 1004: case 1005: case 1011: case 1012:
+		return 1; // CARMODTYPE_HOOD
+	case 1006: case 1032: case 1033: case 1035: case 1038: case 1053:
+	case 1054: case 1055: case 1061: case 1067: case 1068: case 1088:
+	case 1091: case 1103: case 1128: case 1130: case 1131:
+		return 2; // CARMODTYPE_ROOF
+	case 1007: case 1017: case 1026: case 1027: case 1030: case 1031:
+	case 1036: case 1039: case 1040: case 1041: case 1042: case 1047:
+	case 1048: case 1051: case 1052: case 1056: case 1057: case 1062:
+	case 1063: case 1069: case 1070: case 1071: case 1072: case 1090:
+	case 1093: case 1094: case 1095: case 1099: case 1101: case 1102:
+	case 1106: case 1107: case 1108: case 1118: case 1119: case 1120:
+	case 1121: case 1122: case 1124: case 1133: case 1134: case 1137:
+		return 3; // CARMODTYPE_SIDESKIRT
+	case 1013: case 1024:
+		return 4; // CARMODTYPE_LAMPS
+	case 1008: case 1009: case 1010:
+		return 5; // CARMODTYPE_NITRO
+	case 1018: case 1019: case 1020: case 1021: case 1022: case 1028:
+	case 1029: case 1034: case 1037: case 1043: case 1044: case 1045:
+	case 1046: case 1059: case 1064: case 1065: case 1066: case 1089:
+	case 1092: case 1104: case 1105: case 1113: case 1114: case 1126:
+	case 1127: case 1129: case 1132: case 1135: case 1136:
+		return 6; // CARMODTYPE_EXHAUST
+	case 1025: case 1073: case 1074: case 1075: case 1076: case 1077:
+	case 1078: case 1079: case 1080: case 1081: case 1082: case 1083:
+	case 1084: case 1085: case 1096: case 1097: case 1098:
+		return 7; // CARMODTYPE_WHEELS
+	case 1086:
+		return 8; // CARMODTYPE_STEREO
+	case 1087:
+		return 9; // CARMODTYPE_HYDRAULICS
+	case 1117: case 1152: case 1153: case 1155: case 1157: case 1160:
+	case 1165: case 1166: case 1169: case 1170: case 1171: case 1172:
+	case 1173: case 1174: case 1175: case 1179: case 1181: case 1182:
+	case 1185: case 1188: case 1189: case 1190: case 1191:
+		return 10; // CARMODTYPE_FRONT_BUMPER
+	case 1140: case 1141: case 1148: case 1149: case 1150: case 1151:
+	case 1154: case 1156: case 1159: case 1161: case 1167: case 1168:
+	case 1176: case 1177: case 1178: case 1180: case 1183: case 1184:
+	case 1186: case 1187: case 1192: case 1193:
+		return 11; // CARMODTYPE_REAR_BUMPER
+	case 1143: case 1145:
+		return 12; // CARMODTYPE_VENT_RIGHT
+	case 1142: case 1144:
+		return 13; // CARMODTYPE_VENT_LEFT
+	case 1100: case 1123: case 1125:
+		return 14; // CARMODTYPE_BULLBARS
+	case 1109: case 1110:
+		return 15; // CARMODTYPE_REAR_BULLBARS
+	case 1115: case 1116:
+		return 16; // CARMODTYPE_FRONT_BULLBARS;
+	}
+	return -1;
+}
 
 void Util_UrlUnencode(char *enc)
 {

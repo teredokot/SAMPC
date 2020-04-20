@@ -542,41 +542,28 @@ void ScmEvent(RPCParameters *rpcParams)
 
 	if (iEvent == EVENT_TYPE_CARCOMPONENT)
 	{
-		CVehicle*	pVehicle	=	pNetGame->GetVehiclePool()->GetAt((VEHICLEID)dwParams1);
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt((VEHICLEID)dwParams1);
 		if (!pVehicle) return;
 
-		BYTE*	pDataStart	= (BYTE*)&pVehicle->m_CarModInfo.byteCarMod0;
-		for(int i = 0; i < 14; i++)
+		if (!pNetGame->GetGameMode()->OnVehicleMod(bytePlayerID, dwParams1, dwParams2) ||
+			!pNetGame->GetFilterScripts()->OnVehicleMod(bytePlayerID, dwParams1, dwParams2))
 		{
-			DWORD data = pDataStart[i];
+			bSend = FALSE;
+		}
 
-			if (data == 0)
+		if (bSend == TRUE)
+		{
+			int iComponentId = Utils::GetTypeByComponentId(dwParams2);
+			if (iComponentId == -1)
 			{
-				if (!pNetGame->GetGameMode()->OnVehicleMod(bytePlayerID, dwParams1, dwParams2) ||
-				!pNetGame->GetFilterScripts()->OnVehicleMod(bytePlayerID, dwParams1, dwParams2))
-				{
-					bSend = FALSE;
-				}
-
-				if (bSend)
-				{
-					BYTE byteMod = (BYTE)(dwParams2 - 1000);
-
-					if (byteMod >= sizeof (c_byteVehMods) ||
-						(c_byteVehMods[byteMod] != NOV && 
-						c_byteVehMods[byteMod] != (BYTE)(pVehicle->m_SpawnInfo.iVehicleType - 400)))	{
-						bSend = FALSE;
-
-						//printf("Setting bSend false because: %u %u\n",byteMod,dwParams1);
-
-					}
-					else {
-						pDataStart[i] = byteMod;
-					}
-				}
-				break;
+				bSend = FALSE;
+			}
+			else
+			{
+				pVehicle->m_CarModInfo.ucCarMod[iComponentId] = (unsigned char)(dwParams2 - 1000);
 			}
 		}
+
 		if (bSend)
 		{
 			bsSend.Write(bytePlayerID);

@@ -7,6 +7,10 @@
 //
 //----------------------------------------------------
 
+namespace Utils
+{
+	int GetTypeByComponentId(short sModelId);
+};
 
 void Util_UrlUnencode(char *enc);
 char Util_toupper(char c);
