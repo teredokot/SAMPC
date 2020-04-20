@@ -1845,6 +1845,13 @@ static cell n_GetVehicleComponentInSlot(AMX* amx, cell* params)
 	return 0;
 }
 
+// native GetVehicleComponentType(component)
+static cell n_GetVehicleComponentType(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleComponentType", 1);
+	return Utils::GetTypeByComponentId(params[1]);
+}
+
 //----------------------------------------------------------------------------------
 
 // native SendClientMessage(playerid, color, const message[])
@@ -5745,6 +5752,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetVehicleSpawnPos),
 	DEFINE_NATIVE(SetVehicleSpawnPos),
 	DEFINE_NATIVE(GetVehicleComponentInSlot),
+	DEFINE_NATIVE(GetVehicleComponentType),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

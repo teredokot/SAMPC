@@ -67,3 +67,4 @@ native GetVehicleRespawnDelay(vehicleid);
 native SetVehicleSpawnPos(vehicleid, Float:x, Float:y, Float:z);
 native GetVehicleSpawnPos(vehicleid, &Float:x, &Float:y, &Float:z);
 native GetVehicleComponentInSlot(vehicleid, slot);
+native GetVehicleComponentType(component);
