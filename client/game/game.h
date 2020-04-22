@@ -159,6 +159,7 @@ public:
 	void DisableEnterExits(bool bDisable = true);
 
 	void SetMaxHealth(float fMax);
+	void SetBlurLevel(unsigned char ucLevel);
 
 	CGame();
 	~CGame() {};

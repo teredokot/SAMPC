@@ -885,3 +885,8 @@ void CGame::SetMaxHealth(float fMax)
 {
 	*(float*)0xB793E0 = fMax;
 }
+
+void CGame::SetBlurLevel(unsigned char ucLevel)
+{
+	*(unsigned char*)0x8D5104 = ucLevel;
+}

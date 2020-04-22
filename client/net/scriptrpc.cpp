@@ -1713,6 +1713,14 @@ static void ScrSetPlayer(RPCParameters* rpcParams)
 		pGame->SetMaxHealth(fVal);
 		break;
 	}
+	case 6:
+	{
+		unsigned char ucLevel = 0;
+		if (in.Read(ucLevel) && (0 <= ucLevel && ucLevel <= 100))
+		{
+			pGame->SetBlurLevel(ucLevel);
+		}
+	}
 	}
 }
 

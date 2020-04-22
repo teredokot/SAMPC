@@ -386,7 +386,7 @@ void ApplyInGamePatches()
 	
 	// hack to remove motion blur in high speed vehicle
 	//UnFuck(0x704E8A,5);
-	memset((PVOID)0x704E8A,0x90,5);
+	//memset((PVOID)0x704E8A,0x90,5);
 
 	// Respawn and Interior
 	//UnFuck(0x4090A0,1);

@@ -5379,6 +5379,24 @@ static cell n_DisableNameTagLOS(AMX* amx, cell* params)
 	return 1;
 }
 
+// native SetPlayerBlurLevel(playerid, blur_level)
+static cell n_SetPlayerBlurLevel(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetPlayerBlurLevel", 2);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		if (0 <= params[2] && params[2] <= 100)
+		{
+			RakNet::BitStream out;
+			out.Write<int>(6);
+			out.Write((unsigned char)params[2]);
+			return pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out);
+		}
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native CreatePlayerPickup(pickupid,playerid,model,type,Float:PosX,Float:PosY,Float:PosZ)
@@ -5564,6 +5582,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "DisableInteriorEnterExits", n_DisableInteriorEnterExits },
 	{ "SetNameTagDrawDistance", n_SetNameTagDrawDistance },
 	DEFINE_NATIVE(DisableNameTagLOS),
+	DEFINE_NATIVE(SetPlayerBlurLevel),
 
 	// Zones
 	{ "EnableZoneNames",		n_EnableZoneNames },
