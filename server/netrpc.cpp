@@ -791,6 +791,31 @@ void MenuQuit(RPCParameters *rpcParams)
 	pNetGame->GetMenuPool()->ResetPlayer(bytePlayerID);
 }
 
+void TypingEvent(RPCParameters* rpcParams)
+{
+	RakNet::BitStream in(rpcParams->input,
+		BITS_TO_BYTES(rpcParams->numberOfBitsOfData), false);
+
+	int iSenderId = pNetGame->GetRakServer()->GetIndexFromPlayerID(rpcParams->sender);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	unsigned char ucType = 0;
+	if (pPool && pPool->GetSlotState(iSenderId) && in.Read(ucType))
+	{
+		CFilterScripts* pFS = pNetGame->GetFilterScripts();
+		CGameMode* pGM = pNetGame->GetGameMode();
+		if (pFS == NULL || pGM == NULL)
+			return;
+
+		if (ucType == 1) {
+			pFS->OnPlayerBeginTyping(iSenderId);
+			pGM->OnPlayerBeginTyping(iSenderId);
+		} else if (ucType == 0) {
+			pFS->OnPlayerEndTyping(iSenderId);
+			pGM->OnPlayerEndTyping(iSenderId);
+		}
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterRPCs(RakServerInterface * pRakServer)
@@ -816,6 +841,7 @@ void RegisterRPCs(RakServerInterface * pRakServer)
 	REGISTER_STATIC_RPC(pRakServer, PickedUpPickup);
 	REGISTER_STATIC_RPC(pRakServer, MenuSelect);
 	REGISTER_STATIC_RPC(pRakServer, MenuQuit);
+	REGISTER_STATIC_RPC(pRakServer, TypingEvent);
 }
 
 //----------------------------------------------------
@@ -843,6 +869,8 @@ void UnRegisterRPCs(RakServerInterface * pRakServer)
 	UNREGISTER_STATIC_RPC(pRakServer, PickedUpPickup);
 	UNREGISTER_STATIC_RPC(pRakServer, MenuSelect);
 	UNREGISTER_STATIC_RPC(pRakServer, MenuQuit);
+	UNREGISTER_STATIC_RPC(pRakServer, TypingEvent);
+
 }
 
 //----------------------------------------------------

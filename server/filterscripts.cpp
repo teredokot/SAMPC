@@ -1165,3 +1165,37 @@ int CFilterScripts::OnRconLoginAttempt(char* szIP, char* szPassword, cell succes
 	}
 	return (int)ret;
 }
+
+int CFilterScripts::OnPlayerBeginTyping(cell playerid)
+{
+	int idx = 0;
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++)
+	{
+		if (m_pFilterScripts[i] == NULL)
+			continue;
+
+		if (!amx_FindPublic(m_pFilterScripts[i], "OnPlayerBeginTyping", &idx))
+		{
+			amx_Push(m_pFilterScripts[i], playerid);
+			amx_Exec(m_pFilterScripts[i], NULL, idx);
+		}
+	}
+	return 1;
+}
+
+int CFilterScripts::OnPlayerEndTyping(cell playerid)
+{
+	int idx = 0;
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++)
+	{
+		if (m_pFilterScripts[i] == NULL)
+			continue;
+
+		if (!amx_FindPublic(m_pFilterScripts[i], "OnPlayerEndTyping", &idx))
+		{
+			amx_Push(m_pFilterScripts[i], playerid);
+			amx_Exec(m_pFilterScripts[i], NULL, idx);
+		}
+	}
+	return 1;
+}

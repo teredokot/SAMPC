@@ -74,6 +74,12 @@ void CCmdWindow::Enable()
 	}
 	pGame->ToggleKeyInputsDisabled(TRUE);
 	
+	if (pNetGame)
+	{
+		RakNet::BitStream out;
+		out.Write<unsigned char>(1);
+		pNetGame->Send(RPC_TypingEvent, &out);
+	}
 }
 
 //----------------------------------------------------
@@ -86,6 +92,13 @@ void CCmdWindow::Disable()
 		m_pEditControl->SetVisible(false);
 	}
 	pGame->ToggleKeyInputsDisabled(FALSE);
+
+	if (pNetGame)
+	{
+		RakNet::BitStream out;
+		out.Write<unsigned char>(0);
+		pNetGame->Send(RPC_TypingEvent, &out);
+	}
 }
 
 //----------------------------------------------------

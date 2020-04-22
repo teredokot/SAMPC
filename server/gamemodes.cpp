@@ -884,3 +884,27 @@ int CGameMode::OnRconLoginAttempt(char* szIP, char* szPassword, cell success)
 	}
 	return (int)ret;
 }
+
+int CGameMode::OnPlayerBeginTyping(cell playerid)
+{
+	CHECK_INIT();
+	int idx = 0;
+	if (!amx_FindPublic(&m_amx, "OnPlayerBeginTyping", &idx))
+	{
+		amx_Push(&m_amx, playerid);
+		amx_Exec(&m_amx, NULL, idx);
+	}
+	return 1;
+}
+
+int CGameMode::OnPlayerEndTyping(cell playerid)
+{
+	CHECK_INIT();
+	int idx = 0;
+	if (!amx_FindPublic(&m_amx, "OnPlayerEndTyping", &idx))
+	{
+		amx_Push(&m_amx, playerid);
+		amx_Exec(&m_amx, NULL, idx);
+	}
+	return 1;
+}
