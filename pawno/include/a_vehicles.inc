@@ -22,6 +22,11 @@
 #define CARMODTYPE_REAR_BULLBARS 	(15)
 #define CARMODTYPE_FRONT_BULLBARS	(16)
 
+#define VEHICLE_DOOR_FRONT_LEFT 	(1)
+#define VEHICLE_DOOR_FRONT_RIGHT	(2)
+#define VEHICLE_DOOR_REAR_LEFT 		(3)
+#define VEHICLE_DOOR_REAR_RIGHT 	(4)
+
 native IsValidVehicle(vehicleid);
 native CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:a, color1, color2, respawndelay);
 native DestroyVehicle(vehicleid);
@@ -70,3 +75,4 @@ native GetVehicleComponentInSlot(vehicleid, slot);
 native GetVehicleComponentType(component);
 native SetVehicleHoodState(vehicleid, bool:hood_state);
 native SetVehicleTrunkState(vehicleid, bool:trunk_state);
+native SetVehicleDoorState(vehicleid, doorid, bool:door_state);
