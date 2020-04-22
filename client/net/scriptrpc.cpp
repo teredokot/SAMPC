@@ -1809,6 +1809,25 @@ static void ScrInterpolateCamera(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrVehicleComponent(RPCParameters* rpcParams)
+{
+	RakNet::BitStream in(rpcParams->input,
+		BITS_TO_BYTES(rpcParams->numberOfBitsOfData), false);
+
+	VEHICLEID nVehicleId = 0;
+	CVehicle* pVehicle;
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (in.Read(nVehicleId) && pPool && (pVehicle = pPool->GetAt(nVehicleId)) != NULL)
+	{
+		unsigned char ucComponent = 0;
+		if (in.Read(ucComponent))
+			if (in.ReadBit())
+				pVehicle->ToggleComponent(ucComponent, 1.0f);
+			else
+				pVehicle->ToggleComponent(ucComponent, 0.0f);
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1889,6 +1908,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrVehicleVelocity);
 	REGISTER_STATIC_RPC(pRakClient, ScrPlayerVelocity);
 	REGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
+	REGISTER_STATIC_RPC(pRakClient, ScrVehicleComponent);
 }
 
 //----------------------------------------------------
@@ -1969,6 +1989,7 @@ void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetPlayer);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrVehicleVelocity);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
+	UNREGISTER_STATIC_RPC(pRakClient, ScrVehicleComponent);
 }
 
 //----------------------------------------------------

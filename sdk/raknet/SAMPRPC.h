@@ -127,6 +127,7 @@ enum eRPCTable
 	RPC_ACServerProtected,
 	RPC_ScrInterpolateCamera,
 	RPC_TypingEvent,
+	RPC_ScrVehicleComponent,
 
 	MAX_RPC_ID_AVAILABLE
 };

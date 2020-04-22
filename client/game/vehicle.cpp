@@ -873,5 +873,41 @@ void CVehicle::SetLightState(BOOL bState)
 	}
 }
 
+// 0x474F22 - opcode_08A6
+void CVehicle::ToggleComponent(DWORD dwComp, FLOAT fAngle)
+{
+	DWORD dwVehicle = (DWORD)m_pVehicle;
+	DWORD dwFunc1 = 0x6C26F0;
+
+	_asm {
+		mov edi, dwComp
+		push edi
+		mov esi, dwVehicle
+		call dwFunc1
+		mov edx, [esi]
+		add esp, 4
+		push edi
+		mov ecx, esi
+		mov ebx, eax
+		call dword ptr [edx+98h]
+		test al, al
+		jnz abandoning
+		mov eax, [esi+ebx*4+648h]
+		test eax, eax
+		jz abandoning
+		mov eax, [esi]
+		push 1
+		push fAngle
+		push edi
+		push ebx
+		push 0
+		mov ecx, esi
+		call dword ptr [eax+6Ch]
+	};
+
+abandoning:
+	;
+}
+
 //-----------------------------------------------------------
 // EOF

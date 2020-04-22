@@ -96,6 +96,7 @@ public:
 	bool IsUpsideDown();
 	bool IsOnItsSide();
 	void SetLightState(BOOL bState);
+	void ToggleComponent(DWORD dwComp, FLOAT fAngle);
 
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;

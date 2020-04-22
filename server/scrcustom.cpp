@@ -1852,6 +1852,23 @@ static cell n_GetVehicleComponentType(AMX* amx, cell* params)
 	return Utils::GetTypeByComponentId(params[1]);
 }
 
+// native SetVehicleHoodState(vehicleid, bool:hood_state)
+static cell n_SetVehicleHoodState(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetVehicleHoodState", 2);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+		out.Write((VEHICLEID)params[1]);
+		out.Write<unsigned char>(0);
+		out.Write((bool)params[2]);
+		return pNetGame->GetRakServer()->RPC(RPC_ScrVehicleComponent, &out,
+			HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SendClientMessage(playerid, color, const message[])
@@ -5772,6 +5789,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetVehicleSpawnPos),
 	DEFINE_NATIVE(GetVehicleComponentInSlot),
 	DEFINE_NATIVE(GetVehicleComponentType),
+	DEFINE_NATIVE(SetVehicleHoodState),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },
