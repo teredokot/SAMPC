@@ -10,9 +10,6 @@
     <Filter Include="game">
       <UniqueIdentifier>{112c9b74-5705-4e67-8827-17ee7007fd41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="d3dhook">
-      <UniqueIdentifier>{d0bd96aa-c914-4c5e-ad8b-5ea0a65bd906}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sdk">
       <UniqueIdentifier>{ee2286f9-9bf4-45c3-969e-752193fcd1c5}</UniqueIdentifier>
     </Filter>
@@ -143,9 +140,6 @@
     </ClCompile>
     <ClCompile Include="game\vehicle.cpp">
       <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="d3dhook\IDirect3DDevice9Hook.cpp">
-      <Filter>d3dhook</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\sdk\md5\md5.cpp">
@@ -386,6 +380,7 @@
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="playertags.cpp" />
+    <ClCompile Include="d3dhook.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="net\gangzonepool.h">
@@ -501,9 +496,6 @@
     </ClInclude>
     <ClInclude Include="game\vehicle.h">
       <Filter>game</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dhook\IDirect3DDevice9Hook.h">
-      <Filter>d3dhook</Filter>
     </ClInclude>
     <ClInclude Include="main.h" />
     <ClInclude Include="..\sdk\md5\md5.h">
@@ -867,6 +859,7 @@
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="playertags.h" />
+    <ClInclude Include="d3dhook.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\sdk\detours\detours.lib">

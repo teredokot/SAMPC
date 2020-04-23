@@ -82,7 +82,7 @@ typedef struct _GAME_SETTINGS {
 #include "helpdialog.h"
 #include "archive/ArchiveFS.h"
 #include "game/scripting.h"
-#include "d3dhook/IDirect3DDevice9Hook.h"
+#include "d3dhook.h"
 
 
 void QuitGame();

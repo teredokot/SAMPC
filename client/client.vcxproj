@@ -233,15 +233,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS</PreprocessorDefinitions>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
     </ClCompile>
-    <ClCompile Include="d3dhook\IDirect3DDevice9Hook.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;_DEBUG;_WINDOWS</PreprocessorDefinitions>
-      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
-      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</BrowseInformation>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS</PreprocessorDefinitions>
-      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
-    </ClCompile>
+    <ClCompile Include="d3dhook.cpp" />
     <ClCompile Include="deathwindow.cpp" />
     <ClCompile Include="events.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -649,7 +641,7 @@
     <ClInclude Include="chatwindow.h" />
     <ClInclude Include="cmdprocs.h" />
     <ClInclude Include="cmdwindow.h" />
-    <ClInclude Include="d3dhook\IDirect3DDevice9Hook.h" />
+    <ClInclude Include="d3dhook.h" />
     <ClInclude Include="deathwindow.h" />
     <ClInclude Include="filechecks.h" />
     <ClInclude Include="filehooks.h" />

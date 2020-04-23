@@ -2,10 +2,10 @@
 // Version: $Id: IDirect3DDevice9Hook.cpp,v 1.23 2006/05/08 17:35:54 kyeman Exp $
 //
 
-#include "IDirect3DDevice9Hook.h"
-#include "../main.h"
-#include "../game/util.h"
-#include "../game/aimstuff.h"
+//#include "d3dhook.h"
+#include "main.h"
+#include "game/util.h"
+#include "game/aimstuff.h"
 
 #include <string>
 
