@@ -122,7 +122,6 @@ typedef struct _SERVER_SETTINGS {
 
 // Raknet
 #include <raknet/RakServer.h>
-#include <raknet/RakNetworkFactory.h>
 #include <raknet/BitStream.h>
 #include <raknet/PacketEnumerations.h>
 #include <raknet/SAMPRPC.h>

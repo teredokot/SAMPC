@@ -7,6 +7,7 @@
 //
 //----------------------------------------------------------
 
+#include <raknet/RakClient.h>
 #include "../main.h"
 #include "../game/util.h"
 #include "../mod.h"
@@ -67,7 +68,7 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_pTextDrawPool = new CTextDrawPool();
 	m_pGangZonePool = new CGangZonePool();
 
-	m_pRakClient = RakNetworkFactory::GetRakClientInterface();
+	m_pRakClient = new RakClient;
 
 	RegisterRPCs(m_pRakClient);
 	RegisterScriptRPCs(m_pRakClient);	// Register server-side scripting RPCs.
@@ -111,7 +112,7 @@ CNetGame::~CNetGame()
 	m_pRakClient->Disconnect(0);
 	UnRegisterRPCs(m_pRakClient);
 	UnRegisterScriptRPCs(m_pRakClient);	// Unregister server-side scripting RPCs.
-	RakNetworkFactory::DestroyRakClientInterface(m_pRakClient);
+	SAFE_DELETE(m_pRakClient);
 	SAFE_DELETE(m_pPlayerPool);
 	SAFE_DELETE(m_pVehiclePool);
 	SAFE_DELETE(m_pPickupPool);

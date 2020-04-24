@@ -94,7 +94,7 @@ CNetGame::CNetGame()
 	//BOOL bMyriad = pConsole->GetBoolVariable("myriad");
 
 	// Setup RakNet
-	m_pRak = RakNetworkFactory::GetRakServerInterface();
+	m_pRak = new RakServer();
 	//m_pRak->InitializeSecurity(0, 0);
 	//m_pRak->SetTrackFrequencyTable(true);
 
@@ -216,7 +216,7 @@ CNetGame::~CNetGame()
 	//if (IsACEnabled())
 	//	CAntiCheat::Shutdown(this);
 
-	RakNetworkFactory::DestroyRakServerInterface(m_pRak);
+	SAFE_DELETE(m_pRak);
 }
 
 //----------------------------------------------------

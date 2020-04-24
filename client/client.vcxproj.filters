@@ -226,15 +226,6 @@
     <ClCompile Include="..\sdk\raknet\CheckSum.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\CommandParserInterface.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\ConnectionGraph.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\ConsoleServer.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\DataBlockEncryptor.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
@@ -259,28 +250,13 @@
     <ClCompile Include="..\sdk\raknet\FileOperations.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\FullyConnectedMesh.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\GetTime.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\InternalPacketPool.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\LightweightDatabaseClient.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\LightweightDatabaseCommon.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\LightweightDatabaseServer.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\LinuxStrings.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\LogCommandParser.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\NatPunchthrough.cpp">
@@ -292,37 +268,16 @@
     <ClCompile Include="..\sdk\raknet\NetworkTypes.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\PacketConsoleLogger.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\PacketFileLogger.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\PacketLogger.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\PluginInterface.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\RakClient.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\RakNetCommandParser.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\RakNetStatistics.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\RakNetTransport.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\RakNetworkFactory.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\RakPeer.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\RakServer.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\RakSleep.cpp">
@@ -334,13 +289,7 @@
     <ClCompile Include="..\sdk\raknet\ReliabilityLayer.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
-    <ClCompile Include="..\sdk\raknet\ReplicaManager.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\raknet\rijndael.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\Router.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\RPCMap.cpp">
@@ -371,9 +320,6 @@
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\TEABlockEncryptor.cpp">
-      <Filter>sdk\raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sdk\raknet\TelnetTransport.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="..\sdk\raknet\_findfirst.cpp">
@@ -582,15 +528,6 @@
     <ClInclude Include="..\sdk\raknet\CheckSum.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\CommandParserInterface.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\ConnectionGraph.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\ConsoleServer.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\DataBlockEncryptor.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
@@ -669,9 +606,6 @@
     <ClInclude Include="..\sdk\raknet\FileOperations.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\FullyConnectedMesh.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\GetTime.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
@@ -681,19 +615,7 @@
     <ClInclude Include="..\sdk\raknet\InternalPacketPool.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\LightweightDatabaseClient.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\LightweightDatabaseCommon.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\LightweightDatabaseServer.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\LinuxStrings.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\LogCommandParser.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\MTUSize.h">
@@ -711,16 +633,7 @@
     <ClInclude Include="..\sdk\raknet\NetworkTypes.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\PacketConsoleLogger.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\PacketEnumerations.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\PacketFileLogger.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\PacketLogger.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\PacketPriority.h">
@@ -738,31 +651,16 @@
     <ClInclude Include="..\sdk\raknet\RakClientInterface.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\RakNetCommandParser.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\RakNetDefines.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\RakNetStatistics.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\RakNetTransport.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\RakNetworkFactory.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\RakPeer.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\RakPeerInterface.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\RakServer.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\RakServerInterface.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\RakSleep.h">
@@ -774,25 +672,10 @@
     <ClInclude Include="..\sdk\raknet\ReliabilityLayer.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\Replica.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\ReplicaEnums.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\ReplicaManager.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\rijndael.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\rijndael-boxes.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\Router.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\RouterInterface.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\RPCMap.h">
@@ -811,9 +694,6 @@
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\SimpleMutex.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\SimpleTCPServer.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\SingleProducerConsumer.h">
@@ -840,13 +720,7 @@
     <ClInclude Include="..\sdk\raknet\TEABlockEncryptor.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
-    <ClInclude Include="..\sdk\raknet\TelnetTransport.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
     <ClInclude Include="..\sdk\raknet\ThreadPool.h">
-      <Filter>sdk\raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sdk\raknet\TransportInterface.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
     <ClInclude Include="..\sdk\raknet\Types.h">
@@ -871,10 +745,5 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="client.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\sdk\raknet\Makefile.am">
-      <Filter>sdk\raknet</Filter>
-    </None>
   </ItemGroup>
 </Project>
