@@ -128,6 +128,7 @@ enum eRPCTable
 	RPC_ScrInterpolateCamera,
 	RPC_TypingEvent,
 	RPC_ScrVehicleComponent,
+	RPC_ScrSetGameSpeed,
 
 	MAX_RPC_ID_AVAILABLE
 };

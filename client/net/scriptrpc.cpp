@@ -1828,6 +1828,18 @@ static void ScrVehicleComponent(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrSetGameSpeed(RPCParameters* rpcParams)
+{
+	RakNet::BitStream in(rpcParams->input,
+		BITS_TO_BYTES(rpcParams->numberOfBitsOfData), false);
+
+	float fSpeed = 1.0f;
+	if (in.Read(fSpeed))
+	{
+		pGame->SetGameSpeed(fSpeed);
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1909,6 +1921,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrPlayerVelocity);
 	REGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
 	REGISTER_STATIC_RPC(pRakClient, ScrVehicleComponent);
+	REGISTER_STATIC_RPC(pRakClient, ScrSetGameSpeed);
 }
 
 //----------------------------------------------------
@@ -1990,6 +2003,7 @@ void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient, ScrVehicleVelocity);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrVehicleComponent);
+	UNREGISTER_STATIC_RPC(pRakClient, ScrSetGameSpeed);
 }
 
 //----------------------------------------------------

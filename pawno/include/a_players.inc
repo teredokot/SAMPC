@@ -146,3 +146,4 @@ native SetPlayerMaxHealth(playerid, Float:max_health);
 native InterpolateCameraPos(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = CAMERA_CUT);
 native InterpolateCameraLookAt(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = CAMERA_CUT);
 native SetPlayerBlurLevel(playerid, blur_level);
+native SetPlayerGameSpeed(playerid, Float:speed);

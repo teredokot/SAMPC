@@ -890,3 +890,13 @@ void CGame::SetBlurLevel(unsigned char ucLevel)
 {
 	*(unsigned char*)0x8D5104 = ucLevel;
 }
+
+void CGame::SetGameSpeed(float fSpeed)
+{
+	*(float*)0xB7CB64 = fSpeed;
+}
+
+float CGame::GetGameSpeed()
+{
+	return *(float*)0xB7CB64;
+}

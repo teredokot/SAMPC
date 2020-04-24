@@ -1027,6 +1027,21 @@ static cell n_InterpolateCameraLookAt(AMX* amx, cell* params)
 	return 0;
 }
 
+// native SetPlayerGameSpeed(playerid, Float:speed)
+static cell n_SetPlayerGameSpeed(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetPlayerGameSpeed", 2);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+		float fSpeed = amx_ctof(params[2]);
+		out.Write(fSpeed);
+		return pNetGame->SendToPlayer(params[1], RPC_ScrSetGameSpeed, &out);
+	}
+	return -1;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)
@@ -5773,6 +5788,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetPlayerMaxHealth),
 	DEFINE_NATIVE(InterpolateCameraPos),
 	DEFINE_NATIVE(InterpolateCameraLookAt),
+	DEFINE_NATIVE(SetPlayerGameSpeed),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

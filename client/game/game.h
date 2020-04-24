@@ -161,6 +161,9 @@ public:
 	void SetMaxHealth(float fMax);
 	void SetBlurLevel(unsigned char ucLevel);
 
+	void SetGameSpeed(float fSpeed);
+	float GetGameSpeed();
+
 	CGame();
 	~CGame() {};
 };
