@@ -28,8 +28,8 @@ CVehicle::CVehicle( int iModel, VECTOR *vecPos,
 	m_SpawnInfo.vecPos.X = vecPos->X;
 	m_SpawnInfo.vecPos.Y = vecPos->Y;
 	m_SpawnInfo.vecPos.Z = vecPos->Z;
-	m_SpawnInfo.iColor1 = iColor1;
-	m_SpawnInfo.iColor2 = iColor2;
+	m_SpawnInfo.iColor1 = (iColor1 == -1) ? (rand() % 128) : (iColor1);
+	m_SpawnInfo.iColor2 = (iColor2 == -1) ? (rand() % 128) : (iColor2);
 	m_SpawnInfo.iRespawnDelay = iRespawnDelay;
 	m_SpawnInfo.iInterior = 0;
 

@@ -282,19 +282,22 @@ static cell AMX_NATIVE_CALL n_ChangeVehicleColor(AMX *amx, cell *params)
 	if (!pVehicle)
 		return 0;
 
+	DWORD dwCol1 = (params[2] == -1) ? (rand() % 128) : (params[2]),
+		dwCol2 = (params[3] == -1) ? (rand() % 128) : (params[3]);
+
 	RakNet::BitStream bsData;
 	bsData.Write((BYTE)INVALID_PLAYER_ID);
 	bsData.Write((int)EVENT_TYPE_CARCOLOR);
 	bsData.Write((DWORD)params[1]);
-	bsData.Write((DWORD)params[2]);
-	bsData.Write((DWORD)params[3]);
+	bsData.Write(dwCol1);
+	bsData.Write(dwCol2);
 
 	RakServerInterface* pRak = pNetGame->GetRakServer();
 	pRak->RPC(RPC_ScmEvent , &bsData, HIGH_PRIORITY, 
 		RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 
-	pVehicle->m_CarModInfo.iColor0 = (int)params[2];
-	pVehicle->m_CarModInfo.iColor1 = (int)params[3];
+	pVehicle->m_CarModInfo.iColor0 = (int)dwCol1;
+	pVehicle->m_CarModInfo.iColor1 = (int)dwCol2;
 
 	return 1;
 }
