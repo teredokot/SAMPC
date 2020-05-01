@@ -391,6 +391,7 @@ native SendRconCommand(const command[]);
 native GetPlayerVersion(playerid, version[], len = sizeof(version));
 native BlockIpAddress(ip_address[], timems);
 native UnBlockIpAddress(ip_address[]);
+native GetServerTickRate();
 native GetServerVarAsString(const varname[], buffer[], length);
 native GetServerVarAsInt(const varname[]);
 native GetServerVarAsBool(const varname[]);

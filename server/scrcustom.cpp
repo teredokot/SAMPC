@@ -688,6 +688,12 @@ static cell n_UnBlockIpAddress(AMX* amx, cell* params)
 	return 0;
 }
 
+static cell n_GetServerTickRate(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetServerTickRate", 0);
+	return pNetGame->m_uiNumOfTicksInSec;
+}
+
 //----------------------------------------------------------------------------------
 // native IsPlayerAdmin(playerid)
 static cell AMX_NATIVE_CALL n_IsPlayerAdmin(AMX *amx, cell *params)
@@ -5695,6 +5701,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "IsBanned", n_IsBanned},
 	DEFINE_NATIVE(BlockIpAddress),
 	DEFINE_NATIVE(UnBlockIpAddress),
+	DEFINE_NATIVE(GetServerTickRate),
 	{ "SendRconCommand",		n_SendRconCommand },
 	{ "GetServerVarAsString",	n_GetServerVarAsString },
 	{ "GetServerVarAsInt",		n_GetServerVarAsInt },

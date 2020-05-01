@@ -90,6 +90,10 @@ public:
 	bool m_bDisableEnterExits; // Interior enter/exits disabled?
 	unsigned int m_uiMaxRconAttempt;
 
+	RakNet::Time64 m_iLastTimeSaved;
+	unsigned int m_uiNumOfTicksInSec;
+	unsigned int m_uiTickCount;
+
 	long long m_longSynchedWeapons;
 	
 	#ifndef WIN32
@@ -126,6 +130,7 @@ public:
 	char *GetNextScriptFile();
 	void LoadAllFilterscripts();
 	
+	void TickUpdate();
 	void Process();
 
 	int GetBroadcastSendRateFromPlayerDistance(float fDistance);

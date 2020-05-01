@@ -71,6 +71,10 @@ CNetGame::CNetGame()
 	m_uiMaxRconAttempt = 3;
 	m_bNameTagLOS = true;
 
+	m_iLastTimeSaved = 0;
+	m_uiTickCount = 0;
+	m_uiNumOfTicksInSec = 0;
+
 	m_iCurrentGameModeIndex = 0;
 	m_iCurrentGameModeRepeat = 0;
 	m_bFirstGameModeLoaded = FALSE;
@@ -578,10 +582,23 @@ void CNetGame::MasterServerAnnounce(float fElapsedTime)
 
 //----------------------------------------------------
 
+void CNetGame::TickUpdate()
+{
+	RakNet::Time64 iTimeNow = RakNet::GetTime64();
+	if ((iTimeNow - m_iLastTimeSaved) >= 1000)
+	{
+		m_iLastTimeSaved = iTimeNow;
+		m_uiNumOfTicksInSec = m_uiTickCount;
+		m_uiTickCount = 0;
+	}
+	m_uiTickCount++;
+}
+
 void CNetGame::Process()
 {
 	float fElapsedTime = GetElapsedTime();
 
+	TickUpdate();
 	UpdateNetwork();
 
 	//if (IsACEnabled())
