@@ -277,6 +277,7 @@ int main (int argc, char** argv)
 	int iChatLogging = 1;
 	int iPlayerTimeout = 10000;
 	int iOnFootRate = 40;
+	int iInCarRate = 40;
 
 	// Open the log file
 	LoadLogFile();
@@ -374,6 +375,7 @@ int main (int argc, char** argv)
 	pConsole->AddVariable("db_logging", CON_VARTYPE_INT, 0, &g_bDBLogging);
 	pConsole->AddVariable("db_log_queries", CON_VARTYPE_INT, 0, &g_bDBLogQueries);
 	pConsole->AddVariable("onfoot_rate", CON_VARTYPE_INT, 0, &iOnFootRate);
+	pConsole->AddVariable("incar_rate", CON_VARTYPE_INT, 0, &iInCarRate);
 
 	// Add 16 gamemode variables.
 	int x=0;
@@ -405,6 +407,7 @@ int main (int argc, char** argv)
 	//pConsole->ModifyVariableFlags("anticheat", CON_VARFLAG_READONLY /* | CON_VARFLAG_RULE */);
 	//pConsole->ModifyVariableFlags("nosign", CON_VARFLAG_READONLY);
 	pConsole->ModifyVariableFlags("onfoot_rate", CON_VARFLAG_READONLY);
+	pConsole->ModifyVariableFlags("incar_rate", CON_VARFLAG_READONLY);
 
 	// Add the version as a rule
 	pConsole->AddStringVariable("version", CON_VARFLAG_RULE | CON_VARFLAG_READONLY, SAMP_VERSION);

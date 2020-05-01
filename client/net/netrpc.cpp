@@ -89,7 +89,8 @@ void InitGame(RPCParameters *rpcParams)
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 	BYTE byteMyPlayerID;
 	bool bLanMode, bStuntBonus;
-	short iOnFootRate = 40;
+	short sOnFootRate = 40;
+	short sInCarRate = 40;
 
 	bsInitGame.Read(pNetGame->m_iSpawnsAvailable);
 	bsInitGame.Read(byteMyPlayerID);
@@ -111,7 +112,8 @@ void InitGame(RPCParameters *rpcParams)
 	bsInitGame.Read(pNetGame->m_fNameTagDrawDistance);
 	bsInitGame.Read(pNetGame->m_bDisableEnterExits);
 	bsInitGame.Read(pNetGame->m_bNameTagLOS);
-	bsInitGame.Read(iOnFootRate);
+	bsInitGame.Read(sOnFootRate);
+	bsInitGame.Read(sInCarRate);
 
 	size_t uiHostLen;
 	bsInitGame.Read(uiHostLen);
@@ -132,8 +134,12 @@ void InitGame(RPCParameters *rpcParams)
 	// Disable the enter/exits if needed.
 	pGame->DisableEnterExits(pNetGame->m_bDisableEnterExits);
 	
+	CLocalPlayer* pLocalPlayer = pPlayerPool->GetLocalPlayer();
+	pLocalPlayer->m_sNormalOnfootRate = sOnFootRate;
+	pLocalPlayer->m_sNormalIncarRate = sInCarRate;
+
 	pNetGame->SetGameState(GAMESTATE_CONNECTED);
-	pPlayerPool->GetLocalPlayer()->HandleClassSelection();
+	pLocalPlayer->HandleClassSelection();
 
 	pChatWindow->AddDebugMessage("Connected to %.64s",pNetGame->m_szHostName);
 

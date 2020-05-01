@@ -1261,6 +1261,7 @@ void CNetGame::InitGameForPlayer(BYTE bytePlayerID)
 	RakNet::BitStream bsInitGame;
 	bool bLanMode = false;
 	short sOnfootRate = pConsole->GetIntVariable("onfoot_rate");
+	short sIncarRate = pConsole->GetIntVariable("incar_rate");
 
 	if(m_bLanMode) bLanMode = true;
 
@@ -1285,7 +1286,8 @@ void CNetGame::InitGameForPlayer(BYTE bytePlayerID)
 	bsInitGame.Write(m_bDisableEnterExits);
 	bsInitGame.Write(m_bNameTagLOS);
 	bsInitGame.Write(sOnfootRate);
-	
+	bsInitGame.Write(sIncarRate);
+
 	char* szHostName = pConsole->GetStringVariable("hostname");
 	if(szHostName) {
 		size_t uiHostLen = strlen(szHostName);

@@ -43,6 +43,7 @@ public:
 	DWORD					m_dwLastAmmo[13];
 
 	short m_sNormalOnfootRate;
+	short m_sNormalIncarRate;
 private:
 
 	PLAYER_SPAWN_INFO		m_SpawnInfo;

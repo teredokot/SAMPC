@@ -71,6 +71,7 @@ CLocalPlayer::CLocalPlayer()
 	m_dwLastHeadUpdate = GetTickCount();
 	m_bInRCMode = FALSE;
 	m_sNormalOnfootRate = NETMODE_NORMAL_ONFOOT_SENDRATE;
+	m_sNormalIncarRate = NETMODE_NORMAL_INCAR_SENDRATE;
 
 	m_bIsSpectating = FALSE;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;
@@ -912,7 +913,7 @@ int CLocalPlayer::GetOptimumInCarSendRate(int iPlayersEffected)
 			}
 			else {
 				if(pNetGame->IsLanMode()) return LANMODE_NORMAL_INCAR_SENDRATE;
-				else return (NETMODE_NORMAL_INCAR_SENDRATE + (int)iPlayersEffected*NETMODE_SEND_MULTIPLIER);
+				else return (m_sNormalIncarRate + (int)iPlayersEffected*NETMODE_SEND_MULTIPLIER);
 			}
 		}
 	}
