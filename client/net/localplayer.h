@@ -9,48 +9,6 @@
 
 #pragma once
 
-#define SPECTATE_TYPE_NONE				0
-#define SPECTATE_TYPE_PLAYER			1
-#define SPECTATE_TYPE_VEHICLE			2
-
-#define SPECIAL_ACTION_NONE				0
-#define SPECIAL_ACTION_USEJETPACK		2
-#define SPECIAL_ACTION_DANCE1			5
-#define SPECIAL_ACTION_DANCE2			6
-#define SPECIAL_ACTION_DANCE3			7
-#define SPECIAL_ACTION_DANCE4			8
-#define SPECIAL_ACTION_HANDSUP			10
-#define SPECIAL_ACTION_USECELLPHONE		11
-#define SPECIAL_ACTION_SITTING			12
-#define SPECIAL_ACTION_STOPUSECELLPHONE 13
-#define SPECIAL_ACTION_URINATE			68
-
-typedef struct _PLAYER_SPAWN_INFO
-{
-	BYTE byteTeam;
-	int iSkin;
-	VECTOR vecPos;
-	float fRotation;
-	int iSpawnWeapons[3];
-	int iSpawnWeaponsAmmo[3];
-} PLAYER_SPAWN_INFO;
-
-typedef struct _ONFOOT_SYNC_DATA
-{
-	WORD lrAnalog;
-	WORD udAnalog;
-	WORD wKeys;
-	VECTOR vecPos;
-	float fRotation;
-	BYTE byteHealth;
-	BYTE byteArmour;
-	BYTE byteCurrentWeapon;
-	BYTE byteSpecialAction;	
-	VECTOR vecMoveSpeed;
-	VECTOR vecSurfOffsets;
-	VEHICLEID SurfVehicleId;
-} ONFOOT_SYNC_DATA;
-
 enum eWeaponState
 {
 	WS_NO_BULLETS = 0,
@@ -58,70 +16,6 @@ enum eWeaponState
 	WS_MORE_BULLETS = 2,
 	WS_RELOADING = 3,
 };
-
-typedef struct _AIM_SYNC_DATA
-{
-	BYTE byteCamMode;
-	BYTE byteCamExtZoom : 6;	// 0-63 normalized
-	BYTE byteWeaponState : 2;	// see eWeaponState
-	VECTOR vecAimf1;
-	VECTOR vecAimf2;
-	VECTOR vecAimPos;
-	float fAimZ;
-} AIM_SYNC_DATA;
-
-typedef struct _INCAR_SYNC_DATA
-{
-	VEHICLEID VehicleID;
-	WORD lrAnalog;
-	WORD udAnalog;
-	WORD wKeys;
-	C_VECTOR1 cvecRoll;
-	C_VECTOR1 cvecDirection;
-	VECTOR vecPos;
-	VECTOR vecMoveSpeed;
-	float fCarHealth;
-	BYTE bytePlayerHealth;
-	BYTE bytePlayerArmour;
-	BYTE byteCurrentWeapon;
-	BYTE byteSirenOn;
-	BYTE byteLandingGearState;
-	BYTE byteTires[4];
-	VEHICLEID TrailerID;
-	DWORD dwHydraThrustAngle;
-	FLOAT fTrainSpeed;
-	unsigned char ucInfo;
-} INCAR_SYNC_DATA;
-
-typedef struct _PASSENGER_SYNC_DATA
-{
-	VEHICLEID VehicleID;
-	BYTE byteSeatFlags : 7;
-	BYTE byteDriveBy : 1;
-	BYTE byteCurrentWeapon;
-	BYTE bytePlayerHealth;
-	BYTE bytePlayerArmour;
-	WORD lrAnalog;
-	WORD udAnalog;
-	WORD wKeys;
-	VECTOR vecPos;
-} PASSENGER_SYNC_DATA;
-
-typedef struct _SPECTATOR_SYNC_DATA
-{
-	WORD lrAnalog;
-	WORD udAnalog;
-	WORD wKeys;
-	VECTOR vecPos;
-} SPECTATOR_SYNC_DATA;
-
-typedef struct _TRAILER_SYNC_DATA
-{
-	C_VECTOR1 cvecRoll;
-	C_VECTOR1 cvecDirection;
-	VECTOR vecPos;
-	VECTOR vecMoveSpeed;
-} TRAILER_SYNC_DATA;
 
 //----------------------------------------------------------
 
@@ -252,27 +146,5 @@ public:
 
 	int DetermineNumberOfPlayersInLocalRange();
 };
-
-typedef struct
-{
-	unsigned char ucCarMod[17];
-	/*BYTE byteCarMod0;
-	BYTE byteCarMod1;
-	BYTE byteCarMod2;
-	BYTE byteCarMod3;
-	BYTE byteCarMod4;
-	BYTE byteCarMod5;
-	BYTE byteCarMod6;
-	BYTE byteCarMod7;
-	BYTE byteCarMod8;
-	BYTE byteCarMod9;
-	BYTE byteCarMod10;
-	BYTE byteCarMod11;
-	BYTE byteCarMod12;
-	BYTE byteCarMod13;*/
-	BYTE bytePaintJob;
-	int iColor0;
-	int iColor1;
-} CAR_MOD_INFO;
 
 //----------------------------------------------------------

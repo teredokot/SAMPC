@@ -11,7 +11,6 @@
 
 #pragma once
 
-#define MAX_CMD_INPUT   128
 #define MAX_CMDS		128
 #define MAX_CMD_STRLEN  32
 #define CMD_CHARACTER   '/'

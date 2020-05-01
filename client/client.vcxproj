@@ -576,6 +576,7 @@
     <ClInclude Include="..\sdk\raknet\ThreadPool.h" />
     <ClInclude Include="..\sdk\raknet\Types.h" />
     <ClInclude Include="..\sdk\raknet\_findfirst.h" />
+    <ClInclude Include="..\sdk\shared.h" />
     <ClInclude Include="..\sdk\zlib\crc32.h" />
     <ClInclude Include="..\sdk\zlib\deflate.h" />
     <ClInclude Include="..\sdk\zlib\inffast.h" />

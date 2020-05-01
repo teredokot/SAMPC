@@ -12,50 +12,8 @@
 #include <windows.h>
 #include <assert.h>
 
+#include "shared.h"
 //#define  _ASSERT	assert
-
-//-----------------------------------------------------------
-
-#define MAX_PLAYERS		204
-#define MAX_VEHICLES	702
-#define MAX_OBJECTS		255
-#define MAX_MENUS		128
-#define MAX_TEXT_DRAWS	1024
-#define MAX_GANG_ZONES	1024
-//-----------------------------------------------------------
-
-typedef unsigned short VEHICLEID;
-
-typedef struct _C_VECTOR1 {
-	// New format, 24 bits for each of X, Y, Z = 72 bits/9 bytes
-	char data[9];
-
-	// Old format
-	// short X,Y,Z;
-} C_VECTOR1;
-
-typedef struct _RGBA {
-	unsigned char r,g,b,a;
-} RGBA, *PRGBA;
-
-typedef struct _VECTOR {
-	float X,Y,Z;
-} VECTOR, *PVECTOR;
-
-typedef struct _VECTOR2D {
-	float X,Y;
-} VECTOR2D, *PVECTOR2D;
-
-typedef struct _MATRIX4X4 {
-	VECTOR right;
-	DWORD  flags;
-	VECTOR up;
-	float  pad_u;
-	VECTOR at;
-	float  pad_a;
-	VECTOR pos;
-	float  pad_p;
-} MATRIX4X4, *PMATRIX4X4;
 
 //-----------------------------------------------------------
 
@@ -269,70 +227,6 @@ typedef struct {
 #define ACTION_NONE						0 
 
 //-----------------------------------------------------------
-
-#define TRAIN_PASSENGER_LOCO			537
-#define TRAIN_FREIGHT_LOCO				538
-#define TRAIN_PASSENGER					569
-#define TRAIN_FREIGHT					570
-#define TRAIN_TRAM						449
-#define HYDRA							520
-
-//-----------------------------------------------------------
-
-// ---- weapon id defines ----
-#define WEAPON_FIST						0
-#define WEAPON_BRASSKNUCKLE				1
-#define WEAPON_GOLFCLUB					2
-#define WEAPON_NITESTICK				3
-#define WEAPON_KNIFE					4
-#define WEAPON_BAT						5
-#define WEAPON_SHOVEL					6
-#define WEAPON_POOLSTICK				7
-#define WEAPON_KATANA					8
-#define WEAPON_CHAINSAW					9
-#define WEAPON_DILDO					10
-#define WEAPON_DILDO2					11
-#define WEAPON_VIBRATOR					12
-#define WEAPON_VIBRATOR2				13
-#define WEAPON_FLOWER					14
-#define WEAPON_CANE						15
-#define WEAPON_GRENADE					16
-#define WEAPON_TEARGAS					17
-#define WEAPON_MOLTOV					18
-#define WEAPON_ROCKET					19
-#define WEAPON_ROCKET_HS				20
-#define WEAPON_FREEFALLBOMB				21
-#define WEAPON_COLT45					22
-#define WEAPON_SILENCED					23
-#define WEAPON_DEAGLE					24
-#define WEAPON_SHOTGUN					25
-#define WEAPON_SAWEDOFF					26
-#define WEAPON_SHOTGSPA					27
-#define WEAPON_UZI						28
-#define WEAPON_MP5						29
-#define WEAPON_AK47						30
-#define WEAPON_M4						31
-#define WEAPON_TEC9						32
-#define WEAPON_RIFLE					33
-#define WEAPON_SNIPER					34
-#define WEAPON_ROCKETLAUNCHER			35
-#define WEAPON_HEATSEEKER				36
-#define WEAPON_FLAMETHROWER				37
-#define WEAPON_MINIGUN					38
-#define WEAPON_SATCHEL					39
-#define WEAPON_BOMB						40
-#define WEAPON_SPRAYCAN					41
-#define WEAPON_FIREEXTINGUISHER			42
-#define WEAPON_CAMERA					43
-#define WEAPON_NIGHTVISION				44
-#define WEAPON_INFRARED					45
-#define WEAPON_PARACHUTE				46
-#define WEAPON_ARMOUR					47
-#define WEAPON_VEHICLE					49
-#define WEAPON_HELIBLADES				50
-#define WEAPON_EXPLOSION				51
-#define WEAPON_DROWN					53
-#define WEAPON_COLLISION				54
 
 //---- weapon model defines ----
 #define WEAPON_MODEL_BRASSKNUCKLE		331 // was 332

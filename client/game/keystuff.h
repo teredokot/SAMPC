@@ -7,6 +7,8 @@
 //
 //----------------------------------------------------------
 
+#pragma once
+
 typedef struct _GTA_CONTROLSET
 {
 	WORD wKeys1[24];

@@ -17,8 +17,6 @@ DWORD dwPlayerPedPtrs[MAX_PLAYERS];
 
 #define NUM_RADAR_COLORS 200
 
-#define PI 3.14159265
-
 DWORD dwHudColors[NUM_RADAR_COLORS] = {
 0xFF8C13FF, // dark orange
 0xC715FFFF, // Medium violet red
@@ -475,10 +473,10 @@ int __stdcall GameGetWeaponModelIDFromWeaponID(int iWeaponID)
 	case WEAPON_CAMERA:
 		return WEAPON_MODEL_CAMERA;
 
-	case WEAPON_NIGHTVISION:
+	case WEAPON_NIGHT_VIS_GOGGLES:
 		return WEAPON_MODEL_NIGHTVISION;
 
-	case WEAPON_INFRARED:
+	case WEAPON_THERMAL_GOGGLES:
 		return WEAPON_MODEL_INFRARED;
 
 	case WEAPON_PARACHUTE:

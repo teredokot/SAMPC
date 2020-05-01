@@ -734,6 +734,9 @@
     </ClInclude>
     <ClInclude Include="playertags.h" />
     <ClInclude Include="d3dhook.h" />
+    <ClInclude Include="..\sdk\shared.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\sdk\detours\detours.lib">

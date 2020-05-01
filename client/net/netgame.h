@@ -19,9 +19,6 @@
 
 #define LOCAL_CLIENT_PORT		8150
 
-#define PACK_VEHICLE_HEALTH(f)		(BYTE)(f / 4)
-#define UNPACK_VEHICLE_HEALTH(b)	(float)b * 4
-
 //----------------------------------------------------
 
 class CNetGame

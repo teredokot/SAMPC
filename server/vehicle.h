@@ -26,28 +26,6 @@ typedef struct _VEHICLE_SPAWN_INFO
 	int iInterior;
 } VEHICLE_SPAWN_INFO;
 
-typedef struct _CAR_MOD_INFO
-{
-	unsigned char ucCarMod[17];
-	/*BYTE byteCarMod0;
-	BYTE byteCarMod1;
-	BYTE byteCarMod2;
-	BYTE byteCarMod3;
-	BYTE byteCarMod4;
-	BYTE byteCarMod5;
-	BYTE byteCarMod6;
-	BYTE byteCarMod7;
-	BYTE byteCarMod8;
-	BYTE byteCarMod9;
-	BYTE byteCarMod10;
-	BYTE byteCarMod11;
-	BYTE byteCarMod12;
-	BYTE byteCarMod13;*/
-	BYTE bytePaintJob;
-	int iColor0;
-	int iColor1;
-} CAR_MOD_INFO;
-
 //----------------------------------------------------
 
 class CVehicle

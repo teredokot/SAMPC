@@ -13,17 +13,10 @@
 #include <windows.h>
 #include <process.h>
 
-#define SAMP_VERSION "0.2X"
-
-#define ARRAY_SIZE(a)	( sizeof((a)) / sizeof(*(a)) )
-#define SAFE_DELETE(p)	{ if (p) { delete (p); (p) = NULL; } }
-#define SAFE_RELEASE(p)	{ if (p) { (p)->Release(); (p) = NULL; } }
-
 #define IDC_CMDEDIT		1
 #define IDC_CHATBACK	2
 #define IDC_CHATSCROLL  3
 
-#define MAX_PLAYER_NAME			24
 #define MAX_SETTINGS_STRING		100
 
 #define GTASA_VERSION_UNKNOWN	0
@@ -32,6 +25,9 @@
 #define LOCKING_DISTANCE		200.0f
 #define CSCANNER_DISTANCE		200.0f
 #define PSCANNER_DISTANCE		600.0f
+
+// Shared stuffs
+#include "shared.h"
 
 typedef struct _GAME_SETTINGS {
 	BOOL bDebug;

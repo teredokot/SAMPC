@@ -14,16 +14,11 @@
 
 #define IS_FIRING(x) (x & 0x200) // for checking the keystate firing bit
 
-//----------------------------------------------------
-#define MAX_SPAWNS 500
-
-#define UPDATE_TYPE_NONE	0
-#define UPDATE_TYPE_FULL	1
-#define UPDATE_TYPE_MINIMAL 2
-
-#define GAMESTATE_STOPPED	 0
-#define GAMESTATE_RUNNING	 1
+#define GAMESTATE_STOPPED 0
+#define GAMESTATE_RUNNING 1
 #define GAMESTATE_RESTARTING 2
+
+//----------------------------------------------------
 
 #include "main.h"
 #include "player.h"
@@ -187,56 +182,6 @@ public:
 	void UpdateInstagib();
 	const PCHAR GetWeaponName(int iWeaponID);
 };
-
-//----------------------------------------------------
-
-#define WEAPON_FIST						0
-#define WEAPON_BRASSKNUCKLE				1
-#define WEAPON_GOLFCLUB					2
-#define WEAPON_NITESTICK				3
-#define WEAPON_KNIFE					4
-#define WEAPON_BAT						5
-#define WEAPON_SHOVEL					6
-#define WEAPON_POOLSTICK				7
-#define WEAPON_KATANA					8
-#define WEAPON_CHAINSAW					9
-#define WEAPON_DILDO					10
-#define WEAPON_DILDO2					11
-#define WEAPON_VIBRATOR					12
-#define WEAPON_VIBRATOR2				13
-#define WEAPON_FLOWER					14
-#define WEAPON_CANE						15
-#define WEAPON_GRENADE					16
-#define WEAPON_TEARGAS					17
-#define WEAPON_MOLTOV					18
-#define WEAPON_COLT45					22
-#define WEAPON_SILENCED					23
-#define WEAPON_DEAGLE					24
-#define WEAPON_SHOTGUN					25
-#define WEAPON_SAWEDOFF					26
-#define WEAPON_SHOTGSPA					27
-#define WEAPON_UZI						28
-#define WEAPON_MP5						29
-#define WEAPON_AK47						30
-#define WEAPON_M4						31
-#define WEAPON_TEC9						32
-#define WEAPON_RIFLE					33
-#define WEAPON_SNIPER					34
-#define WEAPON_ROCKETLAUNCHER			35
-#define WEAPON_HEATSEEKER				36
-#define WEAPON_FLAMETHROWER				37
-#define WEAPON_MINIGUN					38
-#define WEAPON_SATCHEL					39
-#define WEAPON_BOMB						40
-#define WEAPON_SPRAYCAN					41
-#define WEAPON_FIREEXTINGUISHER			42
-#define WEAPON_CAMERA					43
-#define WEAPON_NIGHT_VIS_GOGGLES		44
-#define WEAPON_THERMAL_GOGGLES			45
-#define WEAPON_PARACHUTE				46
-#define WEAPON_VEHICLE					49
-#define WEAPON_DROWN					53
-#define WEAPON_COLLISION				54
 
 //----------------------------------------------------
 

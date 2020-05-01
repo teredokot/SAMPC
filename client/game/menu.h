@@ -11,10 +11,6 @@ Version: $Id: menu.h,v 1.0 2007/02/13 19:26:45 Y_Less Exp $
 #ifndef SAMPSRV_MENU_H
 #define SAMPSRV_MENU_H
 
-#define MAX_MENU_ITEMS 12
-#define MAX_MENU_LINE 32
-#define MAX_COLUMNS 2
-
 //----------------------------------------------------
 
 struct MENU_INT

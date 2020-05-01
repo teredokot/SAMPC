@@ -24,42 +24,12 @@
 
 //#define RAKRCON
 
-#define MAX_PLAYER_NAME			24
-#ifdef SCRIPTING_ONLY
-#define MAX_PLAYERS				8		// Only 8 players for scripting builds
-#else
-#define MAX_PLAYERS				200
-#endif
-#define MAX_VEHICLES			700
 #define MAX_FILTER_SCRIPTS		16
-#define MAX_OBJECTS				255
-#define MAX_MENUS				128
-#define MAX_TEXT_DRAWS			1024
-#define MAX_GANG_ZONES			1024
-#define MAX_CMD_INPUT			128		// This limitation is also found on the client. it applies to chat and commands.
 
 #define DEFAULT_MAX_PLAYERS		32
 #define DEFAULT_LISTEN_PORT		8192
 #define DEFAULT_RCON_PORT		8193
 #define DEFAULT_RCON_MAXUSERS	8
-
-#define EVENT_TYPE_PAINTJOB			1
-#define EVENT_TYPE_CARCOMPONENT		2
-#define EVENT_TYPE_CARCOLOR			3
-#define EVENT_ENTEREXIT_MODSHOP		4
-
-#define PI 3.14159265
-
-#define ARRAY_SIZE(a)	( sizeof((a)) / sizeof(*(a)) )
-#define SAFE_DELETE(p)	{ if (p) { delete (p); (p) = NULL; } }
-#define SAFE_RELEASE(p)	{ if (p) { (p)->Release(); (p) = NULL; } }
-
-// ------------
-// VERSION INFO
-// ------------
-
-#define SAMP_VERSION "0.2X"
-#define NETGAME_VERSION 8866
 
 // ------------
 // OS SPECIFICS
@@ -133,10 +103,10 @@ typedef struct _SERVER_SETTINGS {
 // SQLite3
 #include <sqlite/sqlite3.h>
 
+// Shared stuffs
+#include "shared.h"
+
 // SA:MP
-
-typedef unsigned short VEHICLEID;
-
 #include "system.h"
 #include "console.h"
 #include "scrtimers.h"

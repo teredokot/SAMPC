@@ -9,9 +9,6 @@
 
 #pragma once
 
-#define INVALID_PLAYER_ID 255
-#define NO_TEAM 255
-
 //----------------------------------------------------
 
 class CPlayerPool

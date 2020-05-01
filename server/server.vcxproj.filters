@@ -468,6 +468,9 @@
     <ClInclude Include="..\sdk\raknet\Types.h">
       <Filter>sdk\raknet</Filter>
     </ClInclude>
+    <ClInclude Include="..\sdk\shared.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sdk">

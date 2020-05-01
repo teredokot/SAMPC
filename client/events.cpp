@@ -18,11 +18,6 @@ extern CGame *pGame;
 
 DWORD dwParams[4];
 
-#define EVENT_TYPE_PAINTJOB			1
-#define EVENT_TYPE_CARCOMPONENT		2
-#define EVENT_TYPE_CARCOLOR			3
-#define EVENT_ENTEREXIT_MODSHOP		4
-
 void SendScmEvent(int iEventType, DWORD dwParam1, DWORD dwParam2, DWORD dwParam3);
 
 DWORD dwStack;

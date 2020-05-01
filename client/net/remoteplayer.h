@@ -9,27 +9,6 @@
 
 #pragma once
 
-#define PLAYER_STATE_NONE						0
-#define PLAYER_STATE_ONFOOT						1
-#define PLAYER_STATE_DRIVER						2
-#define PLAYER_STATE_PASSENGER					3
-#define PLAYER_STATE_EXIT_VEHICLE				4
-#define PLAYER_STATE_ENTER_VEHICLE_DRIVER		5
-#define PLAYER_STATE_ENTER_VEHICLE_PASSENGER	6
-#define PLAYER_STATE_WASTED						7
-#define PLAYER_STATE_SPAWNED					8
-#define PLAYER_STATE_SPECTATING					9
-
-
-#define UPDATE_TYPE_NONE				0
-#define UPDATE_TYPE_ONFOOT				1
-#define UPDATE_TYPE_INCAR				2
-#define UPDATE_TYPE_PASSENGER			3
-
-#define VALID_KILL						1
-#define TEAM_KILL						2
-#define SELF_KILL						3
-
 //----------------------------------------------------
 
 class CRemotePlayer

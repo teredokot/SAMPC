@@ -21,17 +21,6 @@
 #ifndef SAMPSRV_PICKUPPOOL_H
 #define SAMPSRV_PICKUPPOOL_H
 
-#define MAX_PICKUPS 400
-
-typedef struct _PICKUP
-{
-	int iModel;
-	int iType;
-	float fX;
-	float fY;
-	float fZ;
-} PICKUP;
-
 //----------------------------------------------------
 
 class CPickupPool

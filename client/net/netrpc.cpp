@@ -16,11 +16,6 @@ extern CCmdWindow	 *pCmdWindow;
 using namespace RakNet;
 extern CNetGame* pNetGame;
 
-#define REJECT_REASON_BAD_VERSION   1
-#define REJECT_REASON_BAD_NICKNAME  2
-#define REJECT_REASON_BAD_MOD		3
-#define REJECT_REASON_BAD_PLAYERID	4
-
 // No longer needed in new RakNet
 //#define REGISTER_STATIC_RPC REGISTER_AS_REMOTE_PROCEDURE_CALL 
 //#define UNREGISTER_STATIC_RPC UNREGISTER_AS_REMOTE_PROCEDURE_CALL

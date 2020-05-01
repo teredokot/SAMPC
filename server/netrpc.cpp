@@ -19,15 +19,8 @@ RakServerInterface		*pRak=0;
 //#define REGISTER_STATIC_RPC REGISTER_AS_REMOTE_PROCEDURE_CALL
 //#define UNREGISTER_STATIC_RPC UNREGISTER_AS_REMOTE_PROCEDURE_CALL
 
-#define REJECT_REASON_BAD_VERSION	1
-#define REJECT_REASON_BAD_NICKNAME	2
-#define REJECT_REASON_BAD_MOD		3
-#define REJECT_REASON_BAD_PLAYERID	4
-
 bool ContainsInvalidNickChars(char * szString);
 void ReplaceBadChars(char * szString);
-
-#define NETGAME_VERSION 8866
 
 extern unsigned int _uiRndSrvChallenge;
 

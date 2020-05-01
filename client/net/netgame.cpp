@@ -19,8 +19,6 @@ extern CCmdWindow	 *pCmdWindow;
 INCAR_SYNC_DATA DebugSync;
 BOOL bDebugUpdate=FALSE;
 
-#define NETGAME_VERSION 8866
-
 int iExceptMessageDisplayed=0;
 
 int iVehiclesBench=0;

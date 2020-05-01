@@ -9,8 +9,6 @@ Version: $Id: textdraw.h,v 1.3 2008-02-11 22:30:15 kyecvs Exp $
 
 */
 
-#define MAX_TEXT_DRAW_LINE 256
-
 //-----------------------------------------------------------
 
 typedef struct _TEXT_DRAW_DATA
@@ -39,37 +37,6 @@ typedef struct _TEXT_DRAW_DATA
 	DWORD dwParam1;			// 60-64
 	DWORD dwParam2;			// 64-68
 } TEXT_DRAW_DATA;
-
-//-----------------------------------------------------------
-
-typedef struct _TEXT_DRAW_TRANSMIT
-{
-	float fLetterWidth;
-	float fLetterHeight;
-	DWORD dwLetterColor;
-	float fLineWidth;
-	float fLineHeight;
-	DWORD dwBoxColor;
-	union
-	{
-		BYTE byteFlags;
-		struct
-		{
-			BYTE byteBox : 1;
-			BYTE byteLeft : 1;
-			BYTE byteRight : 1;
-			BYTE byteCenter : 1;
-			BYTE byteProportional : 1;
-			BYTE bytePadding : 3;
-		};
-	};
-	BYTE byteShadow;
-	BYTE byteOutline;
-	DWORD dwBackgroundColor;
-	BYTE byteStyle;
-	float fX;
-	float fY;
-} TEXT_DRAW_TRANSMIT;
 
 //----------------------------------------------------
 

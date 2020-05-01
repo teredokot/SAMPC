@@ -15,14 +15,6 @@
 #ifndef SAMPSRV_PLAYERPOOL_H
 #define SAMPSRV_PLAYERPOOL_H
 
-#define INVALID_PLAYER_ID 255
-#define NO_TEAM 255
-
-#define VALID_KILL		  1
-#define TEAM_KILL		  2
-#define SELF_KILL		  3
-
-
 //----------------------------------------------------
 
 class CPlayerPool

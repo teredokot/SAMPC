@@ -20,17 +20,6 @@
 
 #pragma once
 
-#define MAX_PICKUPS 400
-
-typedef struct _PICKUP
-{
-	int iModel;
-	int iType;
-	float fX;
-	float fY;
-	float fZ;
-} PICKUP;
-
 typedef struct _DROPPED_WEAPON
 {
 	bool bDroppedWeapon;
