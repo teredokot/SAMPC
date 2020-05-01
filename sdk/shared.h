@@ -2,8 +2,8 @@
 #ifndef _SAMP_SHARED_H
 #define _SAMP_SHARED_H
 
-#define SAMP_VERSION "0.2X"
-#define NETGAME_VERSION 8866
+#define SAMP_VERSION "1.0-alpha"
+#define NETGAME_VERSION 4242
 
 #define MAX_PLAYER_NAME 24
 #define MAX_PLAYERS 200

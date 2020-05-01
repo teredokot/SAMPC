@@ -99,7 +99,7 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_bInstagib = FALSE;
 	m_iCheckLoadedStuff = 0;
 
-	if(pChatWindow) pChatWindow->AddDebugMessage("SA:MP 0.2X Initialized");
+	if(pChatWindow) pChatWindow->AddDebugMessage("SA:MP " SAMP_VERSION " Initialized");
 
 }
 
