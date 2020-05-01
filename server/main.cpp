@@ -358,6 +358,7 @@ int main (int argc, char** argv)
 	pConsole->AddStringVariable("password", 0, NULL, ServerPasswordChanged);
 	pConsole->AddStringVariable("hostname", 0, "SA:MP Server");
 	pConsole->AddStringVariable("mapname", CON_VARFLAG_RULE, "San Andreas");
+	pConsole->AddStringVariable("language", CON_VARFLAG_RULE, "");
 	pConsole->AddStringVariable("weburl", CON_VARFLAG_RULE, "www.sa-mp.com");
 	pConsole->AddStringVariable("rcon_password", 0, "changeme");
 	pConsole->AddStringVariable("gravity", CON_VARFLAG_RULE, "0.008", ServerGravityChanged);

@@ -94,7 +94,7 @@ int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* da
 					DWORD dwGameModeLen = strlen(szGameMode);
 					if (dwGameModeLen > 30) dwGameModeLen = 30;
 
-					char* szMapName = pConsole->GetStringVariable("mapname");
+					char* szMapName = pConsole->GetStringVariable("language");
 					DWORD dwMapNameLen = strlen(szMapName);
 					if (dwMapNameLen > 30) dwMapNameLen = 30;
 
