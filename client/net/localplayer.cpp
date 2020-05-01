@@ -70,6 +70,7 @@ CLocalPlayer::CLocalPlayer()
 	m_dwLastSpawnSelectionTick = GetTickCount();
 	m_dwLastHeadUpdate = GetTickCount();
 	m_bInRCMode = FALSE;
+	m_sNormalOnfootRate = NETMODE_NORMAL_ONFOOT_SENDRATE;
 
 	m_bIsSpectating = FALSE;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;
@@ -942,7 +943,7 @@ int CLocalPlayer::GetOptimumOnFootSendRate(int iPlayersEffected)
 		}
 		else {
 			if(pNetGame->IsLanMode()) return LANMODE_NORMAL_ONFOOT_SENDRATE;
-			else return (NETMODE_NORMAL_ONFOOT_SENDRATE + (int)iPlayersEffected*NETMODE_SEND_MULTIPLIER); // scale to number of players.
+			else return (m_sNormalOnfootRate + (int)iPlayersEffected*NETMODE_SEND_MULTIPLIER); // scale to number of players.
 		}
 	}
 

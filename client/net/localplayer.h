@@ -42,6 +42,7 @@ public:
 	BYTE					m_byteLastWeapon[13];
 	DWORD					m_dwLastAmmo[13];
 
+	short m_sNormalOnfootRate;
 private:
 
 	PLAYER_SPAWN_INFO		m_SpawnInfo;

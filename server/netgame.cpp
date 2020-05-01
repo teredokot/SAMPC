@@ -1260,6 +1260,7 @@ void CNetGame::InitGameForPlayer(BYTE bytePlayerID)
 {
 	RakNet::BitStream bsInitGame;
 	bool bLanMode = false;
+	short sOnfootRate = pConsole->GetIntVariable("onfoot_rate");
 
 	if(m_bLanMode) bLanMode = true;
 
@@ -1283,6 +1284,7 @@ void CNetGame::InitGameForPlayer(BYTE bytePlayerID)
 	bsInitGame.Write(m_fNameTagDrawDistance);
 	bsInitGame.Write(m_bDisableEnterExits);
 	bsInitGame.Write(m_bNameTagLOS);
+	bsInitGame.Write(sOnfootRate);
 	
 	char* szHostName = pConsole->GetStringVariable("hostname");
 	if(szHostName) {

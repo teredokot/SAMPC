@@ -89,6 +89,7 @@ void InitGame(RPCParameters *rpcParams)
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 	BYTE byteMyPlayerID;
 	bool bLanMode, bStuntBonus;
+	short iOnFootRate = 40;
 
 	bsInitGame.Read(pNetGame->m_iSpawnsAvailable);
 	bsInitGame.Read(byteMyPlayerID);
@@ -110,6 +111,7 @@ void InitGame(RPCParameters *rpcParams)
 	bsInitGame.Read(pNetGame->m_fNameTagDrawDistance);
 	bsInitGame.Read(pNetGame->m_bDisableEnterExits);
 	bsInitGame.Read(pNetGame->m_bNameTagLOS);
+	bsInitGame.Read(iOnFootRate);
 
 	size_t uiHostLen;
 	bsInitGame.Read(uiHostLen);
