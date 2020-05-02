@@ -908,3 +908,16 @@ int CGameMode::OnPlayerEndTyping(cell playerid)
 	}
 	return 1;
 }
+
+int CGameMode::OnPlayerStunt(cell playerid, cell vehicleid)
+{
+	CHECK_INIT();
+	int idx = 0;
+	if (!amx_FindPublic(&m_amx, "OnPlayerStunt", &idx))
+	{
+		amx_Push(&m_amx, vehicleid);
+		amx_Push(&m_amx, playerid);
+		amx_Exec(&m_amx, NULL, idx);
+	}
+	return 1;
+}

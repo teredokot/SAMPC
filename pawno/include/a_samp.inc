@@ -488,4 +488,4 @@ forward OnPlayerUpdate(playerid);
 forward OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ);
 forward OnIncomingConnection(playerid, ip_address[], port);
 forward OnTrailerUpdate(playerid, vehicleid);
-
+forward OnPlayerStunt(playerid, vehicleid);

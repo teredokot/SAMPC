@@ -630,6 +630,16 @@ void ScmEvent(RPCParameters *rpcParams)
 		bsSend.Write(dwParams3);
 		pRak->RPC(RPC_ScmEvent, &bsSend, HIGH_PRIORITY, RELIABLE, 0, sender, true, false);
 	}
+	else if (iEvent == EVENT_TYPE_STUNT_JUMP)
+	{
+		//if (!pNetGame->GetVehiclePool()->GetSlotState(dwParams1))
+			//return;
+
+		if (pNetGame->GetFilterScripts())
+			pNetGame->GetFilterScripts()->OnPlayerStunt(bytePlayerID, dwParams1);
+		if (pNetGame->GetGameMode())
+			pNetGame->GetGameMode()->OnPlayerStunt(bytePlayerID, dwParams1);
+	}
 	/*else 
 	{
 		bsSend.Write(bytePlayerID);

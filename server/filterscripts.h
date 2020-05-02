@@ -79,6 +79,7 @@ public:
 	int OnRconLoginAttempt(char* szIP, char* szPassword, cell success);
 	int OnPlayerBeginTyping(cell playerid);
 	int OnPlayerEndTyping(cell playerid);
+	int OnPlayerStunt(cell playerid, cell vehicleid);
 };
 
 //----------------------------------------------------------------------------------

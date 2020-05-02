@@ -1199,3 +1199,21 @@ int CFilterScripts::OnPlayerEndTyping(cell playerid)
 	}
 	return 1;
 }
+
+int CFilterScripts::OnPlayerStunt(cell playerid, cell vehicleid)
+{
+	int idx = 0;
+	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++)
+	{
+		if (m_pFilterScripts[i] == NULL)
+			continue;
+
+		if (!amx_FindPublic(m_pFilterScripts[i], "OnPlayerStunt", &idx))
+		{
+			amx_Push(m_pFilterScripts[i], vehicleid);
+			amx_Push(m_pFilterScripts[i], playerid);
+			amx_Exec(m_pFilterScripts[i], NULL, idx);
+		}
+	}
+	return 1;
+}

@@ -130,7 +130,12 @@ void ProcessOutgoingEvent(int iEventType, DWORD dwParam1, DWORD dwParam2, DWORD 
 				SendScmEvent(EVENT_ENTEREXIT_MODSHOP,iVehicleID,dwParam2,dwParam3);
 			}
 			break;
-
+		case EVENT_TYPE_STUNT_JUMP:
+			iVehicleID = pVehiclePool->FindIDFromGtaPtr(GamePool_Vehicle_GetAt(dwParam1));
+			if (iVehicleID != INVALID_VEHICLE_ID) {
+				SendScmEvent(EVENT_TYPE_STUNT_JUMP, iVehicleID, 0, 0);
+			}
+			break;
 	}
 }
 
