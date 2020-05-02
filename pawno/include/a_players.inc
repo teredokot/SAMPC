@@ -46,6 +46,12 @@
 #define CAMERA_MOVE (1)
 #define CAMERA_CUT	(2)
 
+#define WEAPONSTATE_UNKNOWN			(-1)
+#define WEAPONSTATE_NO_BULLETS 		(0)
+#define WEAPONSTATE_LAST_BULLET 	(1)
+#define WEAPONSTATE_MORE_BULLETS	(2)
+#define WEAPONSTATE_RELOADING 		(3)
+
 native GetPlayerCount();
 native GetPlayerIDFromName(const name[]);
 native SetSpawnInfo(playerid, teamid, skinid, Float:x, Float:y, Float:z, Float:a, weap1, ammo1, weap2, ammo2, weap3, ammo3);
@@ -147,3 +153,4 @@ native InterpolateCameraPos(playerid, Float:FromX, Float:FromY, Float:FromZ, Flo
 native InterpolateCameraLookAt(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = CAMERA_CUT);
 native SetPlayerBlurLevel(playerid, blur_level);
 native SetPlayerGameSpeed(playerid, Float:speed);
+native GetPlayerWeaponState(playerid);

@@ -1048,6 +1048,18 @@ static cell n_SetPlayerGameSpeed(AMX* amx, cell* params)
 	return -1;
 }
 
+static cell n_GetPlayerWeaponState(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerWeaponState", 1);
+	CPlayerPool* pPool = pNetGame->GetPlayerPool();
+	CPlayer* pPlayer;
+	if (pPool && (pPlayer = pPool->GetAt(params[1])) != NULL)
+	{
+		return pPlayer->GetAimSyncData()->byteWeaponState;
+	}
+	return -2;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)
@@ -5796,6 +5808,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(InterpolateCameraPos),
 	DEFINE_NATIVE(InterpolateCameraLookAt),
 	DEFINE_NATIVE(SetPlayerGameSpeed),
+	DEFINE_NATIVE(GetPlayerWeaponState),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },
