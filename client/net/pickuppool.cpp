@@ -8,9 +8,6 @@
 */
 
 #include "../main.h"
-extern CGame		*pGame;
-extern CNetGame		*pNetGame;
-extern CChatWindow  *pChatWindow;
 
 //----------------------------------------------------
 

@@ -11,22 +11,11 @@
 #include "game/util.h"
 #include "game/task.h"
 
-extern CGame		 *pGame;
-extern CChatWindow   *pChatWindow;
-extern CCmdWindow	 *pCmdWindow;
-extern CDeathWindow	 *pDeathWindow;
-extern CNetGame		 *pNetGame;
-extern IDirect3DDevice9 *pD3DDevice;
-extern GAME_SETTINGS tSettings;
-
 extern BYTE	*pbyteCameraMode;
-extern bool bShowDebugLabels;
 
-CRemotePlayer *pTestPlayer;
-
-VEHICLE_TYPE *pTrain;
-
-int iCurrentPlayerTest=1;
+static CRemotePlayer *pTestPlayer;
+//VEHICLE_TYPE *pTrain;
+static int iCurrentPlayerTest=1;
 
 extern float fFarClip;
 
@@ -57,13 +46,11 @@ void cmdDefaultCmdProc(PCHAR szCmd)
 
 //----------------------------------------------------
 
-extern BOOL gDisableAllFog;
+//BOOL bDontProcessVehiclePool=FALSE;
 
-BOOL bDontProcessVehiclePool=FALSE;
-
-void cmdDiscon(PCHAR szCmd)
+/*void cmdDiscon(PCHAR szCmd)
 {	
-}
+}*/
 
 //----------------------------------------------------
 
@@ -455,10 +442,10 @@ void cmdActorTaskDebug(PCHAR szCmd)
 
 //----------------------------------------------------
 
-void cmdObjectDebug(PCHAR szCmd)
+/*void cmdObjectDebug(PCHAR szCmd)
 {
 
-}
+}*/
 
 //----------------------------------------------------
 
@@ -513,10 +500,10 @@ void cmdSetCameraPos(PCHAR szCmd)
 
 //----------------------------------------------------
 
-void cmdPutActorInVehicle(PCHAR szCmd) // kyeman
+/*void cmdPutActorInVehicle(PCHAR szCmd) // kyeman
 {
-
-}
+	// Good job!
+}*/
 
 //----------------------------------------------------
 
@@ -1039,11 +1026,11 @@ void DriveByTest(PCHAR szCmd)
 
 //-----------------------------------------------------
 
-void cmdLotsOfPlayers(PCHAR c)
+/*void cmdLotsOfPlayers(PCHAR c)
 {
 
 
-}
+}*/
 
 //-----------------------------------------------------
 
@@ -1308,13 +1295,13 @@ extern int iPlayersBench;
 extern int iPicksupsBench;
 extern int iMenuBench;
 extern int iObjectBench;
-extern int iTextDrawBench;
+//extern int iTextDrawBench;
 
 void cmdBench(PCHAR szCmd)
 {
 	pChatWindow->AddDebugMessage("Pl: %u V: %u Pk: %u Mn: %u O: %u T: %u",
-		iPlayersBench,iVehiclesBench,iPicksupsBench,iMenuBench,iObjectBench,
-		iTextDrawBench);
+		iPlayersBench,iVehiclesBench,iPicksupsBench,iMenuBench,iObjectBench, 0
+		/*iTextDrawBench*/);
 }
 
 //-----------------------------------------------------
@@ -1438,7 +1425,7 @@ void SetupCommands()
 	pCmdWindow->AddCmdProc("debug_stop",cmdDebugStop);
 	pCmdWindow->AddCmdProc("s",cmdDebugStop);
 	pCmdWindow->AddCmdProc("set_cam_pos",cmdSetCameraPos);
-	pCmdWindow->AddCmdProc("a2v",cmdPutActorInVehicle);
+	//pCmdWindow->AddCmdProc("a2v",cmdPutActorInVehicle);
 	pCmdWindow->AddCmdProc("give_weapon",cmdGiveActorWeapon);
 	pCmdWindow->AddCmdProc("disp_mem",cmdDisplayMemory);
 	pCmdWindow->AddCmdProc("disp_mem_asc",cmdDisplayMemoryAsc);

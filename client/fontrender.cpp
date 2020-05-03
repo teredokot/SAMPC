@@ -8,8 +8,6 @@
 #include "main.h"
 #include "fontrender.h"
 
-extern CGame *pGame;
-
 //----------------------------------------------------
 
 CFontRender::CFontRender(IDirect3DDevice9* pD3DDevice)

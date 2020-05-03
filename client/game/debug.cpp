@@ -16,29 +16,23 @@
 #include "keystuff.h"
 #include "aimstuff.h"
 
-extern CChatWindow   *pChatWindow;
-extern CCmdWindow	 *pCmdWindow;
-extern CNetGame		 *pNetGame;
-extern CGame		 *pGame;
-extern CFontRender	 *pDefaultFont;
+static int		iGameDebugType=0;
+static DWORD	dwDebugEntity1=0;
+static DWORD	dwDebugEntity2=0;
 
-int		iGameDebugType=0;
-DWORD	dwDebugEntity1=0;
-DWORD	dwDebugEntity2=0;
-
-int debug_draw_top=0;
+static int debug_draw_top=0;
 
 // screen buffer for debug text
 #define NUM_SCREEN_LINES 35
-PCHAR screen_buf[NUM_SCREEN_LINES];
+static PCHAR screen_buf[NUM_SCREEN_LINES];
 
 extern CAMERA_AIM * pcaInternalAim;
 extern BYTE	* pbyteCameraMode;
 
-extern INCAR_SYNC_DATA DebugSync;
-extern BOOL bDebugUpdate;
+//extern INCAR_SYNC_DATA DebugSync;
+//extern BOOL bDebugUpdate;
 
-extern char *aScanListMemory;
+//extern char *aScanListMemory;
 
 extern float fFarClip;
 

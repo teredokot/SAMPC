@@ -5,15 +5,9 @@
 #include "main.h"
 #include <stdio.h>
 
-extern CGame* pGame;
-extern CNetGame* pNetGame;
-extern GAME_SETTINGS tSettings;
-extern CChatWindow *pChatWindow;
-extern CFontRender *pDefaultFont;
-
-char szSvrDispBuf[16384];
-char szSvrStatBuf[16384];
-char szSvrDrawLine[1024];
+static char szSvrDispBuf[16384];
+static char szSvrStatBuf[16384];
+static char szSvrDrawLine[1024];
 RakNetStatisticsStruct RakServerStats;
 
 CSvrNetStats::CSvrNetStats(IDirect3DDevice9 *pD3DDevice)

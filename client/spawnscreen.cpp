@@ -9,13 +9,7 @@
 
 //----------------------------------------------------
 
-const char szVersionInfo[] = "SA:MP 0.2X.1";
-
-//----------------------------------------------------
-
-extern CGame *pGame;
-extern CFileSystem *pFileSystem;
-extern CFontRender *pDefaultFont;
+static const char szVersionInfo[] = "SA:MP " SAMP_VERSION;
 
 //----------------------------------------------------
 

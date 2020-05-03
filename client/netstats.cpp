@@ -5,15 +5,9 @@
 #include "main.h"
 #include <stdio.h>
 
-extern CGame* pGame;
-extern CNetGame* pNetGame;
-extern GAME_SETTINGS tSettings;
-extern CChatWindow *pChatWindow;
-extern CFontRender *pDefaultFont;
-
-char szDispBuf[16384];
-char szStatBuf[16384];
-char szDrawLine[1024];
+static char szDispBuf[16384];
+static char szStatBuf[16384];
+static char szDrawLine[1024];
 
 CNetStats::CNetStats(IDirect3DDevice9 *pD3DDevice)
 {

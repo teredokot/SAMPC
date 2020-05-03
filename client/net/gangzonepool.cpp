@@ -11,8 +11,6 @@ Based on original hook by Peter
 
 #include "../main.h"
 
-extern CGame* pGame;
-
 //----------------------------------------------------
 
 CGangZonePool::CGangZonePool()

@@ -16,26 +16,19 @@
 
 #define WEAPON_DATA_SIZE (28*13)
 
-int iMoneyStored;
-BYTE byteWeaponData[WEAPON_DATA_SIZE];
-DWORD dwHealth;
-DWORD dwArmour;
-MATRIX4X4 matStore;
+static int iMoneyStored;
+static BYTE byteWeaponData[WEAPON_DATA_SIZE];
+static DWORD dwHealth;
+static DWORD dwArmour;
+static MATRIX4X4 matStore;
 
-DWORD dwCamTargetEnt1;
-DWORD dwCamTargetEnt2;
-
-extern CGame *pGame;
-extern CChatWindow *pChatWindow;
+static DWORD dwCamTargetEnt1;
+static DWORD dwCamTargetEnt2;
 
 int iTimesDataModified = 0;
 extern BOOL bFirstSpawn;
 
 //void UnFuck(DWORD,int);
-
-extern CChatWindow *pChatWindow;
-extern CNetGame *pNetGame;
-
 
 /*typedef HANDLE (WINAPI *CREATETOOLHELP32SNAPSHOT)(DWORD, DWORD);
 typedef BOOL (WINAPI *CLOSETOOLHELP32SNAPSHOT)(HANDLE);

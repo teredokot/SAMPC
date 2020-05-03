@@ -22,10 +22,7 @@ BOOL WINAPI Arch_ReadFile( HANDLE hFile,LPVOID lpBuffer,
 						   DWORD nNumberOfBytesToRead,
 						   LPDWORD lpNumberOfBytesRead,
 						   LPOVERLAPPED lpOverlapped );
-HANDLE WINAPI Arch_CreateFileA( LPCTSTR lpFileName,DWORD dwDesiredAccess,
-							   DWORD dwShareMode,LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-							   DWORD dwCreationDisposition,DWORD dwFlagsAndAttributes,
-							   HANDLE hTemplateFile );
+
 BOOL IsCheckableFile(CHAR* szExt)
 {
 	// Obfuscate the code in the dll slightly to make tracing it harder

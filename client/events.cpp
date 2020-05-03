@@ -10,17 +10,13 @@
 #include "main.h"
 #include "game/util.h"
 
-extern CChatWindow *pChatWindow;
-extern CNetGame *pNetGame;
-extern CGame *pGame;
-
 #define NUDE void _declspec(naked) 
 
-DWORD dwParams[4];
+static DWORD dwParams[4];
 
 void SendScmEvent(int iEventType, DWORD dwParam1, DWORD dwParam2, DWORD dwParam3);
 
-DWORD dwStack;
+//DWORD dwStack;
 
 extern BOOL bFirstSpawn;
 

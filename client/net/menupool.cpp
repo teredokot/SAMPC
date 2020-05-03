@@ -26,9 +26,6 @@ CHAR g_szMenuItems[MAX_MENU_ITEMS][MAX_COLUMNS][MAX_MENU_LINE] =
 	{"SAMP011", "SAMP111"},
 };
 
-extern CNetGame* pNetGame;
-extern CChatWindow* pChatWindow;
-
 //----------------------------------------------------
 
 CMenuPool::CMenuPool()

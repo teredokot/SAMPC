@@ -13,17 +13,14 @@
 #include "keystuff.h"
 #include "aimstuff.h"
 
-extern int iGtaVersion;
-extern CChatWindow *pChatWindow;
-
 void GameInstallHooks();
 BOOL ApplyPreGamePatches();
 void ApplyInGamePatches();
 
-char *szGameTextMessage;
+//char *szGameTextMessage;
 
-BOOL bInputsDisabled = FALSE;
-int iInputDisableWaitFrames=0;
+static BOOL bInputsDisabled = FALSE;
+static int iInputDisableWaitFrames=0;
 
 typedef void (*DrawZone_t)(float *fPos, DWORD *dwColor, BYTE byteMenu);
 
@@ -134,7 +131,7 @@ void CGame::ToggleKeyInputsDisabled(BOOL bDisable)
 void CGame::InitGame()
 {
 	// Create a buffer for game text.
-	szGameTextMessage = (char*)malloc(256);
+	//szGameTextMessage = (char*)malloc(256);
 
 	// Init the keystate stuff.
 	GameKeyStatesInit();

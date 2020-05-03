@@ -10,12 +10,6 @@
 #include "main.h"
 #include "runutil.h"
 
-extern CGame		*pGame;
-extern CChatWindow	*pChatWindow;
-extern CNetGame		*pNetGame;
-extern CFontRender	*pDefaultFont;
-extern DWORD		dwUIMode;
-
 //----------------------------------------------------
 
 CCmdWindow::CCmdWindow(IDirect3DDevice9 *pD3DDevice)

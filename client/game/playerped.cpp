@@ -17,21 +17,18 @@
 #include "keystuff.h"
 #include "task.h"
 
-extern CGame *pGame;
-extern CChatWindow *pChatWindow;
-extern CNetGame *pNetGame;
-extern BOOL	bIgnoreNextEntry;
-extern BOOL	bIgnoreNextExit;
+//extern BOOL	bIgnoreNextEntry;
+//extern BOOL	bIgnoreNextExit;
 
 extern BYTE	*pbyteCurrentPlayer;
 
-char szSpecialActors[][32] =
+/*char szSpecialActors[][32] =
 {"TENPEN", "PULASKI", "HERN", "SMOKE", "SWEET",
 "RYDER2", "RYDER3", "EMMET", "ANDRE", "OGLOC", "CESAR", "KENDL",
 "WUZIMU", "CAT", "TRUTH", "JETHRO", "DWAYNE", "ZERO", "TBONE",
 "JIZZY", "TORINO", "SINDACO", "MACCER", "PAUL", "ROSE", "FORELLI",
 "MADDOGG", "CROGRL2", "JANITOR", "BBTHIN", "SMOKEV", "GANGRL2",
-"MECGRL2", "GUNGRL2", "COPGRL2", "NURGRL2"};
+"MECGRL2", "GUNGRL2", "COPGRL2", "NURGRL2"};*/
 
 
 //-----------------------------------------------------------
@@ -885,7 +882,7 @@ void CPlayerPed::EnterVehicle(int iVehicleID, BOOL bPassenger)
 	if(!GamePool_Vehicle_GetAt(iVehicleID)) return;
 	if(!GamePool_Ped_GetAt(m_dwGTAId)) return;
 
-	bIgnoreNextEntry = TRUE;
+	//bIgnoreNextEntry = TRUE;
 
 	if(GetCurrentWeapon() == WEAPON_PARACHUTE) {
 		SetArmedWeapon(0);

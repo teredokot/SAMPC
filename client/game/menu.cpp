@@ -9,8 +9,6 @@ Version: $Id: menu.cpp,v 1.0 2007/02/13 15:35:32 Y_Less Exp $
 
 #include "../main.h"
 
-extern CNetGame *pNetGame;
-extern CChatWindow* pChatWindow;
 extern CHAR g_szMenuItems[MAX_MENU_ITEMS][MAX_COLUMNS][MAX_MENU_LINE];
 
 CMenu::CMenu(PCHAR pTitle, float fX, float fY, BYTE byteColumns, float fCol1Width, float fCol2Width, MENU_INT* MenuInteraction)

@@ -11,13 +11,7 @@
 #include "../game/util.h"
 #include "../game/keystuff.h"
 
-extern CGame		 *pGame;
-extern CChatWindow   *pChatWindow;
-extern CCmdWindow	 *pCmdWindow;
-extern CSpawnScreen	 *pSpawnScreen;
-
 using namespace RakNet;
-extern CNetGame* pNetGame;
 
 #define IS_TARGETING(x) (x & 128)
 #define IS_FIRING(x) (x & 4)
@@ -43,7 +37,7 @@ extern CNetGame* pNetGame;
 
 BOOL bFirstSpawn = TRUE;
 
-DWORD dwEnterVehTimeElasped = -1;
+static DWORD dwEnterVehTimeElasped = -1;
 
 extern int iTimesDataModified;
 

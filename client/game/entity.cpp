@@ -16,8 +16,6 @@
 #include "util.h"
 #include "entity.h"
 
-extern CGame *pGame;
-extern CNetGame	*pNetGame;
 //-----------------------------------------------------------
 
 void CEntity::GetMatrix(PMATRIX4X4 Matrix)

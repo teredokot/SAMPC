@@ -14,18 +14,14 @@
 
 #include <Tlhelp32.h>
 
-PCONTEXT pContextRecord;
+static PCONTEXT pContextRecord;
 extern	 HANDLE		hInstance;
-extern   CGame		*pGame;
-extern   CNetGame	*pNetGame;
-extern   BOOL		bDisableGTAWndProc;
 extern   DWORD		dwScmOpcodeDebug;
 extern   BOOL       bScmLocalDebug;
 extern	 BYTE		*pbyteCurrentPlayer;//internal GTA FindPlayerPed() number
 extern   GAME_SCRIPT_THREAD *gst;
-extern   int		iGtaVersion;
 
-CHAR szErrorString[16384];
+static CHAR szErrorString[16384];
 
 //----------------------------------------------------
 

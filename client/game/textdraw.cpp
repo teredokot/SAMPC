@@ -9,7 +9,6 @@ Version: $Id: textdraw.cpp,v 1.4 2008-04-16 08:54:17 kyecvs Exp $
 
 #include "../main.h"
 #include "font.h"
-extern CGame *pGame;
 
 //char ProvideTmp[1024];
 

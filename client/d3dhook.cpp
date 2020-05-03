@@ -9,53 +9,30 @@
 
 #include <string>
 
-extern IDirect3DDevice9 *pD3DDevice;
 D3DXMATRIX matView, matProj;
-extern void d3d9DestroyDeviceObjects();
-extern void d3d9RestoreDeviceObjects();
+void d3d9DestroyDeviceObjects();
+void d3d9RestoreDeviceObjects();
 
 void GetScreenshotFileName(std::string& FileName);
 extern BOOL g_bTakeScreenshot;
 
-extern CNetGame *pNetGame;
-extern CGame *pGame;
-extern CChatWindow *pChatWindow;
-extern CCmdWindow *pCmdWindow;
-extern CDeathWindow	*pDeathWindow;
-extern CSpawnScreen *pSpawnScreen;
-extern CNetStats *pNetStats;
-extern CSvrNetStats	*pSvrNetStats;
-extern CScoreBoard *pScoreBoard;
-extern CPlayerTags *pPlayerTags;
-extern CLabel	*pLabel;
-extern CHelpDialog	*pHelpDialog;
-
-extern CDXUTDialogResourceManager * pDialogResourceManager;
-extern CDXUTDialog  * pGameUI;
-
-extern bool	bShowDebugLabels;
-
-extern void DoCheatDataStoring();
-extern GAME_SETTINGS tSettings;
+void DoCheatDataStoring();
 
 typedef float (*FindGroundZForCoord_t)(float x, float y);
 static FindGroundZForCoord_t FindGroundZForCoord = (FindGroundZForCoord_t)0x569660;
 
-MATRIX4X4 matPlayer,matTest,matLocal;
+static MATRIX4X4 matPlayer,/*matTest,*/matLocal;
 //D3DXVECTOR3 PlayerPos;
 
-VECTOR vecCam;
-VECTOR vecColPoint;
-VECTOR vecRemotePlayer;
-DWORD dwSavedEBP;
+//VECTOR vecCam;
+//VECTOR vecColPoint;
+//VECTOR vecRemotePlayer;
+//DWORD dwSavedEBP;
 
-DWORD dwHitEntity = 0;
-DWORD *pHitEntity = &dwHitEntity;
+static DWORD dwHitEntity = 0;
+//DWORD *pHitEntity = &dwHitEntity;
 
-char szBuffer[128];
-
-extern void CallRwRenderStateSet(int state, int option);
-extern void SetupD3DFog(BOOL bEnable);
+static char szBuffer[MAX_PLAYER_NAME + 7];
 
 //-------------------------------------------
 

@@ -10,9 +10,7 @@
 #include "main.h"
 #include "game/util.h"
 //#include "anticheat.h"
-#include <aclapi.h>
-
-extern CGame			*pGame;
+//#include <aclapi.h>
 
 int						iGtaVersion=0;
 
@@ -24,14 +22,13 @@ CSpawnScreen			*pSpawnScreen=0;
 CNetGame				*pNetGame=0;
 CFontRender				*pDefaultFont=0;
 
-BOOL					bGameInited=FALSE;
-BOOL					bNetworkInited=FALSE;
+static BOOL				bGameInited=FALSE;
+static BOOL				bNetworkInited=FALSE;
+static BOOL				bGameModded = FALSE;
+static BOOL				bQuitGame=FALSE;
+static DWORD			dwStartQuitTick=0;
 
-BOOL					bGameModded = FALSE;
-BOOL					bQuitGame=FALSE;
-DWORD					dwStartQuitTick=0;
-
-IDirect3D9				*pD3D;
+//IDirect3D9				*pD3D;
 IDirect3DDevice9		*pD3DDevice	= NULL;
 //D3DMATRIX				matView;
 
@@ -46,9 +43,9 @@ CHelpDialog				*pHelpDialog=NULL;
 bool					bShowDebugLabels = false;
 
 CGame					*pGame=0;
-DWORD					dwGameLoop=0;
+//DWORD					dwGameLoop=0;
 DWORD					dwGraphicsLoop=0;
-DWORD					dwUIMode=0;				// 0 = old mode, 1 = new MMOG mode, 2 = DXUT perhaps?
+//DWORD					dwUIMode=0;				// 0 = old mode, 1 = new MMOG mode, 2 = DXUT perhaps?
 												// Have this settable from the server.. on Init.
 CFileSystem				*pFileSystem=NULL;
 //CAntiCheat				*pAntiCheat = NULL;
@@ -57,32 +54,24 @@ CDXUTDialogResourceManager	*pDialogResourceManager=NULL;
 CDXUTDialog					*pGameUI=NULL;
 
 // forwards
-
 BOOL SubclassGameWindow();
 void SetupCommands();
-void TheGameLoop();
+//void TheGameLoop();
 void TheGraphicsLoop();
 void MarkAsModdedGame();
-void GameDebugDrawDebugScreens();
 void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
 LONG WINAPI exc_handler(_EXCEPTION_POINTERS* exc_inf);
-void d3d9DestroyDeviceObjects();
-void d3d9RestoreDeviceObjects();
 void InitSettings();
 
-UINT uiCounter=0;
+//UINT uiCounter=0;
 
-DWORD dwOrgRwSetState=0;
-DWORD dwSetStateCaller=0;
-DWORD dwSetStateOption=0;
-DWORD dwSetStateParam=0;
-char dbgstr[256];
-
-// backwards
-//----------------------------------------------------
-
-extern void InitScripting();
-extern void ApplyDebugLevelPatches();
+static DWORD dwOrgRwSetState=0;
+static DWORD dwSetStateCaller=0;
+static DWORD dwSetStateOption=0;
+static DWORD dwSetStateParam=0;
+#ifdef _DEBUG
+static char dbgstr[40];
+#endif
 
 // polls the game until it's able to run.
 void LaunchMonitor(PVOID v)
@@ -119,7 +108,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 			SetProcessAffinityMask(GetCurrentProcess(),1);
 
 			SetUnhandledExceptionFilter(exc_handler);
-			dwGameLoop = (DWORD)TheGameLoop;
+			//dwGameLoop = (DWORD)TheGameLoop;
 			dwGraphicsLoop = (DWORD)TheGraphicsLoop;
 
 			OutputDebugString("Loading Archive");
@@ -160,8 +149,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 //----------------------------------------------------
 
 DWORD dwFogEnabled = 0;
-DWORD dwFogColor = 0x00FF00FF;
-BOOL gDisableAllFog = FALSE;
+static DWORD dwFogColor = 0x00FF00FF;
+static BOOL gDisableAllFog = FALSE;
 
 void SetupD3DFog(BOOL bEnable)
 {
@@ -228,7 +217,7 @@ void HookRwRenderStateSet()
 
 //----------------------------------------------------
 
-void CallRwRenderStateSet(int state, int option)
+/*void CallRwRenderStateSet(int state, int option)
 {
 	_asm push option
 	_asm push state
@@ -236,7 +225,7 @@ void CallRwRenderStateSet(int state, int option)
 	_asm mov eax, [ebx]
 	_asm call dword ptr [eax+32]
 	_asm add esp, 8
-}
+}*/
 
 //----------------------------------------------------
 
@@ -278,17 +267,17 @@ void DoInitStuff()
 		//CheckDuplicateD3D9Dlls(); // Do this before any hooks are installed.
 
 		// Grab the real IDirect3D9 * from the game.
-		pD3D = (IDirect3D9 *)pGame->GetD3D();
+		//pD3D = (IDirect3D9 *)pGame->GetD3D();
 
-		if(!pD3D) {
+		/*if(!pD3D) {
 			OutputDebugString("No D3D!!!");
 			return;
-		}
+		}*/
 
 		// Grab the real IDirect3DDevice9 * from the game.
 		pD3DDevice = (IDirect3DDevice9 *)pGame->GetD3DDevice();
 
-		if(!pD3D) {
+		if(!pD3DDevice) { // if(pD3D) ?!
 			OutputDebugString("No D3DDevice!!!");
 			return;
 		}
@@ -412,7 +401,7 @@ void TheGraphicsLoop()
 
 //----------------------------------------------------
 
-void TheGameLoop()
+/*void TheGameLoop()
 {	
 	_asm pushad
 
@@ -421,7 +410,7 @@ void TheGameLoop()
 	//OutputDebugString("---- New Frame ----");
 
 	_asm popad
-}
+}*/
 
 //----------------------------------------------------
 

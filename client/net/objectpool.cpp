@@ -8,8 +8,6 @@ Copyright 2004-2005 SA:MP Team
 #include "../main.h"
 #include "../game/util.h"
 
-extern CGame	*pGame;
-
 CObjectPool::CObjectPool()
 {
 	for(BYTE byteObjectID = 0; byteObjectID < MAX_OBJECTS; byteObjectID++)

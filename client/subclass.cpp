@@ -10,25 +10,13 @@
 #include "main.h"
 #include <string>
 
-extern CGame			*pGame;
-extern CNetGame			*pNetGame;
-extern CChatWindow		*pChatWindow;
-extern CCmdWindow		*pCmdWindow;
-extern IDirect3DDevice9 *pD3DDevice;
-extern CScoreBoard		*pScoreBoard;
-extern CDeathWindow		*pDeathWindow;
-extern CDXUTDialogResourceManager *pDialogResourceManager;
-extern CDXUTDialog		*pGameUI;
-
 BOOL g_bTakeScreenshot = FALSE;
-WNDPROC hOldProc;
+static WNDPROC hOldProc;
 LRESULT APIENTRY NewWndProc(HWND,UINT,WPARAM,LPARAM);
-void GetScreenshotFileName(std::string& FileName);
-extern GAME_SETTINGS tSettings;
 
 //----------------------------------------------------
 
-DWORD dwWorkingSkins[] =
+static DWORD dwWorkingSkins[] =
 { 
   0, 1, 2,
   47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,

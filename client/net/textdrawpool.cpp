@@ -9,9 +9,6 @@ Version: $Id: textdrawpool.cpp,v 1.4 2008-02-18 00:43:49 kyecvs Exp $
 
 #include "../main.h"
 
-extern CGame* pGame;
-extern CChatWindow*	pChatWindow;
-
 //----------------------------------------------------
 
 CTextDrawPool::CTextDrawPool()

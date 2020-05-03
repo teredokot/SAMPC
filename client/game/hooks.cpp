@@ -13,12 +13,7 @@
 #include "keystuff.h"
 #include "aimstuff.h"
 
-extern CNetGame* pNetGame;
-extern CGame* pGame;
-extern CChatWindow *pChatWindow;
-
 extern DWORD dwGraphicsLoop; // Used for the external dll game loop.
-extern DWORD dwGameLoop; // Used for the external dll game loop.
 
 void DoCheatDataComparing();
 
@@ -28,81 +23,81 @@ void DoCheatDataComparing();
 // Globals which are used to avoid stack frame alteration
 // inside the following hook procedures.
 
-GTA_CONTROLSET *pGcsKeys;
+static GTA_CONTROLSET *pGcsKeys;
 
-DWORD	dwFarClipHookAddr=0;
-DWORD	dwFarClipReturnAddr=0;
+//DWORD	dwFarClipHookAddr=0;
+//DWORD	dwFarClipReturnAddr=0;
 
 // used generically
-PED_TYPE	*_pPlayer;
-VEHICLE_TYPE *_pVehicle;
-DWORD		TaskPtr;
-VEHICLEID	VehicleID;
-BOOL		bUsePassenger=FALSE;
-CLocalPlayer *pLocalPlayer;
-CVehiclePool *pVehiclePool;
-CVehicle	 *pVehicleClass;
+static PED_TYPE	*_pPlayer;
+static VEHICLE_TYPE *_pVehicle;
+static DWORD TaskPtr;
+static VEHICLEID	VehicleID;
+//BOOL		bUsePassenger=FALSE;
+static CLocalPlayer *pLocalPlayer;
+static CVehiclePool *pVehiclePool;
+//CVehicle	 *pVehicleClass;
 
-BOOL	bIgnoreNextEntry=FALSE;
-BOOL	bIgnoreNextExit=FALSE;
+//BOOL	bIgnoreNextEntry=FALSE;
+static BOOL	bIgnoreNextExit=FALSE;
 
-int opt1,opt2,opt3,opt4; // for vehicle entry/exit.
+//int opt1,opt2,opt3,opt4; // for vehicle entry/exit.
  
-BYTE	byteInternalPlayer=0;
-DWORD	dwCurPlayerActor=0;
-BYTE	byteCurPlayer=0;
-BYTE	byteSavedCameraMode;
-WORD	wSavedCameraMode2;
+static BYTE	byteInternalPlayer=0;
+static DWORD	dwCurPlayerActor=0;
+static BYTE	byteCurPlayer=0;
+static BYTE	byteSavedCameraMode;
+static WORD	wSavedCameraMode2;
 BYTE	*pbyteCameraMode = (BYTE *)0xB6F1A8;
 BYTE	*pbyteCurrentPlayer = (BYTE *)0xB7CD74;
-WORD    *wCameraMode2 = (WORD*)0xB6F858;
+static WORD    *wCameraMode2 = (WORD*)0xB6F858;
 
-DWORD   dwRGBARadar=0;
-DWORD	dwStackFrame=0;
-DWORD	dwSavedEcx=0;
-DWORD	dwRetAddr=0;
-int		iRadarColor1=0;
-DWORD	dwSavedCheatFn=0;
+//DWORD dwRGBARadar=0;
+//DWORD	dwStackFrame=0;
+static DWORD dwSavedEcx=0;
+static DWORD dwRetAddr=0;
+static int iRadarColor1=0;
+static DWORD dwSavedCheatFn=0;
 
-float   fHealth;
+static float fHealth;
 
-BOOL	bAllowVehicleCreation=FALSE;
-BOOL    bVehicleProcessControlLocal=FALSE;
+//BOOL	bAllowVehicleCreation=FALSE;
+//BOOL    bVehicleProcessControlLocal=FALSE;
 
-DWORD	vtbl;
-DWORD	call_addr;
+static DWORD vtbl;
+static DWORD call_addr;
 
-char s[256];
+//char s[256];
 
-DWORD dwPedDamagePed=0;
-DWORD dwPedDamage1=0;
-DWORD dwIgnoreDamage=0;
+static DWORD dwPedDamagePed=0;
+static DWORD dwPedDamage1=0;
+//DWORD dwIgnoreDamage=0;
 
 float fFarClip=1400.0f;
-float fBakUnk;
-char *vt;
+//float fBakUnk;
+//char *vt;
 
-DWORD dwParam1;
-DWORD dwParam2;
-DWORD dwParamThis;
+static DWORD dwParam1;
+//DWORD dwParam2;
+//DWORD dwParamThis;
 
 //-----------------------------------------------------------
 // x86 codes to perform our unconditional jmp for detour entries. 
 
 //BYTE GraphicsLoop_HookJmpCode[]	= {0xFF,0x25,0x2C,0xE2,0x53,0x00,0x90,0x90}; //53E22C
 
-BYTE GameProcess_HookJmpCode[]	= {0xFF,0x25,0xD1,0xBE,0x53,0x00}; //53BED1
-BYTE TaskEnterVehicleDriver_HookJmpCode[]	= {0xFF,0x25,0xBB,0x19,0x69,0x00,0x90};//0x6919BB
-BYTE TaskExitVehicle_HookJmpCode[]	= {0xFF,0x25,0xBA,0xB8,0x63,0x00,0x90};//0x63B8BA
-BYTE RadarTranslateColor_HookJmpCode[] = {0xFF,0x25,0x79,0x4A,0x58,0x00,0x90}; // 584A79
-BYTE CheatProcessHook_JmpCode[] = {0xFF,0x25,0xAA,0x85,0x43,0x00,0x90}; // 4385AA
+static BYTE GameProcess_HookJmpCode[]	= {0xFF,0x25,0xD1,0xBE,0x53,0x00}; //53BED1
+static BYTE TaskEnterVehicleDriver_HookJmpCode[]	= {0xFF,0x25,0xBB,0x19,0x69,0x00,0x90};//0x6919BB
+static BYTE TaskExitVehicle_HookJmpCode[]	= {0xFF,0x25,0xBA,0xB8,0x63,0x00,0x90};//0x63B8BA
+static BYTE RadarTranslateColor_HookJmpCode[] = {0xFF,0x25,0x79,0x4A,0x58,0x00,0x90}; // 584A79
+static BYTE CheatProcessHook_JmpCode[] = {0xFF,0x25,0xAA,0x85,0x43,0x00,0x90}; // 4385AA
 //BYTE AddVehicleHook_HookJmpCode[] = {0xFF,0x25,0x33,0x14,0x42,0x00}; // 421433
-BYTE SetFarClip_HookJmpCode[] =  {0xFF,0x25,0x61,0x36,0x53,0x00,0x90,0x90,0x90}; // 533661
-BYTE CGameShutdown_HookJmpCode[] = {0xFF,0x25,0xF1,0xC8,0x53,0x00,0x90}; // 53C8F1
-BYTE PedDamage_HookJmpCode[] = {0xFF,0x25,0xBC,0x5A,0x4B,0x00}; // 4B5ABC
-BYTE VehicleAudio_HookJmpCode[] = {0xFF,0x25,0x74,0x22,0x50,0x00,0x90,0x90,0x90,0x90}; // 502274
+//BYTE SetFarClip_HookJmpCode[] =  {0xFF,0x25,0x61,0x36,0x53,0x00,0x90,0x90,0x90}; // 533661
+static BYTE CGameShutdown_HookJmpCode[] = {0xFF,0x25,0xF1,0xC8,0x53,0x00,0x90}; // 53C8F1
+static BYTE PedDamage_HookJmpCode[] = {0xFF,0x25,0xBC,0x5A,0x4B,0x00}; // 4B5ABC
+//BYTE VehicleAudio_HookJmpCode[] = {0xFF,0x25,0x74,0x22,0x50,0x00,0x90,0x90,0x90,0x90}; // 502274
 //BYTE GenTaskAlloc_HookJmpCode[] = {0xFF,0x25,0x61,0x38,0x4C,0x00}; // 4C3861
-BYTE GetText_HookJmpCode[]	= {0xFF, 0x25, 0x43, 0x00, 0x6A, 0x00, 0x90, 0x90, 0x90}; //, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90}; // 0x6A004325
+static BYTE GetText_HookJmpCode[]	= {0xFF, 0x25, 0x43, 0x00, 0x6A, 0x00, 0x90, 0x90, 0x90}; //, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90}; // 0x6A004325
 //BYTE PedSay_HookJmpCode[]	= {0xFF, 0x25, 0xD8, 0xFF, 0x5E, 0x00, 0x90}; //5EFFD8
 
 //-----------------------------------------------------------
@@ -138,7 +133,7 @@ NUDE TheScripts_Process_Hook()
 // A hook function that switches keys for
 // CPlayerPed::ProcessControl(void)
 
-BYTE bytePatchPedRot[6] = { 0xD9,0x96,0x5C,0x05,0x00,0x00 };
+static BYTE bytePatchPedRot[6] = { 0xD9,0x96,0x5C,0x05,0x00,0x00 };
 
 NUDE CPlayerPed_ProcessControl_Hook()
 {
@@ -463,10 +458,10 @@ NUDE AllVehicles_ProcessControl_WaterTurret_Hook()
 
 //-----------------------------------------------------------
 
-BYTE bytePatchRadioForPlayer[5] = { 0xE8,0x9F,0x37,0xFF,0xFF };
+//BYTE bytePatchRadioForPlayer[5] = { 0xE8,0x9F,0x37,0xFF,0xFF };
 
-extern BOOL bDontProcessVehiclePool;
-BYTE byteSaveControlFlags;
+//extern BOOL bDontProcessVehiclePool;
+static BYTE byteSaveControlFlags;
 
 NUDE AllVehicles_ProcessControl_Hook()
 {
@@ -589,11 +584,11 @@ NUDE AllVehicles_ProcessControl_Hook()
 
 //-----------------------------------------------------------
 
-VEHICLE_TYPE *_pHornVehicle;
-int _iHasSetHornHookFix = 0;
-BYTE _byteSavedControlFlags = 0;
-DWORD _dwVehicleParams = 0;
-DWORD _dwAudioClass = 0;
+static VEHICLE_TYPE *_pHornVehicle;
+static int _iHasSetHornHookFix = 0;
+static BYTE _byteSavedControlFlags = 0;
+static DWORD _dwVehicleParams = 0;
+static DWORD _dwAudioClass = 0;
 
 NUDE VehicleHorn_Hook()
 {
@@ -785,8 +780,7 @@ NUDE CheatProcessorHook()
 //-----------------------------------------------------------
 // We use this to trap and exit the game
 
-DWORD dwShutDownTick;
-void QuitGame();
+static DWORD dwShutDownTick;
 
 NUDE CGameShutdownHook()
 {
@@ -1047,7 +1041,7 @@ NUDE CPed_Render_Hook()
 
 //-----------------------------------------------------------
 
-PCHAR szGotText;
+static PCHAR szGotText;
 
 NUDE GetText_Hook()
 {
@@ -1186,8 +1180,8 @@ NUDE PickUpPickup_Hook()
 
 //-----------------------------------------------------------
 
-BYTE priCol, secCol;
-CPlayerPed* pPlayerPed;
+static BYTE priCol, secCol;
+static CPlayerPed* pPlayerPed;
 void ProcessOutgoingEvent(int iEventType, DWORD dwParam1, DWORD dwParam2, DWORD dwParam3);
 NUDE PaynSpray_Hook()
 {

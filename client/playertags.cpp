@@ -4,11 +4,7 @@
 
 #include "main.h"
 
-extern CGame *pGame;
-extern CChatWindow *pChatWindow;
-extern CFontRender *pDefaultFont;
-
-HealthBarVertices1_s HealthBarBDRVertices1[4] =
+static HealthBarVertices1_s HealthBarBDRVertices1[4] =
 {	//x     y      z     rhw   c
 	{0.0f,  0.0f,  0.0f, 0.0f, D3DCOLOR_XRGB(0, 0, 0)},  // 1 . . 4
 	{0.0f,  10.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(0, 0, 0)},  // 2 . . 3
@@ -16,7 +12,7 @@ HealthBarVertices1_s HealthBarBDRVertices1[4] =
 	{50.0f, 0.0f,  0.0f, 0.0f, D3DCOLOR_XRGB(0, 0, 0)}
 };
 
-HealthBarVertices1_s HealthBarBGVertices1[4] =
+static HealthBarVertices1_s HealthBarBGVertices1[4] =
 {	//x     y     z     rhw   c
 	{1.0f,  1.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(75, 11, 20)},  // 1 . . 4
 	{1.0f,  9.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(75, 11, 20)},  // 2 . . 3
@@ -24,7 +20,7 @@ HealthBarVertices1_s HealthBarBGVertices1[4] =
 	{49.0f, 1.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(75, 11, 20)}
 };
 
-HealthBarVertices1_s HealthBarVertices1[4] =
+static HealthBarVertices1_s HealthBarVertices1[4] =
 {	//x     y     z     rhw   c
 	{1.0f,  1.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(185, 34, 40)},  // 1 . . 4
 	{1.0f,  9.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(185, 34, 40)},  // 2 . . 3

@@ -11,12 +11,7 @@
 #include "../game/util.h"
 #include <math.h>
 
-extern CGame		 *pGame;
-extern CChatWindow   *pChatWindow;
-extern CCmdWindow	 *pCmdWindow;
-
 using namespace RakNet;
-extern CNetGame* pNetGame;
 
 #define IS_TARGETING(x) (x & 128)
 

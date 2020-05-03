@@ -14,15 +14,15 @@
 #include "address.h"
 
 CAMERA_AIM * pcaInternalAim = (CAMERA_AIM *)0xB6F32C;
-CAMERA_AIM caLocalPlayerAim;
-CAMERA_AIM caRemotePlayerAim[MAX_PLAYERS];
+static CAMERA_AIM caLocalPlayerAim;
+static CAMERA_AIM caRemotePlayerAim[MAX_PLAYERS];
 extern BYTE * pbyteCameraMode;
 
-float * pfCameraExtZoom = (float *)0xB6F250;
-float fCameraExtZoom[MAX_PLAYERS];		// stored as a normalized multiplier float
-float fLocalCameraExtZoom;
+static float * pfCameraExtZoom = (float *)0xB6F250;
+static float fCameraExtZoom[MAX_PLAYERS];		// stored as a normalized multiplier float
+static float fLocalCameraExtZoom;
 
-BYTE byteCameraMode[MAX_PLAYERS];
+static BYTE byteCameraMode[MAX_PLAYERS];
 
 //----------------------------------------------------------
 

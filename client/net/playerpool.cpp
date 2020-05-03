@@ -9,17 +9,13 @@
 
 #include "../main.h"
 
-extern CGame		 *pGame;
-extern CChatWindow   *pChatWindow;
-extern CCmdWindow	 *pCmdWindow;
-
-char szQuitReasons[][32] = {
+/*char szQuitReasons[][32] = {
 "Timeout",
 "Leaving",
 "Kicked"
-};
+};*/
 
-int iExceptPlayerMessageDisplayed=0;
+static int iExceptPlayerMessageDisplayed=0;
 
 //----------------------------------------------------
 

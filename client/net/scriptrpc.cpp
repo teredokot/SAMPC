@@ -14,10 +14,6 @@
 #include "../main.h"
 
 using namespace RakNet;
-extern CNetGame*	pNetGame;
-extern CChatWindow*	pChatWindow;
-extern CDeathWindow	*pDeathWindow;
-extern CGame * pGame;
 
 //----------------------------------------------------
 

@@ -19,23 +19,23 @@
 //----------------------------------------------------------
 
 // Original procedures
-def_GetFileSize Real_GetFileSize = NULL;
-def_SetFilePointer Real_SetFilePointer = NULL;
-def_CreateFileA Real_CreateFileA = NULL;
-def_CreateFileW Real_CreateFileW = NULL;
-def_ReadFile Real_ReadFile = NULL;
-def_CloseHandle Real_CloseHandle = NULL;
-def_GetFileType Real_GetFileType = NULL;
-def_GetAsyncKeyState Real_GetAsyncKeyState = NULL;
-def_GetModuleHandleA Real_GetModuleHandleA = NULL;
+static def_GetFileSize Real_GetFileSize = NULL;
+static def_SetFilePointer Real_SetFilePointer = NULL;
+static def_CreateFileA Real_CreateFileA = NULL;
+static def_CreateFileW Real_CreateFileW = NULL;
+static def_ReadFile Real_ReadFile = NULL;
+static def_CloseHandle Real_CloseHandle = NULL;
+static def_GetFileType Real_GetFileType = NULL;
+static def_GetAsyncKeyState Real_GetAsyncKeyState = NULL;
+static def_GetModuleHandleA Real_GetModuleHandleA = NULL;
 
 extern CFileSystem *pFileSystem;
 
-ARCH_FILE_RECORD	OpenArchRecords[MAX_OPEN_ARCH_FILES];
-BOOL				bArchRecordSlotState[MAX_OPEN_ARCH_FILES];
+static ARCH_FILE_RECORD	OpenArchRecords[MAX_OPEN_ARCH_FILES];
+static BOOL bArchRecordSlotState[MAX_OPEN_ARCH_FILES];
 
-BOOL bFileHooksInstalled = FALSE;
-int iCustomHandle=CUSTOM_HANDLE_BASE;
+static BOOL bFileHooksInstalled = FALSE;
+static int iCustomHandle=CUSTOM_HANDLE_BASE;
 
 char * FileNameOnly(char *sz);
 char * ExtensionOnly(char *sz);

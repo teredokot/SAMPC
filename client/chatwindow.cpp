@@ -9,8 +9,6 @@
 
 #include "main.h"
 
-extern CGame *pGame;
-
 //----------------------------------------------------
 
 CChatWindow::CChatWindow(IDirect3DDevice9 *pD3DDevice, ID3DXFont *pFont)

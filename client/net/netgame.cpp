@@ -12,24 +12,20 @@
 #include "../game/util.h"
 #include "../mod.h"
 
-extern CGame		 *pGame;
-extern CChatWindow   *pChatWindow;
-extern CCmdWindow	 *pCmdWindow;
+//INCAR_SYNC_DATA DebugSync;
+//BOOL bDebugUpdate=FALSE;
 
-INCAR_SYNC_DATA DebugSync;
-BOOL bDebugUpdate=FALSE;
-
-int iExceptMessageDisplayed=0;
+static int iExceptMessageDisplayed=0;
 
 int iVehiclesBench=0;
 int iPlayersBench=0;
 int iPicksupsBench=0;
 int iMenuBench=0;
 int iObjectBench=0;
-int iTextDrawBench=0;
+//int iTextDrawBench=0;
 
-int iVehiclePoolProcessFlag=0;
-int iPickupPoolProcessFlag=0;
+static int iVehiclePoolProcessFlag=0;
+static int iPickupPoolProcessFlag=0;
 
 //----------------------------------------------------
 

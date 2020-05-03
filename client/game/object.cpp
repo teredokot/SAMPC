@@ -9,9 +9,6 @@
 #include "../main.h"
 #include "util.h"
 
-extern CGame		*pGame;
-extern CNetGame		*pNetGame;
-
 CObject::CObject(int iModel, float fPosX, float fPosY, float fPosZ, VECTOR vecRot)
 {
 	DWORD dwRetID	= 0;

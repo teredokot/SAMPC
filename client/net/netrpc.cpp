@@ -9,12 +9,7 @@
 
 #include "../main.h"
 
-extern CGame		 *pGame;
-extern CChatWindow   *pChatWindow;
-extern CCmdWindow	 *pCmdWindow;
-
 using namespace RakNet;
-extern CNetGame* pNetGame;
 
 // No longer needed in new RakNet
 //#define REGISTER_STATIC_RPC REGISTER_AS_REMOTE_PROCEDURE_CALL 

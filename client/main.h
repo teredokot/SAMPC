@@ -87,6 +87,25 @@ void QuitGame();
 extern CGame* pGame;
 extern CChatWindow* pChatWindow;
 extern CDeathWindow* pDeathWindow;
+extern CNetGame* pNetGame;
+extern CCmdWindow* pCmdWindow;
+extern CSpawnScreen* pSpawnScreen;
+extern CFontRender* pDefaultFont;
+extern CPlayerTags* pPlayerTags;
+extern CScoreBoard* pScoreBoard;
+extern CLabel* pLabel;
+extern CNetStats* pNetStats;
+extern CSvrNetStats* pSvrNetStats;
+extern CHelpDialog* pHelpDialog;
+extern CFileSystem* pFileSystem;
+
+extern CDXUTDialogResourceManager* pDialogResourceManager;
+extern CDXUTDialog* pGameUI;
+
+extern GAME_SETTINGS tSettings;
+extern IDirect3DDevice9* pD3DDevice;
+extern bool bShowDebugLabels;
+extern int iGtaVersion;
 
 #include "outputdebugstring.h"
 

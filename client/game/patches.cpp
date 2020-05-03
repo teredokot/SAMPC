@@ -13,11 +13,6 @@ void InstallSCMEventsProcessor();
 void RelocateScanListHack();
 void RelocatePedsListHack();
 
-extern int iGtaVersion;
-extern CNetGame* pNetGame;
-extern CGame* pGame;
-extern DWORD dwUIMode;
-
 //----------------------------------------------------------
 
 /*#define memadd(num,arr) dwAlloc+=num;cBytes=(char*)&dwAlloc;for(int i=0;i<4;i++)arr[i]=cBytes[i]
@@ -189,26 +184,23 @@ BOOL ApplyPreGamePatches()
 
 //----------------------------------------------------------
 
-BYTE pbyteVehiclePoolAllocPatch[] = {0x6A,0x00,0x68,0xC6,0x2,0x00,0x00}; // 710
-BYTE pbyteCollisionPoolAllocPatch[] = { 0x68,0xFF,0x7E,0x00,0x00 }; // 32511
-BYTE pbyteEntryInfoPoolAllocPatch[] = { 0x68,0x00,0x8,0x00,0x00 }; // 2048
+static BYTE pbyteVehiclePoolAllocPatch[] = {0x6A,0x00,0x68,0xC6,0x2,0x00,0x00}; // 710
+static BYTE pbyteCollisionPoolAllocPatch[] = { 0x68,0xFF,0x7E,0x00,0x00 }; // 32511
+static BYTE pbyteEntryInfoPoolAllocPatch[] = { 0x68,0x00,0x8,0x00,0x00 }; // 2048
+static BYTE pbyteTrainDelrailmentPatch[] = { 0xB8, 0x89, 0x8F, 0x6F, 0x00, 0xFF, 0xE0 };
 
-BYTE pbyteTrainDelrailmentPatch[] = {
-	0xB8, 0x89, 0x8F, 0x6F, 0x00, 0xFF, 0xE0
-};
-
-extern DWORD dwFarClipHookAddr;
-extern DWORD dwFarClipReturnAddr;
+//extern DWORD dwFarClipHookAddr;
+//extern DWORD dwFarClipReturnAddr;
 
 void ApplyInGamePatches()
 {	
-	if(GTASA_VERSION_USA10 == iGtaVersion) {
+	/*if(GTASA_VERSION_USA10 == iGtaVersion) {
 		dwFarClipHookAddr = 0x7EE2A0;
 		dwFarClipReturnAddr = dwFarClipHookAddr+9;
 	} else {
 		dwFarClipHookAddr = 0x7EE2E0;
 		dwFarClipReturnAddr = dwFarClipHookAddr+9;
-	}	
+	}*/
 
 	// APPLY THE DAMN NOP PATCH AND QUIT ASCIING QUESTIONS!
 
@@ -304,7 +296,9 @@ void ApplyInGamePatches()
 	//UnFuck(0x53C159,5);
 	memset((PVOID)0x53C159,0x90,5);
 	
-	if (dwUIMode != 0) 
+	// dwUIMode was unused, and always 0
+	// Also moving to top left? That's where the chatbox is..
+	/*if (dwUIMode != 0) 
 	{
 		// Move the radar to the top left of the screen
 		//UnFuck(0x866B70,4);
@@ -314,7 +308,7 @@ void ApplyInGamePatches()
 		//UnFuck(0x859520,8);
 		//*(float *)0x859520 = 0.0011f;
 		//*(float *)0x859524 = 0.00172f;
-	}
+	}*/
 
 	/* Cursor hiding
 	UnFuck(0x7481CD,16);
@@ -573,13 +567,11 @@ void ApplyInGamePatches()
 
 //----------------------------------------------------------
 
-typedef struct _PED_MODEL
+static struct
 {
 	DWORD func_tbl;
 	BYTE  data[64];
-} PED_MODEL;
-
-PED_MODEL PedModelsMemory[600];
+} PedModelsMemory[600];
 
 void RelocatePedsListHack()
 {
@@ -602,26 +594,26 @@ void RelocatePedsListHack()
 // FOLLOWING IS TO RELOCATE THE SCANLIST MEMORY, A BIG
 // HACK THAT ALLOWS US TO HAVE MORE THAN 2 CPlayerInfo STRUCTURES.
 
-unsigned char ScanListMemory[8*20000];
+static unsigned char ScanListMemory[8*20000];
 
 // Pointers to actual code addresses to patch. The first list
 // has taken into account the instruction bytes, second list
 // does not. The second list is guaranteed to have 3 byte
 // instructions before the new address.
 
-DWORD dwPatchAddrScanReloc1USA[14] = {
+static DWORD dwPatchAddrScanReloc1USA[14] = {
 0x5DC7AA,0x41A85D,0x41A864,0x408259,0x711B32,0x699CF8,
 0x4092EC,0x40914E,0x408702,0x564220,0x564172,0x563845,
 0x84E9C2,0x85652D };
 
-DWORD dwPatchAddrScanReloc1EU[14] = {
+static DWORD dwPatchAddrScanReloc1EU[14] = {
 0x5DC7AA,0x41A85D,0x41A864,0x408261,0x711B32,0x699CF8,
 0x4092EC,0x40914E,0x408702,0x564220,0x564172,0x563845,
 0x84EA02,0x85656D };
 
 // Lots of hex.. that's why they call us a "determined group of hackers"
 
-DWORD dwPatchAddrScanReloc2USA[56] = {
+static DWORD dwPatchAddrScanReloc2USA[56] = {
 0x0040D68C,0x005664D7,0x00566586,0x00408706,0x0056B3B1,0x0056AD91,0x0056A85F,0x005675FA,
 0x0056CD84,0x0056CC79,0x0056CB51,0x0056CA4A,0x0056C664,0x0056C569,0x0056C445,0x0056C341,
 0x0056BD46,0x0056BC53,0x0056BE56,0x0056A940,0x00567735,0x00546738,0x0054BB23,0x006E31AA,
@@ -630,7 +622,7 @@ DWORD dwPatchAddrScanReloc2USA[56] = {
 0x0056BF4F,0x0056ACA3,0x0056A766,0x0056A685,0x0070B9BA,0x0056479D,0x0070ACB2,0x006063C7,
 0x00699CFE,0x0041A861,0x0040E061,0x0040DF5E,0x0040DDCE,0x0040DB0E,0x0040D98C,0x01566855 };
 
-DWORD dwPatchAddrScanReloc2EU[56] = {
+static DWORD dwPatchAddrScanReloc2EU[56] = {
 0x0040D68C,0x005664D7,0x00566586,0x00408706,0x0056B3B1,0x0056AD91,0x0056A85F,0x005675FA,
 0x0056CD84,0x0056CC79,0x0056CB51,0x0056CA4A,0x0056C664,0x0056C569,0x0056C445,0x0056C341,
 0x0056BD46,0x0056BC53,0x0056BE56,0x0056A940,0x00567735,0x00546738,0x0054BB23,0x006E31AA,
@@ -639,14 +631,13 @@ DWORD dwPatchAddrScanReloc2EU[56] = {
 0x0056BF4F,0x0056ACA3,0x0056A766,0x0056A685,0x0070B9BA,0x0056479D,0x0070ACB2,0x006063C7,
 0x00699CFE,0x0041A861,0x0040E061,0x0040DF5E,0x0040DDCE,0x0040DB0E,0x0040D98C,0x01566845 };
 
-DWORD dwPatchAddrScanReloc3[11] = {
+static DWORD dwPatchAddrScanReloc3[11] = {
 0x004091C5,0x00409367,0x0040D9C5,0x0040DB47,0x0040DC61,0x0040DE07,0x0040DF97,
 0x0040E09A,0x00534A98,0x00534DFA,0x0071CDB0 };
 
 // For End
 // 0xB992B8 is reffed for checking end of scanlist... rewrite this to point to end of new list
-DWORD dwPatchAddrScanRelocEnd[4] = { 0x005634A6, 0x005638DF, 0x0056420F, 0x00564283 };
-
+static DWORD dwPatchAddrScanRelocEnd[4] = { 0x005634A6, 0x005638DF, 0x0056420F, 0x00564283 };
 
 //-----------------------------------------------------------
 

@@ -8,10 +8,6 @@
 
 #define ScoreBoardFVF D3DFVF_XYZRHW|D3DFVF_DIFFUSE
 
-extern CNetGame* pNetGame;
-extern CGame* pGame;
-extern CChatWindow* pChatWindow;
-
 struct ScoreBoardVertices_s
 {
 	float x, y, z, rhw;

@@ -10,15 +10,13 @@
 #include "../main.h"
 
 GAME_SCRIPT_THREAD* gst;
-FARPROC ProcessOneCommand = (FARPROC)0x469EB0;
-BYTE ScriptBuf[255];
-DWORD* pdwParamVars[18];
+static FARPROC ProcessOneCommand = (FARPROC)0x469EB0;
+static BYTE ScriptBuf[255];
+static DWORD* pdwParamVars[18];
 
 DWORD dwScmOpcodeDebug=0;
 BOOL bScmLocalDebug=FALSE;
-BOOL bExceptionDisplayed=FALSE;
-
-extern CChatWindow *pChatWindow;
+static BOOL bExceptionDisplayed=FALSE;
 
 int __declspec(naked) ExecuteScriptBuf()
 {

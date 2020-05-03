@@ -16,13 +16,10 @@
 #include "util.h"
 #include "keystuff.h"
 
-extern CGame		*pGame;
-extern CNetGame		*pNetGame;
-extern CChatWindow  *pChatWindow;
-extern BOOL			bAllowVehicleCreation;
+//extern BOOL bAllowVehicleCreation;
 
-DWORD	dwLastCreatedVehicleID=0;
-DWORD	dwNumVehicles=0;
+static DWORD dwLastCreatedVehicleID=0;
+//DWORD	dwNumVehicles=0;
 
 //-----------------------------------------------------------
 // CONSTRUCTOR

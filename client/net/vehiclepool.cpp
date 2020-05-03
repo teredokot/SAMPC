@@ -10,9 +10,6 @@
 #include "../main.h"
 #include "../game/util.h"
 
-extern CNetGame *pNetGame;
-extern CGame *pGame;
-extern CChatWindow *pChatWindow;
 //----------------------------------------------------
 
 CVehiclePool::CVehiclePool()
