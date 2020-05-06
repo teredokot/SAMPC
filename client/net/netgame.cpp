@@ -300,6 +300,7 @@ void CNetGame::Process()
 		}
 		pGame->GetCamera()->SetPosition(1497.803f,-887.0979f,62.56055f,0.0f,0.0f,0.0f);
 		pGame->GetCamera()->LookAtPoint(1406.65f,-795.7716f,82.2771f,2);
+		pGame->FindPlayerPed()->TogglePlayerControllable(0);
 		pGame->DisplayHud(FALSE);
 	}
 

@@ -132,6 +132,7 @@ void InitGame(RPCParameters *rpcParams)
 	CLocalPlayer* pLocalPlayer = pPlayerPool->GetLocalPlayer();
 	pLocalPlayer->m_sNormalOnfootRate = sOnFootRate;
 	pLocalPlayer->m_sNormalIncarRate = sInCarRate;
+	pLocalPlayer->GetPlayerPed()->TogglePlayerControllable(1);
 
 	pNetGame->SetGameState(GAMESTATE_CONNECTED);
 	pLocalPlayer->HandleClassSelection();
