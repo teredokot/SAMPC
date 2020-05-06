@@ -2830,7 +2830,7 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId )
 	RakNet::BitStream replyToSender;
 	rpcParms.replyToSender=&replyToSender;
 
-	rpcParms.recipient=this;
+	//rpcParms.recipient=this;
 	rpcParms.sender=playerId;
 
 	// Note to self - if I change this format then I have to change the PacketLogger class too

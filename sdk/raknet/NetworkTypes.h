@@ -123,7 +123,7 @@ struct Packet
 	bool deleteData;
 };
 
-class RakPeerInterface;
+//class RakPeerInterface;
 
 /// All RPC functions have the same parameter list - this structure.
 struct RPCParameters
@@ -138,7 +138,7 @@ struct RPCParameters
 	PlayerID sender;
 
 	/// Which instance of RakPeer (or a derived RakServer or RakClient) got this call
-	RakPeerInterface *recipient;
+	//RakPeerInterface *recipient;
 
 	// TODO - RakNet 3.0. Be consistent and have user put ID_TIMESTAMP, rather than do this
 	// Bug: hasTimestamp was unused.

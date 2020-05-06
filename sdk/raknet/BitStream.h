@@ -64,6 +64,7 @@ namespace RakNet
 
 		// SAMPSRV (adding this just as a tag for next RakNet upgrade)
 		BitStream(char* _dataC, unsigned int lengthInBytes, bool _copyData);
+		BitStream(RPCParameters* pParams, bool _copyData = false);
 		// SAMPSRV end
 
 		// Destructor

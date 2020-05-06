@@ -131,6 +131,39 @@ BitStream::BitStream(char* _dataC, unsigned int lengthInBytes, bool _copyData)
 		data = (unsigned char*)_data;
 
 }
+
+BitStream::BitStream(RPCParameters* pParams, bool _copyData)
+{
+	numberOfBitsUsed = pParams->numberOfBitsOfData;
+	readOffset = 0;
+	copyData = _copyData;
+	numberOfBitsAllocated = pParams->numberOfBitsOfData;
+
+	if (copyData)
+	{
+		BitSize_t lengthInBytes = BITS_TO_BYTES(pParams->numberOfBitsOfData);
+		if (lengthInBytes > 0)
+		{
+			if (lengthInBytes < BITSTREAM_STACK_ALLOCATION_SIZE)
+			{
+				data = (unsigned char*)stackData;
+				numberOfBitsAllocated = BITSTREAM_STACK_ALLOCATION_SIZE << 3;
+			}
+			else
+			{
+				data = (unsigned char*)malloc((size_t)lengthInBytes);
+			}
+#ifdef _DEBUG
+			RakAssert(data);
+#endif
+			memcpy(data, pParams->input, (size_t)lengthInBytes);
+		}
+		else
+			data = 0;
+	}
+	else
+		data = (unsigned char*)pParams->input;
+}
 // SAMPSRV end
 
 // Use this if you pass a pointer copy to the constructor (_copyData==false) and want to overallocate to prevent reallocation
