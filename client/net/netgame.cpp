@@ -387,7 +387,6 @@ void CNetGame::Packet_PlayerSync(Packet *p)
 	CRemotePlayer * pPlayer;
 	RakNet::BitStream bsPlayerSync((PCHAR)p->data, p->length, false);
 	ONFOOT_SYNC_DATA ofSync;
-	BYTE bytePacketID=0;
 	BYTE bytePlayerID=0;
 	
 	bool bHasLR,bHasUD;
@@ -398,7 +397,7 @@ void CNetGame::Packet_PlayerSync(Packet *p)
 
 	memset(&ofSync,0,sizeof(ONFOOT_SYNC_DATA));
 
-	bsPlayerSync.Read(bytePacketID);
+	bsPlayerSync.IgnoreBits(8);
 	bsPlayerSync.Read(bytePlayerID);
 
 	//bsPlayerSync.Read((PCHAR)&ofSync,sizeof(ONFOOT_SYNC_DATA));
@@ -479,12 +478,11 @@ void CNetGame::Packet_AimSync(Packet *p)
 	CRemotePlayer * pPlayer;
 	RakNet::BitStream bsAimSync((PCHAR)p->data, p->length, false);
 	AIM_SYNC_DATA aimSync;
-	BYTE bytePacketID=0;
 	BYTE bytePlayerID=0;
 
 	if(GetGameState() != GAMESTATE_CONNECTED) return;
 
-	bsAimSync.Read(bytePacketID);
+	bsAimSync.IgnoreBits(8);
 	bsAimSync.Read(bytePlayerID);
 	bsAimSync.Read((PCHAR)&aimSync,sizeof(AIM_SYNC_DATA));
 
@@ -501,7 +499,6 @@ void CNetGame::Packet_VehicleSync(Packet *p)
 {
 	CRemotePlayer * pPlayer;
 	RakNet::BitStream bsSync((PCHAR)p->data, p->length, false);
-	BYTE		bytePacketID=0;
 	BYTE		bytePlayerID=0;
 	INCAR_SYNC_DATA icSync;
 
@@ -513,7 +510,7 @@ void CNetGame::Packet_VehicleSync(Packet *p)
 
 	memset(&icSync,0,sizeof(INCAR_SYNC_DATA));
 
-	bsSync.Read(bytePacketID);
+	bsSync.IgnoreBits(8);
 	bsSync.Read(bytePlayerID);
 	bsSync.Read(icSync.VehicleID);
 
@@ -598,13 +595,12 @@ void CNetGame::Packet_PassengerSync(Packet *p)
 {
 	CRemotePlayer * pPlayer;
 	RakNet::BitStream bsPassengerSync((PCHAR)p->data, p->length, false);
-	BYTE		bytePacketID=0;
 	BYTE		bytePlayerID=0;
 	PASSENGER_SYNC_DATA psSync;
 
 	if(GetGameState() != GAMESTATE_CONNECTED) return;
 
-	bsPassengerSync.Read(bytePacketID);
+	bsPassengerSync.IgnoreBits(8);
 	bsPassengerSync.Read(bytePlayerID);
 	bsPassengerSync.Read((PCHAR)&psSync,sizeof(PASSENGER_SYNC_DATA));
 
@@ -626,11 +622,10 @@ void CNetGame::Packet_TrailerSync(Packet *p)
 
 	if(GetGameState() != GAMESTATE_CONNECTED) return;
 
-	BYTE bytePacketID=0;
 	BYTE bytePlayerID=0;
 	TRAILER_SYNC_DATA trSync;
 	
-	bsSpectatorSync.Read(bytePacketID);
+	bsSpectatorSync.IgnoreBits(8);
 	bsSpectatorSync.Read(bytePlayerID);
 	bsSpectatorSync.Read((PCHAR)&trSync, sizeof(TRAILER_SYNC_DATA));
 
@@ -724,13 +719,12 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 {
 	RakNet::BitStream bsReturnParams((PCHAR)p->data, p->length, true);
 
-	BYTE bytePacketID=0;
 	unsigned int binaryAddr=0;
 	unsigned short port=0;
 	unsigned short playerId=0;
 	unsigned int uiChallenge=0;
 
-	bsReturnParams.Read(bytePacketID);
+	bsReturnParams.IgnoreBits(8);
 	bsReturnParams.Read(binaryAddr);
 	bsReturnParams.Read(port);
 	bsReturnParams.Read(playerId);

@@ -876,10 +876,9 @@ void CNetGame::Packet_PlayerSync(Packet *p)
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
-	BYTE				bytePacketID=0;
 	ONFOOT_SYNC_DATA	ofSync;
 	
-	bsPlayerSync.Read(bytePacketID);
+	bsPlayerSync.IgnoreBits(8);
 	bsPlayerSync.Read((PCHAR)&ofSync,sizeof(ONFOOT_SYNC_DATA));
 	
 	if(pPlayer)	{
@@ -896,10 +895,9 @@ void CNetGame::Packet_AimSync(Packet *p)
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
-	BYTE			bytePacketID=0;
 	AIM_SYNC_DATA	aimSync;
 	
-	bsPlayerSync.Read(bytePacketID);
+	bsPlayerSync.IgnoreBits(8);
 	bsPlayerSync.Read((PCHAR)&aimSync,sizeof(AIM_SYNC_DATA));
 		
 	if(pPlayer)	{
@@ -916,10 +914,9 @@ void CNetGame::Packet_VehicleSync(Packet *p)
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
-	BYTE		bytePacketID=0;
 	INCAR_SYNC_DATA icSync;
 	
-	bsVehicleSync.Read(bytePacketID);
+	bsVehicleSync.IgnoreBits(8);
 	bsVehicleSync.Read((PCHAR)&icSync,sizeof(INCAR_SYNC_DATA));
 
 	if(pPlayer)	{
@@ -941,10 +938,9 @@ void CNetGame::Packet_PassengerSync(Packet *p)
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
-	BYTE bytePacketID=0;
 	PASSENGER_SYNC_DATA psSync;
 	
-	bsPassengerSync.Read(bytePacketID);
+	bsPassengerSync.IgnoreBits(8);
 	bsPassengerSync.Read((PCHAR)&psSync,sizeof(PASSENGER_SYNC_DATA));
 
 	if(pPlayer)	{
@@ -965,10 +961,9 @@ void CNetGame::Packet_SpectatorSync(Packet *p)
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
-	BYTE bytePacketID=0;
 	SPECTATOR_SYNC_DATA spSync;
 	
-	bsSpectatorSync.Read(bytePacketID);
+	bsSpectatorSync.IgnoreBits(8);
 	bsSpectatorSync.Read((PCHAR)&spSync,sizeof(SPECTATOR_SYNC_DATA));
 
 	if(pPlayer)	{
@@ -983,10 +978,9 @@ void CNetGame::Packet_TrailerSync(Packet *p)
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
-	BYTE bytePacketID=0;
 	TRAILER_SYNC_DATA trSync;
 	
-	bsTrailerSync.Read(bytePacketID);
+	bsTrailerSync.IgnoreBits(8);
 	bsTrailerSync.Read((PCHAR)&trSync, sizeof(TRAILER_SYNC_DATA));
 
 	if(pPlayer)	{
@@ -1004,9 +998,8 @@ void CNetGame::Packet_StatsUpdate(Packet *p)
 	BYTE bytePlayerID = (BYTE)p->playerIndex;
 	int iMoney;
 	WORD wAmmo;
-	BYTE bytePacketID;
 
-	bsStats.Read(bytePacketID);
+	bsStats.IgnoreBits(8);
 	bsStats.Read(iMoney);
 	bsStats.Read(wAmmo);
 
@@ -1042,7 +1035,7 @@ void CNetGame::Packet_WeaponsUpdate(Packet *p)
 		{
 			//printf("2");
 			CPlayer* pPlayer = pPlayerPool->GetAt(bytePlayerID);
-			bsData.Read(byteIndex); // Dump the first byte, we don't need it
+			bsData.IgnoreBits(8);
 			while (byteLength)
 			{
 				//printf("3");
