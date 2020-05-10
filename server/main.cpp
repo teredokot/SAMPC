@@ -405,6 +405,10 @@ int main (int argc, char** argv)
 		return 0;
 	}*/
 
+	if (!RCONPasswordValid()) {
+		logprintf("Info: RCON has been disabled. To re-enable, change your \"rcon_password\" string variable.");
+	}
+
 	// Change some var flags to read-only (can only be accessed from server.cfg).
 	//pConsole->ModifyVariableFlags("mtu", CON_VARFLAG_READONLY);
 	pConsole->ModifyVariableFlags("maxplayers", CON_VARFLAG_READONLY);
