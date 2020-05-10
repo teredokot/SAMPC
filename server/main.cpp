@@ -360,7 +360,7 @@ int main (int argc, char** argv)
 	pConsole->AddStringVariable("mapname", CON_VARFLAG_RULE, "San Andreas");
 	pConsole->AddStringVariable("language", CON_VARFLAG_RULE, "");
 	pConsole->AddStringVariable("weburl", CON_VARFLAG_RULE, "www.sa-mp.com");
-	pConsole->AddStringVariable("rcon_password", 0, "changeme");
+	pConsole->AddStringVariable("rcon_password", 0, DEFAULT_RCON_PASSWORD);
 	pConsole->AddStringVariable("gravity", CON_VARFLAG_RULE, "0.008", ServerGravityChanged);
 	pConsole->AddStringVariable("weather", CON_VARFLAG_RULE, "10", ServerWeatherChanged);
 	//pConsole->AddStringVariable("tirepopping", CON_VARFLAG_RULE, "0");
@@ -390,11 +390,11 @@ int main (int argc, char** argv)
 	// Exec the server config!
 	pConsole->Execute("exec server");
 
-	if ( !strcmp( pConsole->GetStringVariable("rcon_password"), "changeme" ) )
+	/*if ( !strcmp( pConsole->GetStringVariable("rcon_password"), "changeme" ) )
 	{
 		logprintf("Error: Your password must be changed from the default password, please change it.");
 		return 0;
-	}
+	}*/
 
 	// Change some var flags to read-only (can only be accessed from server.cfg).
 	//pConsole->ModifyVariableFlags("mtu", CON_VARFLAG_READONLY);
@@ -612,3 +612,13 @@ void SetStringFromCommandLine(char *szCmdLine, char *szString)
 }
 
 //----------------------------------------------------
+
+bool RCONPasswordValid()
+{
+	if (pConsole) {
+		char* str = pConsole->GetStringVariable("rcon_password");
+		if (str != NULL && str[0] != '\0' && strcmp(str, DEFAULT_RCON_PASSWORD) != 0)
+			return true;
+	}
+	return false;
+}

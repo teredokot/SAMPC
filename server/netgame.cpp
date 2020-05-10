@@ -1105,6 +1105,9 @@ void CNetGame::Packet_RemotePortRefused(Packet* packet)
 
 void CNetGame::Packet_InGameRcon(Packet* packet)
 {
+	if (!RCONPasswordValid())
+		return;
+
 	CPlayer* pPlayer = m_pPlayerPool->GetAt(packet->playerIndex);
 	if (pPlayer == NULL)
 		return;

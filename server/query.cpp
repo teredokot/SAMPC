@@ -305,7 +305,7 @@ int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* da
 					szPassword[wStrLen] = 0;
 					data += wStrLen;
 
-					if (strcmp(szPassword, pConsole->GetStringVariable("rcon_password")) == 0)
+					if (RCONPasswordValid() && strcmp(szPassword, pConsole->GetStringVariable("rcon_password")) == 0)
 					{
 						// Check there's enough data for another WORD
 						tmp_datalen += sizeof(WORD);

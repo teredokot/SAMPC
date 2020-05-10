@@ -30,7 +30,7 @@
 #define DEFAULT_LISTEN_PORT		8192
 #define DEFAULT_RCON_PORT		8193
 #define DEFAULT_RCON_MAXUSERS	8
-
+#define DEFAULT_RCON_PASSWORD	"changeme"
 // ------------
 // OS SPECIFICS
 // ------------
@@ -154,6 +154,7 @@ extern bool g_bDBLogQueries;
 void logprintf(char* format, ...);
 void flogprintf(char* format, ...);
 void LoadLogFile();
+bool RCONPasswordValid();
 
 #ifdef LINUX
 void SignalHandler(int sig);
