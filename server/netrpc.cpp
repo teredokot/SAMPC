@@ -45,9 +45,30 @@ void ClientJoin(RPCParameters *rpcParams)
 	size_t uiVersionLen = 0;
 	char szVersion[12];
 	unsigned int uiChallengeResponse=0;
+	PlayerID otherPlayerId = UNASSIGNED_PLAYER_ID;
+	size_t uiCount = 0;
 
 	bytePlayerID = pRak->GetIndexFromPlayerID(sender);
 	PlayerID MyPlayerID = pRak->GetPlayerIDFromIndex(bytePlayerID);
+
+	for (size_t i = 0; i < MAX_PLAYERS; i++) {
+		if (pPlayerPool->GetSlotState((BYTE)i)) {
+			otherPlayerId = pRak->GetPlayerIDFromIndex(i);
+			if (otherPlayerId != UNASSIGNED_PLAYER_ID &&
+				otherPlayerId.binaryAddress == MyPlayerID.binaryAddress)
+				uiCount++;
+		}
+	}
+
+	if (pConsole->GetIntVariable("maxplayerperip") < (int)uiCount)
+	{
+		byteRejectReason = REJECT_REASON_IP_LIMIT_REACHED;
+		bsReject.Write(byteRejectReason);
+		pRak->RPC(RPC_ConnectionRejected, &bsReject, HIGH_PRIORITY, RELIABLE, 0, sender, FALSE, FALSE);
+		pRak->Kick(sender);
+		return;
+	}
+
 	in_addr in;
 
 	memset(szPlayerName,0,256);

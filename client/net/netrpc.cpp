@@ -549,6 +549,11 @@ void ConnectionRejected(RPCParameters *rpcParams)
 		pChatWindow->AddInfoMessage("Connection was closed by the server.");
 		pChatWindow->AddInfoMessage("Unable to allocate a player slot. Try again.");
 	}
+	else if (byteRejectReason == REJECT_REASON_IP_LIMIT_REACHED)
+	{
+		pChatWindow->AddInfoMessage("Connection was closed by the server.");
+		pChatWindow->AddInfoMessage("Maximum connection limit reached. Try again later.");
+	}
 
 	pNetGame->GetRakClient()->Disconnect(500);
 }

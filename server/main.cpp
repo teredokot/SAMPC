@@ -168,6 +168,13 @@ void ServerTimeOutChanged()
 	}
 }
 
+static void ServerPlayerPerIPChanged()
+{
+	int iNewVal = pConsole->GetIntVariable("maxplayerperip");
+	if (iNewVal < 1)
+		pConsole->SetIntVariable("maxplayerperip", 1);
+}
+
 //----------------------------------------------------
 
 void LoadLogFile()
@@ -278,6 +285,7 @@ int main (int argc, char** argv)
 	int iPlayerTimeout = 10000;
 	int iOnFootRate = 40;
 	int iInCarRate = 40;
+	int iMaxPlayerPerIP = 3;
 
 	// Open the log file
 	LoadLogFile();
@@ -377,6 +385,7 @@ int main (int argc, char** argv)
 	pConsole->AddVariable("db_log_queries", CON_VARTYPE_INT, 0, &g_bDBLogQueries);
 	pConsole->AddVariable("onfoot_rate", CON_VARTYPE_INT, 0, &iOnFootRate);
 	pConsole->AddVariable("incar_rate", CON_VARTYPE_INT, 0, &iInCarRate);
+	pConsole->AddVariable("maxplayerperip", CON_VARTYPE_INT, 0, &iMaxPlayerPerIP, ServerPlayerPerIPChanged);
 
 	// Add 16 gamemode variables.
 	int x=0;
