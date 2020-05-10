@@ -531,14 +531,9 @@ PlayerID RakServer::GetPlayerIDFromIndex( int index )
 	return RakPeer::GetPlayerIDFromIndex( index );
 }
 
-void RakServer::AddToBanList( const char *IP )
+void RakServer::AddToBanList( const char *IP, RakNet::Time ms )
 {
-	RakPeer::AddToBanList( IP );
-}
-
-void RakServer::AddToBanListEx(const char* IP, RakNet::Time ms)
-{
-	RakPeer::AddToBanList(IP, ms);
+	RakPeer::AddToBanList( IP, ms );
 }
 
 void RakServer::RemoveFromBanList( const char *IP )

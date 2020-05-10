@@ -667,7 +667,7 @@ static cell n_BlockIpAddress(AMX* amx, cell* params)
 	amx_StrParam(amx, params[1], szIP);
 	if (pNetGame->GetRakServer() && szIP && 0 <= params[2])
 	{
-		pNetGame->GetRakServer()->AddToBanListEx(szIP, params[2]);
+		pNetGame->GetRakServer()->AddToBanList(szIP, params[2]);
 		return 1;
 	}
 	return 0;
