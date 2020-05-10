@@ -147,6 +147,9 @@
 	#define SAFE_RELEASE(p)	{ if (p) { (p)->Release(); (p) = NULL; } }
 #endif
 
+#define TO_STR(x) #x
+#define STR(x) TO_STR(x)
+
 typedef unsigned short VEHICLEID;
 
 typedef struct {

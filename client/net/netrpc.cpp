@@ -535,7 +535,7 @@ void ConnectionRejected(RPCParameters *rpcParams)
 	else if(byteRejectReason==REJECT_REASON_BAD_NICKNAME)
 	{
 		pChatWindow->AddInfoMessage("CONNECTION REJECTED. BAD NICKNAME!");
-		pChatWindow->AddInfoMessage("Please choose another nick between 3-16 characters");
+		pChatWindow->AddInfoMessage("Please choose another nick between 3-" STR(MAX_PLAYER_NAME) " characters");
 		pChatWindow->AddInfoMessage("containing only A-Z a-z 0-9 [ ] or _");
 		pChatWindow->AddInfoMessage("Use /quit to exit or press ESC and select Quit Game");
 	}

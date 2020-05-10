@@ -125,7 +125,7 @@ void ClientJoin(RPCParameters *rpcParams)
 	}*/
 
 	if(ContainsInvalidNickChars(szPlayerName) ||
-		byteNickLen < 3 || byteNickLen > 16 || pPlayerPool->IsNickInUse(szPlayerName)) {
+		byteNickLen < 3 || byteNickLen > MAX_PLAYER_NAME || pPlayerPool->IsNickInUse(szPlayerName)) {
 		byteRejectReason = REJECT_REASON_BAD_NICKNAME;
 		bsReject.Write(byteRejectReason);
 		pRak->RPC(RPC_ConnectionRejected,&bsReject,HIGH_PRIORITY,RELIABLE,0,sender,FALSE,FALSE);
