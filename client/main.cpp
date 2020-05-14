@@ -32,7 +32,7 @@ static DWORD			dwStartQuitTick=0;
 IDirect3DDevice9		*pD3DDevice	= NULL;
 //D3DMATRIX				matView;
 
-HANDLE					hInstance=0;
+HINSTANCE				hInstance=0;
 CPlayerTags				*pPlayerTags=NULL;
 CScoreBoard				*pScoreBoard=NULL;
 CLabel					*pLabel=NULL;

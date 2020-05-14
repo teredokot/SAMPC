@@ -9,250 +9,260 @@
 
 #include "main.h"
 #include "resource.h"
-//#include "httpclient.h"
-#include "runutil.h"
-
 #include <Tlhelp32.h>
 
-static PCONTEXT pContextRecord;
-extern	 HANDLE		hInstance;
-extern   DWORD		dwScmOpcodeDebug;
-extern   BOOL       bScmLocalDebug;
-extern	 BYTE		*pbyteCurrentPlayer;//internal GTA FindPlayerPed() number
-extern   GAME_SCRIPT_THREAD *gst;
+extern HINSTANCE hInstance;
+extern DWORD dwScmOpcodeDebug;
+extern BOOL bScmLocalDebug;
+extern GAME_SCRIPT_THREAD* gst;
 
-static CHAR szErrorString[16384];
+static PEXCEPTION_POINTERS pExceptionPtrs = NULL;
+static char szCrashInfoFile[50] = { 0 };
 
-//----------------------------------------------------
-
-void DumpNetworkStateInformation()
+static void DumpLoadedModules(FILE* f)
 {
-	CPlayerPool   *pPlayerPool = pNetGame->GetPlayerPool();
-	CRemotePlayer *pThisPlayer;
-	BYTE bytePlayerId=0;
-
-	int x=0;
-	while(x!=MAX_PLAYERS) {
-		if(pPlayerPool->GetSlotState(x)) {
-			pThisPlayer = pPlayerPool->GetAt(x);
-			bytePlayerId = pThisPlayer->GetID();
-		}
-		x++;
-	}
-
-	sprintf_s(szErrorString,"\r\nState Information: L: %u  N: %u\r\n",*pbyteCurrentPlayer,bytePlayerId);
-
-	x=0;
-	while(x!=MAX_PLAYERS) {
-		if(pPlayerPool->GetSlotState(x)) {
-			pThisPlayer = pPlayerPool->GetAt(x);
-			sprintf_s(szErrorString,"P%u (%u,%u) ",x,pThisPlayer->GetState(),pThisPlayer->m_VehicleID);
-			if (x > 0 && ((x+1) % 4) == 0)
-				strcat_s(szErrorString, "\r\n");
-		}
-		x++;
-	}
-}
-
-//----------------------------------------------------
-
-void DumpMemory(BYTE *pData, DWORD dwCount, BOOL bAsDWords = FALSE)
-{
-	if (bAsDWords)
-	{
-		for(int i=0; i<(int)dwCount; i += 16)
-		{
-			sprintf_s(szErrorString, "+%04X: 0x%08X   0x%08X   0x%08X   0x%08X\r\n", i,
-					*(DWORD*)(pData+i+0), *(DWORD*)(pData+i+4),
-					*(DWORD*)(pData+i+8), *(DWORD*)(pData+i+12));
-		}
-	}
-	else
-	{
-		for(int i=0; i<(int)dwCount; i += 16)
-		{
-			sprintf_s(szErrorString, "+%04X: %02X %02X %02X %02X   %02X %02X %02X %02X   "
-					"%02X %02X %02X %02X   %02X %02X %02X %02X\r\n", i,
-					pData[i+0], pData[i+1], pData[i+2], pData[i+3],
-					pData[i+4], pData[i+5], pData[i+6], pData[i+7],
-					pData[i+8], pData[i+9], pData[i+10], pData[i+11],
-					pData[i+12], pData[i+13], pData[i+14], pData[i+15]);
-		}
-	}
-}
-
-//----------------------------------------------------
-
-void DumpLoadedModules()
-{
-    HANDLE hModuleSnap = NULL; 
+	HANDLE hModuleSnap;
 	MODULEENTRY32 me32;
-	
-	hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId()); 
-	
-	strcpy_s(szErrorString, "\r\nLoaded Modules:\r\n");
 
-	if(hModuleSnap == INVALID_HANDLE_VALUE) 
-	{
-		strcat_s(szErrorString, "-FailedCreate-\r\n");
+	hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+
+	fputs("\nLoaded Modules:\n", f);
+	fflush(f);
+
+	if (hModuleSnap == INVALID_HANDLE_VALUE) {
+		fputs("-FailedCreate-\n", f);
+		fflush(f);
 		return;
 	}
 
-	me32.dwSize = sizeof( MODULEENTRY32 );
+	me32.dwSize = sizeof(MODULEENTRY32);
 
-	if( !Module32First( hModuleSnap, &me32 ) )
-	{
-		strcat_s(szErrorString, "-FailedFirst-" );  // Show cause of failure
-		CloseHandle( hModuleSnap );     // Must clean up the snapshot object!
+	if (Module32First(hModuleSnap, &me32) == FALSE) {
+		fputs("-FailedFirst-\n", f);
+		fflush(f);
+		CloseHandle(hModuleSnap);
 		return;
 	}
+	
+	do {
+		fprintf_s(f, "%s\tB: 0x%p\tS: 0x%08X\t(%s)\n",
+			me32.szModule, me32.modBaseAddr, me32.modBaseSize, me32.szExePath);
+		fflush(f);
+	} while (Module32Next(hModuleSnap, &me32));
 
-	do
-	{
-		if (me32.szModule[0] != 'f' && me32.szModule[1] != 'l' && me32.szModule[2] != 'a')
-		{
-			sprintf_s(szErrorString, "%s\tB: 0x%p\tS: 0x%08X\t(%s)\r\n",
-				me32.szModule, me32.modBaseAddr, me32.modBaseSize, me32.szExePath);
+	CloseHandle(hModuleSnap);
+}
+
+static void DumpMemory(FILE* f, BYTE* pData, DWORD dwCount, BOOL bAsDWords = FALSE)
+{
+	if (bAsDWords) {
+		for (DWORD i = 0; i < dwCount; i += 16) {
+			fprintf_s(f, "+%04X: 0x%08X 0x%08X 0x%08X 0x%08X\n", i,
+				*(DWORD*)(pData + i + 0), *(DWORD*)(pData + i + 4),
+				*(DWORD*)(pData + i + 8), *(DWORD*)(pData + i + 12));
+			fflush(f);
 		}
-	} while( Module32Next( hModuleSnap, &me32 ) );
-
-	CloseHandle( hModuleSnap );
-	
-	return;
-
-}
-
-//----------------------------------------------------
-
-void DumpMain(BOOL bIncModules)
-{
-	DWORD *pdwStack;
-	int x=0;
-
-	sprintf_s(szErrorString,
-		"Exception At Address: 0x%08X\r\n\r\n"
-		"Registers:\r\n"
-		"EAX: 0x%08X\tEBX: 0x%08X\tECX: 0x%08X\tEDX: 0x%08X\r\n"
-		"ESI: 0x%08X\tEDI: 0x%08X\tEBP: 0x%08X\tESP: 0x%08X\r\n"
-		"EFS: 0x%p\tEFLAGS: 0x%08X\r\n\r\nStack:\r\n",
-		pContextRecord->Eip,
-		pContextRecord->Eax,
-		pContextRecord->Ebx,
-		pContextRecord->Ecx,
-		pContextRecord->Edx,
-		pContextRecord->Esi,
-		pContextRecord->Edi,
-		pContextRecord->Ebp,
-		pContextRecord->Esp,
-		hInstance,
-		pContextRecord->EFlags);
-
-	// grab the last 40 stack values
-	pdwStack = (DWORD *)pContextRecord->Esp;
-	DumpMemory(reinterpret_cast<BYTE*>(pdwStack), 320, TRUE);
-
-	sprintf_s(szErrorString,"\r\nSCM Op: 0x%X, L: %d, Dump:\r\n", dwScmOpcodeDebug, bScmLocalDebug);
-	DumpMemory(reinterpret_cast<BYTE*>(gst), sizeof(GAME_SCRIPT_THREAD));
-
-	const char *szGameVersion = (iGtaVersion == GTASA_VERSION_USA10) ? "US 1.0" :
-								(iGtaVersion == GTASA_VERSION_EU10) ? "EU 1.0" :
-								"UNKNOWN";
-	sprintf_s(szErrorString, "\r\nGame Version: %s\r\n", szGameVersion);
-
-	if(pNetGame) 
-		DumpNetworkStateInformation();
-
-	if (bIncModules)
-		DumpLoadedModules();
-
-}
-
-//----------------------------------------------------
-
-void DoCrashReportingStuff()
-{
-#ifdef DO_REPORT_STUFF
-	CHttpClient pHttp;
-	char szURL[256];
-	char szBase64[16384];
-
-	DumpMain(TRUE);
-
-	strcpy(szBase64,"data=");
-
-	Util_Base64Encode(szErrorString,&szBase64[5]);
-	
-	sprintf(szURL,"team.sa-mp.com/report_02X_u1.php?addr=0x%X",pContextRecord->Eip);
-	pHttp.ProcessURL(HTTP_POST,szURL,szBase64,"www.sa-mp.com");
-#else
-	DumpMain(TRUE);
-#endif
-	return;
-}
-
-//----------------------------------------------------
-
-BOOL CALLBACK GuiDlgProcMain(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
-{	
-	
-	SetCursor(0);
-	ShowCursor(TRUE);
-
-	switch(uMsg)
-	{
-		case WM_MOUSEMOVE:
-			ShowCursor(TRUE);
-			break;
-
-		case WM_INITDIALOG:		
-
-			DumpMain(FALSE);
-
-			SetDlgItemText(hDlg,IDC_REPORT_OUTPUT,szErrorString);
-			SetForegroundWindow(GetDlgItem(hDlg, IDD_EXCEPTION));
-			SetFocus(GetDlgItem(hDlg,IDCLOSE));
-			break;
-
-		case WM_DESTROY:
-			EndDialog(hDlg,TRUE);
-			//ExitProcess(1);
-			break;
-
-		case WM_COMMAND:
-			switch(LOWORD(wParam))
-			{
-			case IDCLOSE:
-				EndDialog(hDlg,TRUE);
-				//ExitProcess(1);
-				break;
-			case ID_REPORT_CRASH:
-				DoCrashReportingStuff();
-				//EnableWindow(GetDlgItem(hDlg,IDC_BUTTON2),FALSE);
-
-				// TODO: Show it after the crash report was successfully sent.
-				//SetDlgItemText(hDlg,IDC_EDIT1,"Thanks for reporting this problem.");
-				break;
-			}
-			break;
+	} else {
+		for (DWORD i = 0; i < dwCount; i += 16) {
+			fprintf_s(f, "+%04X: %02X %02X %02X %02X  %02X %02X %02X %02X  "
+				"%02X %02X %02X %02X  %02X %02X %02X %02X\n", i,
+				pData[i + 0], pData[i + 1], pData[i + 2], pData[i + 3],
+				pData[i + 4], pData[i + 5], pData[i + 6], pData[i + 7],
+				pData[i + 8], pData[i + 9], pData[i + 10], pData[i + 11],
+				pData[i + 12], pData[i + 13], pData[i + 14], pData[i + 15]);
+			fflush(f);
+		}
 	}
+}
 
+static void DumpMain()
+{
+	SYSTEMTIME t;
+	FILE* f;
+	errno_t err;
+
+	GetLocalTime(&t);
+	t.wYear %= 100;
+	sprintf_s(szCrashInfoFile, "samp-crashinfo-%02d%02d%02d%02d%02d%02d.txt",
+		t.wDay, t.wMonth, t.wYear, t.wHour, t.wMinute, t.wSecond);
+
+	err = fopen_s(&f, szCrashInfoFile, "w");
+	if (err == 0) {
+		DWORD* pdwStack;
+		
+		fprintf_s(f, "SA-MP " SAMP_VERSION " (" __DATE__ " " __TIME__ ")\n"
+			"Exception At Address: 0x%p\n",
+			pExceptionPtrs->ExceptionRecord->ExceptionAddress);
+		fflush(f);
+
+		switch (pExceptionPtrs->ExceptionRecord->ExceptionCode) {
+		case EXCEPTION_ACCESS_VIOLATION:
+			fprintf_s(f, "Exception Code: ACCESS_VIOLATION T: %d A: 0x%08x\n\n",
+				pExceptionPtrs->ExceptionRecord->ExceptionInformation[0],
+				pExceptionPtrs->ExceptionRecord->ExceptionInformation[1]);
+			break;
+		case EXCEPTION_IN_PAGE_ERROR:
+			fprintf_s(f, "Exception Code: IN_PAGE_ERROR T: %d A: 0x%08x NTSTATUS: 0x%08x\n\n",
+				pExceptionPtrs->ExceptionRecord->ExceptionInformation[0],
+				pExceptionPtrs->ExceptionRecord->ExceptionInformation[1],
+				pExceptionPtrs->ExceptionRecord->ExceptionInformation[2]);
+			break;
+		case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
+			fputs("Exception Code: ARRAY_BOUNDS_EXCEEDED\n\n", f);
+			break;
+		case EXCEPTION_BREAKPOINT:
+			fputs("Exception Code: BREAKPOINT\n\n", f);
+			break;
+		case EXCEPTION_DATATYPE_MISALIGNMENT:
+			fputs("Exception Code: DATATYPE_MISALIGNMENT\n\n", f);
+			break;
+		case EXCEPTION_FLT_DENORMAL_OPERAND:
+			fputs("Exception Code: FLT_DENORMAL_OPERAND\n\n", f);
+			break;
+		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
+			fputs("Exception Code: FLT_DIVIDE_BY_ZERO\n\n", f);
+			break;
+		case EXCEPTION_FLT_INEXACT_RESULT:
+			fputs("Exception Code: FLT_INEXACT_RESULT\n\n", f);
+			break;
+		case EXCEPTION_FLT_INVALID_OPERATION:
+			fputs("Exception Code: FLT_INVALID_OPERATION\n\n", f);
+			break;
+		case EXCEPTION_FLT_OVERFLOW:
+			fputs("Exception Code: FLT_OVERFLOW\n\n", f);
+			break;
+		case EXCEPTION_FLT_STACK_CHECK:
+			fputs("Exception Code: FLT_STACK_CHECK\n\n", f);
+			break;
+		case EXCEPTION_FLT_UNDERFLOW:
+			fputs("Exception Code: FLT_UNDERFLOW\n\n", f);
+			break;
+		case EXCEPTION_ILLEGAL_INSTRUCTION:
+			fputs("Exception Code: ILLEGAL_INSTRUCTION\n\n", f);
+			break;
+		case EXCEPTION_INT_DIVIDE_BY_ZERO:
+			fputs("Exception Code: INT_DIVIDE_BY_ZERO\n\n", f);
+			break;
+		case EXCEPTION_INT_OVERFLOW:
+			fputs("Exception Code: INT_OVERFLOW\n\n", f);
+			break;
+		case EXCEPTION_INVALID_DISPOSITION:
+			fputs("Exception Code: INVALID_DISPOSITION\n\n", f);
+			break;
+		case EXCEPTION_NONCONTINUABLE_EXCEPTION:
+			fputs("Exception Code: NONCONTINUABLE_EXCEPTION\n\n", f);
+			break;
+		case EXCEPTION_PRIV_INSTRUCTION:
+			fputs("Exception Code: PRIV_INSTRUCTION\n\n", f);
+			break;
+		case EXCEPTION_SINGLE_STEP:
+			fputs("Exception Code: SINGLE_STEP\n\n", f);
+			break;
+		case EXCEPTION_STACK_OVERFLOW:
+			fputs("Exception Code: STACK_OVERFLOW\n\n", f);
+			break;
+		case DBG_CONTROL_C:
+			fputs("Exception Code: DBG_CONTROL_C\n\n", f);
+			break;
+		}
+		fflush(f);
+
+		fprintf_s(f, "Registers:\n"
+			"EAX: 0x%08X\tEBX: 0x%08X\tECX: 0x%08X\tEDX: 0x%08X\n"
+			"ESI: 0x%08X\tEDI: 0x%08X\tEBP: 0x%08X\tESP: 0x%08X\n"
+			"EIP: 0x%08X\tEFS: 0x%p\tEFLAGS: 0x%08X\n\nStack:\n",
+			pExceptionPtrs->ContextRecord->Eax, pExceptionPtrs->ContextRecord->Ebx,
+			pExceptionPtrs->ContextRecord->Ecx, pExceptionPtrs->ContextRecord->Edx,
+			pExceptionPtrs->ContextRecord->Esi, pExceptionPtrs->ContextRecord->Edi,
+			pExceptionPtrs->ContextRecord->Ebp, pExceptionPtrs->ContextRecord->Esp,
+			pExceptionPtrs->ContextRecord->Eip, hInstance,
+			pExceptionPtrs->ContextRecord->EFlags);
+		fflush(f);
+
+		pdwStack = (DWORD*)pExceptionPtrs->ContextRecord->Esp;
+		DumpMemory(f, reinterpret_cast<BYTE*>(pdwStack), 320, TRUE);
+
+		fprintf_s(f, "\nSCM Op: 0x%X, L: %d, Dump:\n", dwScmOpcodeDebug, bScmLocalDebug);
+		if (gst)
+			DumpMemory(f, reinterpret_cast<BYTE*>(gst), sizeof(GAME_SCRIPT_THREAD));
+		else
+			fputs("-Not initialized-\n", f);
+		fflush(f);
+
+		if(iGtaVersion == GTASA_VERSION_USA10)
+			fputs("\nGame Version: US 1.0\n", f);
+		else if (iGtaVersion == GTASA_VERSION_USA10)
+			fputs("\nGame Version: EU 1.0\n", f);
+		else
+			fputs("\nGame Version: UNKNOWN\n", f);
+		fflush(f);
+
+		DumpLoadedModules(f);
+
+		fclose(f);
+	}
+}
+
+static void SetDlgItemTextFromFile(HWND hDlg)
+{
+	HANDLE hFile = CreateFileA(szCrashInfoFile, GENERIC_READ,
+		FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	if (hFile != INVALID_HANDLE_VALUE) {
+		DWORD dwSize = GetFileSize(hFile, NULL);
+		if (dwSize != INVALID_FILE_SIZE) {
+			char* szOutput = (char*)malloc(dwSize + 1);
+			if (szOutput != NULL) {
+				if (ReadFile(hFile, szOutput, dwSize, NULL, NULL) == TRUE) {
+					szOutput[dwSize] = '\0';
+					SetDlgItemText(hDlg, IDC_REPORT_OUTPUT, szOutput);
+				}
+				free(szOutput);
+			}
+		}
+		CloseHandle(hFile);
+	}
+}
+
+static INT_PTR CALLBACK GuiDlgProcMain(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg) {
+	case WM_MOUSEMOVE:
+		ShowCursor(TRUE);
+		break;
+	case WM_INITDIALOG:
+		SetCursor(LoadCursorA(NULL, IDC_ARROW));
+		ShowCursor(TRUE);
+
+		DumpMain();
+
+		SetDlgItemTextFromFile(hDlg);
+		SetForegroundWindow(GetDlgItem(hDlg, IDD_EXCEPTION));
+		SetFocus(GetDlgItem(hDlg, IDCLOSE));
+		break;
+	case WM_DESTROY:
+		EndDialog(hDlg, TRUE);
+		break;
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case IDCLOSE:
+			EndDialog(hDlg, TRUE);
+			break;
+		}
+		break;
+	}
 	return FALSE;
 }
 
-//----------------------------------------------------
-
 LONG WINAPI exc_handler(_EXCEPTION_POINTERS* exc_inf)
 {
-	pContextRecord = exc_inf->ContextRecord;
-	
-	ShowWindow(pGame->GetMainWindowHwnd(), SW_MINIMIZE);
-	DialogBox((HINSTANCE)hInstance, MAKEINTRESOURCE(IDD_EXCEPTION), pGame->GetMainWindowHwnd(), (DLGPROC)GuiDlgProcMain);
+	pExceptionPtrs = exc_inf;
 
-//#ifdef _DEBUG
+	if (pGame) {
+		HWND hwnd = pGame->GetMainWindowHwnd();
+		ShowWindow(hwnd, SW_MINIMIZE);
+		DialogBoxA(hInstance, MAKEINTRESOURCE(IDD_EXCEPTION), hwnd, GuiDlgProcMain);
+	} else {
+		DumpMain();
+	}
 	return EXCEPTION_CONTINUE_SEARCH;
-//#else
-	//return EXCEPTION_EXECUTE_HANDLER;
-//#endif
 }
-
-//----------------------------------------------------
