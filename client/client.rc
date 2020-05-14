@@ -31,7 +31,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "Report Crash",ID_REPORT_CRASH,138,160,65,15
     PUSHBUTTON      "Close",IDCLOSE,208,160,65,15
-    EDITTEXT        IDC_REPORT_OUTPUT,7,44,266,110,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL
+    EDITTEXT        IDC_REPORT_OUTPUT,7,44,266,110,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
     LTEXT           "SA:MP has crashed. The error report has been generated below.\r\n\r\nUsing the 'Report Crash' button will submit a crash report\r\nthat will help us to fix this problem in future versions.",IDC_INFO_TEXT,7,7,240,35
 END
 
