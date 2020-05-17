@@ -138,6 +138,7 @@ object fmMain: TfmMain
     ParentColor = False
     ParentFont = False
     TabOrder = 1
+    Transparent = True
     Wrapable = False
     OnResize = tbMainResize
     object tbConnect: TToolButton
@@ -274,22 +275,17 @@ object fmMain: TfmMain
       ShowHint = True
     end
   end
-  object Splitter1: TSplitter
-    Left = 0
-    Height = 529
-    Top = 28
-    Width = 5
-  end
   object imLogo: TImage
     Cursor = crHandPoint
     Left = 783
     Height = 26
-    Top = 2
+    Top = 0
     Width = 57
     Anchors = []
     AutoSize = True
     Center = True
     OnClick = imLogoClick
+    ParentShowHint = False
     Picture.Data = {
       07544269746D61704E0A0000424D4E0A00000000000036040000280000003900
       00001A0000000100080000000000180600000000000000000000000100000001

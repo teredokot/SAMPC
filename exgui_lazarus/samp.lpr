@@ -14,6 +14,7 @@ uses
 
 begin
   RequireDerivedFormResource:=True;
+  Application.Title:='San Andreas Multiplayer';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TfmMain, fmMain);

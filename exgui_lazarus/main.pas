@@ -47,7 +47,6 @@ type
     pnLine: TPanel;
     pnBreakable: TPanel;
     sbMain: TStatusBar;
-    Splitter1: TSplitter;
     tbMain: TToolBar;
     tbConnect: TToolButton;
     tbCopyServerInfo: TToolButton;
