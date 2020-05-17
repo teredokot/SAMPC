@@ -40,3 +40,7 @@ Release/
 
 # That stupid settings.ini from Pawno
 pawno/settings.ini
+
+# Lazarus generated files from exgui (Server browser and mod launcher)
+exgui_lazarus/backup/
+exgui_lazarus/lib/
