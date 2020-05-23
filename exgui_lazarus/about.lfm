@@ -1,0 +1,21 @@
+object fmAbout: TfmAbout
+  Left = 604
+  Height = 240
+  Top = 109
+  Width = 320
+  BorderIcons = []
+  BorderStyle = bsNone
+  Caption = 'About SA-MP'
+  Color = clGray
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Arial'
+  Font.Style = [fsBold]
+  OnClick = FormClick
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '2.0.6.0'
+end

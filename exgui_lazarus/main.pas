@@ -6,17 +6,31 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
-  ExtCtrls, StdCtrls, TAGraph;
+  ExtCtrls, StdCtrls, ValEdit, Grids, TAGraph, Types;
 
 type
 
   { TfmMain }
 
   TfmMain = class(TForm)
+    cbFilterEmpty: TCheckBox;
+    cbFilterPassworded: TCheckBox;
+    cbFilterFull: TCheckBox;
+    edSIPing: TLabeledEdit;
+    edSIMap: TLabeledEdit;
+    edSIMode: TLabeledEdit;
+    edSIPlayers: TLabeledEdit;
     gbFilter: TGroupBox;
+    gbInfo: TGroupBox;
     ilMain: TImageList;
-    edFilterMode: TLabeledEdit;
     imLogo: TImage;
+    edFilterMode: TLabeledEdit;
+    edFilterMap: TLabeledEdit;
+    edSIAddress: TLabeledEdit;
+    lebName: TLabeledEdit;
+    lvServers: TListView;
+    lvPlayers: TListView;
+    lvRules: TListView;
     N5: TMenuItem;
     miFile: TMenuItem;
     miQuickConnect: TMenuItem;
@@ -43,10 +57,15 @@ type
     miConnect: TMenuItem;
     N1: TMenuItem;
     mmMain: TMainMenu;
-    pnRight: TPanel;
+    Panel1: TPanel;
+    pURL: TPanel;
     pnLine: TPanel;
     pnBreakable: TPanel;
+    //pnLine: TPanel;
     sbMain: TStatusBar;
+    Splitter1: TSplitter;
+    Splitter2: TSplitter;
+    tsServerLists: TTabControl;
     tbMain: TToolBar;
     tbConnect: TToolButton;
     tbCopyServerInfo: TToolButton;
@@ -69,22 +88,30 @@ type
     procedure ConnectClick(Sender: TObject);
     procedure CopyServerInfoClick(Sender: TObject);
     procedure DeleteServerClick(Sender: TObject);
+    procedure edFilterModeClick(Sender: TObject);
     procedure ExitClick(Sender: TObject);
     procedure ExportFavoritesClick(Sender: TObject);
+    procedure FilterChange(Sender: TObject);
     procedure GroupBox1Click(Sender: TObject);
     procedure imLogoClick(Sender: TObject);
     procedure ImportFavoritesClick(Sender: TObject);
+    procedure lbServersContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
     procedure MasterServerUpdateClick(Sender: TObject);
     procedure miViewClick(Sender: TObject);
     procedure Panel1Click(Sender: TObject);
+    procedure pnBreakableResize(Sender: TObject);
     procedure QuickConnectClick(Sender: TObject);
     procedure RefreshServerClick(Sender: TObject);
     procedure ServerPropertiesClick(Sender: TObject);
     procedure SettingsClick(Sender: TObject);
+    procedure Splitter1CanOffset(Sender: TObject; var NewOffset: Integer;
+      var Accept: Boolean);
     procedure tbMainClick(Sender: TObject);
     procedure tbMainResize(Sender: TObject);
     procedure ToggleFilterServerInfo(Sender: TObject);
     procedure ToggleStatusBar(Sender: TObject);
+    procedure tsServerListsChange(Sender: TObject);
   private
 
   public
@@ -105,6 +132,12 @@ begin
 
 end;
 
+procedure TfmMain.lbServersContextPopup(Sender: TObject; MousePos: TPoint;
+  var Handled: Boolean);
+begin
+
+end;
+
 procedure TfmMain.MasterServerUpdateClick(Sender: TObject);
 begin
 
@@ -116,6 +149,11 @@ begin
 end;
 
 procedure TfmMain.Panel1Click(Sender: TObject);
+begin
+
+end;
+
+procedure TfmMain.pnBreakableResize(Sender: TObject);
 begin
 
 end;
@@ -140,6 +178,12 @@ begin
 
 end;
 
+procedure TfmMain.Splitter1CanOffset(Sender: TObject; var NewOffset: Integer;
+  var Accept: Boolean);
+begin
+
+end;
+
 procedure TfmMain.tbMainClick(Sender: TObject);
 begin
 
@@ -160,7 +204,17 @@ begin
 
 end;
 
+procedure TfmMain.tsServerListsChange(Sender: TObject);
+begin
+
+end;
+
 procedure TfmMain.ExportFavoritesClick(Sender: TObject);
+begin
+
+end;
+
+procedure TfmMain.FilterChange(Sender: TObject);
 begin
 
 end;
@@ -191,6 +245,11 @@ begin
 end;
 
 procedure TfmMain.DeleteServerClick(Sender: TObject);
+begin
+
+end;
+
+procedure TfmMain.edFilterModeClick(Sender: TObject);
 begin
 
 end;
