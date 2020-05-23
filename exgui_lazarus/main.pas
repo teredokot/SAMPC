@@ -16,6 +16,7 @@ type
     cbFilterEmpty: TCheckBox;
     cbFilterPassworded: TCheckBox;
     cbFilterFull: TCheckBox;
+    chSIPingChart: TChart;
     edSIPing: TLabeledEdit;
     edSIMap: TLabeledEdit;
     edSIMode: TLabeledEdit;
