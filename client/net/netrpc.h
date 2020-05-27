@@ -12,6 +12,6 @@
 //----------------------------------------------------
 
 void RegisterRPCs(RakClientInterface *);
-void UnRegisterRPCs(RakClientInterface *);
+//void UnRegisterRPCs(RakClientInterface *);
 
 //----------------------------------------------------

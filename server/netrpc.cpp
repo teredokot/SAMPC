@@ -829,7 +829,7 @@ void RegisterRPCs(RakServerInterface * pRakServer)
 
 //----------------------------------------------------
 
-void UnRegisterRPCs(RakServerInterface * pRakServer)
+/*void UnRegisterRPCs(RakServerInterface * pRakServer)
 {
 	pRak = 0;
 
@@ -854,6 +854,6 @@ void UnRegisterRPCs(RakServerInterface * pRakServer)
 	UNREGISTER_STATIC_RPC(pRakServer, MenuQuit);
 	UNREGISTER_STATIC_RPC(pRakServer, TypingEvent);
 
-}
+}*/
 
 //----------------------------------------------------

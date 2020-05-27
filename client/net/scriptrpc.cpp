@@ -1651,7 +1651,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 
 //----------------------------------------------------
 
-void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
+/*void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 {
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetSpawnInfo); // 32
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetPlayerTeam);
@@ -1729,6 +1729,6 @@ void UnRegisterScriptRPCs(RakClientInterface* pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrVehicleComponent);
 	UNREGISTER_STATIC_RPC(pRakClient, ScrSetGameSpeed);
-}
+}*/
 
 //----------------------------------------------------

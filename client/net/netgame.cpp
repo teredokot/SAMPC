@@ -104,8 +104,8 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 CNetGame::~CNetGame()
 {
 	m_pRakClient->Disconnect(0);
-	UnRegisterRPCs(m_pRakClient);
-	UnRegisterScriptRPCs(m_pRakClient);	// Unregister server-side scripting RPCs.
+	//UnRegisterRPCs(m_pRakClient);
+	//UnRegisterScriptRPCs(m_pRakClient);	// Unregister server-side scripting RPCs.
 	SAFE_DELETE(m_pRakClient);
 	SAFE_DELETE(m_pPlayerPool);
 	SAFE_DELETE(m_pVehiclePool);

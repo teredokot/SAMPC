@@ -792,7 +792,7 @@ void RegisterRPCs(RakClientInterface * pRakClient)
 
 //----------------------------------------------------
 
-void UnRegisterRPCs(RakClientInterface * pRakClient)
+/*void UnRegisterRPCs(RakClientInterface * pRakClient)
 {
 	UNREGISTER_STATIC_RPC(pRakClient,ServerJoin);
 	UNREGISTER_STATIC_RPC(pRakClient,ServerQuit);
@@ -825,6 +825,6 @@ void UnRegisterRPCs(RakClientInterface * pRakClient)
 	UNREGISTER_STATIC_RPC(pRakClient,SetTimeEx);
 	UNREGISTER_STATIC_RPC(pRakClient,ToggleClock);
 	UNREGISTER_STATIC_RPC(pRakClient,ACServerProtected);
-}
+}*/
 
 //----------------------------------------------------

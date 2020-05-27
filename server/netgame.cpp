@@ -213,9 +213,6 @@ CNetGame::~CNetGame()
 	SAFE_DELETE(m_pMenuPool);
 	SAFE_DELETE(m_pTextPool);
 	SAFE_DELETE(m_pGangZonePool);
-	
-	m_pRak->Disconnect(100);
-	UnRegisterRPCs(m_pRak);
 
 	//if (IsACEnabled())
 	//	CAntiCheat::Shutdown(this);
