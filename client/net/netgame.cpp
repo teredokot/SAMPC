@@ -78,9 +78,9 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_byteWeather	= 10;
 	m_fGravity = (float)0.008000000;
 	m_iDeathDropMoney = 0;
-	m_bLanMode = FALSE;
+	m_bLanMode = false;
 	m_byteHoldTime = 1;
-	m_bUseCJWalk = FALSE;
+	m_bUseCJWalk = false;
 	m_bDisableEnterExits = false;
 	m_fNameTagDrawDistance = 70.0f;
 	m_bNameTagLOS = true;
@@ -91,8 +91,8 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_byteFriendlyFire = 1;
 	pGame->EnableClock(0); // Hide the clock by default
 	pGame->EnableZoneNames(0);
-	m_bZoneNames = FALSE;
-	m_bInstagib = FALSE;
+	m_bZoneNames = false;
+	m_bInstagib = false;
 	m_iCheckLoadedStuff = 0;
 
 	if(pChatWindow) pChatWindow->AddDebugMessage("SA:MP " SAMP_VERSION " Initialized");
@@ -124,7 +124,7 @@ void CNetGame::ShutdownForGameModeRestart()
 	m_byteWorldMinute = 0;
 	m_byteWeather	= 10;
 	m_byteHoldTime = 1;
-	m_bUseCJWalk = FALSE;
+	m_bUseCJWalk = false;
 	m_fGravity = (float)0.008000000;
 	m_iDeathDropMoney = 0;
 	pGame->SetGravity(m_fGravity);
@@ -142,7 +142,7 @@ void CNetGame::ShutdownForGameModeRestart()
 		}
 	}
 	m_pPlayerPool->GetLocalPlayer()->ResetAllSyncAttributes();
-	m_pPlayerPool->GetLocalPlayer()->ToggleSpectating(FALSE);
+	m_pPlayerPool->GetLocalPlayer()->ToggleSpectating(false);
 	m_pPlayerPool->GetLocalPlayer()->SetVirtualWorld(0);
 	m_iGameState = GAMESTATE_RESTARTING;
 
@@ -165,14 +165,14 @@ void CNetGame::ShutdownForGameModeRestart()
 		pDeathWindow->ClearWindow();
 
 	ResetMapIcons();
-	pGame->ToggleCheckpoints(FALSE);
-	pGame->ToggleRaceCheckpoints(FALSE);
+	pGame->ToggleCheckpoints(false);
+	pGame->ToggleRaceCheckpoints(false);
 	pGame->FindPlayerPed()->SetInterior(0);
 	pGame->ResetLocalMoney();
 	pGame->FindPlayerPed()->SetDead();
 	pGame->FindPlayerPed()->SetArmour(0.0f);
 	pGame->EnableZoneNames(0);
-	m_bZoneNames = FALSE;
+	m_bZoneNames = false;
 	
 	GameResetRadarColors();
 }
@@ -301,7 +301,7 @@ void CNetGame::Process()
 		pGame->GetCamera()->SetPosition(1497.803f,-887.0979f,62.56055f,0.0f,0.0f,0.0f);
 		pGame->GetCamera()->LookAtPoint(1406.65f,-795.7716f,82.2771f,2);
 		pGame->FindPlayerPed()->TogglePlayerControllable(0);
-		pGame->DisplayHud(FALSE);
+		pGame->DisplayHud(false);
 	}
 
 	if( GetGameState() == GAMESTATE_WAIT_CONNECT && 
@@ -753,7 +753,7 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 	bsSend.Write(uiVersionLen);
 	bsSend.Write(SAMP_VERSION, uiVersionLen);
 
-	m_pRakClient->RPC(RPC_ClientJoin,&bsSend,HIGH_PRIORITY,RELIABLE,0,FALSE);
+	m_pRakClient->RPC(RPC_ClientJoin,&bsSend,HIGH_PRIORITY,RELIABLE,0,false);
 }
 
 //----------------------------------------------------
@@ -765,7 +765,7 @@ void CNetGame::UpdatePlayerScoresAndPings()
 	if ((GetTickCount() - dwLastUpdateTick) > 3000) {
 		dwLastUpdateTick = GetTickCount();
 		RakNet::BitStream bsParams;
-		m_pRakClient->RPC(RPC_UpdateScoresPingsIPs, &bsParams, HIGH_PRIORITY, RELIABLE, 0, FALSE);
+		m_pRakClient->RPC(RPC_UpdateScoresPingsIPs, &bsParams, HIGH_PRIORITY, RELIABLE, 0, false);
 	}
 }
 

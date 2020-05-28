@@ -74,7 +74,7 @@ void CScriptTimers::DeleteForMode(AMX* pEndedAMX)
 
 //----------------------------------------------------------------------------------
 
-DWORD CScriptTimers::New(char* szScriptFunc, int iInterval, BOOL bRepeating, AMX* pAMX)
+DWORD CScriptTimers::New(char* szScriptFunc, int iInterval, bool bRepeating, AMX* pAMX)
 {
 	m_dwTimerCount++;
 
@@ -108,7 +108,7 @@ DWORD CScriptTimers::New(char* szScriptFunc, int iInterval, BOOL bRepeating, AMX
 //----------------------------------------------------------------------------------
 // Same as new only with parameters to be passed to the called function
 cell* get_amxaddr(AMX *amx, cell amx_addr);
-DWORD CScriptTimers::NewEx(char* szScriptFunc, int iInterval, BOOL bRepeating, cell *params, AMX* pAMX)
+DWORD CScriptTimers::NewEx(char* szScriptFunc, int iInterval, bool bRepeating, cell *params, AMX* pAMX)
 {
 	m_dwTimerCount++;
 

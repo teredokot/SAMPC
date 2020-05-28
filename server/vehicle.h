@@ -37,8 +37,8 @@ public:
 	VEHICLEID				m_CabID;
 	BYTE					m_byteDriverID;
 	BYTE					m_bytePassengers[7];
-	BOOL					m_bIsActive;
-	BOOL					m_bIsWasted;
+	bool					m_bIsActive;
+	bool					m_bIsWasted;
 	VEHICLE_SPAWN_INFO		m_SpawnInfo;
 	MATRIX4X4				m_matWorld;
 	VECTOR					m_vecMoveSpeed;
@@ -63,8 +63,8 @@ public:
 	CVehicle(int iModel,VECTOR *vecPos,float fRotation,int iColor1,int iColor2, int iRespawnTime);
 	~CVehicle(){};
 
-	BOOL IsActive() { return m_bIsActive; };
-	BOOL IsWasted() { return m_bIsWasted; };
+	bool IsActive() { return m_bIsActive; };
+	bool IsWasted() { return m_bIsWasted; };
 
 	void SetID(VEHICLEID VehicleID) { m_VehicleID = VehicleID; };
 	void SetCab(VEHICLEID VehicleID) { m_CabID = VehicleID; };
@@ -77,7 +77,7 @@ public:
 	void SetNumberPlate(PCHAR Plate);
 	void CheckForIdleRespawn();
 	void Respawn();
-	BOOL IsOccupied();
+	bool IsOccupied();
 	bool IsATrainPart();
 
 	void Update(BYTE bytePlayerID, MATRIX4X4 * matWorld, float fHealth, VEHICLEID TrailerID);

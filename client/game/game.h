@@ -48,7 +48,7 @@ private:
 
 	VECTOR			m_vecCheckpointPos;
 	VECTOR			m_vecCheckpointExtent;
-	BOOL			m_bCheckpointsEnabled;
+	bool			m_bCheckpointsEnabled;
 	DWORD			m_dwCheckpointMarker;
 
 	VECTOR			m_vecRaceCheckpointPos;
@@ -56,7 +56,7 @@ private:
 	//VECTOR			m_vecRaceCheckpointExtent;
 	float			m_fRaceCheckpointSize;
 	BYTE			m_byteRaceType;
-	BOOL			m_bRaceCheckpointsEnabled;
+	bool			m_bRaceCheckpointsEnabled;
 	DWORD			m_dwRaceCheckpointMarker;
 	DWORD			m_dwRaceCheckpointHandle;
 
@@ -66,24 +66,24 @@ public:
 	CVehicle *NewVehicle(int iType,float fPosX,float fPosY,float fPosZ,float fRotation, PCHAR szNumberPlate);
 	CObject *NewObject(int iModel, float fPosX, float fPosY,float fPosZ, VECTOR vecRot);
 	int		GetWeaponModelIDFromWeapon(int iWeaponID);
-	BOOL	IsKeyPressed(int iKeyIdentifier);
+	bool	IsKeyPressed(int iKeyIdentifier);
 	float	FindGroundZForCoord(float x, float y, float z);
-	void	ToggleKeyInputsDisabled(BOOL bDisable);
+	void	ToggleKeyInputsDisabled(bool bDisable);
 	void	StartGame();
 	void	InitGame();
-	BOOL	IsMenuActive();
-	BOOL	IsGameLoaded();
+	bool	IsMenuActive();
+	bool	IsGameLoaded();
 	void	RequestModel(int iModelID);
 	void	LoadRequestedModels();
-	BOOL	IsModelLoaded(int iModelID);
+	bool	IsModelLoaded(int iModelID);
 	void    RemoveModel(int iModelID);
 	void	SetWorldTime(int iHour, int iMinute);
 	void	GetWorldTime(int* iHour, int* iMinute);
 	void	ToggleThePassingOfTime(BYTE byteOnOff);
 	void	SetWorldWeather(int iWeatherID);
-	void	DisplayHud(BOOL bDisp);
+	void	DisplayHud(bool bDisp);
 	BYTE	IsHudEnabled();
-	void	SetFrameLimiterOn(BOOL bLimiter);
+	void	SetFrameLimiterOn(bool bLimiter);
 	void	SetMaxStats();
 	void	DisableTrainTraffic();
 	void	RefreshStreamingAt(float x, float y);
@@ -102,12 +102,12 @@ public:
 	void    EnableStuntBonus(bool bEnable);
 	void	SetDrunkLevel(float fLevel);
 	void   UpdateCheckpoints();
-	void   ToggleCheckpoints(BOOL bEnabled){ m_bCheckpointsEnabled = bEnabled; };
+	void   ToggleCheckpoints(bool bEnabled){ m_bCheckpointsEnabled = bEnabled; };
 	void   SetCheckpointInformation(VECTOR *pos, VECTOR *extent);
 	
 	void	MakeRaceCheckpoint();
 	void	DisableRaceCheckpoint();
-	void   ToggleRaceCheckpoints(BOOL bEnabled){ m_bRaceCheckpointsEnabled = bEnabled; };
+	void   ToggleRaceCheckpoints(bool bEnabled){ m_bRaceCheckpointsEnabled = bEnabled; };
 	void   SetRaceCheckpointInformation(BYTE byteType, VECTOR *pos, VECTOR *next, float fSize);
 	
 	DWORD	CreateRadarMarkerIcon(int iMarkerType, float fX, float fY, float fZ, int iColor = 201);

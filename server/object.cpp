@@ -29,7 +29,7 @@ CObject::CObject(int iModel, VECTOR * vecPos, VECTOR * vecRot)
 
 	m_iModel = iModel;
 
-	m_bIsActive = TRUE;
+	m_bIsActive = true;
 }
 
 //----------------------------------------------------

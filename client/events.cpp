@@ -18,7 +18,7 @@ void SendScmEvent(int iEventType, DWORD dwParam1, DWORD dwParam2, DWORD dwParam3
 
 //DWORD dwStack;
 
-extern BOOL bFirstSpawn;
+extern bool bFirstSpawn;
 
 //----------------------------------------------------------
 

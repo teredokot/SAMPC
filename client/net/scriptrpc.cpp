@@ -872,7 +872,7 @@ void ScrTogglePlayerSpectating(RPCParameters *rpcParams)
 {
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 	RakNet::BitStream bsData(rpcParams);
-	BOOL bToggle;
+	bool bToggle;
 	bsData.Read(bToggle);
 	pPlayerPool->GetLocalPlayer()->ToggleSpectating(bToggle);
 }
@@ -1029,7 +1029,7 @@ void ScrInitMenu(RPCParameters *rpcParams)
 	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
 
 	BYTE byteMenuID;
-	BOOL bColumns; // 0 = 1, 1 = 2
+	bool bColumns; // 0 = 1, 1 = 2
 	CHAR cText[MAX_MENU_LINE];
 	float fX;
 	float fY;

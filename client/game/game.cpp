@@ -14,12 +14,12 @@
 #include "aimstuff.h"
 
 void GameInstallHooks();
-BOOL ApplyPreGamePatches();
+bool ApplyPreGamePatches();
 void ApplyInGamePatches();
 
 //char *szGameTextMessage;
 
-static BOOL bInputsDisabled = FALSE;
+static bool bInputsDisabled = false;
 static int iInputDisableWaitFrames=0;
 
 typedef void (*DrawZone_t)(float *fPos, DWORD *dwColor, BYTE byteMenu);
@@ -34,8 +34,8 @@ CGame::CGame()
 
 	m_pGameCamera = new CCamera();
 	m_pGamePlayer = NULL;
-	m_bCheckpointsEnabled = FALSE;
-	m_bRaceCheckpointsEnabled = FALSE;
+	m_bCheckpointsEnabled = false;
+	m_bRaceCheckpointsEnabled = false;
 	m_dwRaceCheckpointHandle = NULL;
 }
 
@@ -75,13 +75,13 @@ int CGame::GetWeaponModelIDFromWeapon(int iWeaponID)
 
 //-----------------------------------------------------------
 
-BOOL CGame::IsKeyPressed(int iKeyIdentifier)
+bool CGame::IsKeyPressed(int iKeyIdentifier)
 {
 	GTA_CONTROLSET * pControlSet = GameGetInternalKeys();
 
-	if(pControlSet->wKeys1[iKeyIdentifier]) return TRUE;
+	if(pControlSet->wKeys1[iKeyIdentifier]) return true;
 
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -116,12 +116,12 @@ void CGame::ProcessInputDisabling()
 
 //-----------------------------------------------------------
 
-void CGame::ToggleKeyInputsDisabled(BOOL bDisable)
+void CGame::ToggleKeyInputsDisabled(bool bDisable)
 {
 	if(bDisable) {
-		bInputsDisabled = TRUE;
+		bInputsDisabled = true;
 	} else {
-		bInputsDisabled = FALSE;
+		bInputsDisabled = false;
 		iInputDisableWaitFrames = 2;
 	}
 }
@@ -174,19 +174,19 @@ void CGame::StartGame()
 
 //-----------------------------------------------------------
 
-BOOL CGame::IsMenuActive()
+bool CGame::IsMenuActive()
 {
-	if(*(PDWORD)ADDR_MENU) return TRUE;
-	return FALSE;
+	if(*(PDWORD)ADDR_MENU) return true;
+	return false;
 }
 
 //-----------------------------------------------------------
 // Return TRUE if the world has been loaded.
 
-BOOL CGame::IsGameLoaded()
+bool CGame::IsGameLoaded()
 {
-	if(!(*(PBYTE)ADDR_GAME_STARTED)) return TRUE;
-	return FALSE;
+	if(!(*(PBYTE)ADDR_GAME_STARTED)) return true;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -218,7 +218,7 @@ void CGame::LoadRequestedModels()
 
 //-----------------------------------------------------------
 
-BOOL CGame::IsModelLoaded(int iModelID)
+bool CGame::IsModelLoaded(int iModelID)
 {
 	return ScriptCommand(&is_model_available,iModelID);
 }
@@ -277,7 +277,7 @@ void CGame::SetWorldWeather(int iWeatherID)
 
 //-----------------------------------------------------------
 
-void CGame::DisplayHud(BOOL bDisp)
+void CGame::DisplayHud(bool bDisp)
 {
 	if(bDisp) {
 		*(BYTE*)ADDR_ENABLE_HUD = 1;
@@ -296,7 +296,7 @@ BYTE CGame::IsHudEnabled()
 
 //-----------------------------------------------------------
 
-void CGame::SetFrameLimiterOn(BOOL bLimiter)
+void CGame::SetFrameLimiterOn(bool bLimiter)
 {
 
 }

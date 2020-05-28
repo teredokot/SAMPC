@@ -55,8 +55,8 @@ CPlayer::CPlayer()
 	m_byteUpdateFromNetwork = UPDATE_TYPE_NONE;
 	m_bytePlayerID = INVALID_PLAYER_ID;
 	m_VehicleID = 0;
-	m_bHasAimUpdates = FALSE;
-	m_bHasTrailerUpdates = FALSE;
+	m_bHasAimUpdates = false;
+	m_bHasTrailerUpdates = false;
 	m_byteState = PLAYER_STATE_NONE;
 	m_dwColor = 0;
 	m_wLastKeys = 0;
@@ -73,8 +73,8 @@ CPlayer::CPlayer()
 	m_bCanTeleport = false;
 	//byteCurWeap = 0;
 
-	m_bCheckpointEnabled = FALSE;
-	m_bRaceCheckpointEnabled = FALSE;
+	m_bCheckpointEnabled = false;
+	m_bRaceCheckpointEnabled = false;
 	m_iInteriorId = 0;
 	m_byteSpectateType = 0;
 	m_SpectateID = 0xFFFFFFFF;
@@ -132,7 +132,7 @@ void CPlayer::UpdatePosition(float x, float y, float z)
 		if((float)sqrt(fSX + fSY + fSZ) < m_fCheckpointSize)
 		{
 			if(!m_bInCheckpoint) {
-				m_bInCheckpoint = TRUE;
+				m_bInCheckpoint = true;
 				pNetGame->GetFilterScripts()->OnPlayerEnterCheckpoint((cell)m_bytePlayerID);
 				CGameMode *pGameMode = pNetGame->GetGameMode();
 				if(pGameMode) pGameMode->OnPlayerEnterCheckpoint((cell)m_bytePlayerID);
@@ -140,7 +140,7 @@ void CPlayer::UpdatePosition(float x, float y, float z)
 		} 
 		else {
 			if(m_bInCheckpoint) {
-				m_bInCheckpoint = FALSE;
+				m_bInCheckpoint = false;
 				pNetGame->GetFilterScripts()->OnPlayerLeaveCheckpoint((cell)m_bytePlayerID);
 				CGameMode *pGameMode = pNetGame->GetGameMode();
 				if(pGameMode) pGameMode->OnPlayerLeaveCheckpoint((cell)m_bytePlayerID);
@@ -157,7 +157,7 @@ void CPlayer::UpdatePosition(float x, float y, float z)
 		if((float)sqrt(fSX + fSY + fSZ) < m_fRaceCheckpointSize)
 		{
 			if(!m_bInRaceCheckpoint) {
-				m_bInRaceCheckpoint = TRUE;
+				m_bInRaceCheckpoint = true;
 				pNetGame->GetFilterScripts()->OnPlayerEnterRaceCheckpoint((cell)m_bytePlayerID);
 				CGameMode *pGameMode = pNetGame->GetGameMode();
 				if(pGameMode) pGameMode->OnPlayerEnterRaceCheckpoint((cell)m_bytePlayerID);
@@ -165,7 +165,7 @@ void CPlayer::UpdatePosition(float x, float y, float z)
 		} 
 		else {
 			if(m_bInRaceCheckpoint) {
-				m_bInRaceCheckpoint = FALSE;
+				m_bInRaceCheckpoint = false;
 				pNetGame->GetFilterScripts()->OnPlayerLeaveRaceCheckpoint((cell)m_bytePlayerID);
 				CGameMode *pGameMode = pNetGame->GetGameMode();
 				if(pGameMode) pGameMode->OnPlayerLeaveRaceCheckpoint((cell)m_bytePlayerID);
@@ -436,8 +436,8 @@ void CPlayer::BroadcastSyncData()
 		bsSync.Write((BYTE)ID_AIM_SYNC);
 		bsSync.Write(m_bytePlayerID);
 		bsSync.Write((PCHAR)&m_aimSync,sizeof(AIM_SYNC_DATA));
-		pNetGame->BroadcastData(&bsSync, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, m_bytePlayerID, TRUE, TRUE);
-		m_bHasAimUpdates = FALSE;
+		pNetGame->BroadcastData(&bsSync, HIGH_PRIORITY, UNRELIABLE_SEQUENCED, 0, m_bytePlayerID, true, true);
+		m_bHasAimUpdates = false;
 	}
 	
 	// TODO: This piece never gets called. Maybe find out why?
@@ -446,8 +446,8 @@ void CPlayer::BroadcastSyncData()
 		bsSync.Write((BYTE)ID_TRAILER_SYNC);
 		bsSync.Write(m_bytePlayerID);
 		bsSync.Write((PCHAR)&m_trSync, sizeof (TRAILER_SYNC_DATA));
-		pNetGame->BroadcastData(&bsSync, HIGH_PRIORITY,UNRELIABLE_SEQUENCED, 0, m_bytePlayerID, TRUE);
-		m_bHasTrailerUpdates = FALSE;
+		pNetGame->BroadcastData(&bsSync, HIGH_PRIORITY,UNRELIABLE_SEQUENCED, 0, m_bytePlayerID, true);
+		m_bHasTrailerUpdates = false;
 	}
 		
 }
@@ -587,7 +587,7 @@ void CPlayer::StoreOnFootFullSyncData(ONFOOT_SYNC_DATA *pofSync)
 void CPlayer::StoreAimSyncData(AIM_SYNC_DATA *paimSync)
 {
 	memcpy(&m_aimSync,paimSync,sizeof(AIM_SYNC_DATA));
-	m_bHasAimUpdates = TRUE;
+	m_bHasAimUpdates = true;
 }
 
 //----------------------------------------------------
@@ -807,7 +807,7 @@ void CPlayer::HandleDeath(BYTE byteReason, BYTE byteWhoWasResponsible)
 void CPlayer::SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn)
 {
 	memcpy(&m_SpawnInfo,pSpawn,sizeof(PLAYER_SPAWN_INFO));
-	m_bHasSpawnInfo = TRUE;
+	m_bHasSpawnInfo = true;
 }
 
 //----------------------------------------------------
@@ -968,16 +968,16 @@ void CPlayer::SetCheckpoint(float fX, float fY, float fZ, float fSize)
 	m_vecCheckpoint.Y = fY;
 	m_vecCheckpoint.Z = fZ;
 	m_fCheckpointSize = fSize;
-	ToggleCheckpoint(TRUE);
+	ToggleCheckpoint(true);
 }
 
 
 //----------------------------------------------------
 
-void CPlayer::ToggleCheckpoint(BOOL bEnabled)
+void CPlayer::ToggleCheckpoint(bool bEnabled)
 {
 	m_bCheckpointEnabled = bEnabled;
-	m_bInCheckpoint = FALSE;
+	m_bInCheckpoint = false;
 
 	RakServerInterface* pRak = pNetGame->GetRakServer();
 
@@ -1009,7 +1009,7 @@ void CPlayer::SetRaceCheckpoint(int iType, float fX, float fY, float fZ, float f
 	m_vecRaceNextCheckpoint.Z = fNZ;
 	m_fRaceCheckpointSize = fSize;
 	m_byteRaceCheckpointType = iType;
-	ToggleRaceCheckpoint(TRUE);
+	ToggleRaceCheckpoint(true);
 }
 
 //----------------------------------------------------
@@ -1042,10 +1042,10 @@ void CPlayer::SetCurrentWeaponAmmo(DWORD dwAmmo)
 
 //----------------------------------------------------
 
-void CPlayer::ToggleRaceCheckpoint(BOOL bEnabled)
+void CPlayer::ToggleRaceCheckpoint(bool bEnabled)
 {
 	m_bRaceCheckpointEnabled = bEnabled;
-	m_bInRaceCheckpoint = FALSE;
+	m_bInRaceCheckpoint = false;
 
 	RakServerInterface* pRak = pNetGame->GetRakServer();
 

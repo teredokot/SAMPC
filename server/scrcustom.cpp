@@ -45,7 +45,7 @@ char* format_amxstring(AMX *amx, cell *params, int parm, int &len);
 int set_amxstring(AMX *amx,cell amx_addr,const char *source,int max);
 bool ContainsInvalidNickChars(char* szString);
 
-extern BOOL bGameModeFinished;
+extern bool bGameModeFinished;
 extern CNetGame* pNetGame;
 
 //----------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ extern CNetGame* pNetGame;
 static cell AMX_NATIVE_CALL n_GameModeExit(AMX *amx, cell *params)
 {
 	if(pNetGame->SetNextScriptFile(NULL)) {
-		bGameModeFinished = TRUE;
+		bGameModeFinished = true;
 	} else {
 		logprintf("The gamemode finished and I couldn't start another script.");
 		fcloseall();
@@ -1269,7 +1269,7 @@ static cell AMX_NATIVE_CALL n_TogglePlayerSpectating(AMX *amx, cell *params)
 		pPlayer->m_byteSpectateType = SPECTATE_TYPE_NONE;
 
 		RakNet::BitStream bsParams;
-		bsParams.Write((BOOL)params[2]); // toggle
+		bsParams.Write((bool)params[2]); // toggle
 		RakServerInterface* pRak = pNetGame->GetRakServer();
 		pRak->RPC(RPC_ScrTogglePlayerSpectating , &bsParams, HIGH_PRIORITY, RELIABLE, 0, pRak->GetPlayerIDFromIndex((BYTE)params[1]), false, false);
 		return 1;
@@ -2138,7 +2138,7 @@ static cell AMX_NATIVE_CALL n_DisablePlayerCheckpoint(AMX *amx, cell *params)
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
 	{
-		pPlayer->ToggleCheckpoint(FALSE);
+		pPlayer->ToggleCheckpoint(false);
 
 		return 1;
 	}
@@ -2189,7 +2189,7 @@ static cell AMX_NATIVE_CALL n_DisablePlayerRaceCheckpoint(AMX *amx, cell *params
 	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 	if (pPlayer)
 	{
-		pPlayer->ToggleRaceCheckpoint(FALSE);
+		pPlayer->ToggleRaceCheckpoint(false);
 
 		return 1;
 	}
@@ -2992,7 +2992,7 @@ static cell AMX_NATIVE_CALL n_LimitGlobalChatRadius(AMX *amx, cell *params)
 	CHECK_PARAMS(amx, "LimitGlobalChatRadius", 1);
 	float fRadius = amx_ctof(params[1]);
 
-	pNetGame->m_bLimitGlobalChatRadius = TRUE;
+	pNetGame->m_bLimitGlobalChatRadius = true;
 	pNetGame->m_fGlobalChatRadius = fRadius;
 	
 	return 1;
@@ -3002,7 +3002,7 @@ static cell n_LimitPlayerMarkerRadius(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "LimitPlayerMarkerRadius", 1);
 
-	pNetGame->m_bLimitGlobalMarkerRadius = TRUE;
+	pNetGame->m_bLimitGlobalMarkerRadius = true;
 	pNetGame->m_fGlobalMarkerRadius = amx_ctof(params[1]);
 	return 1;
 }
@@ -3140,7 +3140,7 @@ static cell AMX_NATIVE_CALL n_AllowInteriorWeapons(AMX *amx, cell *params)
 static cell AMX_NATIVE_CALL n_UsePlayerPedAnims(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "UsePlayerPedAnims", 0);
-	pNetGame->m_bUseCJWalk = TRUE;
+	pNetGame->m_bUseCJWalk = true;
 	return 1;
 }
 

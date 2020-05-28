@@ -15,7 +15,7 @@ class CTextDrawPool
 {
 private:
 
-	BOOL				m_bSlotState[MAX_TEXT_DRAWS];
+	bool				m_bSlotState[MAX_TEXT_DRAWS];
 	TEXT_DRAW_TRANSMIT*	m_TextDraw[MAX_TEXT_DRAWS];
 	PCHAR				m_szFontText[MAX_TEXT_DRAWS];
 	bool				m_bHasText[MAX_TEXT_DRAWS][MAX_PLAYERS];
@@ -31,9 +31,9 @@ public:
 	void HideForPlayer(BYTE bytePlayer, WORD wText);
 	void HideForAll(WORD wText);
 
-	BOOL GetSlotState(WORD wText)
+	bool GetSlotState(WORD wText)
 	{
-		if (wText >= MAX_TEXT_DRAWS) return FALSE;
+		if (wText >= MAX_TEXT_DRAWS) return false;
 		return m_bSlotState[wText];
 	};
 	

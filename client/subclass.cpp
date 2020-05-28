@@ -211,7 +211,7 @@ BOOL HandleCharacterInput(DWORD dwChar)
 
 //----------------------------------------------------
 
-BOOL SubclassGameWindow()
+bool SubclassGameWindow()
 {
 	HWND hwndGameWnd = pGame->GetMainWindowHwnd();
 
@@ -227,9 +227,9 @@ BOOL SubclassGameWindow()
 	if(hwndGameWnd) {
 		hOldProc = (WNDPROC)GetWindowLong(hwndGameWnd,GWL_WNDPROC);
 		SetWindowLong(hwndGameWnd,GWL_WNDPROC,(LONG)NewWndProc);
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 //----------------------------------------------------

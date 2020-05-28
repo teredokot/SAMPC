@@ -16,7 +16,7 @@ CVehiclePool::CVehiclePool()
 {
 	// loop through and initialize all vehicle properties to 0
 	for(VEHICLEID VehicleID = 0; VehicleID < MAX_VEHICLES; VehicleID++) {
-		m_bVehicleSlotState[VehicleID] = FALSE;
+		m_bVehicleSlotState[VehicleID] = false;
 		m_pVehicles[VehicleID] = NULL;
 		m_pGTAVehicles[VehicleID] = NULL;
 		m_byteVirtualWorld[VehicleID] = 0;
@@ -34,7 +34,7 @@ CVehiclePool::~CVehiclePool()
 
 //----------------------------------------------------
 
-BOOL CVehiclePool::New( VEHICLEID VehicleID, int iVehicleType,
+bool CVehiclePool::New( VEHICLEID VehicleID, int iVehicleType,
 					    VECTOR * vecPos, float fRotation,
 					    int iColor1, int iColor2,
 					    VECTOR * vecSpawnPos, float fSpawnRotation, /*int iRespawnDelay,*/
@@ -59,23 +59,23 @@ BOOL CVehiclePool::New( VEHICLEID VehicleID, int iVehicleType,
 
 //----------------------------------------------------
 
-BOOL CVehiclePool::Delete(VEHICLEID VehicleID)
+bool CVehiclePool::Delete(VEHICLEID VehicleID)
 {
 	if(!GetSlotState(VehicleID) || !m_pVehicles[VehicleID])
 	{
-		return FALSE; // Vehicle already deleted or not used.
+		return false; // Vehicle already deleted or not used.
 	}
 
-	m_bVehicleSlotState[VehicleID] = FALSE;
+	m_bVehicleSlotState[VehicleID] = false;
 	delete m_pVehicles[VehicleID];
 	m_pVehicles[VehicleID] = NULL;
 
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
 
-BOOL CVehiclePool::Spawn( VEHICLEID VehicleID, int iVehicleType,
+bool CVehiclePool::Spawn( VEHICLEID VehicleID, int iVehicleType,
 					      VECTOR * vecPos, float fRotation,
 					      int iColor1, int iColor2, int iInterior, PCHAR szNumberPlate, int iObjective,
 						  int iDoorsLocked )
@@ -95,7 +95,7 @@ BOOL CVehiclePool::Spawn( VEHICLEID VehicleID, int iVehicleType,
 		}
 
 		m_pGTAVehicles[VehicleID] = m_pVehicles[VehicleID]->m_pVehicle;
-		m_bVehicleSlotState[VehicleID] = TRUE;
+		m_bVehicleSlotState[VehicleID] = true;
 
 		if(iObjective) m_pVehicles[VehicleID]->m_byteObjectiveVehicle = 1;
 		if(iDoorsLocked) m_pVehicles[VehicleID]->SetDoorState(1);
@@ -104,15 +104,15 @@ BOOL CVehiclePool::Spawn( VEHICLEID VehicleID, int iVehicleType,
 			LinkToInterior(VehicleID, iInterior);
 		}
 
-		m_bIsActive[VehicleID] = TRUE;
-		m_bIsWasted[VehicleID] = FALSE;
+		m_bIsActive[VehicleID] = true;
+		m_bIsWasted[VehicleID] = false;
 		m_charNumberPlate[VehicleID][0] = 0;
 
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -205,7 +205,7 @@ void CVehiclePool::Process()
 
 	for(VEHICLEID x = 0; x != MAX_VEHICLES; x++)
 	{
-		if(GetSlotState(x) == TRUE)
+		if(GetSlotState(x) == true)
 		{
 			// It's in use.
 			pVehicle = m_pVehicles[x];
@@ -218,9 +218,9 @@ void CVehiclePool::Process()
 				}*/
 
 				if(pVehicle->IsDriverLocalPlayer()) {
-					pVehicle->SetInvulnerable(FALSE);
+					pVehicle->SetInvulnerable(false);
 				} else {
-					pVehicle->SetInvulnerable(TRUE);
+					pVehicle->SetInvulnerable(true);
 				}
 
 				if (pVehicle->GetHealth() == 0.0f) // || pVehicle->IsWrecked()) // It's dead
@@ -304,7 +304,7 @@ void CVehiclePool::Process()
 
 				if(!pVehicle->HasADriver()) {
 					pVehicle->SetHornState(0);
-					pVehicle->SetEngineState(FALSE);
+					pVehicle->SetEngineState(false);
 				}
 
 				// Update the actual ingame pointer if it's not
@@ -343,8 +343,8 @@ void CVehiclePool::SetForRespawn(VEHICLEID VehicleID, int iRespawnDelay)
 	CVehicle *pVehicle = m_pVehicles[VehicleID];
 
 	if(pVehicle) {
-		m_bIsActive[VehicleID] = FALSE;
-		m_bIsWasted[VehicleID] = TRUE;
+		m_bIsActive[VehicleID] = false;
+		m_bIsWasted[VehicleID] = true;
 		m_iRespawnDelay[VehicleID] = iRespawnDelay;
 	}
 }

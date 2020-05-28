@@ -77,7 +77,7 @@ private:
 	
 	ServerPluginVector m_Plugins;
 
-	BOOL LoadSinglePlugin(char *szPluginPath);
+	bool LoadSinglePlugin(char *szPluginPath);
 	
 	/*void ConvertFromHex(unsigned char* pbBuffer, char* szData, unsigned int dwMaxLength);
 	bool VerifyPluginSignature(char* szPluginFilename);

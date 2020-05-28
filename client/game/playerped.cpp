@@ -557,10 +557,10 @@ void CPlayerPed::HideMarker()
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsOnScreen()
+bool CPlayerPed::IsOnScreen()
 {
 	if(m_pPed)	return GameIsEntityOnScreen((DWORD *)m_pPed);
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -613,11 +613,11 @@ void CPlayerPed::SetStateFlags(DWORD dwState)
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsDead()
+bool CPlayerPed::IsDead()
 {
-	if(!m_pPed) return TRUE;
-	if(m_pPed->fHealth > 0.0f) return FALSE;
-	return TRUE;
+	if(!m_pPed) return true;
+	if(m_pPed->fHealth > 0.0f) return false;
+	return true;
 }
 
 //-----------------------------------------------------------
@@ -638,14 +638,14 @@ void CPlayerPed::SetActionTrigger(BYTE byteTrigger)
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsInVehicle()
+bool CPlayerPed::IsInVehicle()
 {
-	if(!m_pPed) return FALSE;
+	if(!m_pPed) return false;
 
 	if(IN_VEHICLE(m_pPed)) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -691,7 +691,7 @@ void CPlayerPed::ForceTargetRotation(float fRotation)
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsAPassenger()
+bool CPlayerPed::IsAPassenger()
 {
 	if( m_pPed->pVehicle && IN_VEHICLE(m_pPed) )
 	{
@@ -700,14 +700,14 @@ BOOL CPlayerPed::IsAPassenger()
 		if( pVehicle->pDriver != m_pPed || 
 			pVehicle->entity.nModelIndex == TRAIN_PASSENGER ||
 			pVehicle->entity.nModelIndex == TRAIN_FREIGHT ) {
-			return TRUE;
+			return true;
 		}
 		else {
-			return FALSE;
+			return false;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -793,20 +793,20 @@ WEAPON_SLOT_TYPE * CPlayerPed::GetCurrentWeaponSlot()
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::HasAmmoForCurrentWeapon()
+bool CPlayerPed::HasAmmoForCurrentWeapon()
 {
 	if(m_pPed) {
 		WEAPON_SLOT_TYPE * WeaponSlot = GetCurrentWeaponSlot();
 
-		if(!WeaponSlot) return TRUE;
+		if(!WeaponSlot) return true;
 		
 		// Melee types always have ammo.
 		if( WeaponSlot->dwType <= WEAPON_CANE ||
-			WeaponSlot->dwType == WEAPON_PARACHUTE ) return TRUE;
+			WeaponSlot->dwType == WEAPON_PARACHUTE ) return true;
 
-		if(!WeaponSlot->dwAmmo) return FALSE;
+		if(!WeaponSlot->dwAmmo) return false;
 	}
-	return TRUE;
+	return true;
 }
 
 //-----------------------------------------------------------
@@ -876,7 +876,7 @@ void CPlayerPed::PutDirectlyInVehicle(int iVehicleID, int iSeat)
 
 //-----------------------------------------------------------
 
-void CPlayerPed::EnterVehicle(int iVehicleID, BOOL bPassenger)
+void CPlayerPed::EnterVehicle(int iVehicleID, bool bPassenger)
 {
 	if(!m_pPed) return;
 	if(!GamePool_Vehicle_GetAt(iVehicleID)) return;
@@ -1063,16 +1063,16 @@ void CPlayerPed::HandsUp()
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::HasHandsUp()
+bool CPlayerPed::HasHandsUp()
 {
-	if(!m_pPed || IN_VEHICLE(m_pPed)) return FALSE;
-	if(!IsAdded()) return FALSE;
-	if(!GamePool_Ped_GetAt(m_dwGTAId)) return FALSE;
-	if(m_pPed->Tasks->pdwJumpJetPack == NULL) return FALSE;
+	if(!m_pPed || IN_VEHICLE(m_pPed)) return false;
+	if(!IsAdded()) return false;
+	if(!GamePool_Ped_GetAt(m_dwGTAId)) return false;
+	if(m_pPed->Tasks->pdwJumpJetPack == NULL) return false;
 	DWORD dwJmpVtbl = m_pPed->Tasks->pdwJumpJetPack[0];
-	if(dwJmpVtbl == 0x85A29C) return TRUE;
+	if(dwJmpVtbl == 0x85A29C) return true;
 	
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -1128,37 +1128,37 @@ void CPlayerPed::StopJetpack()
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsInJetpackMode()
+bool CPlayerPed::IsInJetpackMode()
 {
-	if(!m_pPed || IN_VEHICLE(m_pPed)) return FALSE;
-	if(m_pPed->Tasks->pdwJumpJetPack == NULL) return FALSE;
+	if(!m_pPed || IN_VEHICLE(m_pPed)) return false;
+	if(m_pPed->Tasks->pdwJumpJetPack == NULL) return false;
 
 	DWORD dwJmpVtbl = m_pPed->Tasks->pdwJumpJetPack[0];
 
-	if(dwJmpVtbl == 0x8705C4) return TRUE;
+	if(dwJmpVtbl == 0x8705C4) return true;
 
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::StartPassengerDriveByMode()
+bool CPlayerPed::StartPassengerDriveByMode()
 {
 	if(m_pPed) {
 
-		if(!IN_VEHICLE(m_pPed) || !m_pPed->pVehicle) return FALSE;
+		if(!IN_VEHICLE(m_pPed) || !m_pPed->pVehicle) return false;
 
 		int iWeapon = GetCurrentWeapon();
 		
 		// Don't allow them to enter driveby with a para
 		if(iWeapon == WEAPON_PARACHUTE) {
 			SetArmedWeapon(0);
-			return FALSE;
+			return false;
 		}
 
 		// Check for an uzi type weapon.
 		if((iWeapon != WEAPON_UZI) && (iWeapon != WEAPON_MP5) && (iWeapon != WEAPON_TEC9)) {
-			return FALSE;
+			return false;
 		}
 
 		SetArmedWeapon(iWeapon);
@@ -1173,9 +1173,9 @@ BOOL CPlayerPed::StartPassengerDriveByMode()
 
 		//SetWeaponModelIndex(iWeapon);
 
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -1363,7 +1363,7 @@ void CPlayerPed::SetMoney(int iAmount)
 void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 								 int opt1, int opt2, int opt3, int opt4, int iUnk )
 {
-	BOOL bLoaded = FALSE;
+	bool bLoaded = false;
 	int iWaitAnimLoad=0;
 
 	
@@ -1386,7 +1386,7 @@ void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 			iWaitAnimLoad++;
 			if(iWaitAnimLoad == 10) return; // we can't wait forever
 		}		
-		bLoaded = TRUE;
+		bLoaded = true;
 	}
 
 	ScriptCommand(&apply_animation,m_dwGTAId,szAnimName,szAnimFile,fT,opt1,opt2,opt3,opt4,iUnk);
@@ -1399,12 +1399,12 @@ void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsPerformingAnimation(char *szAnimName)
+bool CPlayerPed::IsPerformingAnimation(char *szAnimName)
 {
 	if(m_pPed && ScriptCommand(&is_actor_performing_anim,m_dwGTAId,szAnimName)) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;	
+	return false;	
 }
 
 //-----------------------------------------------------------
@@ -1561,14 +1561,14 @@ void CPlayerPed::ProcessParachuting()
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsOnGround()
+bool CPlayerPed::IsOnGround()
 {
 	if(m_pPed) {
 		if(m_pPed->dwStateFlags & 3) {
-			return TRUE;
+			return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -1654,16 +1654,16 @@ int CPlayerPed::GetPedStat()
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsPerformingCustomAnim()
+bool CPlayerPed::IsPerformingCustomAnim()
 {
-	if(!m_pPed) return FALSE;
-	if(!IsAdded()) return FALSE;
+	if(!m_pPed) return false;
+	if(!IsAdded()) return false;
 
 	if(m_pPed->Tasks->pdwJumpJetPack) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -1719,10 +1719,10 @@ void CPlayerPed::StopDancing()
 
 //-----------------------------------------------------------
 
-BOOL CPlayerPed::IsDancing()
+bool CPlayerPed::IsDancing()
 {
-	if(m_iDanceState) return TRUE;
-	return FALSE;
+	if(m_iDanceState) return true;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -1799,7 +1799,7 @@ char * CPlayerPed::GetDanceAnimForMove(int iMove)
 
 //-----------------------------------------------------------
 
-void CPlayerPed::ProcessMarkers(BOOL bMarkerStreamingEnabled, float fMarkerStreamRadius, BOOL bVisible)
+void CPlayerPed::ProcessMarkers(bool bMarkerStreamingEnabled, float fMarkerStreamRadius, bool bVisible)
 {
 	if(!m_pPed) return;
 

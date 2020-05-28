@@ -16,7 +16,7 @@ CPlayerPool::CPlayerPool()
 {
 	// loop through and initialize all net players to null and slot states to false
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++) {
-		m_bPlayerSlotState[bytePlayerID] = FALSE;
+		m_bPlayerSlotState[bytePlayerID] = false;
 		m_pPlayers[bytePlayerID] = NULL;
 	}
 	m_iPlayerCount = 0;
@@ -34,10 +34,10 @@ CPlayerPool::~CPlayerPool()
 
 //----------------------------------------------------
 
-BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
+bool CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
 {
-	if(bytePlayerID > MAX_PLAYERS) return FALSE;
-	if(strlen(szPlayerName) > MAX_PLAYER_NAME) return FALSE;
+	if(bytePlayerID > MAX_PLAYERS) return false;
+	if(strlen(szPlayerName) > MAX_PLAYER_NAME) return false;
 
 	m_pPlayers[bytePlayerID] = new CPlayer();
 
@@ -47,10 +47,10 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
 		strcpy(m_pPlayers[bytePlayerID]->m_szClientVersion, szVersion);
 
 		m_pPlayers[bytePlayerID]->SetID(bytePlayerID);
-		m_bPlayerSlotState[bytePlayerID] = TRUE;
+		m_bPlayerSlotState[bytePlayerID] = true;
 		m_iPlayerScore[bytePlayerID] = 0;
 		m_iPlayerMoney[bytePlayerID] = 0;
-		m_bIsAnAdmin[bytePlayerID] = FALSE;
+		m_bIsAnAdmin[bytePlayerID] = false;
 		m_byteVirtualWorld[bytePlayerID] = 0;
 
 		// Notify all the other players of a newcommer with
@@ -96,21 +96,21 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
 			if (GetSlotState((BYTE)i))
 				m_uiLastPlayerId = i;
 		}
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
 //----------------------------------------------------
 
-BOOL CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
+bool CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 {
 	if(!GetSlotState(bytePlayerID) || !m_pPlayers[bytePlayerID])
 	{
-		return FALSE; // Player already deleted or not used.
+		return false; // Player already deleted or not used.
 	}
 
 	pNetGame->GetFilterScripts()->OnPlayerDisconnect(bytePlayerID, byteReason);
@@ -119,10 +119,10 @@ BOOL CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 		pGameMode->OnPlayerDisconnect(bytePlayerID, byteReason);
 	}
 
-	m_bPlayerSlotState[bytePlayerID] = FALSE;
+	m_bPlayerSlotState[bytePlayerID] = false;
 	delete m_pPlayers[bytePlayerID];
 	m_pPlayers[bytePlayerID] = NULL;
-	m_bIsAnAdmin[bytePlayerID] = FALSE;
+	m_bIsAnAdmin[bytePlayerID] = false;
 	
 	// Notify all the other players that this client is quiting.
 	RakNet::BitStream bsSend;
@@ -152,22 +152,22 @@ BOOL CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 		if (GetSlotState((BYTE)i))
 			m_uiLastPlayerId = i;
 	}
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
 
-BOOL CPlayerPool::Process(float fElapsedTime)
+bool CPlayerPool::Process(float fElapsedTime)
 {
 	// Process all CPlayers
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++)
 	{
-		if(TRUE == m_bPlayerSlotState[bytePlayerID])
+		if(true == m_bPlayerSlotState[bytePlayerID])
 		{
 			m_pPlayers[bytePlayerID]->Process(fElapsedTime);
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
@@ -185,7 +185,7 @@ void CPlayerPool::InitPlayersForPlayer(BYTE bytePlayerID)
 	bool send = false;
 
 	while(lp!=MAX_PLAYERS) {
-		if((GetSlotState(lp) == TRUE) && (lp != bytePlayerID)) {
+		if((GetSlotState(lp) == true) && (lp != bytePlayerID)) {
 			size_t uiNameLen = strlen(GetPlayerName(lp));
 
 			bsExistingClient.Write(lp);
@@ -216,7 +216,7 @@ void CPlayerPool::InitSpawnsForPlayer(BYTE bytePlayerID)
 	CPlayer *pSpawnPlayer;
 
 	while(x!=MAX_PLAYERS) {
-		if((GetSlotState(x) == TRUE) && (x != bytePlayerID)) {
+		if((GetSlotState(x) == true) && (x != bytePlayerID)) {
 			pSpawnPlayer = GetAt(x);
 			if(pSpawnPlayer->IsActive()) {
 				pSpawnPlayer->SpawnForPlayer(bytePlayerID);
@@ -302,19 +302,19 @@ float CPlayerPool::GetDistanceSquaredFromPlayerToPlayer(BYTE bytePlayer1, BYTE b
 
 //----------------------------------------------------
 
-BOOL CPlayerPool::IsNickInUse(PCHAR szNick)
+bool CPlayerPool::IsNickInUse(PCHAR szNick)
 {
 	int x=0;
 	while(x!=MAX_PLAYERS) {
 		if(GetSlotState((BYTE)x)) {
 			//if(!stricmp(GetPlayerName((BYTE)x),szNick)) {
 			if (!strcmp(GetPlayerName((BYTE)x), szNick)) {
-				return TRUE;
+				return true;
 			}
 		}
 		x++;
 	}
-	return FALSE;
+	return false;
 }
 
 //----------------------------------------------------
@@ -324,7 +324,7 @@ void CPlayerPool::DeactivateAll()
 	CGameMode* pGameMode = pNetGame->GetGameMode();
 	CFilterScripts* pFilterScripts = pNetGame->GetFilterScripts();
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++) {
-		if(TRUE == m_bPlayerSlotState[bytePlayerID]) {
+		if(true == m_bPlayerSlotState[bytePlayerID]) {
 			m_pPlayers[bytePlayerID]->Deactivate();
 			pGameMode->OnPlayerDisconnect(bytePlayerID, 1);
 			pFilterScripts->OnPlayerDisconnect(bytePlayerID, 1);

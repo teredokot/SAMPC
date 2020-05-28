@@ -21,13 +21,13 @@ class CPlayerPool
 {
 private:
 	
-	BOOL	m_bPlayerSlotState[MAX_PLAYERS];
+	bool	m_bPlayerSlotState[MAX_PLAYERS];
 	CPlayer *m_pPlayers[MAX_PLAYERS];
 	CHAR	m_szPlayerName[MAX_PLAYERS][MAX_PLAYER_NAME+1];
 	int 	m_iPlayerScore[MAX_PLAYERS];
 	int		m_iPlayerMoney[MAX_PLAYERS];
 	DWORD	m_dwPlayerAmmo[MAX_PLAYERS];
-	BOOL	m_bIsAnAdmin[MAX_PLAYERS];
+	bool	m_bIsAnAdmin[MAX_PLAYERS];
 	BYTE	m_byteVirtualWorld[MAX_PLAYERS];
 	int		m_iPlayerCount;
 	unsigned int m_uiLastPlayerId;
@@ -37,9 +37,9 @@ public:
 	CPlayerPool();
 	~CPlayerPool();
 
-	BOOL Process(float fElapsedTime);
-	BOOL New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion);
-	BOOL Delete(BYTE bytePlayerID, BYTE byteReason);
+	bool Process(float fElapsedTime);
+	bool New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion);
+	bool Delete(BYTE bytePlayerID, BYTE byteReason);
 		
 	// Retrieve a player
 	CPlayer* GetAt(BYTE bytePlayerID) {
@@ -48,18 +48,18 @@ public:
 	};
 
 	// Find out if the slot is inuse.
-	BOOL GetSlotState(BYTE bytePlayerID) {
-		if(bytePlayerID >= MAX_PLAYERS) { return FALSE; }
+	bool GetSlotState(BYTE bytePlayerID) {
+		if(bytePlayerID >= MAX_PLAYERS) { return false; }
 		return m_bPlayerSlotState[bytePlayerID];
 	};
 
 	PCHAR GetPlayerName(BYTE bytePlayerID) {
-		if(bytePlayerID >= MAX_PLAYERS) { return FALSE; }
+		if(bytePlayerID >= MAX_PLAYERS) { return NULL; }
 		return m_szPlayerName[bytePlayerID];
 	};
 
 	int GetPlayerScore(BYTE bytePlayerID) {
-		if(bytePlayerID >= MAX_PLAYERS) { return FALSE; }
+		if(bytePlayerID >= MAX_PLAYERS) { return 0; }
 		return m_iPlayerScore[bytePlayerID];
 	};
 
@@ -73,7 +73,7 @@ public:
 	}
 
 	int GetPlayerMoney(BYTE bytePlayerID) {
-		if(bytePlayerID >= MAX_PLAYERS) { return FALSE; }
+		if(bytePlayerID >= MAX_PLAYERS) { return 0; }
 		return m_iPlayerMoney[bytePlayerID];
 	};
 
@@ -83,7 +83,7 @@ public:
 	};
 
 	DWORD GetPlayerAmmo(BYTE bytePlayerID) {
-		if(bytePlayerID >= MAX_PLAYERS) { return FALSE; }
+		if(bytePlayerID >= MAX_PLAYERS) { return 0; }
 		return m_dwPlayerAmmo[bytePlayerID];
 	};
 
@@ -106,8 +106,8 @@ public:
 	};
 
 	void SetAdmin(unsigned int iPlayerId, bool bToggle) { m_bIsAnAdmin[iPlayerId] = bToggle; }
-	void SetAdmin(BYTE bytePlayerID) { m_bIsAnAdmin[bytePlayerID] = TRUE; };
-	BOOL IsAdmin(BYTE bytePlayerID) { return m_bIsAnAdmin[bytePlayerID]; };
+	void SetAdmin(BYTE bytePlayerID) { m_bIsAnAdmin[bytePlayerID] = true; };
+	bool IsAdmin(BYTE bytePlayerID) { return m_bIsAnAdmin[bytePlayerID]; };
 
 	void InitPlayersForPlayer(BYTE bytePlayerID);
 	void InitSpawnsForPlayer(BYTE bytePlayerID);
@@ -116,7 +116,7 @@ public:
 
 	float GetDistanceFromPlayerToPlayer(BYTE bytePlayer1, BYTE bytePlayer2);
 	float GetDistanceSquaredFromPlayerToPlayer(BYTE bytePlayer1, BYTE bytePlayer2);
-	BOOL  IsNickInUse(PCHAR szNick);
+	bool  IsNickInUse(PCHAR szNick);
 
 	int GetPlayerCount() { return m_iPlayerCount; };
 

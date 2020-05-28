@@ -22,10 +22,10 @@ CSpawnScreen			*pSpawnScreen=0;
 CNetGame				*pNetGame=0;
 CFontRender				*pDefaultFont=0;
 
-static BOOL				bGameInited=FALSE;
-static BOOL				bNetworkInited=FALSE;
-static BOOL				bGameModded = FALSE;
-static BOOL				bQuitGame=FALSE;
+static bool				bGameInited=false;
+static bool				bNetworkInited=false;
+static bool				bGameModded = false;
+static bool				bQuitGame=false;
 static DWORD			dwStartQuitTick=0;
 
 //IDirect3D9				*pD3D;
@@ -54,7 +54,7 @@ CDXUTDialogResourceManager	*pDialogResourceManager=NULL;
 CDXUTDialog					*pGameUI=NULL;
 
 // forwards
-BOOL SubclassGameWindow();
+bool SubclassGameWindow();
 void SetupCommands();
 //void TheGameLoop();
 void TheGraphicsLoop();
@@ -150,7 +150,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 
 DWORD dwFogEnabled = 0;
 static DWORD dwFogColor = 0x00FF00FF;
-static BOOL gDisableAllFog = FALSE;
+static bool gDisableAllFog = false;
 
 void SetupD3DFog(BOOL bEnable)
 {
@@ -332,7 +332,7 @@ void DoInitStuff()
 			pGame->DisplayHud(TRUE);
 		}
 
-		bGameInited = TRUE;
+		bGameInited = true;
 		OutputDebugString("End of DoInitStuff()");
 
 		return;		
@@ -344,7 +344,7 @@ void DoInitStuff()
 		pNetGame = new CNetGame(tSettings.szConnectHost,atoi(tSettings.szConnectPort),
 				tSettings.szNickName,tSettings.szConnectPass);
 
-		bNetworkInited = TRUE;
+		bNetworkInited = true;
 		return;
 	}
 }
@@ -353,7 +353,7 @@ void DoInitStuff()
 
 void MarkAsModdedGame()
 {
-	bGameModded = TRUE;
+	bGameModded = true;
 }
 
 //----------------------------------------------------
@@ -387,7 +387,7 @@ void TheGraphicsLoop()
 
 	//pGame->UpdateFarClippingPlane();
 	pGame->ProcessInputDisabling();
-	if (bGameModded == TRUE)
+	if (bGameModded == true)
 	{
 		FORCE_EXIT(0x4);
 	}
@@ -419,7 +419,7 @@ void QuitGame()
 	if(pNetGame && pNetGame->GetGameState() == GAMESTATE_CONNECTED) {
 		pNetGame->GetRakClient()->Disconnect(500);
 	}	
-	bQuitGame = TRUE;
+	bQuitGame = true;
 	dwStartQuitTick = GetTickCount();
 }
 

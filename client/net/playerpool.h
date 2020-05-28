@@ -20,7 +20,7 @@ private:
 	int				m_iLocalPlayerScore;
 	DWORD			m_dwLocalPlayerPing;
 
-	BOOL			m_bPlayerSlotState[MAX_PLAYERS];
+	bool			m_bPlayerSlotState[MAX_PLAYERS];
 	CRemotePlayer	*m_pPlayers[MAX_PLAYERS];
 	DWORD			m_dwPlayerPings[MAX_PLAYERS];
 	ULONG			m_ulIPAddresses[MAX_PLAYERS];
@@ -31,7 +31,7 @@ private:
 	
 public:
 	// Process All CPlayers
-	BOOL Process();
+	bool Process();
 
 	void SetLocalPlayerName(PCHAR szName) { strcpy_s(m_szLocalPlayerName,szName); };
 	PCHAR GetLocalPlayerName() { return m_szLocalPlayerName; };
@@ -43,8 +43,8 @@ public:
 	CLocalPlayer * GetLocalPlayer() { return m_pLocalPlayer; };
 	BYTE FindRemotePlayerIDFromGtaPtr(PED_TYPE * pActor);
 
-	BOOL New(BYTE bytePlayerID, PCHAR szPlayerName);
-	BOOL Delete(BYTE bytePlayerID, BYTE byteReason);
+	bool New(BYTE bytePlayerID, PCHAR szPlayerName);
+	bool Delete(BYTE bytePlayerID, BYTE byteReason);
 
 	CRemotePlayer* GetAt(BYTE bytePlayerID) {
 		if(bytePlayerID > MAX_PLAYERS) { return NULL; }
@@ -52,8 +52,8 @@ public:
 	};
 
 	// Find out if the slot is inuse.
-	BOOL GetSlotState(BYTE bytePlayerID) {
-		if(bytePlayerID > MAX_PLAYERS) { return FALSE; }
+	bool GetSlotState(BYTE bytePlayerID) {
+		if(bytePlayerID > MAX_PLAYERS) { return false; }
 		return m_bPlayerSlotState[bytePlayerID];
 	};
 	

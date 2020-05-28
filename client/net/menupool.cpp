@@ -33,7 +33,7 @@ CMenuPool::CMenuPool()
 	// loop through and initialize all net players to null and slot states to false
 	for (BYTE byteMenuID = 0; byteMenuID < MAX_MENUS; byteMenuID++)
 	{
-		m_bMenuSlotState[byteMenuID] = FALSE;
+		m_bMenuSlotState[byteMenuID] = false;
 		m_pMenus[byteMenuID] = NULL;
 	}
 	m_byteCurrentMenu = MAX_MENUS;
@@ -59,12 +59,12 @@ CMenuPool::~CMenuPool()
 CMenu* CMenuPool::New(BYTE byteMenuID, PCHAR pTitle, float fX, float fY, BYTE byteColumns, float fCol1Width, float fCol2Width, MENU_INT* MenuInteraction)
 {
 	SAFE_DELETE(m_pMenus[byteMenuID]);
-	m_bMenuSlotState[byteMenuID] = FALSE;
+	m_bMenuSlotState[byteMenuID] = false;
 	CMenu* pMenu = new CMenu(pTitle, fX, fY, byteColumns, fCol1Width, fCol2Width, MenuInteraction);
 	
 	if (pMenu)
 	{
-		m_bMenuSlotState[byteMenuID] = TRUE;
+		m_bMenuSlotState[byteMenuID] = true;
 		m_pMenus[byteMenuID] = pMenu;
 		return pMenu;
 	}
@@ -73,18 +73,18 @@ CMenu* CMenuPool::New(BYTE byteMenuID, PCHAR pTitle, float fX, float fY, BYTE by
 
 //----------------------------------------------------
 
-BOOL CMenuPool::Delete(BYTE byteMenuID)
+bool CMenuPool::Delete(BYTE byteMenuID)
 {
-	if (m_bMenuSlotState[byteMenuID] == FALSE || !m_pMenus[byteMenuID])
+	if (m_bMenuSlotState[byteMenuID] == false || !m_pMenus[byteMenuID])
 	{
-		return FALSE;
+		return false;
 	}
 
-	m_bMenuSlotState[byteMenuID] = FALSE;
+	m_bMenuSlotState[byteMenuID] = false;
 	delete m_pMenus[byteMenuID];
 	m_pMenus[byteMenuID] = NULL;
 
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
@@ -92,7 +92,7 @@ BOOL CMenuPool::Delete(BYTE byteMenuID)
 void CMenuPool::ShowMenu(BYTE byteMenuID)
 {
 	if (byteMenuID >= MAX_MENUS) return;
-	if (m_bMenuSlotState[byteMenuID] == FALSE || !m_pMenus[byteMenuID]) return;
+	if (m_bMenuSlotState[byteMenuID] == false || !m_pMenus[byteMenuID]) return;
 
 	if (m_byteCurrentMenu != MAX_MENUS) m_pMenus[m_byteCurrentMenu]->Hide();
 	m_pMenus[byteMenuID]->Show();
@@ -105,7 +105,7 @@ void CMenuPool::ShowMenu(BYTE byteMenuID)
 void CMenuPool::HideMenu(BYTE byteMenuID)
 {
 	if (byteMenuID >= MAX_MENUS || m_byteCurrentMenu == MAX_MENUS) return;
-	if (m_bMenuSlotState[byteMenuID] == FALSE || !m_pMenus[byteMenuID]) return;
+	if (m_bMenuSlotState[byteMenuID] == false || !m_pMenus[byteMenuID]) return;
 	m_pMenus[byteMenuID]->Hide();
 	m_byteCurrentMenu = MAX_MENUS;
 }
@@ -141,13 +141,13 @@ void CMenuPool::Process()
 			m_byteExited = 1;
 			RakNet::BitStream bsSend;
 			bsSend.Write(row);
-			pRak->RPC(RPC_MenuSelect, &bsSend, HIGH_PRIORITY, RELIABLE, 0, FALSE);
+			pRak->RPC(RPC_MenuSelect, &bsSend, HIGH_PRIORITY, RELIABLE, 0, false);
 		}
 	}
 	else if (pControls->wKeys1[15] && !pControls->wKeys2[15]) // Exited
 	{
 		m_byteExited = 1;
-		pRak->RPC(RPC_MenuQuit, NULL, HIGH_PRIORITY, RELIABLE, 0, FALSE);
+		pRak->RPC(RPC_MenuQuit, NULL, HIGH_PRIORITY, RELIABLE, 0, false);
 	}
 	else if (m_byteExited)
 	{

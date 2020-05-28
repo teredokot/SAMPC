@@ -38,13 +38,13 @@ CNetGame::CNetGame()
 {
 	fRestartWaitTime = 0.0f;
 	m_bAdminTeleport = false;
-	m_bAllowWeapons = FALSE;
+	m_bAllowWeapons = false;
 	m_byteWorldTime = 12;
 	m_byteWeather	= 10;
 	m_bStuntBonus   = true;
 	m_fGravity		= 0.008f;
 	m_iDeathDropMoney = 0;
-	m_bZoneNames = FALSE;
+	m_bZoneNames = false;
 	
 	m_longSynchedWeapons = DEFAULT_WEAPONS;
 	// Change number here and in ShutdownForGameModeRestart for default weapon sets
@@ -58,11 +58,11 @@ CNetGame::CNetGame()
 	m_pMenuPool = NULL;
 	m_pTextPool = NULL;
 	m_pGangZonePool = NULL;
-	m_bLanMode = FALSE;
+	m_bLanMode = false;
 	//m_byteMod = 0x01;
 	//m_bACEnabled = pConsole->GetBoolVariable("anticheat");
 
-	m_bLimitGlobalChatRadius = FALSE;
+	m_bLimitGlobalChatRadius = false;
 	m_fGlobalChatRadius = 10000.0f;
 	m_bLimitGlobalMarkerRadius = false;
 	m_fGlobalMarkerRadius = 10000.0f;
@@ -77,7 +77,7 @@ CNetGame::CNetGame()
 
 	m_iCurrentGameModeIndex = 0;
 	m_iCurrentGameModeRepeat = 0;
-	m_bFirstGameModeLoaded = FALSE;
+	m_bFirstGameModeLoaded = false;
 	m_pScriptTimers = new CScriptTimers;
 	
 	#ifndef WIN32
@@ -94,7 +94,7 @@ CNetGame::CNetGame()
 
 	DWORD dwPort = pConsole->GetIntVariable("port");
 	DWORD dwMaxPlayers = pConsole->GetIntVariable("maxplayers");
-	BOOL bLanMode = pConsole->GetBoolVariable("lanmode");
+	bool bLanMode = pConsole->GetBoolVariable("lanmode");
 	//BOOL bMyriad = pConsole->GetBoolVariable("myriad");
 
 	// Setup RakNet
@@ -155,7 +155,7 @@ CNetGame::CNetGame()
 	
 	// Define LAN mode
 	if(bLanMode) {
-		m_bLanMode = TRUE;
+		m_bLanMode = true;
 	}
 
 	char szScriptFiles[512];
@@ -277,7 +277,7 @@ char *CNetGame::GetNextScriptFile()
 
 }
 
-BOOL CNetGame::SetNextScriptFile(char *szFile)
+bool CNetGame::SetNextScriptFile(char *szFile)
 {
 	//char szCurGameModeConsoleVar[64];
 	char szConfigFileName[64];
@@ -307,7 +307,7 @@ BOOL CNetGame::SetNextScriptFile(char *szFile)
 		//logprintf("Set szGameModeFile to %s\n",szGameModeFile);
 
 		if(!CanFileBeOpenedForReading(szGameModeFile)) {
-			return FALSE;
+			return false;
 		}
 
 		if(!m_iCurrentGameModeRepeat) {
@@ -318,9 +318,9 @@ BOOL CNetGame::SetNextScriptFile(char *szFile)
 
 		//logprintf("Repeat is %d ConfigRepeat is %d\n",m_iCurrentGameModeRepeat,iConfigRepeatCount);
 
-		m_bFirstGameModeLoaded = TRUE;
+		m_bFirstGameModeLoaded = true;
 
-		return TRUE;
+		return true;
 
 	} else {
 		// set the script from szFile
@@ -329,18 +329,18 @@ BOOL CNetGame::SetNextScriptFile(char *szFile)
 		sprintf(szGameModeFile,"gamemodes/%s.amx",szFile);
 
 		if(!CanFileBeOpenedForReading(szGameModeFile)) {
-			return FALSE;
+			return false;
 		}
 
 		m_iCurrentGameModeRepeat = 0;
 
-		return TRUE;
+		return true;
 	}
 }
 
 //----------------------------------------------------
 
-void CNetGame::Init(BOOL bFirst = false)
+void CNetGame::Init(bool bFirst = false)
 {
 	m_iSpawnsAvailable = 0;
 
@@ -387,10 +387,10 @@ void CNetGame::Init(BOOL bFirst = false)
 	}
 
 	// Default tags/markers
-	m_bShowNameTags = TRUE;
-	m_bShowPlayerMarkers = TRUE;
-	m_bTirePopping = TRUE;
-	m_bUseCJWalk = FALSE;
+	m_bShowNameTags = true;
+	m_bShowPlayerMarkers = true;
+	m_bTirePopping = true;
+	m_bUseCJWalk = false;
 	m_bNameTagLOS = true;
 
 	// Set the default world time for clients.
@@ -399,7 +399,7 @@ void CNetGame::Init(BOOL bFirst = false)
 	// Set the default weather
 	m_byteWeather   = 10;
 
-	m_bLimitGlobalChatRadius = FALSE;
+	m_bLimitGlobalChatRadius = false;
 	m_fGlobalChatRadius = 10000.0f;
 	m_bLimitGlobalMarkerRadius = false;
 	m_fGlobalMarkerRadius = 10000.0f;
@@ -447,12 +447,12 @@ void CNetGame::ShutdownForGameModeRestart()
 
 	fRestartWaitTime = 0.0f;
 	m_bAdminTeleport = false;
-	m_bAllowWeapons = FALSE;
+	m_bAllowWeapons = false;
 	m_byteWorldTime = 12;
 	m_byteWeather	= 10;
 	m_fGravity		= 0.008f;
 	m_iDeathDropMoney = 0;
-	m_bZoneNames = FALSE;
+	m_bZoneNames = false;
 	m_longSynchedWeapons = DEFAULT_WEAPONS;
 
 #ifdef _DEBUG
@@ -499,8 +499,8 @@ void CNetGame::ReInitWhenRestarting()
 //#pragma comment(lib, "winmm.lib")
 float GetElapsedTime()
 {
-	static BOOL bTimerInit = false;
-	static BOOL bUsingOPF  = false;
+	static bool bTimerInit = false;
+	static bool bUsingOPF  = false;
 	static LONGLONG nTicksPerSec = 0;
 
 	if (!bTimerInit)
@@ -735,8 +735,8 @@ void CNetGame::BroadcastData( RakNet::BitStream *bitStream,
 							  PacketReliability reliability,
 							  char orderingStream,
 							  BYTE byteExcludedPlayer,
-							  BOOL bBroadcastLocalRangeOnly,
-							  BOOL bAimSync )
+							  bool bBroadcastLocalRangeOnly,
+							  bool bAimSync )
 {
 	// Use UNASSIGNED_PLAYER_ID to broadcast to all.
 	
@@ -749,7 +749,7 @@ void CNetGame::BroadcastData( RakNet::BitStream *bitStream,
 
 	while(x!=MAX_PLAYERS)
 	{
-		if( (m_pPlayerPool->GetSlotState(x) == TRUE) && 
+		if( (m_pPlayerPool->GetSlotState(x) == true) && 
 			(x != byteExcludedPlayer) )
 		{
 			pPlayer = m_pPlayerPool->GetAt(x);
@@ -769,7 +769,7 @@ void CNetGame::BroadcastData( RakNet::BitStream *bitStream,
 					// data is synced/broadcast in range of near players only.
 					if(fDistance < LOCAL_RANGE) {
 						m_pRak->Send(bitStream,priority,reliability,orderingStream,
-							m_pRak->GetPlayerIDFromIndex(x),FALSE);
+							m_pRak->GetPlayerIDFromIndex(x),false);
 					}
 				}
 				else {
@@ -789,7 +789,7 @@ void CNetGame::BroadcastData( RakNet::BitStream *bitStream,
 					
 					if(!r) {				
 						m_pRak->Send(bitStream,priority,reliability,orderingStream,
-							m_pRak->GetPlayerIDFromIndex(x),FALSE);
+							m_pRak->GetPlayerIDFromIndex(x),false);
 					}
 				}
 			}
@@ -814,7 +814,7 @@ void CNetGame::BroadcastDistanceRPC( short szUniqueID,
 
 	while(x!=MAX_PLAYERS)
 	{
-		if( (m_pPlayerPool->GetSlotState(x) == TRUE) && 
+		if( (m_pPlayerPool->GetSlotState(x) == true) && 
 			(x != byteExcludedPlayer) )
 		{
 			pPlayer = m_pPlayerPool->GetAt(x);

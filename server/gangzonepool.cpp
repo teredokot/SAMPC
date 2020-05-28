@@ -20,7 +20,7 @@ CGangZonePool::CGangZonePool()
 {
 	for (WORD wZone = 0; wZone < MAX_GANG_ZONES; wZone++)
 	{
-		m_bSlotState[wZone] = FALSE;
+		m_bSlotState[wZone] = false;
 	}
 }
 
@@ -37,13 +37,13 @@ WORD CGangZonePool::New(float fMinX, float fMinY, float fMaxX, float fMaxY)
 	m_fGangZone[wZone][1] = fMinY;
 	m_fGangZone[wZone][2] = fMaxX;
 	m_fGangZone[wZone][3] = fMaxY;
-	m_bSlotState[wZone] = TRUE;
+	m_bSlotState[wZone] = true;
 	return wZone;
 }
 
 void CGangZonePool::Delete(WORD wZone)
 {
-	m_bSlotState[wZone] = FALSE;
+	m_bSlotState[wZone] = false;
 	RakNet::BitStream bsParams;
 	bsParams.Write(wZone);
 	pNetGame->GetRakServer()->RPC(RPC_ScrRemoveGangZone, &bsParams, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);

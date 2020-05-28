@@ -41,8 +41,8 @@ CVehicle::CVehicle( int iModel, VECTOR *vecPos,
 	memset(&m_CarModInfo,  0,sizeof(CAR_MOD_INFO));
 	memset(&m_szNumberPlate[0],0,sizeof(m_szNumberPlate));
 
-	m_bIsActive = TRUE;
-	m_bIsWasted = FALSE;
+	m_bIsActive = true;
+	m_bIsWasted = false;
 	m_byteDriverID = INVALID_ID;
 	m_fHealth = 1000.0f;
 	m_bDeathHasBeenNotified = false;
@@ -136,7 +136,7 @@ void CVehicle::SpawnForPlayer(BYTE byteForPlayerID)
 
 //----------------------------------------------------------
 
-BOOL CVehicle::IsOccupied()
+bool CVehicle::IsOccupied()
 {
 	CPlayer *pPlayer;
 
@@ -149,13 +149,13 @@ BOOL CVehicle::IsOccupied()
 			if( pPlayer && (pPlayer->m_VehicleID == m_VehicleID) &&
 				 (pPlayer->GetState() == PLAYER_STATE_DRIVER ||
 				 pPlayer->GetState() == PLAYER_STATE_PASSENGER) ) {
-					 return TRUE;
+					 return true;
 			}
 		}
 		x++;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //----------------------------------------------------------

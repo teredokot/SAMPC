@@ -39,12 +39,12 @@ public:
 	VEHICLEID			m_VehicleID;
 	BYTE				m_byteSeatID;
 	BYTE				m_byteTeam;
-	BOOL				m_bPassengerDriveByMode;
+	bool				m_bPassengerDriveByMode;
 	DWORD				m_dwLastHeadUpdate;
 	DWORD				m_dwStreamUpdate;
 
-	BOOL				m_bShowNameTag;
-	BOOL				m_bVisible;
+	bool				m_bShowNameTag;
+	bool				m_bVisible;
 
 	float				m_fReportedHealth;
 	float				m_fReportedArmour;
@@ -69,7 +69,7 @@ public:
 
 	void ForceOutOfCurrentVehicle();
 
-	BOOL IsSurfingOrTurretMode();
+	bool IsSurfingOrTurretMode();
 	void UpdateSurfing();
 
 	void Say(unsigned char * szText);
@@ -78,16 +78,16 @@ public:
 	BYTE GetID() { return m_bytePlayerID; };
 	CPlayerPed * GetPlayerPed() { return m_pPlayerPed; };
 
-	BOOL IsActive() {
+	bool IsActive() {
 		if(m_byteState != PLAYER_STATE_NONE && m_byteState != PLAYER_STATE_SPECTATING) {
-			return TRUE;
+			return true;
 		}
-		return FALSE;
+		return false;
 	};
 
 	void Deactivate() {
 		m_byteState = PLAYER_STATE_NONE;
-		m_bShowNameTag = TRUE;
+		m_bShowNameTag = true;
 	};
 	
 	void UpdateIncarTargetPosition();
@@ -104,7 +104,7 @@ public:
 	void StorePassengerFullSyncData(PASSENGER_SYNC_DATA *ppsSync);
 	void StoreTrailerFullSyncData(TRAILER_SYNC_DATA* trSync);
 
-	BOOL Spawn(BYTE byteTeam, int iSkin, VECTOR * vecPos, float fRotation, DWORD dwColor);
+	bool Spawn(BYTE byteTeam, int iSkin, VECTOR * vecPos, float fRotation, DWORD dwColor);
 
 	void HandleDeath();
 	void ResetAllSyncAttributes();
@@ -118,14 +118,14 @@ public:
 	float GetReportedHealth() { return m_fReportedHealth; };
 	float GetReportedArmour() { return m_fReportedArmour; };
 
-	void EnterVehicle(VEHICLEID VehicleID, BOOL bPassenger);
+	void EnterVehicle(VEHICLEID VehicleID, bool bPassenger);
 	void ExitVehicle();
 	
 	void SetVirtualWorld(BYTE byteWorld) { m_byteVirtualWorld = byteWorld; };
 	
 	BYTE GetTeam() { return m_byteTeam; };
 	void SetTeam(BYTE byteTeam) { m_byteTeam = byteTeam; };
-	void ShowNameTag(BYTE byteShow) { if (byteShow) m_bShowNameTag = TRUE; else m_bShowNameTag = FALSE; };
+	void ShowNameTag(BYTE byteShow) { if (byteShow) m_bShowNameTag = true; else m_bShowNameTag = false; };
 
 	void StateChange(BYTE byteNewState, BYTE byteOldState);
 

@@ -626,15 +626,15 @@ NUDE VehicleHorn_Hook()
 //-----------------------------------------------------------
 // Returns FALSE if the entering should be cancelled.
 
-BOOL NotifyEnterVehicle()
+bool NotifyEnterVehicle()
 {
 	if(pNetGame) {
 		pVehiclePool=pNetGame->GetVehiclePool();
 		VehicleID=pVehiclePool->FindIDFromGtaPtr(_pVehicle);
 
-		if(VehicleID == INVALID_VEHICLE_ID) return FALSE;
-		if(!pVehiclePool->GetSlotState(VehicleID)) return FALSE;
-		if(pVehiclePool->GetAt(VehicleID)->m_bDoorsLocked) return FALSE;
+		if(VehicleID == INVALID_VEHICLE_ID) return false;
+		if(!pVehiclePool->GetSlotState(VehicleID)) return false;
+		if(pVehiclePool->GetAt(VehicleID)->m_bDoorsLocked) return false;
 
 		pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
 
@@ -642,10 +642,10 @@ BOOL NotifyEnterVehicle()
 			pLocalPlayer->GetPlayerPed()->SetArmedWeapon(0);
 		}
 
-		pLocalPlayer->SendEnterVehicleNotification(VehicleID,FALSE);
+		pLocalPlayer->SendEnterVehicleNotification(VehicleID,false);
 	}
 
-	return TRUE;
+	return true;
 }
 
 //-----------------------------------------------------------

@@ -28,29 +28,29 @@ private:
 
 	WORD					m_wLastKeys;
 
-	BOOL					m_bHasAimUpdates;
-	BOOL					m_bHasTrailerUpdates;
+	bool					m_bHasAimUpdates;
+	bool					m_bHasTrailerUpdates;
 	BYTE					m_byteSeatID;
 	BYTE					m_byteState;
 
 	VECTOR					m_vecCheckpoint;
 	float					m_fCheckpointSize;
-	BOOL					m_bInCheckpoint;
+	bool					m_bInCheckpoint;
 
 	VECTOR					m_vecRaceCheckpoint;
 	VECTOR					m_vecRaceNextCheckpoint;
 	BYTE					m_byteRaceCheckpointType;
 	float					m_fRaceCheckpointSize;
-	BOOL					m_bInRaceCheckpoint;
+	bool					m_bInRaceCheckpoint;
 public:
 	PLAYER_SPAWN_INFO		m_SpawnInfo;
-	BOOL					m_bHasSpawnInfo;
+	bool					m_bHasSpawnInfo;
 	BYTE					m_byteWantedLevel;
 
 	VEHICLEID				m_VehicleID;
 	DWORD					m_dwColor;
-	BOOL					m_bCheckpointEnabled;
-	BOOL					m_bRaceCheckpointEnabled;
+	bool					m_bCheckpointEnabled;
+	bool					m_bRaceCheckpointEnabled;
 	int						m_iInteriorId;
 	int						m_iDrunkLevel;
 		
@@ -85,16 +85,16 @@ public:
 	VECTOR  m_vecPos;
 	VECTOR	m_vecMoveSpeed;
 	float	m_fRotation;
-	BOOL	m_bCanTeleport;
+	bool	m_bCanTeleport;
 	float m_fWorldBounds[4];
 
-	BOOL IsActive() { 
-		if( m_byteState != PLAYER_STATE_NONE && m_byteState != PLAYER_STATE_SPECTATING ) { return TRUE; }
-		return FALSE;
+	bool IsActive() { 
+		if( m_byteState != PLAYER_STATE_NONE && m_byteState != PLAYER_STATE_SPECTATING ) { return true; }
+		return false;
 	};
 	
 	void Deactivate() {	
-		m_bHasSpawnInfo = FALSE;
+		m_bHasSpawnInfo = false;
 		memset(&m_SpawnInfo,0,sizeof(PLAYER_SPAWN_INFO));
 		m_dwColor = 0;
 		m_byteState = PLAYER_STATE_NONE;
@@ -136,12 +136,12 @@ public:
 	DWORD GetPlayerColor() { return m_dwColor; };
 
 	void SetCheckpoint(float fX, float fY, float fZ, float fSize);
-	void ToggleCheckpoint(BOOL bEnabled);
+	void ToggleCheckpoint(bool bEnabled);
 	void SetRaceCheckpoint(int iType, float fX, float fY, float fZ, float fNX, float fNY, float fNZ, float fSize);
-	void ToggleRaceCheckpoint(BOOL bEnabled);
+	void ToggleRaceCheckpoint(bool bEnabled);
 
-	BOOL IsInCheckpoint() { return m_bInCheckpoint; };
-	BOOL IsInRaceCheckpoint() { return m_bInRaceCheckpoint; };
+	bool IsInCheckpoint() { return m_bInCheckpoint; };
+	bool IsInRaceCheckpoint() { return m_bInRaceCheckpoint; };
 	BYTE GetTeam() { return m_SpawnInfo.byteTeam; };
 	BYTE GetCurrentWeapon() { return m_ofSync.byteCurrentWeapon; };
 	

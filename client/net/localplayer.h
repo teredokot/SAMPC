@@ -24,17 +24,17 @@ class CLocalPlayer
 public:
 
 	CPlayerPed				*m_pPlayerPed;
-	BOOL					m_bIsActive;
-	BOOL					m_bIsWasted;
-	BOOL					m_bWantsAnotherClass;
+	bool					m_bIsActive;
+	bool					m_bIsWasted;
+	bool					m_bWantsAnotherClass;
 	int						m_iSelectedClass;
-	BOOL					m_bWaitingForSpawnRequestReply;
+	bool					m_bWaitingForSpawnRequestReply;
 	BYTE					m_byteVirtualWorld;
 
 	BYTE					m_byteSpectateMode;
 	BYTE					m_byteSpectateType;
 	DWORD					m_SpectateID; // Vehicle or player id
-	BOOL					m_bSpectateProcessed;
+	bool					m_bSpectateProcessed;
 	VEHICLEID				m_CurrentVehicle;
 	VEHICLEID				m_LastVehicle;
 	int						m_iDisplayZoneTick;
@@ -47,21 +47,21 @@ public:
 private:
 
 	PLAYER_SPAWN_INFO		m_SpawnInfo;
-	BOOL					m_bHasSpawnInfo;
+	bool					m_bHasSpawnInfo;
 	ULONG					m_ulThisSyncFrame;
 	ULONG					m_ulLastSyncFrame;
-	BOOL					m_bPassengerDriveByMode;
+	bool					m_bPassengerDriveByMode;
 	BYTE					m_byteCurInterior;
-	BOOL					m_bInRCMode;
+	bool					m_bInRCMode;
 
 	// SPAWNING STUFF
-	BOOL					m_bClearedToSpawn;
+	bool					m_bClearedToSpawn;
 	DWORD					m_dwLastSpawnSelectionTick;// delays left and right selection
 	DWORD					m_dwInitialSelectionTick;// delays initial selection
-	BOOL					m_bIsSpectating;
+	bool					m_bIsSpectating;
 	BYTE					m_byteTeam;
 
-	BOOL					m_bSurfingMode;
+	bool					m_bSurfingMode;
 	VECTOR					m_vecLockedSurfingOffsets;
 	VEHICLEID				m_SurfingID;
 
@@ -79,12 +79,12 @@ public:
 	CLocalPlayer();
 	~CLocalPlayer(){};
 
-	BOOL IsActive() { return m_bIsActive; };
-	BOOL IsWasted() { return m_bIsWasted; };
+	bool IsActive() { return m_bIsActive; };
+	bool IsWasted() { return m_bIsWasted; };
 
 	void HandlePassengerEntry();
-	BOOL Process();
-	BOOL DestroyPlayer();
+	bool Process();
+	bool DestroyPlayer();
 	
 	BYTE GetSpecialAction();
 	void ApplySpecialAction(BYTE byteSpecialAction);
@@ -107,14 +107,14 @@ public:
 
 	void SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn);
 
-	BOOL Spawn();
+	bool Spawn();
 
 	CPlayerPed * GetPlayerPed() { return m_pPlayerPed; };
 
 	void Say(PCHAR szText);
 
 	void SendExitVehicleNotification(VEHICLEID VehicleID);
-	void SendEnterVehicleNotification(VEHICLEID VehicleID,BOOL bPassenger);
+	void SendEnterVehicleNotification(VEHICLEID VehicleID,bool bPassenger);
 	
 	void SetPlayerColor(DWORD dwColor);
 	DWORD GetPlayerColorAsRGBA();
@@ -125,26 +125,26 @@ public:
 	void SendStatsUpdate();
 	void UpdateRemoteInterior(BYTE byteInterior);
 
-	void HandleClassSelectionOutcome(BOOL bOutcome);
+	void HandleClassSelectionOutcome(bool bOutcome);
 	void HandleClassSelection();
 	void ProcessClassSelection();
-	BOOL IsClearedToSpawn() { return m_bClearedToSpawn; };
+	bool IsClearedToSpawn() { return m_bClearedToSpawn; };
 	
 	void CheckWeapons();
 	void SetVirtualWorld(BYTE byteWorld) { m_byteVirtualWorld = byteWorld; };
 	BYTE GetVirtualWorld() { return m_byteVirtualWorld; };
 
-	void ToggleSpectating(BOOL bToggle);
+	void ToggleSpectating(bool bToggle);
 	void SpectateVehicle(VEHICLEID VehicleID);
 	void SpectatePlayer(BYTE bytePlayerID);
 	void ProcessSpectating();
-	BOOL IsSpectating() { return m_bIsSpectating; };
-	void ReturnToClassSelection() { m_bWantsAnotherClass = TRUE; };
+	bool IsSpectating() { return m_bIsSpectating; };
+	void ReturnToClassSelection() { m_bWantsAnotherClass = true; };
 
 	BYTE GetTeam() { return m_byteTeam; };
 	void SetTeam(BYTE byteTeam) { m_byteTeam = byteTeam; };
 
-	BOOL IsInRCMode() { return m_bInRCMode; };
+	bool IsInRCMode() { return m_bInRCMode; };
 
 	int DetermineNumberOfPlayersInLocalRange();
 };

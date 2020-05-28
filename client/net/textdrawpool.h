@@ -16,7 +16,7 @@ class CTextDrawPool
 private:
 
 	CTextDraw		*m_pTextDraw[MAX_TEXT_DRAWS];
-	BOOL			m_bSlotState[MAX_TEXT_DRAWS];
+	bool			m_bSlotState[MAX_TEXT_DRAWS];
 
 public:
 	CTextDrawPool();

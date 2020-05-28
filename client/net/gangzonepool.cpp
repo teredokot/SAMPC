@@ -18,7 +18,7 @@ CGangZonePool::CGangZonePool()
 	for (WORD wZone = 0; wZone < MAX_GANG_ZONES; wZone++)
 	{
 		m_pGangZone[wZone] = NULL;
-		m_bSlotState[wZone] = FALSE;
+		m_bSlotState[wZone] = false;
 	}
 }
 
@@ -40,7 +40,7 @@ void CGangZonePool::New(WORD wZone, float fMinX, float fMinY, float fMaxX, float
 	{
 		delete m_pGangZone[wZone];
 		m_pGangZone[wZone] = NULL;
-		m_bSlotState[wZone] = FALSE;
+		m_bSlotState[wZone] = false;
 	}
 	GANG_ZONE* pGangZone = (GANG_ZONE*)malloc(sizeof (GANG_ZONE));
 	if (pGangZone)
@@ -53,7 +53,7 @@ void CGangZonePool::New(WORD wZone, float fMinX, float fMinY, float fMaxX, float
 		pGangZone->dwColor = dwColor;
 		pGangZone->dwAltColor = dwColor;
 		m_pGangZone[wZone] = pGangZone;
-		m_bSlotState[wZone] = TRUE;
+		m_bSlotState[wZone] = true;
 	}
 }
 
@@ -79,7 +79,7 @@ void CGangZonePool::Delete(WORD wZone)
 	{
 		delete m_pGangZone[wZone];
 		m_pGangZone[wZone] = NULL;
-		m_bSlotState[wZone] = FALSE;
+		m_bSlotState[wZone] = false;
 	}
 }
 

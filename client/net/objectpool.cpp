@@ -12,7 +12,7 @@ CObjectPool::CObjectPool()
 {
 	for(BYTE byteObjectID = 0; byteObjectID < MAX_OBJECTS; byteObjectID++)
 	{
-		m_bObjectSlotState[byteObjectID]	= FALSE;
+		m_bObjectSlotState[byteObjectID]	= false;
 		m_pObjects[byteObjectID]			= NULL;
 	}
 };
@@ -25,21 +25,21 @@ CObjectPool::~CObjectPool()
 	}
 }
 
-BOOL CObjectPool::Delete(BYTE byteObjectID)
+bool CObjectPool::Delete(BYTE byteObjectID)
 {
 	if(!GetSlotState(byteObjectID) || !m_pObjects[byteObjectID])
 	{
-		return FALSE; // Vehicle already deleted or not used.
+		return false; // Vehicle already deleted or not used.
 	}
 
-	m_bObjectSlotState[byteObjectID] = FALSE;
+	m_bObjectSlotState[byteObjectID] = false;
 	delete m_pObjects[byteObjectID];
 	m_pObjects[byteObjectID] = NULL;
 
-	return TRUE;
+	return true;
 }
 
-BOOL CObjectPool::New(byte byteObjectID, int iModel, VECTOR vecPos, VECTOR vecRot)
+bool CObjectPool::New(byte byteObjectID, int iModel, VECTOR vecPos, VECTOR vecRot)
 {
 	if (m_pObjects[byteObjectID] != NULL)
 	{
@@ -50,12 +50,12 @@ BOOL CObjectPool::New(byte byteObjectID, int iModel, VECTOR vecPos, VECTOR vecRo
 
 	if (m_pObjects[byteObjectID])
 	{
-		m_bObjectSlotState[byteObjectID] = TRUE;
+		m_bObjectSlotState[byteObjectID] = true;
 
-		return TRUE;
+		return true;
 	}
 
-	return FALSE; // Will only be called if m_pObjects[byteObjectID] is null
+	return false; // Will only be called if m_pObjects[byteObjectID] is null
 }
 
 //----------------------------------------------------

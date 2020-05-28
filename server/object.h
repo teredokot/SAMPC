@@ -23,7 +23,7 @@ public:
 
 	BYTE					m_byteObjectID;
 	int						m_iModel;
-	BOOL					m_bIsActive;
+	bool					m_bIsActive;
 	MATRIX4X4				m_matWorld;
 	MATRIX4X4				m_matTarget;
 	BYTE					m_byteMoving;
@@ -33,7 +33,7 @@ public:
 	CObject(int iModel, VECTOR * vecPos, VECTOR * vecRot);
 	~CObject(){};
 
-	BOOL IsActive() { return m_bIsActive; }
+	bool IsActive() { return m_bIsActive; }
 
 	void SetID(BYTE byteObjectID) { m_byteObjectID = byteObjectID; };
 

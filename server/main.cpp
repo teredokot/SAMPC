@@ -26,7 +26,7 @@ DWORD		dwdlRconReply=0;
 
 FILE		*pLogFile;
 bool		bQuitApp = false;
-BOOL		bGameModeFinished=FALSE;
+bool		bGameModeFinished=false;
 
 unsigned int _uiRndSrvChallenge;
 
@@ -470,9 +470,9 @@ int main (int argc, char** argv)
 		pRcon->Process();
 #endif*/
 
-		if(TRUE == bGameModeFinished) {
+		if(bGameModeFinished) {
 			pNetGame->ShutdownForGameModeRestart();
-			bGameModeFinished = FALSE;
+			bGameModeFinished = false;
 		}
 
 		#ifdef WIN32

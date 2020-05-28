@@ -26,7 +26,7 @@ static DWORD dwCamTargetEnt1;
 static DWORD dwCamTargetEnt2;
 
 int iTimesDataModified = 0;
-extern BOOL bFirstSpawn;
+extern bool bFirstSpawn;
 
 //void UnFuck(DWORD,int);
 

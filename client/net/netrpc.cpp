@@ -107,7 +107,7 @@ void InitGame(RPCParameters *rpcParams)
 
 	pPlayerPool->SetLocalPlayerID(byteMyPlayerID);
 	pGame->EnableStuntBonus(bStuntBonus);
-	if (bLanMode) pNetGame->SetLanMode(TRUE);
+	if (bLanMode) pNetGame->SetLanMode(true);
 
 	pNetGame->InitGameLogic();
 
@@ -180,10 +180,10 @@ void RequestClass(RPCParameters *rpcParams)
 
 	if(byteRequestOutcome) {
 		pPlayer->SetSpawnInfo(&SpawnInfo);
-		pPlayer->HandleClassSelectionOutcome(TRUE);
+		pPlayer->HandleClassSelectionOutcome(true);
 	}
 	else {
-		pPlayer->HandleClassSelectionOutcome(FALSE);
+		pPlayer->HandleClassSelectionOutcome(false);
 	}
 }
 
@@ -280,13 +280,13 @@ void EnterVehicle(RPCParameters *rpcParams)
 	BYTE bytePlayerID=0;
 	VEHICLEID VehicleID=0;
 	BYTE bytePassenger=0;
-	BOOL bPassenger=FALSE;
+	bool bPassenger=false;
 
 	bsData.Read(bytePlayerID);
 	bsData.Read(VehicleID);
 	bsData.Read(bytePassenger);
 
-	if(bytePassenger) bPassenger = TRUE;
+	if(bytePassenger) bPassenger = true;
 
 	CRemotePlayer *pRemotePlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
@@ -434,14 +434,14 @@ void SetCheckpoint(RPCParameters *rpcParams)
 	Extent.Z = fSize;
 
 	pGame->SetCheckpointInformation(&Pos, &Extent);
-	pGame->ToggleCheckpoints(TRUE);
+	pGame->ToggleCheckpoints(true);
 }
 
 //----------------------------------------------------
 
 void DisableCheckpoint(RPCParameters *rpcParams)
 {
-	pGame->ToggleCheckpoints(FALSE);
+	pGame->ToggleCheckpoints(false);
 }
 
 //----------------------------------------------------
@@ -471,14 +471,14 @@ void SetRaceCheckpoint(RPCParameters *rpcParams)
 	bsData.Read(fX);
 
 	pGame->SetRaceCheckpointInformation(byteType, &Pos, &Next, fX);
-	pGame->ToggleRaceCheckpoints(TRUE);
+	pGame->ToggleRaceCheckpoints(true);
 }
 
 //----------------------------------------------------
 
 void DisableRaceCheckpoint(RPCParameters *rpcParams)
 {
-	pGame->ToggleRaceCheckpoints(FALSE);
+	pGame->ToggleRaceCheckpoints(false);
 }
 
 //----------------------------------------------------

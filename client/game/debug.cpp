@@ -782,12 +782,12 @@ void GameDrawMemoryInfoAscii()
 
 //--------------------------------------------------------------
 
-int sync_inited=0;
+/*int sync_inited=0;
 CVehicle * pv[2];
 CPlayerPed * pActor;
 CPlayerPed * pPlayer;
 WORD w1,w2,w3;
-BOOL bOffFrame=FALSE;
+BOOL bOffFrame=FALSE;*/
 
 void GameDoVehicleSyncTest()
 {
@@ -864,7 +864,7 @@ void GameDebugScreensOff()
 
 //----------------------------------------------------------
 
-BOOL bSelVehicleInit=FALSE;
+bool bSelVehicleInit=false;
 CVehicle *pVehicle=NULL;
 int iSelection = 400;
 GTA_CONTROLSET *pControls;
@@ -890,7 +890,7 @@ void GameBuildSelectVehicle()
 		pGame->FindPlayerPed()->TogglePlayerControllable(0);
 		pGame->DisplayGameText("Vehicle Select",4000,6);
 		GameBuildRecreateVehicle();
-		bSelVehicleInit = TRUE;
+		bSelVehicleInit = true;
 	}
 
 	pGame->DisplayHud(FALSE);

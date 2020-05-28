@@ -25,7 +25,7 @@ class CVehiclePool
 {
 private:
 	
-	BOOL m_bVehicleSlotState[MAX_VEHICLES];
+	bool m_bVehicleSlotState[MAX_VEHICLES];
 	CVehicle *m_pVehicles[MAX_VEHICLES];
 	BYTE m_byteVirtualWorld[MAX_VEHICLES];
 	unsigned int m_uiLastVehicleId;
@@ -35,7 +35,7 @@ public:
 
 	VEHICLEID New(int iVehicleType, VECTOR * vecPos, float fRotation, int iColor1, int iColor2, int iRespawnDelay);
 
-	BOOL Delete(VEHICLEID VehicleID);	
+	bool Delete(VEHICLEID VehicleID);	
 		
 	// Retrieve a vehicle by id
 	CVehicle* GetAt(VEHICLEID VehicleID)
@@ -45,9 +45,9 @@ public:
 	};
 
 	// Find out if the slot is inuse.
-	BOOL GetSlotState(VEHICLEID VehicleID)
+	bool GetSlotState(VEHICLEID VehicleID)
 	{
-		if(VehicleID > MAX_VEHICLES) { return FALSE; }
+		if(VehicleID > MAX_VEHICLES) { return false; }
 		return m_bVehicleSlotState[VehicleID];
 	};
 

@@ -15,7 +15,7 @@ CVehiclePool::CVehiclePool()
 {
 	// loop through and initialize all net players to null and slot states to false
 	for(VEHICLEID VehicleID = 0; VehicleID != MAX_VEHICLES; VehicleID++) {
-		m_bVehicleSlotState[VehicleID] = FALSE;
+		m_bVehicleSlotState[VehicleID] = false;
 		m_pVehicles[VehicleID] = NULL;
 	}
 }
@@ -39,7 +39,7 @@ VEHICLEID CVehiclePool::New(int iVehicleType,
 
 	for(VehicleID=1; VehicleID != MAX_VEHICLES; VehicleID++)
 	{
-		if(m_bVehicleSlotState[VehicleID] == FALSE) break;
+		if(m_bVehicleSlotState[VehicleID] == false) break;
 	}
 
 	if(VehicleID == MAX_VEHICLES) return 0xFFFF;		
@@ -49,7 +49,7 @@ VEHICLEID CVehiclePool::New(int iVehicleType,
 	if(m_pVehicles[VehicleID])
 	{
 		m_pVehicles[VehicleID]->SetID(VehicleID);
-		m_bVehicleSlotState[VehicleID] = TRUE;
+		m_bVehicleSlotState[VehicleID] = true;
 		m_byteVirtualWorld[VehicleID] = 0;
 
 		for (unsigned int i = 0; i < MAX_VEHICLES; i++)
@@ -70,14 +70,14 @@ VEHICLEID CVehiclePool::New(int iVehicleType,
 
 //----------------------------------------------------
 
-BOOL CVehiclePool::Delete(VEHICLEID VehicleID)
+bool CVehiclePool::Delete(VEHICLEID VehicleID)
 {
 	if(!GetSlotState(VehicleID) || !m_pVehicles[VehicleID])
 	{
-		return FALSE; // Vehicle already deleted or not used.
+		return false; // Vehicle already deleted or not used.
 	}
 
-	m_bVehicleSlotState[VehicleID] = FALSE;
+	m_bVehicleSlotState[VehicleID] = false;
 	delete m_pVehicles[VehicleID];
 	m_pVehicles[VehicleID] = NULL;
 
@@ -88,7 +88,7 @@ BOOL CVehiclePool::Delete(VEHICLEID VehicleID)
 			m_uiLastVehicleId = i;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
@@ -97,7 +97,7 @@ void CVehiclePool::Process(float fElapsedTime)
 {
 	for (int i=0; i<MAX_VEHICLES; i++)
 	{
-		if (GetSlotState(i) == TRUE)
+		if (GetSlotState(i))
 		{
 			GetAt(i)->Process(fElapsedTime);
 		}
@@ -113,7 +113,7 @@ void CVehiclePool::InitForPlayer(BYTE bytePlayerID)
 	VEHICLEID x=0;
 
 	while(x!=MAX_VEHICLES) {
-		if(GetSlotState(x) == TRUE) {
+		if(GetSlotState(x)) {
 			pVehicle = GetAt(x);
 			if(pVehicle->IsActive()) pVehicle->SpawnForPlayer(bytePlayerID);
 		}

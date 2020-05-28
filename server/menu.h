@@ -14,9 +14,9 @@ Version: $Id: menu.h,v 1.0 2007/02/13 19:26:45 Y_Less Exp $
 
 struct MENU_INT
 {
-	BOOL bMenu;
-	BOOL bRow[MAX_MENU_ITEMS];
-	BOOL bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)]; 
+	bool bMenu;
+	bool bRow[MAX_MENU_ITEMS];
+	bool bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)]; 
 };
 
 class CMenu
@@ -29,7 +29,7 @@ private:
 	CHAR m_charItems[MAX_MENU_ITEMS][MAX_COLUMNS][MAX_MENU_LINE];
 	CHAR m_charHeader[MAX_COLUMNS][MAX_MENU_LINE];
 	
-	BOOL m_bInitedForPlayer[MAX_PLAYERS];
+	bool m_bInitedForPlayer[MAX_PLAYERS];
 	MENU_INT m_MenuInteraction;
 	
 	float m_fXPos;
@@ -60,10 +60,10 @@ public:
 	
 	void ResetPlayer(BYTE bytePlayerID)
 	{
-		if (bytePlayerID < MAX_PLAYERS) m_bInitedForPlayer[bytePlayerID] = FALSE;
+		if (bytePlayerID < MAX_PLAYERS) m_bInitedForPlayer[bytePlayerID] = false;
 	};
-	void DisableInteraction() { m_MenuInteraction.bMenu = FALSE; };
-	void DisableRow(BYTE byteRow) { m_MenuInteraction.bRow[byteRow] = FALSE; };
+	void DisableInteraction() { m_MenuInteraction.bMenu = false; };
+	void DisableRow(BYTE byteRow) { m_MenuInteraction.bRow[byteRow] = false; };
 	
 };
 

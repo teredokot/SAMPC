@@ -28,7 +28,7 @@ CPlayerPool::CPlayerPool()
 
 	// loop through and initialize all net players to null and slot states to false
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++) {
-		m_bPlayerSlotState[bytePlayerID] = FALSE;
+		m_bPlayerSlotState[bytePlayerID] = false;
 		m_pPlayers[bytePlayerID] = NULL;
 		m_iPlayerScores[bytePlayerID] = 0;
 		m_dwPlayerPings[bytePlayerID] = 0;
@@ -49,7 +49,7 @@ CPlayerPool::~CPlayerPool()
 
 //----------------------------------------------------
 
-BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
+bool CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
 {
 	m_pPlayers[bytePlayerID] = new CRemotePlayer();
 
@@ -57,30 +57,30 @@ BOOL CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
 	{
 		strcpy_s(m_szPlayerNames[bytePlayerID],szPlayerName);
 		m_pPlayers[bytePlayerID]->SetID(bytePlayerID);
-		m_bPlayerSlotState[bytePlayerID] = TRUE;
+		m_bPlayerSlotState[bytePlayerID] = true;
 		//if(pChatWindow) 
 			//pChatWindow->AddInfoMessage("*** %s joined the server.",szPlayerName);
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
 //----------------------------------------------------
 
-BOOL CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
+bool CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 {
 	if(!GetSlotState(bytePlayerID) || !m_pPlayers[bytePlayerID]) {
-		return FALSE; // Player already deleted or not used.
+		return false; // Player already deleted or not used.
 	}
 
 	if (m_pLocalPlayer && m_pLocalPlayer->IsSpectating() && m_pLocalPlayer->m_SpectateID == bytePlayerID) {
-		m_pLocalPlayer->ToggleSpectating(FALSE);
+		m_pLocalPlayer->ToggleSpectating(false);
 	}
 
-	m_bPlayerSlotState[bytePlayerID] = FALSE;
+	m_bPlayerSlotState[bytePlayerID] = false;
 	delete m_pPlayers[bytePlayerID];
 	m_pPlayers[bytePlayerID] = NULL;
 
@@ -89,18 +89,18 @@ BOOL CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 		//m_szPlayerNames[bytePlayerID],szQuitReasons[byteReason]);
 	//}
 
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
 
-BOOL CPlayerPool::Process()
+bool CPlayerPool::Process()
 {
 	// Process all CRemotePlayers
 	BYTE localVW = 0;
 	if (m_pLocalPlayer) localVW = m_pLocalPlayer->GetVirtualWorld();
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++) {
-		if(TRUE == m_bPlayerSlotState[bytePlayerID]) {
+		if(true == m_bPlayerSlotState[bytePlayerID]) {
 			
 			try {
 				m_pPlayers[bytePlayerID]->Process(localVW);
@@ -132,7 +132,7 @@ BOOL CPlayerPool::Process()
 		}
 	}
 	
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
@@ -143,7 +143,7 @@ BYTE CPlayerPool::FindRemotePlayerIDFromGtaPtr(PED_TYPE * pActor)
 
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++)
 	{
-		if(TRUE == m_bPlayerSlotState[bytePlayerID])
+		if(true == m_bPlayerSlotState[bytePlayerID])
 		{
 			pPlayerPed = m_pPlayers[bytePlayerID]->GetPlayerPed();
 
@@ -164,7 +164,7 @@ BYTE CPlayerPool::GetCount()
 {
 	BYTE byteCount=0;
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++) {
-		if(TRUE == m_bPlayerSlotState[bytePlayerID]) {
+		if(true == m_bPlayerSlotState[bytePlayerID]) {
 			byteCount++;
 		}
 	}
@@ -175,11 +175,11 @@ BYTE CPlayerPool::GetCount()
 
 void CPlayerPool::DeactivateAll()
 {
-	m_pLocalPlayer->m_bIsActive = FALSE;
+	m_pLocalPlayer->m_bIsActive = false;
 	m_pLocalPlayer->m_iSelectedClass = 0;
 
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++) {
-		if(TRUE == m_bPlayerSlotState[bytePlayerID]) {
+		if(true == m_bPlayerSlotState[bytePlayerID]) {
 			m_pPlayers[bytePlayerID]->Deactivate();
 		}
 	}

@@ -14,7 +14,7 @@ class CPlayerPed;
 class CTask
 {
 protected:
-	BOOL m_bSelfCreated;
+	bool m_bSelfCreated;
 
 public:
 	CPlayerPed *m_pPlayerPed;
@@ -34,7 +34,7 @@ public:
 
 	virtual DWORD GetID();
 
-	virtual BOOL IsDestroyed();
+	virtual bool IsDestroyed();
 	virtual BOOL IsSimple();
 
 };

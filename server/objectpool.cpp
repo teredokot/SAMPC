@@ -17,12 +17,12 @@ CObjectPool::CObjectPool()
 {
 	// loop through and initialize all net players to null and slot states to false
 	for(BYTE byteObjectID = 0; byteObjectID != MAX_OBJECTS; byteObjectID++) {
-		m_bObjectSlotState[byteObjectID] = FALSE;
+		m_bObjectSlotState[byteObjectID] = false;
 		m_pObjects[byteObjectID] = NULL;
-		m_bPlayersObject[byteObjectID] = FALSE;
+		m_bPlayersObject[byteObjectID] = false;
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			m_bPlayerObjectSlotState[i][byteObjectID] = FALSE;
+			m_bPlayerObjectSlotState[i][byteObjectID] = false;
 			m_pPlayerObjects[i][byteObjectID] = NULL;
 		}
 	}
@@ -52,7 +52,7 @@ BYTE CObjectPool::New(int iModel, VECTOR * vecPos, VECTOR * vecRot)
 
 	for(byteObjectID=1; byteObjectID != MAX_OBJECTS; byteObjectID++)
 	{
-		if(m_bObjectSlotState[byteObjectID] == FALSE && m_bPlayersObject[byteObjectID] == FALSE) break;
+		if(m_bObjectSlotState[byteObjectID] == false && m_bPlayersObject[byteObjectID] == false) break;
 	}
 
 	if(byteObjectID == MAX_OBJECTS) return 0xFF;		
@@ -62,8 +62,8 @@ BYTE CObjectPool::New(int iModel, VECTOR * vecPos, VECTOR * vecRot)
 	if(m_pObjects[byteObjectID])
 	{
 		m_pObjects[byteObjectID]->SetID(byteObjectID);
-		m_bObjectSlotState[byteObjectID] = TRUE;
-		m_bPlayersObject[byteObjectID] = FALSE;
+		m_bObjectSlotState[byteObjectID] = true;
+		m_bPlayersObject[byteObjectID] = false;
 
 		//pNetGame->GetGameMode()->OnObjectSpawn(byteObjectID);
 
@@ -80,7 +80,7 @@ BYTE CObjectPool::New(int iPlayer, int iModel, VECTOR* vecPos, VECTOR* vecRot)
 
 	for(byteObjectID=1; byteObjectID != MAX_OBJECTS; byteObjectID++)
 	{
-		if(m_bObjectSlotState[byteObjectID] == FALSE && m_bPlayerObjectSlotState[iPlayer][byteObjectID] == FALSE) break;
+		if(m_bObjectSlotState[byteObjectID] == false && m_bPlayerObjectSlotState[iPlayer][byteObjectID] == false) break;
 	}
 
 	if(byteObjectID == MAX_OBJECTS) return 0xFF;		
@@ -90,9 +90,9 @@ BYTE CObjectPool::New(int iPlayer, int iModel, VECTOR* vecPos, VECTOR* vecRot)
 	if (pObject)
 	{
 		pObject->SetID(byteObjectID);
-		m_bPlayerObjectSlotState[iPlayer][byteObjectID] = TRUE;
+		m_bPlayerObjectSlotState[iPlayer][byteObjectID] = true;
 		m_pPlayerObjects[iPlayer][byteObjectID] = pObject;
-		m_bPlayersObject[byteObjectID] = TRUE;
+		m_bPlayersObject[byteObjectID] = true;
 		return byteObjectID;
 	}
 	return 0xFF;
@@ -144,43 +144,43 @@ void CObjectPool::Process(float fElapsedTime)
 
 //----------------------------------------------------
 
-BOOL CObjectPool::Delete(BYTE byteObjectID)
+bool CObjectPool::Delete(BYTE byteObjectID)
 {
 	if(!GetSlotState(byteObjectID) || !m_pObjects[byteObjectID])
 	{
-		return FALSE; // Object already deleted or not used.
+		return false; // Object already deleted or not used.
 	}
 
 	//pNetGame->GetGameMode()->OnObjectDeath(byteObjectID, 0);
 
-	m_bObjectSlotState[byteObjectID] = FALSE;
+	m_bObjectSlotState[byteObjectID] = false;
 	delete m_pObjects[byteObjectID];
 	m_pObjects[byteObjectID] = NULL;
 
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
 
-BOOL CObjectPool::DeleteForPlayer(BYTE bytePlayerID, BYTE byteObjectID)
+bool CObjectPool::DeleteForPlayer(BYTE bytePlayerID, BYTE byteObjectID)
 {
 	if(!m_bPlayersObject[byteObjectID] || m_pPlayerObjects[bytePlayerID][byteObjectID] == NULL)
 	{
-		return FALSE; // Object already deleted or not used or global.
+		return false; // Object already deleted or not used or global.
 	}
 
 	//pNetGame->GetGameMode()->OnObjectDeath(byteObjectID, 0);
 
-	m_bPlayerObjectSlotState[bytePlayerID][byteObjectID] = FALSE;
+	m_bPlayerObjectSlotState[bytePlayerID][byteObjectID] = false;
 	delete m_pPlayerObjects[bytePlayerID][byteObjectID];
 	m_pPlayerObjects[bytePlayerID][byteObjectID] = NULL;
 	for (int i = 0; i < MAX_PLAYERS; i++) // Check if anyone has it anymore
 	{	
-		if (m_bPlayerObjectSlotState[i][byteObjectID]) return TRUE;
+		if (m_bPlayerObjectSlotState[i][byteObjectID]) return true;
 	}
-	m_bPlayersObject[byteObjectID] = FALSE; // Mark as an empty slot
+	m_bPlayersObject[byteObjectID] = false; // Mark as an empty slot
 
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------
@@ -192,7 +192,7 @@ void CObjectPool::InitForPlayer(BYTE bytePlayerID)
 	BYTE x=0;
 
 	while(x!=MAX_OBJECTS) {
-		if(GetSlotState(x) == TRUE) {
+		if(GetSlotState(x) == true) {
 			pObject = GetAt(x);
 			if(pObject->IsActive()) pObject->SpawnForPlayer(bytePlayerID);
 		}

@@ -35,7 +35,7 @@ using namespace RakNet;
 
 #define STATS_UPDATE_TICKS 1000 // 1 second
 
-BOOL bFirstSpawn = TRUE;
+bool bFirstSpawn = true;
 
 static DWORD dwEnterVehTimeElasped = -1;
 
@@ -45,10 +45,10 @@ extern int iTimesDataModified;
 
 CLocalPlayer::CLocalPlayer()
 {
-	m_bHasSpawnInfo = FALSE;
+	m_bHasSpawnInfo = false;
 	m_pPlayerPed = pGame->FindPlayerPed();
-	m_bIsActive = FALSE;
-	m_bIsWasted = FALSE;
+	m_bIsActive = false;
+	m_bIsWasted = false;
 	m_ulThisSyncFrame = 0;
 	m_ulLastSyncFrame = 0;
 	m_wLastKeys = 0;
@@ -57,17 +57,17 @@ CLocalPlayer::CLocalPlayer()
 	m_dwLastSendSpecTick = GetTickCount();
 	m_dwLastAimSendTick = m_dwLastSendTick;
 	m_dwLastStatsUpdateTick = m_dwLastSendTick;
-	m_bWantsAnotherClass = FALSE;
-	m_bWaitingForSpawnRequestReply = FALSE;
+	m_bWantsAnotherClass = false;
+	m_bWaitingForSpawnRequestReply = false;
 	m_iSelectedClass = 0;
 	m_byteVirtualWorld = 0;
 	m_dwLastSpawnSelectionTick = GetTickCount();
 	m_dwLastHeadUpdate = GetTickCount();
-	m_bInRCMode = FALSE;
+	m_bInRCMode = false;
 	m_sNormalOnfootRate = NETMODE_NORMAL_ONFOOT_SENDRATE;
 	m_sNormalIncarRate = NETMODE_NORMAL_INCAR_SENDRATE;
 
-	m_bIsSpectating = FALSE;
+	m_bIsSpectating = false;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;
 	m_SpectateID = 0xFFFFFFFF;
 	ResetAllSyncAttributes();
@@ -83,9 +83,9 @@ CLocalPlayer::CLocalPlayer()
 
 //----------------------------------------------------------
 
-BOOL CLocalPlayer::DestroyPlayer()
+bool CLocalPlayer::DestroyPlayer()
 {
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------------
@@ -94,12 +94,12 @@ void CLocalPlayer::ResetAllSyncAttributes()
 {
 	m_byteCurInterior = 0;
 	m_LastVehicle = 0xFFFF;
-	m_bInRCMode = FALSE;
+	m_bInRCMode = false;
 }
 
 //----------------------------------------------------------
 
-BOOL CLocalPlayer::Process()
+bool CLocalPlayer::Process()
 {
 	DWORD dwThisTick;
 
@@ -119,7 +119,7 @@ BOOL CLocalPlayer::Process()
 		// HANDLE I'M A DEAD LOCAL PLAYER PED
 		if (!m_bIsWasted && m_pPlayerPed->GetActionTrigger() == ACTION_DEATH || m_pPlayerPed->IsDead()) {
 			// DEAD
-			ToggleSpectating(FALSE); // Player shouldn't die while spectating, but scripts may mess with that
+			ToggleSpectating(false); // Player shouldn't die while spectating, but scripts may mess with that
 			
 			if(m_pPlayerPed->IsDancing()) {
 				m_pPlayerPed->StopDancing(); // there's no need to dance when you're dead
@@ -137,7 +137,7 @@ BOOL CLocalPlayer::Process()
 			m_pPlayerPed->TogglePlayerControllable(1);
 
 			if(m_bInRCMode) {
-				m_bInRCMode = FALSE;
+				m_bInRCMode = false;
 				m_pPlayerPed->Add();
 			}
 
@@ -151,18 +151,18 @@ BOOL CLocalPlayer::Process()
 
 			SendWastedNotification();
 
-			m_bIsActive = FALSE;
-			m_bIsWasted = TRUE;
+			m_bIsActive = false;
+			m_bIsWasted = true;
 
 			// Disable zone names till they respawn (looks silly in request spawn)
 			pGame->EnableZoneNames(0);
 
-			return TRUE;
+			return true;
 		}
 
 		// HANDLE DANCING LOCAL PED
 		if(m_pPlayerPed->IsDancing()) {
-			pGame->DisplayHud(FALSE);
+			pGame->DisplayHud(false);
 			m_pPlayerPed->ProcessDancing();
 			if(GameGetInternalKeys()->wKeys1[17]) m_pPlayerPed->StopDancing();
 		}
@@ -230,7 +230,7 @@ BOOL CLocalPlayer::Process()
 		// PLAYER DATA UPDATES
 		if (m_bIsSpectating) {
 			ProcessSpectating();
-			m_bPassengerDriveByMode = FALSE;
+			m_bPassengerDriveByMode = false;
 		}
 		// DRIVER CONDITIONS
 		else if(m_pPlayerPed->IsInVehicle() && !m_pPlayerPed->IsAPassenger())
@@ -246,7 +246,7 @@ BOOL CLocalPlayer::Process()
 			// HANDLE DRIVING AN RC VEHICLE
 			if(pVehicle && !m_bInRCMode && pVehicle->IsRCVehicle()) {
 				m_pPlayerPed->Remove();
-				m_bInRCMode = TRUE;
+				m_bInRCMode = true;
 			}
 
 			if(m_bInRCMode && !pVehicle) {
@@ -263,7 +263,7 @@ BOOL CLocalPlayer::Process()
 				m_dwLastSendTick = GetTickCount();
 				SendInCarFullSyncData(); // INCAR - DRIVER				
 			}
-			m_bPassengerDriveByMode = FALSE;
+			m_bPassengerDriveByMode = false;
 		}
 		// ONFOOT CONDITIONS
 		else if(m_pPlayerPed->GetActionTrigger() == ACTION_NORMAL || m_pPlayerPed->GetActionTrigger() == ACTION_SCOPE) // Scoped - THIS IS A QUICK HACK CHANGEME
@@ -282,7 +282,7 @@ BOOL CLocalPlayer::Process()
 			}
 
 			if(m_bInRCMode) {
-				m_bInRCMode = FALSE;
+				m_bInRCMode = false;
 				m_pPlayerPed->Add();
 			}
 
@@ -334,13 +334,13 @@ BOOL CLocalPlayer::Process()
 				}
 			}
 
-			m_bPassengerDriveByMode = FALSE;
+			m_bPassengerDriveByMode = false;
 		}
 		// PASSENGER CONDITIONS
 		else if(m_pPlayerPed->IsInVehicle() && m_pPlayerPed->IsAPassenger())
 		{
 			if(m_bInRCMode) {
-				m_bInRCMode = FALSE;
+				m_bInRCMode = false;
 				m_pPlayerPed->Add();
 			}
 
@@ -352,7 +352,7 @@ BOOL CLocalPlayer::Process()
 				// NOT IN DRIVEBY MODE AND HORN HELD 
 				if(iWeapon == WEAPON_UZI || iWeapon == WEAPON_MP5 || iWeapon == WEAPON_TEC9) {
 					if(m_pPlayerPed->StartPassengerDriveByMode()) {
-						m_bPassengerDriveByMode = TRUE;
+						m_bPassengerDriveByMode = true;
 					}	
 				}
 			}
@@ -368,13 +368,13 @@ BOOL CLocalPlayer::Process()
 	// HANDLE !IsActive spectating
 	if(m_bIsSpectating && !m_bIsActive) {
 		ProcessSpectating();
-		return TRUE;
+		return true;
 	}
 
 	// HANDLE THE 'WANTS ANOTHER CLASS BUTTON'
 	if(!m_bWantsAnotherClass && GetAsyncKeyState(VK_F4))
 	{
-		m_bWantsAnotherClass = TRUE;
+		m_bWantsAnotherClass = true;
 		pChatWindow->AddInfoMessage("Returning to class selection after next death");
 	}
 
@@ -394,12 +394,12 @@ BOOL CLocalPlayer::Process()
 			}
 
 		} else {
-			m_bIsWasted = FALSE;
+			m_bIsWasted = false;
 			HandleClassSelection();
-			m_bWantsAnotherClass = FALSE;
+			m_bWantsAnotherClass = false;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	// HAND CONTROL OVER TO THE GAMELOGIC
@@ -411,7 +411,7 @@ BOOL CLocalPlayer::Process()
 		ProcessClassSelection();
 	}
 
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------------
@@ -535,7 +535,7 @@ void CLocalPlayer::UpdateSurfing()
 	VEHICLE_TYPE *Contact = m_pPlayerPed->GetGtaContactVehicle();
 
 	if(!Contact) {
-		m_bSurfingMode = FALSE;
+		m_bSurfingMode = false;
 		m_vecLockedSurfingOffsets.X = 0.0f;
 		m_vecLockedSurfingOffsets.Y = 0.0f;
 		m_vecLockedSurfingOffsets.Z = 0.0f;
@@ -562,7 +562,7 @@ void CLocalPlayer::UpdateSurfing()
 			pVehicle->GetMatrix(&matVehicle);
 			m_pPlayerPed->GetMatrix(&matPlayer);
 
-			m_bSurfingMode = TRUE;
+			m_bSurfingMode = true;
 			m_SurfingID = vehID;
 
 			m_vecLockedSurfingOffsets.X = matPlayer.pos.X - matVehicle.pos.X;
@@ -588,7 +588,7 @@ void CLocalPlayer::UpdateSurfing()
 			return;
 		}
 	}
-	m_bSurfingMode = FALSE;
+	m_bSurfingMode = false;
 	m_vecLockedSurfingOffsets.X = 0.0f;
 	m_vecLockedSurfingOffsets.Y = 0.0f;
 	m_vecLockedSurfingOffsets.Z = 0.0f;
@@ -982,7 +982,7 @@ void CLocalPlayer::RequestSpawn()
 void CLocalPlayer::SetSpawnInfo(PLAYER_SPAWN_INFO *pSpawn)
 {
 	memcpy(&m_SpawnInfo,pSpawn,sizeof(PLAYER_SPAWN_INFO));
-	m_bHasSpawnInfo = TRUE;
+	m_bHasSpawnInfo = true;
 }
 
 //----------------------------------------------------------
@@ -997,11 +997,11 @@ void CLocalPlayer::UpdateRemoteInterior(BYTE byteInterior)
 
 //----------------------------------------------------------
 
-BOOL CLocalPlayer::Spawn()
+bool CLocalPlayer::Spawn()
 {
-	if(!m_bHasSpawnInfo) return FALSE;
+	if(!m_bHasSpawnInfo) return false;
 
-	pGame->DisplayHud(TRUE);
+	pGame->DisplayHud(true);
 	m_pPlayerPed->TogglePlayerControllable(1);
 
 	iTimesDataModified = 0;
@@ -1051,11 +1051,11 @@ BOOL CLocalPlayer::Spawn()
 	if (!bFirstSpawn)
 		m_pPlayerPed->SetInitialState();
 	else
-		bFirstSpawn = FALSE;
+		bFirstSpawn = false;
 
-	m_bIsWasted = FALSE;
-	m_bIsActive = TRUE;
-	m_bWaitingForSpawnRequestReply = FALSE;
+	m_bIsWasted = false;
+	m_bIsActive = true;
+	m_bWaitingForSpawnRequestReply = false;
 
 	// Let the rest of the network know we're spawning.
 	RakNet::BitStream bsSendSpawn;
@@ -1064,7 +1064,7 @@ BOOL CLocalPlayer::Spawn()
 
 	m_iDisplayZoneTick = GetTickCount() + 1000;
 	
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------------
@@ -1090,7 +1090,7 @@ void CLocalPlayer::Say(PCHAR szText)
 
 //----------------------------------------------------------
 
-void CLocalPlayer::SendEnterVehicleNotification(VEHICLEID VehicleID, BOOL bPassenger)
+void CLocalPlayer::SendEnterVehicleNotification(VEHICLEID VehicleID, bool bPassenger)
 {
 	RakNet::BitStream bsSend;
 	BYTE bytePassenger=0;
@@ -1225,7 +1225,7 @@ void CLocalPlayer::ProcessClassSelection()
 	char			szMsg[1024];
 	char			szClassInfo[256];
 
-	pGame->DisplayHud(FALSE);
+	pGame->DisplayHud(false);
 
 	// DONT ALLOW ANY ACTIONS IF WE'RE STILL FADING OR WAITING.
 	if((GetTickCount() - m_dwInitialSelectionTick) < 2000) return;
@@ -1239,7 +1239,7 @@ void CLocalPlayer::ProcessClassSelection()
 	{
 		pSpawnScreen->SetSpawnText(NULL);
 		RequestSpawn();
-		m_bWaitingForSpawnRequestReply = TRUE;
+		m_bWaitingForSpawnRequestReply = true;
 		return;
 	}
 	else if(m_bClearedToSpawn) // WE ARE CLEARED TO SPAWN OR SELECT ANOTHER CLASS
@@ -1267,7 +1267,7 @@ void CLocalPlayer::ProcessClassSelection()
 		// ALLOW ANOTHER SELECTION WITH THE LEFT KEY
 		if((GetAsyncKeyState(VK_LEFT)&0x8000) && (dwTicksSinceLastSelection > 250)) { // LEFT ARROW
 				
-			m_bClearedToSpawn = FALSE;
+			m_bClearedToSpawn = false;
 			m_dwLastSpawnSelectionTick = GetTickCount();
 				
 			if(m_iSelectedClass == 0) m_iSelectedClass = (pNetGame->m_iSpawnsAvailable - 1);
@@ -1279,7 +1279,7 @@ void CLocalPlayer::ProcessClassSelection()
 		// ALLOW ANOTHER SELECTION WITH THE RIGHT KEY
 		else if((GetAsyncKeyState(VK_RIGHT)&0x8000) && (dwTicksSinceLastSelection > 250)) { // RIGHT ARROW
 			
-			m_bClearedToSpawn = FALSE;
+			m_bClearedToSpawn = false;
 			m_dwLastSpawnSelectionTick = GetTickCount();
 				
 			if(m_iSelectedClass == (pNetGame->m_iSpawnsAvailable - 1)) m_iSelectedClass = 0;
@@ -1295,7 +1295,7 @@ void CLocalPlayer::ProcessClassSelection()
 
 void CLocalPlayer::HandleClassSelection()
 {
-	m_bClearedToSpawn = FALSE;
+	m_bClearedToSpawn = false;
 	if(m_pPlayerPed) {
 		m_pPlayerPed->SetInitialState();
 		m_pPlayerPed->SetHealth(100.0f);
@@ -1308,14 +1308,14 @@ void CLocalPlayer::HandleClassSelection()
 
 //----------------------------------------------------------
 
-void CLocalPlayer::HandleClassSelectionOutcome(BOOL bOutcome)
+void CLocalPlayer::HandleClassSelectionOutcome(bool bOutcome)
 {
 	if(bOutcome) {
 		if(m_pPlayerPed) {
 			m_pPlayerPed->ClearAllWeapons();
 			m_pPlayerPed->SetModelIndex(m_SpawnInfo.iSkin);
 		}
-		m_bClearedToSpawn = TRUE;
+		m_bClearedToSpawn = true;
 	}
 }
 
@@ -1327,7 +1327,7 @@ void CLocalPlayer::CheckWeapons()
 	if (m_pPlayerPed->IsInVehicle()) return;
 	BYTE i;
 	BYTE byteCurWep = m_pPlayerPed->GetCurrentWeapon();
-	BOOL bMSend = false;
+	bool bMSend = false;
 
 	RakNet::BitStream bsWeapons;
 	bsWeapons.Write((BYTE)ID_WEAPONS_UPDATE);
@@ -1337,7 +1337,7 @@ void CLocalPlayer::CheckWeapons()
 		if (m_byteLastWeapon[i] != byteCurWep)
 		{
 			//bsWeapons.Write(i);
-			BOOL bSend = false;
+			bool bSend = false;
 			if (m_byteLastWeapon[i] != m_pPlayerPed->m_pPed->WeaponSlots[i].dwType)
 			{
 				// non-current weapon has changed
@@ -1438,7 +1438,7 @@ void CLocalPlayer::ProcessSpectating()
 		pNetGame->GetRakClient()->Send(&bsSpectatorSync,HIGH_PRIORITY,UNRELIABLE,0);
 	}
 	
-	pGame->DisplayHud(FALSE);
+	pGame->DisplayHud(false);
 
 	m_pPlayerPed->SetHealth(100.0f);
 	GetPlayerPed()->TeleportTo(spSync.vecPos.X, spSync.vecPos.Y, spSync.vecPos.Z + 20.0f);
@@ -1466,7 +1466,7 @@ void CLocalPlayer::ProcessSpectating()
 		GetPlayerPed()->RemoveFromVehicleAndPutAt(0.0f, 0.0f, 10.0f);
 		pGame->GetCamera()->SetPosition(50.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f);
 		pGame->GetCamera()->LookAtPoint(60.0f, 60.0f, 50.0f, 2);
-		m_bSpectateProcessed = TRUE;
+		m_bSpectateProcessed = true;
 	}
 	else if (m_byteSpectateType == SPECTATE_TYPE_PLAYER)
 	{
@@ -1479,7 +1479,7 @@ void CLocalPlayer::ProcessSpectating()
 				dwGTAId = pPlayerPed->m_dwGTAId;
 				//pChatWindow->AddDebugMessage("Spectating Player: 0x%X", dwGTAId);
 				ScriptCommand(&camera_on_actor, dwGTAId, m_byteSpectateMode, 2);
-				m_bSpectateProcessed = TRUE;
+				m_bSpectateProcessed = true;
 			}
 		}
 	}
@@ -1494,7 +1494,7 @@ void CLocalPlayer::ProcessSpectating()
 				dwGTAId = pVehicle->m_dwGTAId;
 				//pChatWindow->AddDebugMessage("Spectating Vehicle: 0x%X", dwGTAId);
 				ScriptCommand(&camera_on_vehicle, dwGTAId, m_byteSpectateMode, 2);
-				m_bSpectateProcessed = TRUE;
+				m_bSpectateProcessed = true;
 			}
 		}
 	}
@@ -1502,7 +1502,7 @@ void CLocalPlayer::ProcessSpectating()
 
 //-----------------------------------------------------------
 
-void CLocalPlayer::ToggleSpectating(BOOL bToggle)
+void CLocalPlayer::ToggleSpectating(bool bToggle)
 {
 	if (m_bIsSpectating && !bToggle) {
 		Spawn();
@@ -1510,7 +1510,7 @@ void CLocalPlayer::ToggleSpectating(BOOL bToggle)
 	m_bIsSpectating = bToggle;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;
 	m_SpectateID = 0xFFFFFFFF;
-	m_bSpectateProcessed = FALSE;
+	m_bSpectateProcessed = false;
 }
 
 //-----------------------------------------------------------
@@ -1524,7 +1524,7 @@ void CLocalPlayer::SpectateVehicle(VEHICLEID VehicleID)
 	if (pVehiclePool && pVehiclePool->GetSlotState(VehicleID)) {
 		m_byteSpectateType = SPECTATE_TYPE_VEHICLE;
 		m_SpectateID = VehicleID;
-		m_bSpectateProcessed = FALSE;
+		m_bSpectateProcessed = false;
 	}
 }
 
@@ -1541,7 +1541,7 @@ void CLocalPlayer::SpectatePlayer(BYTE bytePlayerID)
 			&& pPlayerPool->GetAt(bytePlayerID)->GetState() != PLAYER_STATE_WASTED) {
 			m_byteSpectateType = SPECTATE_TYPE_PLAYER;
 			m_SpectateID = bytePlayerID;
-			m_bSpectateProcessed = FALSE;
+			m_bSpectateProcessed = false;
 		}
 	}
 }

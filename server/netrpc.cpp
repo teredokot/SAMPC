@@ -64,7 +64,7 @@ void ClientJoin(RPCParameters *rpcParams)
 	{
 		byteRejectReason = REJECT_REASON_IP_LIMIT_REACHED;
 		bsReject.Write(byteRejectReason);
-		pRak->RPC(RPC_ConnectionRejected, &bsReject, HIGH_PRIORITY, RELIABLE, 0, sender, FALSE, FALSE);
+		pRak->RPC(RPC_ConnectionRejected, &bsReject, HIGH_PRIORITY, RELIABLE, 0, sender, false, false);
 		pRak->Kick(sender);
 		return;
 	}
@@ -85,7 +85,7 @@ void ClientJoin(RPCParameters *rpcParams)
 	{
 		byteRejectReason = REJECT_REASON_BAD_VERSION;
 		bsReject.Write(byteRejectReason);
-		pRak->RPC(RPC_ConnectionRejected, &bsReject, HIGH_PRIORITY, RELIABLE, 0, sender, FALSE, FALSE);
+		pRak->RPC(RPC_ConnectionRejected, &bsReject, HIGH_PRIORITY, RELIABLE, 0, sender, false, false);
 		pRak->Kick(sender);
 		return;
 	}
@@ -103,7 +103,7 @@ void ClientJoin(RPCParameters *rpcParams)
 		bytePlayerID > MAX_PLAYERS ) {
 		byteRejectReason = REJECT_REASON_BAD_PLAYERID;
 		bsReject.Write(byteRejectReason);
-		pRak->RPC(RPC_ConnectionRejected,&bsReject,HIGH_PRIORITY,RELIABLE,0,sender,FALSE,FALSE);
+		pRak->RPC(RPC_ConnectionRejected,&bsReject,HIGH_PRIORITY,RELIABLE,0,sender,false,false);
 		pRak->Kick(sender);
 		return;
 	}	
@@ -111,7 +111,7 @@ void ClientJoin(RPCParameters *rpcParams)
 	if(iVersion != NETGAME_VERSION || _uiRndSrvChallenge != (uiChallengeResponse ^ NETGAME_VERSION)) {
 		byteRejectReason = REJECT_REASON_BAD_VERSION;
 		bsReject.Write(byteRejectReason);
-		pRak->RPC(RPC_ConnectionRejected,&bsReject,HIGH_PRIORITY,RELIABLE,0,sender,FALSE,FALSE);
+		pRak->RPC(RPC_ConnectionRejected,&bsReject,HIGH_PRIORITY,RELIABLE,0,sender,false,false);
 		pRak->Kick(sender);
 		return;
 	}
@@ -128,7 +128,7 @@ void ClientJoin(RPCParameters *rpcParams)
 		byteNickLen < 3 || byteNickLen > MAX_PLAYER_NAME || pPlayerPool->IsNickInUse(szPlayerName)) {
 		byteRejectReason = REJECT_REASON_BAD_NICKNAME;
 		bsReject.Write(byteRejectReason);
-		pRak->RPC(RPC_ConnectionRejected,&bsReject,HIGH_PRIORITY,RELIABLE,0,sender,FALSE,FALSE);
+		pRak->RPC(RPC_ConnectionRejected,&bsReject,HIGH_PRIORITY,RELIABLE,0,sender,false,false);
 		pRak->Kick(sender);
 		return;
 	}
@@ -522,7 +522,7 @@ void ScmEvent(RPCParameters *rpcParams)
 	bsData.Read(dwParams2);
 	bsData.Read(dwParams3);
 	
-	BOOL bSend = TRUE;
+	bool bSend = true;
 
 	//printf("ScmEvent: %u %u %u %u\n",iEvent,dwParams1,dwParams2,dwParams3);
     
@@ -536,15 +536,15 @@ void ScmEvent(RPCParameters *rpcParams)
 		if (!pNetGame->GetGameMode()->OnVehicleMod(bytePlayerID, dwParams1, dwParams2) ||
 			!pNetGame->GetFilterScripts()->OnVehicleMod(bytePlayerID, dwParams1, dwParams2))
 		{
-			bSend = FALSE;
+			bSend = false;
 		}
 
-		if (bSend == TRUE)
+		if (bSend == true)
 		{
 			int iComponentId = Utils::GetTypeByComponentId(dwParams2);
 			if (iComponentId == -1)
 			{
-				bSend = FALSE;
+				bSend = false;
 			}
 			else
 			{
@@ -574,7 +574,7 @@ void ScmEvent(RPCParameters *rpcParams)
 		if (!pVehicle) return;
 
 		if (!pNetGame->GetGameMode()->OnVehiclePaintjob(bytePlayerID, dwParams1, dwParams2) ||
-		!pNetGame->GetFilterScripts()->OnVehiclePaintjob(bytePlayerID, dwParams1, dwParams2)) bSend = FALSE;
+		!pNetGame->GetFilterScripts()->OnVehiclePaintjob(bytePlayerID, dwParams1, dwParams2)) bSend = false;
 		if (bSend)
 		{
 			pVehicle->m_CarModInfo.bytePaintJob = (BYTE)dwParams2;
@@ -594,7 +594,7 @@ void ScmEvent(RPCParameters *rpcParams)
 			return;
 
 		if (!pNetGame->GetGameMode()->OnVehicleRespray(bytePlayerID, dwParams1, dwParams2, dwParams3) ||
-		!pNetGame->GetFilterScripts()->OnVehicleRespray(bytePlayerID, dwParams1, dwParams2, dwParams3)) bSend = FALSE;
+		!pNetGame->GetFilterScripts()->OnVehicleRespray(bytePlayerID, dwParams1, dwParams2, dwParams3)) bSend = false;
 		if (bSend)
 		{
 			pVehicle->m_CarModInfo.iColor0 = (int)dwParams2;

@@ -29,12 +29,12 @@ class CVehiclePool
 {
 public:
 	
-	BOOL				m_bVehicleSlotState[MAX_VEHICLES];
+	bool				m_bVehicleSlotState[MAX_VEHICLES];
 	CVehicle			*m_pVehicles[MAX_VEHICLES];
 	VEHICLE_TYPE		*m_pGTAVehicles[MAX_VEHICLES]; // pointers to actual ingame vehicles.
 
-	BOOL				m_bIsActive[MAX_VEHICLES];
-	BOOL				m_bIsWasted[MAX_VEHICLES];
+	bool				m_bIsActive[MAX_VEHICLES];
+	bool				m_bIsWasted[MAX_VEHICLES];
 	VEHICLE_SPAWN_INFO	m_SpawnInfo[MAX_VEHICLES];
 	
 	int					m_iRespawnDelay[MAX_VEHICLES];
@@ -44,13 +44,13 @@ public:
 	CVehiclePool();
 	~CVehiclePool();
 
-	BOOL New(VEHICLEID VehicleID, int iVehicleType,
+	bool New(VEHICLEID VehicleID, int iVehicleType,
 			 VECTOR * vecPos, float fRotation,
 			 int iColor1, int iColor2,
 			 VECTOR * vecSpawnPos, float fSpawnRotation,
 			 int iInterior, PCHAR szNumberPlate);
 
-	BOOL Delete(VEHICLEID VehicleID);	
+	bool Delete(VEHICLEID VehicleID);	
 	
 	// Retrieve a vehicle
 	CVehicle* GetAt(VEHICLEID VehicleID) {
@@ -59,12 +59,12 @@ public:
 	};
 
 	// Find out if the slot is inuse.
-	BOOL GetSlotState(VEHICLEID VehicleID) {
-		if(VehicleID >= MAX_VEHICLES) { return FALSE; }
+	bool GetSlotState(VEHICLEID VehicleID) {
+		if(VehicleID >= MAX_VEHICLES) { return false; }
 		return m_bVehicleSlotState[VehicleID];
 	};
 
-	BOOL Spawn( VEHICLEID VehicleID, int iVehicleType,
+	bool Spawn( VEHICLEID VehicleID, int iVehicleType,
 				VECTOR * vecPos, float fRotation,
 				int iColor1, int iColor2, int iInterior, PCHAR szNumberPlate, 
 				int iObjective = 0, int iDoorsLocked = 0 );

@@ -11,7 +11,7 @@
 
 //----------------------------------------------------
 
-BOOL	bRconSocketReply	= FALSE;
+bool	bRconSocketReply	= false;
 
 SOCKET	cur_sock			= INVALID_SOCKET;
 char*	cur_data			= NULL;
@@ -331,10 +331,10 @@ int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* da
 
 						if (pConsole)
 						{
-							bRconSocketReply = TRUE;
+							bRconSocketReply = true;
 							// Execute the command
 							pConsole->Execute(szCommand);
-							bRconSocketReply = FALSE;
+							bRconSocketReply = false;
 						}
 
 						free(szCommand);
@@ -343,9 +343,9 @@ int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* da
 						in.s_addr = binaryAddress;
 						logprintf("BAD RCON ATTEMPT BY: %s", inet_ntoa(in));
 
-						bRconSocketReply = TRUE;
+						bRconSocketReply = true;
 						RconSocketReply("Invalid RCON password.");
-						bRconSocketReply = FALSE;
+						bRconSocketReply = false;
 					}
 					free(szPassword);
 

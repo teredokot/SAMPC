@@ -17,9 +17,9 @@ CMenu::CMenu(PCHAR pTitle, float fX, float fY, BYTE byteColumns, float fCol1Widt
 	{
 		m_charItems[i][0][0] = '\0';
 		m_charItems[i][1][0] = '\0';
-		m_MenuInteraction.bRow[i] = TRUE;
+		m_MenuInteraction.bRow[i] = true;
 	}
-	m_MenuInteraction.bMenu = TRUE;
+	m_MenuInteraction.bMenu = true;
 	//m_charTitle[0] = '\0';
 	m_charHeader[0][0] = '\0';
 	m_charHeader[1][0] = '\0';
@@ -43,7 +43,7 @@ void CMenu::ResetForAll()
 {
 	for (BYTE i = 0; i < MAX_PLAYERS; i++)
 	{
-		m_bInitedForPlayer[i] = FALSE;
+		m_bInitedForPlayer[i] = false;
 	}
 }
 
@@ -73,14 +73,14 @@ void CMenu::InitForPlayer(BYTE bytePlayerID)
 {
 	if (bytePlayerID >= MAX_PLAYERS) return;
 	
-	m_bInitedForPlayer[bytePlayerID] = TRUE;
+	m_bInitedForPlayer[bytePlayerID] = true;
 	
 	// Send data here
 	RakServerInterface* pRak = pNetGame->GetRakServer();
 	RakNet::BitStream bsMenu;
 	
 	bsMenu.Write(m_byteMenuID);
-	bsMenu.Write((BOOL)(m_byteColumns == 2));
+	bsMenu.Write(m_byteColumns == 2);
 	bsMenu.Write(m_charTitle, MAX_MENU_LINE);
 	bsMenu.Write(m_fXPos);
 	bsMenu.Write(m_fYPos);

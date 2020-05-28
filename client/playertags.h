@@ -27,7 +27,7 @@ public:
 	CPlayerTags(IDirect3DDevice9* pDevice);
 	~CPlayerTags();
 
-	BOOL m_DrawPlayerIDs;
+	//BOOL m_DrawPlayerIDs;
 
 	void Begin();
 	void End();

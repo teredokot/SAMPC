@@ -13,7 +13,7 @@
 
 extern HINSTANCE hInstance;
 extern DWORD dwScmOpcodeDebug;
-extern BOOL bScmLocalDebug;
+extern bool bScmLocalDebug;
 extern GAME_SCRIPT_THREAD* gst;
 
 static PEXCEPTION_POINTERS pExceptionPtrs = NULL;

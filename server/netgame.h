@@ -54,9 +54,9 @@ private:
 
     int							m_iCurrentGameModeIndex;
 	int							m_iCurrentGameModeRepeat;
-	BOOL						m_bFirstGameModeLoaded;
+	bool						m_bFirstGameModeLoaded;
 
-	BOOL						m_bLanMode;
+	bool						m_bLanMode;
 	//BOOL						m_bACEnabled;
 
 	void UpdateNetwork();
@@ -78,7 +78,7 @@ public:
 	int	 m_iGameState;
 	float m_fGravity;
 	int  m_iDeathDropMoney;
-	BOOL m_bAdminTeleport;
+	bool m_bAdminTeleport;
 	bool m_bZoneNames;
 	//BYTE m_byteMod;
 	bool m_bLimitGlobalChatRadius; // limit global player chat to other players within a certain radius
@@ -103,10 +103,10 @@ public:
 	CNetGame();
 	~CNetGame();
 
-	void Init(BOOL bFirst);
+	void Init(bool bFirst);
 	void ShutdownForGameModeRestart();
 	void ReInitWhenRestarting();
-	BOOL SetNextScriptFile(char *szFile);
+	bool SetNextScriptFile(char *szFile);
 	
 	int GetGameState() { return m_iGameState; };
 
@@ -141,8 +141,8 @@ public:
 						PacketReliability reliability,
 						char orderingStream,
 						BYTE byteExcludedPlayer,
-						BOOL bBroadcastLocalRangeOnly = FALSE,
-						BOOL bAimSync = FALSE );
+						bool bBroadcastLocalRangeOnly = false,
+						bool bAimSync = false );
 
 	void BroadcastDistanceRPC( short szUniqueID, 
 							   RakNet::BitStream *bitStream,
@@ -174,7 +174,7 @@ public:
 	void RemoveBan(char * ip_mask);
 	void LoadBanList();
 		
-	BOOL IsLanMode() { return m_bLanMode; };
+	bool IsLanMode() { return m_bLanMode; };
 
 	// CLASS SYSTEM
 	int					m_iSpawnsAvailable;

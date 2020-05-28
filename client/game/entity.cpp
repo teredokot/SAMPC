@@ -111,15 +111,15 @@ void CEntity::ApplyMoveSpeed()
 
 //-----------------------------------------------------------
 
-BOOL CEntity::IsStationary()
+bool CEntity::IsStationary()
 {
     if( m_pEntity->vecMoveSpeed.X == 0.0f &&
 		m_pEntity->vecMoveSpeed.Y == 0.0f &&
 		m_pEntity->vecMoveSpeed.Z == 0.0f )
 	{
-		return TRUE;
+		return true;
 	}
-    return FALSE;
+    return false;
 }
 
 //-----------------------------------------------------------
@@ -270,17 +270,17 @@ void CEntity::Add()
 
 //-----------------------------------------------------------
 
-BOOL CEntity::IsAdded()
+bool CEntity::IsAdded()
 {
 	// Check for CPlaceable messup
 	if(m_pEntity) {
 		if (m_pEntity->vtable == 0x863C40) 
-			return FALSE;
+			return false;
 
 		if(m_pEntity->dwUnkModelRel)
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -310,12 +310,12 @@ void CEntity::Remove()
 
 //-----------------------------------------------------------
 
-BOOL CEntity::EnforceWorldBoundries(float fPX, float fZX, float fPY, float fNY)
+bool CEntity::EnforceWorldBoundries(float fPX, float fZX, float fPY, float fNY)
 {
 	MATRIX4X4 matWorld;
 	VECTOR vecMoveSpeed;
 
-	if(!m_pEntity) return FALSE;
+	if(!m_pEntity) return false;
 
 	GetMatrix(&matWorld);
 	GetMoveSpeedVector(&vecMoveSpeed);
@@ -329,7 +329,7 @@ BOOL CEntity::EnforceWorldBoundries(float fPX, float fZX, float fPY, float fNY)
 		SetMoveSpeedVector(vecMoveSpeed);
 		matWorld.pos.Z += 0.04f;
 		SetMatrix(matWorld);
-		return TRUE;
+		return true;
 	}
 	else if(matWorld.pos.X < fZX)
 	{
@@ -340,7 +340,7 @@ BOOL CEntity::EnforceWorldBoundries(float fPX, float fZX, float fPY, float fNY)
 		SetMoveSpeedVector(vecMoveSpeed);
 		matWorld.pos.Z += 0.04f;
 		SetMatrix(matWorld);
-		return TRUE;
+		return true;
 	}
 	else if(matWorld.pos.Y > fPY)
 	{
@@ -352,7 +352,7 @@ BOOL CEntity::EnforceWorldBoundries(float fPX, float fZX, float fPY, float fNY)
 		SetMoveSpeedVector(vecMoveSpeed);
 		matWorld.pos.Z += 0.04f;
 		SetMatrix(matWorld);
-		return TRUE;
+		return true;
 	}
 	else if(matWorld.pos.Y < fNY)
 	{
@@ -364,33 +364,33 @@ BOOL CEntity::EnforceWorldBoundries(float fPX, float fZX, float fPY, float fNY)
 		SetMoveSpeedVector(vecMoveSpeed);
 		matWorld.pos.Z += 0.04f;
 		SetMatrix(matWorld);
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------
 
-BOOL CEntity::HasExceededWorldBoundries(float fPX, float fZX, float fPY, float fNY)
+bool CEntity::HasExceededWorldBoundries(float fPX, float fZX, float fPY, float fNY)
 {
 	MATRIX4X4 matWorld;
 
-	if(!m_pEntity) return FALSE;
+	if(!m_pEntity) return false;
 
 	GetMatrix(&matWorld);
 
 	if(matWorld.pos.X > fPX) {
-		return TRUE;
+		return true;
 	}
 	else if(matWorld.pos.X < fZX) {
-		return TRUE;
+		return true;
 	}
 	else if(matWorld.pos.Y > fPY) {
-		return TRUE;
+		return true;
 	}
 	else if(matWorld.pos.Y < fNY) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }

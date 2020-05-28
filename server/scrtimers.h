@@ -20,9 +20,9 @@ struct ScriptTimer_s
 	char szScriptFunc[255];
 	int iTotalTime;
 	int iRemainingTime;
-	BOOL bRepeating;
+	bool bRepeating;
 	//BOOL bFilterscript;
-	BOOL bKilled;
+	bool bKilled;
 	AMX* pAMX;
 	int iParamCount;
 	//cell cellParams[16];
@@ -45,8 +45,8 @@ public:
 	~CScriptTimers();
 	
 	void DeleteForMode(AMX* pEndedAMX);
-	DWORD New(char* szScriptFunc, int iInterval, BOOL bRepeating, AMX* pAMX);
-	DWORD NewEx(char* szScriptFunc, int iInterval, BOOL bRepeating, cell *params, AMX* pAMX);
+	DWORD New(char* szScriptFunc, int iInterval, bool bRepeating, AMX* pAMX);
+	DWORD NewEx(char* szScriptFunc, int iInterval, bool bRepeating, cell *params, AMX* pAMX);
 	void Delete(DWORD dwTimerId);
 	void Kill(DWORD dwTimerId);
 	void Process(int iElapsedTime);

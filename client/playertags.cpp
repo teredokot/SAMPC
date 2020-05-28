@@ -35,7 +35,7 @@ CPlayerTags::CPlayerTags(IDirect3DDevice9* pDevice)
 	m_pDevice			= pDevice;
 	m_pOldStates		= NULL;
 	m_pNewStates		= NULL;
-	m_DrawPlayerIDs		= FALSE;
+	//m_DrawPlayerIDs		= FALSE;
 }
 
 CPlayerTags::~CPlayerTags()

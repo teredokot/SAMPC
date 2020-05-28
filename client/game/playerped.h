@@ -58,15 +58,15 @@ public:
 	void  HideMarker();
 	BYTE  GetCurrentWeapon();
 	int   GetCurrentVehicleID();
-	BOOL  IsOnScreen();
+	bool  IsOnScreen();
 	float GetHealth();
 	void  SetHealth(float fHealth);
 	float GetArmour();
 	void  SetArmour(float fArmour);
 	DWORD GetStateFlags();
 	void  SetStateFlags(DWORD dwStateFlags);
-	BOOL  IsDead();
-	BOOL  IsInVehicle();
+	bool  IsDead();
+	bool  IsInVehicle();
 	BYTE  GetActionTrigger();
 	void  SetActionTrigger(BYTE byteTrigger);
 	WORD  GetAmmo();
@@ -81,17 +81,17 @@ public:
 	void SetArmedWeapon(int iWeaponType);
 	WEAPON_SLOT_TYPE * GetCurrentWeaponSlot();
 	WEAPON_SLOT_TYPE * FindWeaponSlot(DWORD dwWeapon);
-	BOOL HasAmmoForCurrentWeapon();
+	bool HasAmmoForCurrentWeapon();
 	void SetWeaponModelIndex(int iWeapon);
 
-	void SetImmunities(BOOL bBullet, BOOL bFire, BOOL bExplosion, BOOL bDamage, BOOL bUnknown);
+	void SetImmunities(bool bBullet, bool bFire, bool bExplosion, bool bDamage, bool bUnknown);
 	
 	void PutDirectlyInVehicle(int iVehicleID, int iSeat);
-	void EnterVehicle(int iVehicleID, BOOL bPassenger);
+	void EnterVehicle(int iVehicleID, bool bPassenger);
 	void ExitCurrentVehicle();
 	void RemoveFromVehicleAndPutAt(float fX, float fY, float fZ);
 
-	BOOL IsAPassenger();
+	bool IsAPassenger();
 
 	VEHICLE_TYPE * GetGtaVehicle();
 	PED_TYPE * GetGtaActor() { return m_pPed; };
@@ -106,9 +106,9 @@ public:
 
 	void StartJetpack();
 	void StopJetpack();
-	BOOL IsInJetpackMode();
+	bool IsInJetpackMode();
 
-	BOOL StartPassengerDriveByMode();
+	bool StartPassengerDriveByMode();
 
 	void SetCollisionChecking(int iCheck);
 	void SetGravityProcessing(int iState);
@@ -122,9 +122,9 @@ public:
 						int opt1, int opt2, int opt3, int opt4, int iUnk);
 
 	void SetInterior(BYTE byteID);
-	BOOL IsOnGround();
+	bool IsOnGround();
 	void ResetDamageEntity();
-	BOOL IsPerformingAnimation(char *szAnimName);
+	bool IsPerformingAnimation(char *szAnimName);
 
 	// Constructor/Destructor.	
 	CPlayerPed();
@@ -133,7 +133,7 @@ public:
 
 	void		ProcessVehicleHorn();
 
-	BOOL		IsPerformingCustomAnim();
+	bool		IsPerformingCustomAnim();
 	void		ProcessParachutes();
 	void		ProcessParachuteSkydiving();
 	void		ProcessParachuting();
@@ -145,18 +145,18 @@ public:
 	int			m_iLastDanceMove;
 	void		StartDancing(int iStyle);
 	void		StopDancing();
-	BOOL		IsDancing();
+	bool		IsDancing();
 	void		ProcessDancing();
 	char		*GetDanceAnimForMove(int iMove);
 	void		HandsUp();
-	BOOL		HasHandsUp();
+	bool		HasHandsUp();
 	void		HoldItem(int iObject);
 
 	void		StartPissing();
     void		StopPissing();
 	int			IsPissing();
 
-	void		ProcessMarkers(BOOL bMarkerStreamingEnabled, float fMarkerStreamRadius, BOOL bVisible);
+	void		ProcessMarkers(bool bMarkerStreamingEnabled, float fMarkerStreamRadius, bool bVisible);
 
 	void		ApplyCommandTask(char *szTaskName, int p1, int p2, int p3, 
 								VECTOR *p4, int p5, float p6, int p7, int p8, int p9);

@@ -15,8 +15,8 @@ static BYTE ScriptBuf[255];
 static DWORD* pdwParamVars[18];
 
 DWORD dwScmOpcodeDebug=0;
-BOOL bScmLocalDebug=FALSE;
-static BOOL bExceptionDisplayed=FALSE;
+bool bScmLocalDebug=false;
+static bool bExceptionDisplayed=false;
 
 int __declspec(naked) ExecuteScriptBuf()
 {
@@ -146,7 +146,7 @@ int ScriptCommand(const SCRIPT_COMMAND* pScriptCommand, ...)
 	} catch(...) {
 		if(pChatWindow && !bExceptionDisplayed) {
 			pChatWindow->AddDebugMessage("Warning: error using opcode: 0x%X",pScriptCommand->OpCode);
-			bExceptionDisplayed = TRUE;
+			bExceptionDisplayed = true;
 		}
 	}
 

@@ -271,7 +271,7 @@ bool CPlugins::IsValidForNoSign(char* szFilename)
 
 //---------------------------------------
 	
-BOOL CPlugins::LoadSinglePlugin(char *szPluginPath) 
+bool CPlugins::LoadSinglePlugin(char *szPluginPath) 
 {
 	// Verify the plugin
 	/*
@@ -301,7 +301,7 @@ BOOL CPlugins::LoadSinglePlugin(char *szPluginPath)
 	{
 		// Failed to load
 		delete pSPlugin;
-		return FALSE;
+		return false;
 	}
 
 	pSPlugin->Load = (ServerPluginLoad_t)PLUGIN_GETFUNCTION(pSPlugin->hModule, "Load");
@@ -314,7 +314,7 @@ BOOL CPlugins::LoadSinglePlugin(char *szPluginPath)
 		logprintf("  Plugin does not conform to architecture.");
 		PLUGIN_UNLOAD(pSPlugin->hModule);
 		delete pSPlugin;
-		return FALSE;
+		return false;
 	}
 
 	pSPlugin->dwSupportFlags = (SUPPORTS_FLAGS)pSPlugin->Supports();
@@ -325,7 +325,7 @@ BOOL CPlugins::LoadSinglePlugin(char *szPluginPath)
 		logprintf("  Unsupported version - This plugin requires version %x.", (pSPlugin->dwSupportFlags & SUPPORTS_VERSION_MASK));
 		PLUGIN_UNLOAD(pSPlugin->hModule);
 		delete pSPlugin;
-		return FALSE;
+		return false;
 	}
 
 	if ((pSPlugin->dwSupportFlags & SUPPORTS_AMX_NATIVES) != 0) 
@@ -353,12 +353,12 @@ BOOL CPlugins::LoadSinglePlugin(char *szPluginPath)
 		// Initialize failed!
 		PLUGIN_UNLOAD(pSPlugin->hModule);
 		delete pSPlugin;
-		return FALSE;
+		return false;
 	}
 
 	m_Plugins.push_back(pSPlugin);
 
-	return TRUE;
+	return true;
 
 }
 

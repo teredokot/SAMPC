@@ -127,7 +127,7 @@ void ApplyDebugLevelPatches()
 
 //----------------------------------------------------------
 
-BOOL ApplyPreGamePatches()
+bool ApplyPreGamePatches()
 {	
 	BYTE * pbyteVersionDetermination = (PBYTE)ADDR_BYPASS_VIDS_USA10;
 	int iCounter=0;
@@ -137,12 +137,12 @@ BOOL ApplyPreGamePatches()
 		   (*pbyteVersionDetermination != 0xC8) )
 	{
 		if (*(PBYTE)ADDR_GAME_STARTED == 1) {
-			return FALSE;
+			return false;
 		} else {
 			Sleep(10);
 			iCounter++;
 			if(iCounter>6000) { // 60 seconds have passed
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -179,7 +179,7 @@ BOOL ApplyPreGamePatches()
 	// For SCM disable/enable
 	//UnFuck(0x469EF5,2);
 
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------------

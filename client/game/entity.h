@@ -21,7 +21,7 @@ public:
 	virtual void  Add();
 	virtual void  Remove();
 
-	BOOL  IsAdded();
+	bool  IsAdded();
 
 	void  GetMatrix(PMATRIX4X4 Matrix);
 	void  SetMatrix(MATRIX4X4 Matrix);
@@ -35,10 +35,10 @@ public:
 	float GetDistanceFromLocalPlayerPed();
 	float GetDistanceFromPoint(float X, float Y, float Z);
 	void  ApplyMoveSpeed();
-	BOOL  IsStationary();
+	bool  IsStationary();
 	
-	BOOL  EnforceWorldBoundries(float fPX, float fZX, float fPY, float fNY);
-	BOOL  HasExceededWorldBoundries(float fPX, float fZX, float fPY, float fNY);
+	bool  EnforceWorldBoundries(float fPX, float fZX, float fPY, float fNY);
+	bool  HasExceededWorldBoundries(float fPX, float fZX, float fPY, float fNY);
 
 	ENTITY_TYPE *m_pEntity;
 	DWORD		m_dwGTAId;

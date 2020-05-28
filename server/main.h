@@ -142,7 +142,7 @@ extern CRcon *pRcon;
 #endif*/
 
 extern BYTE byteRconUser;
-extern BOOL bRconSocketReply;
+extern bool bRconSocketReply;
 
 extern bool g_bDBLogging;
 extern bool g_bDBLogQueries;

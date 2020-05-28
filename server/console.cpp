@@ -176,7 +176,7 @@ void con_unbanip()
 	}
 }
 
-extern BOOL bGameModeFinished;
+extern bool bGameModeFinished;
 void con_gmx()
 {
 	if (pNetGame && pNetGame->GetGameState() == GAMESTATE_RUNNING)
@@ -188,7 +188,7 @@ void con_gmx()
 		szMode = pNetGame->GetNextScriptFile();
 		if (szMode != NULL && pNetGame->SetNextScriptFile(szMode))
 		{
-			bGameModeFinished = TRUE;
+			bGameModeFinished = true;
 		}
 	}
 }
@@ -201,7 +201,7 @@ void con_changemode()
 		if (arg)
 		{
 			if (pNetGame->SetNextScriptFile(arg)) {
-				bGameModeFinished = TRUE;
+				bGameModeFinished = true;
 			}
 			// do nothing if we can't set the requested script.
 		}
@@ -244,7 +244,7 @@ void con_players() {
 
 	for( int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if ( pPlayerPool->GetSlotState(i) == TRUE)
+		if ( pPlayerPool->GetSlotState(i) )
 		{
 			PlayerID Player = pRak->GetPlayerIDFromIndex(i);
 			in_addr in;

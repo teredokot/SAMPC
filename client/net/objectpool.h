@@ -10,7 +10,7 @@ Copyright 2004-2005 SA:MP Team
 class CObjectPool
 {
 private:
-	BOOL		m_bObjectSlotState[MAX_OBJECTS];
+	bool		m_bObjectSlotState[MAX_OBJECTS];
 	CObject		*m_pObjects[MAX_OBJECTS];
 
 
@@ -18,12 +18,12 @@ public:
 	CObjectPool();
 	~CObjectPool();
 
-	BOOL New(byte byteObjectID, int iModel, VECTOR vecPos, VECTOR vecRot);
-	BOOL Delete(BYTE byteObjectID);
+	bool New(byte byteObjectID, int iModel, VECTOR vecPos, VECTOR vecRot);
+	bool Delete(BYTE byteObjectID);
 
 	// Find out if the slot is inuse.
-	BOOL GetSlotState(BYTE byteObjectID) {
-		if(byteObjectID > MAX_OBJECTS) { return FALSE; }
+	bool GetSlotState(BYTE byteObjectID) {
+		if(byteObjectID > MAX_OBJECTS) { return false; }
 		return m_bObjectSlotState[byteObjectID];
 	};
 

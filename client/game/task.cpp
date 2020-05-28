@@ -228,17 +228,17 @@ DWORD CTask::GetID()
 
 //----------------------------------------------------------
 
-BOOL CTask::IsDestroyed()
+bool CTask::IsDestroyed()
 {
 	if (m_pTaskType == NULL)
-		return TRUE;
+		return true;
 
 	DWORD dwVTbl = *((DWORD*)m_pTaskType);
 
 	if (dwVTbl == 0x86D48C)		// CTask_vtbl
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 //----------------------------------------------------------

@@ -22,7 +22,7 @@ class CGangZonePool
 {
 private:
 	GANG_ZONE		*m_pGangZone[MAX_GANG_ZONES];
-	BOOL			m_bSlotState[MAX_GANG_ZONES];
+	bool			m_bSlotState[MAX_GANG_ZONES];
 public:
 	CGangZonePool();
 	~CGangZonePool();

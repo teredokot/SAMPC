@@ -19,7 +19,7 @@ CTextDrawPool::CTextDrawPool()
 {
 	for (WORD wText = 0; wText < MAX_TEXT_DRAWS; wText++)
 	{
-		m_bSlotState[wText] = FALSE;
+		m_bSlotState[wText] = false;
 		m_TextDraw[wText] = NULL;
 		m_szFontText[wText] = NULL;
 	}
@@ -82,7 +82,7 @@ WORD CTextDrawPool::New(float fX, float fY, char* szText)
 		TextDraw->fY = fY;
 		m_TextDraw[wText] = TextDraw;
 		m_szFontText[wText] = Text;
-		m_bSlotState[wText] = TRUE;
+		m_bSlotState[wText] = true;
 		return wText;
 	}
 	return 0xFFFF;
@@ -100,7 +100,7 @@ void CTextDrawPool::Delete(WORD wText)
 		free(m_szFontText[wText]);
 		m_szFontText[wText] = NULL;
 	}
-	m_bSlotState[wText] = FALSE;
+	m_bSlotState[wText] = false;
 	HideForAll(wText);
 }
 

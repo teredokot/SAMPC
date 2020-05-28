@@ -78,7 +78,7 @@ public:
 	DWORD		m_dwLastConnectAttempt;
 	int			m_iCheckLoadedStuff;
 	int			m_iGameState;
-	BOOL		m_bLanMode;
+	bool		m_bLanMode;
 	bool		m_bNameTagLOS;
 
 	char		m_szHostName[256];
@@ -101,9 +101,9 @@ public:
 
 	int GetGameState() { return m_iGameState; };
 	void SetGameState(int iGameState) { m_iGameState = iGameState; };
-	BOOL IsLanMode() { return m_bLanMode; };
-	BOOL GetWalkStyle() { return m_bUseCJWalk; };
-	void SetLanMode(BOOL bMode) { m_bLanMode = bMode; };
+	bool IsLanMode() { return m_bLanMode; };
+	bool GetWalkStyle() { return m_bUseCJWalk; };
+	void SetLanMode(bool bMode) { m_bLanMode = bMode; };
 
 	void InitGameLogic();
 	void Process();

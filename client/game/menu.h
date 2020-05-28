@@ -15,9 +15,9 @@ Version: $Id: menu.h,v 1.0 2007/02/13 19:26:45 Y_Less Exp $
 
 struct MENU_INT
 {
-	BOOL bMenu;
-	BOOL bRow[MAX_MENU_ITEMS];
-	BOOL bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)]; 
+	bool bMenu;
+	bool bRow[MAX_MENU_ITEMS];
+	bool bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)]; 
 };
 
 class CMenu

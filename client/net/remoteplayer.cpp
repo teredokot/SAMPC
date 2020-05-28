@@ -33,8 +33,8 @@ CRemotePlayer::CRemotePlayer()
 	m_dwWaitForEntryExitAnims = GetTickCount();
 	ResetAllSyncAttributes();
 	m_byteTeam = NO_TEAM;
-	m_bVisible = TRUE;
-	m_bShowNameTag = TRUE;
+	m_bVisible = true;
+	m_bShowNameTag = true;
 	m_byteVirtualWorld = 0;
 	m_dwLastHeadUpdate = GetTickCount();
 	m_dwStreamUpdate = 0;
@@ -68,8 +68,8 @@ void CRemotePlayer::Process(BYTE byteLocalWorld)
 			// Stream player markers based on the server script
 			// settings for the chat radius
 
-			if (m_byteVirtualWorld != byteLocalWorld || m_byteState == PLAYER_STATE_SPECTATING) m_bVisible = FALSE;
-			else m_bVisible = TRUE;			
+			if (m_byteVirtualWorld != byteLocalWorld || m_byteState == PLAYER_STATE_SPECTATING) m_bVisible = false;
+			else m_bVisible = true;			
 
 			m_pPlayerPed->ProcessMarkers(
 				pNetGame->m_bLimitGlobalMarkerRadius,
@@ -243,7 +243,7 @@ void CRemotePlayer::Process(BYTE byteLocalWorld)
 					if(m_psSync.byteDriveBy) {
 						if(m_pPlayerPed->IsAdded()) {
 							if(m_pPlayerPed->StartPassengerDriveByMode()) {
-								m_bPassengerDriveByMode = TRUE;
+								m_bPassengerDriveByMode = true;
 							}
 						}
 					}
@@ -253,7 +253,7 @@ void CRemotePlayer::Process(BYTE byteLocalWorld)
 
 			// ------ PROCESSED FOR ALL FRAMES ----- 
 			if(GetState() == PLAYER_STATE_ONFOOT) {
-				m_bPassengerDriveByMode = FALSE;
+				m_bPassengerDriveByMode = false;
 				ProcessSpecialActions(m_ofSync.byteSpecialAction);
 				//m_pPlayerPed->SetMoveSpeedVector(m_ofSync.vecMoveSpeed);
 				m_pPlayerPed->SetKeys(m_ofSync.wKeys,m_ofSync.lrAnalog,m_ofSync.udAnalog);
@@ -274,7 +274,7 @@ void CRemotePlayer::Process(BYTE byteLocalWorld)
 				}
 			}
 			else if(GetState() == PLAYER_STATE_DRIVER) {
-				m_bPassengerDriveByMode = FALSE;
+				m_bPassengerDriveByMode = false;
 				m_pPlayerPed->CheckVehicleParachute();
 				
 				// REMOVE PLAYER MODEL IN RC VEHICLE
@@ -297,7 +297,7 @@ void CRemotePlayer::Process(BYTE byteLocalWorld)
 				
 			}
 			else {
-				m_bPassengerDriveByMode = FALSE;
+				m_bPassengerDriveByMode = false;
 				m_pPlayerPed->SetKeys(0,0,0);
 			}
 
@@ -492,16 +492,16 @@ void CRemotePlayer::ProcessSpecialActions(BYTE byteSpecialAction)
 
 //----------------------------------------------------
 
-BOOL CRemotePlayer::IsSurfingOrTurretMode()
+bool CRemotePlayer::IsSurfingOrTurretMode()
 {
 	if(GetState() == PLAYER_STATE_ONFOOT) {
 		if( m_ofSync.SurfVehicleId != 0 &&
 			m_ofSync.SurfVehicleId != INVALID_VEHICLE_ID &&
 			m_ofSync.SurfVehicleId < MAX_VEHICLES ) {
-			return TRUE;
+			return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 //----------------------------------------------------
@@ -753,7 +753,7 @@ void CRemotePlayer::UpdateTrainDriverMatrixAndSpeed(MATRIX4X4 *matWorld,VECTOR *
 {
 	MATRIX4X4 matVehicle;
 	VECTOR vecInternalMoveSpeed;
-	BOOL bTeleport=FALSE;
+	bool bTeleport=false;
 	float fDif;
 
 	if(!m_pPlayerPed || !m_pCurrentVehicle) return;
@@ -765,14 +765,14 @@ void CRemotePlayer::UpdateTrainDriverMatrixAndSpeed(MATRIX4X4 *matWorld,VECTOR *
 	} else {
 		fDif = matVehicle.pos.X - matWorld->pos.X;
 	}
-	if(fDif > 10.0f) bTeleport=TRUE;
+	if(fDif > 10.0f) bTeleport=true;
 
 	if(matWorld->pos.Y >= matVehicle.pos.Y) {
 		fDif = matWorld->pos.Y - matVehicle.pos.Y;
 	} else {
 		fDif = matVehicle.pos.Y - matWorld->pos.Y;
 	}
-	if(fDif > 10.0f) bTeleport=TRUE;
+	if(fDif > 10.0f) bTeleport=true;
 
 	if(bTeleport) m_pCurrentVehicle->TeleportTo(matWorld->pos.X,matWorld->pos.Y,matWorld->pos.Z);
 	
@@ -899,9 +899,9 @@ void CRemotePlayer::StoreTrailerFullSyncData(TRAILER_SYNC_DATA* trSync)
 
 //----------------------------------------------------
 
-BOOL CRemotePlayer::Spawn(BYTE byteTeam, int iSkin, VECTOR * vecPos, float fRotation, DWORD dwColor)
+bool CRemotePlayer::Spawn(BYTE byteTeam, int iSkin, VECTOR * vecPos, float fRotation, DWORD dwColor)
 {
-	if(!pGame->IsGameLoaded()) return FALSE;
+	if(!pGame->IsGameLoaded()) return false;
 
 	if(m_pPlayerPed != NULL) {
 		m_pPlayerPed->Destroy();
@@ -922,11 +922,11 @@ BOOL CRemotePlayer::Spawn(BYTE byteTeam, int iSkin, VECTOR * vecPos, float fRota
 
 		SetState(PLAYER_STATE_SPAWNED);
 
-		return TRUE;
+		return true;
 	}
 
 	SetState(PLAYER_STATE_NONE);
-	return FALSE;
+	return false;
 }
 
 //----------------------------------------------------
@@ -942,7 +942,7 @@ void CRemotePlayer::ResetAllSyncAttributes()
 	m_fReportedArmour = 0.0f;
 	m_pCurrentVehicle = NULL;
 	m_byteSeatID = 0;
-	m_bPassengerDriveByMode = FALSE;
+	m_bPassengerDriveByMode = false;
 	m_iIsInAModShop = 0;
 	m_dwWaitForEntryExitAnims = GetTickCount();
 }
@@ -1028,7 +1028,7 @@ DWORD CRemotePlayer::GetPlayerColorAsARGB()
 
 //----------------------------------------------------
 
-void CRemotePlayer::EnterVehicle(VEHICLEID VehicleID, BOOL bPassenger)
+void CRemotePlayer::EnterVehicle(VEHICLEID VehicleID, bool bPassenger)
 {
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
 	CVehicle *pVehicle = pVehiclePool->GetAt(VehicleID);
