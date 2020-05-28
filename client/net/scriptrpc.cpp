@@ -1398,6 +1398,11 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 		pVehicle->SetFeature(in.ReadBit());
 		break;
 	}
+	case 7:
+	{
+		pVehicle->SetVisibility(in.ReadBit());
+		break;
+	}
 	}
 }
 

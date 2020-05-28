@@ -76,3 +76,5 @@ native GetVehicleComponentType(component);
 native SetVehicleHoodState(vehicleid, bool:hood_state);
 native SetVehicleTrunkState(vehicleid, bool:trunk_state);
 native SetVehicleDoorState(vehicleid, doorid, bool:door_state);
+native SetVehicleFeature(vehicleid, toggle);
+native SetVehicleVisibility(vehicleid, visible);

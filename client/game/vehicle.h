@@ -98,6 +98,7 @@ public:
 	void SetLightState(BOOL bState);
 	void ToggleComponent(DWORD dwComp, FLOAT fAngle);
 	void SetFeature(bool bToggle);
+	void SetVisibility(bool bVisible);
 
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;
