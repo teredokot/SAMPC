@@ -906,5 +906,10 @@ abandoning:
 	;
 }
 
+void CVehicle::SetFeature(bool bToggle)
+{
+	ScriptCommand(&set_car_extra_parts_angle_to, m_dwGTAId, (bToggle) ? 1.0f : 0.0f);
+}
+
 //-----------------------------------------------------------
 // EOF

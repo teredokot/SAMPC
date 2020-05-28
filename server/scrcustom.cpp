@@ -1958,6 +1958,22 @@ static cell n_SetVehicleDoorState(AMX* amx, cell* params)
 	return 0;
 }
 
+static cell n_SetVehicleFeature(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetVehicleFeature", 2);
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (pPool && pPool->GetSlotState(params[1]))
+	{
+		RakNet::BitStream out;
+		out.Write<int>(6);
+		out.Write((VEHICLEID)params[1]);
+		out.Write((bool)params[2]);
+		return pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out,
+			HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SendClientMessage(playerid, color, const message[])
@@ -5884,6 +5900,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetVehicleHoodState),
 	DEFINE_NATIVE(SetVehicleTrunkState),
 	DEFINE_NATIVE(SetVehicleDoorState),
+	DEFINE_NATIVE(SetVehicleFeature),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

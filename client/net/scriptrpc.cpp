@@ -1393,6 +1393,11 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 		pVehicle->SetLightState(ucState);
 		break;
 	}
+	case 6:
+	{
+		pVehicle->SetFeature(in.ReadBit());
+		break;
+	}
 	}
 }
 

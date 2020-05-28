@@ -303,3 +303,5 @@ const SCRIPT_COMMAND attach_particle_to_actor2			= { 0x066a, "siffffffiv" };
 const SCRIPT_COMMAND make_particle_visible				= { 0x64c, "i" };
 
 const SCRIPT_COMMAND create_property_pickup				= { 0x518, "i" };
+
+const SCRIPT_COMMAND set_car_extra_parts_angle_to		= { 0x8A4, "if" };
