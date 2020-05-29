@@ -552,6 +552,10 @@ void ApplyInGamePatches()
 	//memset((void*)0x44ACAE, 0x90, 5);
 	*(BYTE*)0x447B80 = 0xC3;
 
+	// Patch for creating Freight (537 train) without a trailer
+	*(BYTE*)0x8D477C = 0;
+	*(BYTE*)0x8D477D = 0; 
+
 	// Rest of the stuff
 	RelocateScanListHack();
 	

@@ -72,12 +72,36 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		(iType == TRAIN_TRAM)) {
 
 		// TRAIN LOCOMOTIVES
+		/*
+			Train type array at gta_sa.exe:008D44F8
+			   00  01  02  03  04  05 06 07 08 09 10 11 12 13 14 15
+			00 537 569 569 569 569 0   0  0  0  0  0  0  0  0  0  0
+			01 538 570 570 0   0   0   0  0  0  0  0  0  0  0  0  0
+			02 538 570 570 0   0   0   0  0  0  0  0  0  0  0  0  0
+			03 537 569 569 569 0   0   0  0  0  0  0  0  0  0  0  0
+			04 538 570 570 0   0   0   0  0  0  0  0  0  0  0  0  0
+			05 538 570 570 570 0   0   0  0  0  0  0  0  0  0  0  0
+			06 537 569 569 0   0   0   0  0  0  0  0  0  0  0  0  0
+			07 538 570 570 0   0   0   0  0  0  0  0  0  0  0  0  0
+			08 449 449 0   0   0   0   0  0  0  0  0  0  0  0  0  0
+			09 449 0   0   0   0   0   0  0  0  0  0  0  0  0  0  0
+			10 537 569 0   0   0   0   0  0  0  0  0  0  0  0  0  0
+			11 538 570 570 0   0   0   0  0  0  0  0  0  0  0  0  0
+			12 537 569 569 569 537 0   0  0  0  0  0  0  0  0  0  0
+			13 537 569 569 569 569 569 0  0  0  0  0  0  0  0  0  0
+			14 449 0   0   0   0   0   0  0  0  0  0  0  0  0  0  0
+			15 538 0   0   0   0   0   0  0  0  0  0  0  0  0  0  0
+		*/
 
-		if(iType == TRAIN_PASSENGER_LOCO) iType = 5;
-		else if(iType == TRAIN_FREIGHT_LOCO) iType = 3;
-		else if(iType == TRAIN_TRAM) iType = 9;
+		pGame->RequestModel(iType);
+		pGame->LoadRequestedModels();
+		while (!pGame->IsModelLoaded(iType)) Sleep(1);
 
-		DWORD dwDirection=0;
+		if (iType == TRAIN_PASSENGER_LOCO) iType = 10; // 5
+		else if (iType == TRAIN_FREIGHT_LOCO) iType = 15; // 3
+		else if (iType == TRAIN_TRAM)	iType = 9;
+
+		/*DWORD dwDirection=0;
 		if(fRotation != 0.0f) {
 			dwDirection = 1;
 		}
@@ -91,9 +115,9 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		while(!pGame->IsModelLoaded(TRAIN_PASSENGER)) Sleep(1);
 		while(!pGame->IsModelLoaded(TRAIN_FREIGHT_LOCO)) Sleep(1);
 		while(!pGame->IsModelLoaded(TRAIN_FREIGHT)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_TRAM)) Sleep(1);
+		while(!pGame->IsModelLoaded(TRAIN_TRAM)) Sleep(1);*/
 	
-		ScriptCommand(&create_train,iType,fPosX,fPosY,fPosZ,dwDirection,&dwRetID);
+		ScriptCommand(&create_train,iType,fPosX,fPosY,fPosZ,fRotation!=0.0f,&dwRetID);
 
 		m_pVehicle = GamePool_Vehicle_GetAt(dwRetID);
 		m_pEntity = (ENTITY_TYPE *)m_pVehicle; 
