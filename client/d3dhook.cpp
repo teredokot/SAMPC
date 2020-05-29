@@ -272,6 +272,8 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 			if(pDeathWindow) pDeathWindow->Draw();		
 		}
 
+		if (pCursor) pCursor->Process();
+
 #ifndef _DEBUG
 		if(tSettings.bDebug)
 			GameDebugDrawDebugScreens();

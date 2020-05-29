@@ -215,6 +215,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS</PreprocessorDefinitions>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
     </ClCompile>
+    <ClCompile Include="cursor.cpp" />
     <ClCompile Include="d3dhook.cpp" />
     <ClCompile Include="deathwindow.cpp" />
     <ClCompile Include="events.cpp">
@@ -600,6 +601,7 @@
     <ClInclude Include="chatwindow.h" />
     <ClInclude Include="cmdprocs.h" />
     <ClInclude Include="cmdwindow.h" />
+    <ClInclude Include="cursor.h" />
     <ClInclude Include="d3dhook.h" />
     <ClInclude Include="deathwindow.h" />
     <ClInclude Include="filechecks.h" />

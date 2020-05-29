@@ -166,6 +166,8 @@ public:
 
 	CGame();
 	~CGame() {};
+
+	void DisableCamera(bool bDisable);
 };
 
 //-----------------------------------------------------------

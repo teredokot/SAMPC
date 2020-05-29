@@ -897,3 +897,27 @@ float CGame::GetGameSpeed()
 {
 	return *(float*)0xB7CB64;
 }
+
+void CGame::DisableCamera(bool bDisable)
+{
+	memset((void*)0xB73424, 0, 8);
+
+	if (bDisable) {
+		memcpy((void*)0x53F41F, "\x33\xC0\x0F\x84", 4); // skip
+		//memset((void*)0x53F417, 0x90, 5);
+
+		_asm mov edx, 0x541BD0 // reset mouse
+		_asm call edx
+		_asm mov edx, 0x541DD0 // CPad::Update()
+		_asm call edx
+
+		*(BYTE*)0x531140 = 0xC3; // ret (keyboard event process)
+	} else {
+		memcpy((void*)0x53F41F, "\x85\xC0\x0F\x8C", 4);
+		//BYTE bOriginal[] = { 0xE8, 0xB4, 0x7A, 0x20, 0x00 };
+		//memcpy((void*)0x53F417, bOriginal, sizeof(bOriginal));
+		*(BYTE*)0x531140 = 0x83; // sub (keyboard event process)
+		SetCursor(NULL);
+	}
+	
+}

@@ -67,7 +67,9 @@ void CCmdWindow::Enable()
 		m_pEditControl->SetLocation(20,pChatWindow->GetChatWindowBottom());
 	}
 	pGame->ToggleKeyInputsDisabled(TRUE);
-	
+	pCursor->m_bVisible = true;
+	pGame->DisableCamera(true);
+
 	if (pNetGame)
 	{
 		RakNet::BitStream out;
@@ -86,6 +88,8 @@ void CCmdWindow::Disable()
 		m_pEditControl->SetVisible(false);
 	}
 	pGame->ToggleKeyInputsDisabled(FALSE);
+	pCursor->m_bVisible = false;
+	pGame->DisableCamera(false);
 
 	if (pNetGame)
 	{
@@ -268,6 +272,10 @@ int CCmdWindow::MsgProc(UINT uMsg, DWORD wParam, DWORD lParam)
 	if(m_bEnabled && m_pEditControl) {
 		m_pEditControl->MsgProc(uMsg,wParam,lParam);
 		m_pEditControl->HandleKeyboard(uMsg,wParam,lParam);
+
+		POINT p;
+		GetCursorPos(&p);
+		m_pEditControl->HandleMouse(uMsg,p,wParam,lParam);
 	}
 	return 0;
 }

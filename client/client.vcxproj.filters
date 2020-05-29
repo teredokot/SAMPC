@@ -327,6 +327,7 @@
     </ClCompile>
     <ClCompile Include="playertags.cpp" />
     <ClCompile Include="d3dhook.cpp" />
+    <ClCompile Include="cursor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="net\gangzonepool.h">
@@ -737,6 +738,7 @@
     <ClInclude Include="..\sdk\shared.h">
       <Filter>sdk</Filter>
     </ClInclude>
+    <ClInclude Include="cursor.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\sdk\detours\detours.lib">
