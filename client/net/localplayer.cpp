@@ -1109,8 +1109,8 @@ void CLocalPlayer::SendEnterVehicleNotification(VEHICLEID VehicleID, bool bPasse
 	CVehicle* pVehicle = pVehiclePool->GetAt(VehicleID);
 
 	if (pVehicle && pVehicle->IsATrainPart()) {
-		DWORD dwVehicle = pVehicle->m_dwGTAId;
-		ScriptCommand(&camera_on_vehicle, dwVehicle, 3, 2);
+		//DWORD dwVehicle = pVehicle->m_dwGTAId;
+		//ScriptCommand(&camera_on_vehicle, dwVehicle, 3, 2);
 		dwEnterVehTimeElasped = GetTickCount();
 	}
 }
