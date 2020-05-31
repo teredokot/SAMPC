@@ -39,7 +39,7 @@ static CVehiclePool *pVehiclePool;
 //CVehicle	 *pVehicleClass;
 
 //BOOL	bIgnoreNextEntry=FALSE;
-static BOOL	bIgnoreNextExit=FALSE;
+//static BOOL	bIgnoreNextExit=FALSE;
 
 //int opt1,opt2,opt3,opt4; // for vehicle entry/exit.
  
@@ -691,32 +691,27 @@ no_destruct:
 
 NUDE TaskExitVehicle()
 {
-	_asm mov ebp, esp
-
 	_asm mov TaskPtr, ecx
-	_asm mov eax, [ebp]
+	_asm mov eax, [esp]
 	_asm mov dwRetAddr, eax
-	_asm mov eax, [ebp+4]
+	_asm mov eax, [esp + 4]
 	_asm mov _pVehicle, eax
+	_asm pushad
 
-	if(!bIgnoreNextExit && (dwRetAddr == 0x5704A1 || dwRetAddr == 0x5703FC)) {
-		if(pNetGame) {
-			if(GamePool_FindPlayerPed()->pVehicle == (DWORD)_pVehicle) {
-				pVehiclePool=pNetGame->GetVehiclePool();
-				VehicleID=pVehiclePool->FindIDFromGtaPtr((VEHICLE_TYPE *)GamePool_FindPlayerPed()->pVehicle);
-				pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
-				pLocalPlayer->SendExitVehicleNotification(VehicleID);
-			}
+	if (pNetGame && (dwRetAddr == 0x5704A1 || dwRetAddr == 0x5703FC)) {
+		if(GamePool_FindPlayerPed()->pVehicle == (DWORD)_pVehicle) {
+			pVehiclePool = pNetGame->GetVehiclePool();
+			VehicleID = pVehiclePool->FindIDFromGtaPtr((VEHICLE_TYPE*)GamePool_FindPlayerPed()->pVehicle);
+			pLocalPlayer = pNetGame->GetPlayerPool()->GetLocalPlayer();
+			pLocalPlayer->SendExitVehicleNotification(VehicleID);
 		}
-	} else {
-		bIgnoreNextExit = FALSE;
 	}
 
-	_asm push 0xFFFFFFFF
-	_asm push 0x841618
+	_asm popad
 	_asm mov ecx, TaskPtr
-	_asm mov edx, 0x63B8C0
-	_asm add edx, 7
+	_asm push 0xFF
+	_asm push 0x841618
+	_asm mov edx, 0x63B8C7
 	_asm jmp edx
 }
 
