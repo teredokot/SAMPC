@@ -136,10 +136,12 @@ void CVehiclePool::AssignSpecialParamsToVehicle(VEHICLEID VehicleID, BYTE byteOb
 	CVehicle *pVehicle = m_pVehicles[VehicleID];
 
 	if(pVehicle && m_bIsActive[VehicleID]) {
-		if (byteObjective)
-		{
+		if (byteObjective) {
 			pVehicle->m_byteObjectiveVehicle = 1;
 			pVehicle->m_bSpecialMarkerEnabled = false;
+		} else {
+			pVehicle->m_byteObjectiveVehicle = 0;
+			pVehicle->m_bSpecialMarkerEnabled = true;
 		}
 		pVehicle->SetDoorState(byteDoorsLocked);
 	}
