@@ -248,7 +248,10 @@ void CVehiclePool::Process()
 				}*/
 
 				if( pVehicle->GetVehicleSubtype() != VEHICLE_SUBTYPE_BOAT &&
-					pVehicle->HasSunk() ) // Not boat and has sunk.
+					// HasSunk() returns TRUE even if touches it
+					//pVehicle->HasSunk() ) // Not boat and has sunk.
+					// IsWrecked() only returns TRUE if the engine is dead, and not off
+					pVehicle->IsWrecked() )
 				{
 					if (pLocalPlayer->m_LastVehicle == x) {
 						NotifyVehicleDeath(x);
