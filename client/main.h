@@ -74,7 +74,7 @@ typedef struct _GAME_SETTINGS {
 #include "label.h"
 #include "netstats.h"
 #include "svrnetstats.h"
-#include "helpdialog.h"
+//#include "helpdialog.h"
 #include "archive/ArchiveFS.h"
 #include "game/scripting.h"
 #include "d3dhook.h"
