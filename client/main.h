@@ -79,6 +79,7 @@ typedef struct _GAME_SETTINGS {
 #include "game/scripting.h"
 #include "d3dhook.h"
 #include "cursor.h"
+#include "guitest.h"
 
 void QuitGame();
 
@@ -96,7 +97,7 @@ extern CScoreBoard* pScoreBoard;
 extern CLabel* pLabel;
 extern CNetStats* pNetStats;
 extern CSvrNetStats* pSvrNetStats;
-extern CHelpDialog* pHelpDialog;
+//extern CHelpDialog* pHelpDialog;
 extern CFileSystem* pFileSystem;
 extern CCursor* pCursor;
 

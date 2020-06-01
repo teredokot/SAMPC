@@ -245,11 +245,11 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 			pScoreBoard->Draw();
 		}		
 		// Help Dialog
-		else if(pNetGame && GetAsyncKeyState(VK_F1))
+		/*else if(pNetGame && GetAsyncKeyState(VK_F1))
 		{
 			pGame->DisplayHud(FALSE);
 			pHelpDialog->Draw(); 
-		} 
+		} */
 		// Net Statistics
 		else if(pNetGame && GetAsyncKeyState(VK_F5))
 		{
@@ -273,6 +273,7 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 		}
 
 		if (pCursor) pCursor->Process();
+		GUI_Render();
 
 #ifndef _DEBUG
 		if(tSettings.bDebug)

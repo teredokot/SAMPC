@@ -39,7 +39,7 @@ CScoreBoard				*pScoreBoard=NULL;
 CLabel					*pLabel=NULL;
 CNetStats				*pNetStats=NULL;
 CSvrNetStats			*pSvrNetStats=NULL;
-CHelpDialog				*pHelpDialog=NULL;
+//CHelpDialog				*pHelpDialog=NULL;
 
 bool					bShowDebugLabels = false;
 
@@ -306,6 +306,8 @@ void DoInitStuff()
 		pCursor = new CCursor;
 		pCursor->Init();
 
+		GUI_Init();
+
 		if(tSettings.bPlayOnline) {
 			pDeathWindow = new CDeathWindow(pD3DDevice);
 			pSpawnScreen = new CSpawnScreen(pD3DDevice);
@@ -314,7 +316,7 @@ void DoInitStuff()
 			pScoreBoard = new CScoreBoard(pD3DDevice, FALSE);
 			pNetStats = new CNetStats(pD3DDevice);
 			pSvrNetStats = new CSvrNetStats(pD3DDevice);
-			pHelpDialog = new CHelpDialog(pD3DDevice);
+			//pHelpDialog = new CHelpDialog(pD3DDevice);
 
 			pDeathWindow->CreateFonts();
 		}

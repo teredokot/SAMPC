@@ -164,6 +164,10 @@ BOOL HandleKeyPress(DWORD vKey)
 			}
 			break;
 		}
+		case VK_F1:
+			GUI_ToggleHelp();
+			break;
+
 		case 38: // Will be up
 			if (pCmdWindow->isEnabled())
 			{
@@ -238,7 +242,9 @@ bool SubclassGameWindow()
 
 LRESULT APIENTRY NewWndProc( HWND hwnd,UINT uMsg,
 							 WPARAM wParam,LPARAM lParam ) 
-{ 	
+{
+	GUI_Event(hwnd, uMsg, wParam, lParam);
+
 	if(pCmdWindow) {
 		pCmdWindow->MsgProc(uMsg,wParam,lParam);		
 	}

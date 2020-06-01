@@ -28,6 +28,9 @@
     <Filter Include="sdk\dxut">
       <UniqueIdentifier>{f266aa84-3284-475e-a6db-33945eb864ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk\nuklear">
+      <UniqueIdentifier>{f047a9da-5fa5-4b7c-8395-bf7d64e045d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="net\gangzonepool.cpp">
@@ -328,6 +331,7 @@
     <ClCompile Include="playertags.cpp" />
     <ClCompile Include="d3dhook.cpp" />
     <ClCompile Include="cursor.cpp" />
+    <ClCompile Include="guitest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="net\gangzonepool.h">
@@ -739,6 +743,13 @@
       <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="cursor.h" />
+    <ClInclude Include="..\sdk\nuklear\nuklear.h">
+      <Filter>sdk\nuklear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\nuklear\nuklear_d3d9.h">
+      <Filter>sdk\nuklear</Filter>
+    </ClInclude>
+    <ClInclude Include="guitest.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\sdk\detours\detours.lib">
