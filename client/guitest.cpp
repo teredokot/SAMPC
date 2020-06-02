@@ -27,23 +27,15 @@ void GUI_Init()
     //struct nk_font* droid = nk_font_atlas_add_from_file(atlas, "extra_font/DroidSans.ttf", 14, 0);
 	nk_d3d9_font_stash_end();
     //nk_style_set_font(ctx, &droid->handle);
+#ifdef USE_NUKLEAR_INPUT 
+    nk_style_load_all_cursors(ctx, atlas->cursors);
+    nk_style_hide_cursor(ctx);
+#endif
 }
 
 void GUI_Shutdown()
 {
 	nk_d3d9_shutdown();
-}
-
-void GUI_ShowHelp();
-void GUI_Render()
-{
-    nk_d3d9_resize(pGame->GetScreenWidth(), pGame->GetScreenHeight());
-
-    if(bRenderHelp) GUI_ShowHelp();
-
-    nk_input_begin(ctx);
-	nk_d3d9_render(NK_ANTI_ALIASING_OFF);
-    nk_input_end(ctx);
 }
 
 int GUI_Event(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -56,10 +48,37 @@ void GUI_Release()
 	nk_d3d9_release();
 }
 
+#ifdef USE_NUKLEAR_INPUT
+void GUI_ShowCursor(bool bShow)
+{
+    if (bShow)
+        nk_style_show_cursor(ctx);
+    else
+        nk_style_hide_cursor(ctx);
+}
+#endif
+
 void GUI_ToggleHelp()
 {
     bRenderHelp = !bRenderHelp;
 }
+
+#ifdef USE_NUKLEAR_INPUT
+void GUI_RenderInput(char* szBuffer, int iMax, float fY)
+{
+    if (nk_begin(ctx, "Input", nk_rect(20, fY, 420, 40), NK_WINDOW_NO_SCROLLBAR)) { 
+        nk_flags flags = 0;
+        nk_layout_row_dynamic(ctx, 30, 1); // BUG? nk_edit_string() will not add it to window until something else put in front
+        nk_edit_focus(ctx, 0);
+        flags = nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD | NK_EDIT_SIG_ENTER | NK_EDIT_GOTO_END_ON_ACTIVATE | NK_EDIT_NO_HORIZONTAL_SCROLL, szBuffer, iMax, 0);
+        if ((flags & NK_EDIT_COMMITED)) {
+            if(pCmdWindow) pCmdWindow->ProcessInput(szBuffer);
+            szBuffer[0] = '\0';
+        }
+    }
+    nk_end(ctx);
+}
+#endif
 
 void GUI_ShowHelp()
 {
@@ -101,4 +120,15 @@ void GUI_ShowHelp()
         nk_label(ctx, "Enter vehicle as passenger", NK_TEXT_LEFT);
     }
     nk_end(ctx);
+}
+
+void GUI_Render()
+{
+    nk_d3d9_resize(pGame->GetScreenWidth(), pGame->GetScreenHeight());
+
+    if (bRenderHelp) GUI_ShowHelp();
+
+    nk_input_begin(ctx);
+    nk_d3d9_render(NK_ANTI_ALIASING_OFF);
+    nk_input_end(ctx);
 }

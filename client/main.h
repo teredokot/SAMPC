@@ -78,7 +78,9 @@ typedef struct _GAME_SETTINGS {
 #include "archive/ArchiveFS.h"
 #include "game/scripting.h"
 #include "d3dhook.h"
+#ifndef USE_NUKLEAR_INPUT
 #include "cursor.h"
+#endif
 #include "guitest.h"
 
 void QuitGame();
@@ -99,7 +101,9 @@ extern CNetStats* pNetStats;
 extern CSvrNetStats* pSvrNetStats;
 //extern CHelpDialog* pHelpDialog;
 extern CFileSystem* pFileSystem;
+#ifndef USE_NUKLEAR_INPUT
 extern CCursor* pCursor;
+#endif
 
 extern CDXUTDialogResourceManager* pDialogResourceManager;
 extern CDXUTDialog* pGameUI;

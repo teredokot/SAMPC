@@ -243,11 +243,14 @@ bool SubclassGameWindow()
 LRESULT APIENTRY NewWndProc( HWND hwnd,UINT uMsg,
 							 WPARAM wParam,LPARAM lParam ) 
 {
-	GUI_Event(hwnd, uMsg, wParam, lParam);
-
+#ifdef USE_NUKLEAR_INPUT
+	if (pCmdWindow && pCmdWindow->isEnabled() && GUI_Event(hwnd, uMsg, wParam, lParam))
+		return 0;
+#else
 	if(pCmdWindow) {
-		pCmdWindow->MsgProc(uMsg,wParam,lParam);		
+		pCmdWindow->MsgProc(uMsg,wParam,lParam);
 	}
+#endif
 
 	switch(uMsg) {
 		case WM_SYSKEYUP:

@@ -272,7 +272,9 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 			if(pDeathWindow) pDeathWindow->Draw();		
 		}
 
+#ifndef USE_NUKLEAR_INPUT
 		if (pCursor) pCursor->Process();
+#endif
 		GUI_Render();
 
 #ifndef _DEBUG
