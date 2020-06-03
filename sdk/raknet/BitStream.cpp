@@ -97,47 +97,11 @@ BitStream::BitStream(unsigned char* _data, const unsigned int lengthInBytes, boo
 }
 
 // SAMPSRV (adding this just as a tag for next RakNet upgrade)
-BitStream::BitStream(char* _dataC, unsigned int lengthInBytes, bool _copyData)
-{
-	unsigned char* _data = reinterpret_cast<unsigned char*>(_dataC);
-
-	numberOfBitsUsed = lengthInBytes << 3;
-	readOffset = 0;
-	copyData = _copyData;
-	numberOfBitsAllocated = lengthInBytes << 3;
-
-	if (copyData)
-	{
-		if (lengthInBytes > 0)
-		{
-			if (lengthInBytes < BITSTREAM_STACK_ALLOCATION_SIZE)
-			{
-				data = (unsigned char*)stackData;
-				numberOfBitsAllocated = BITSTREAM_STACK_ALLOCATION_SIZE << 3;
-			}
-			else
-			{
-				data = (unsigned char*)malloc(lengthInBytes);
-			}
-#ifdef _DEBUG
-			RakAssert(data);
-#endif
-			memcpy(data, _data, lengthInBytes);
-		}
-		else
-			data = 0;
-	}
-	else
-		data = (unsigned char*)_data;
-
-}
-
 BitStream::BitStream(RPCParameters* pParams, bool _copyData)
 {
-	numberOfBitsUsed = pParams->numberOfBitsOfData;
+	numberOfBitsUsed = numberOfBitsAllocated = pParams->numberOfBitsOfData;
 	readOffset = 0;
 	copyData = _copyData;
-	numberOfBitsAllocated = pParams->numberOfBitsOfData;
 
 	if (copyData)
 	{
@@ -153,9 +117,7 @@ BitStream::BitStream(RPCParameters* pParams, bool _copyData)
 			{
 				data = (unsigned char*)malloc((size_t)lengthInBytes);
 			}
-#ifdef _DEBUG
 			RakAssert(data);
-#endif
 			memcpy(data, pParams->input, (size_t)lengthInBytes);
 		}
 		else
@@ -163,6 +125,36 @@ BitStream::BitStream(RPCParameters* pParams, bool _copyData)
 	}
 	else
 		data = (unsigned char*)pParams->input;
+}
+
+BitStream::BitStream(Packet* pPacket, bool _copyData)
+{
+	numberOfBitsUsed = numberOfBitsAllocated = pPacket->bitSize;
+	readOffset = 0;
+	copyData = _copyData;
+
+	if (copyData)
+	{
+		BitSize_t lengthInBytes = BITS_TO_BYTES(pPacket->bitSize);
+		if (lengthInBytes > 0)
+		{
+			if (lengthInBytes < BITSTREAM_STACK_ALLOCATION_SIZE)
+			{
+				data = (unsigned char*)stackData;
+				numberOfBitsAllocated = BITSTREAM_STACK_ALLOCATION_SIZE << 3;
+			}
+			else
+			{
+				data = (unsigned char*)malloc((size_t)lengthInBytes);
+			}
+			RakAssert(data);
+			memcpy(data, pPacket->data, (size_t)lengthInBytes);
+		}
+		else
+			data = 0;
+	}
+	else
+		data = (unsigned char*)pPacket->data;
 }
 // SAMPSRV end
 

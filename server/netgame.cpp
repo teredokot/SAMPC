@@ -869,7 +869,7 @@ void CNetGame::AdjustAimSync(RakNet::BitStream *bitStream, BYTE byteTargetPlayer
 void CNetGame::Packet_PlayerSync(Packet *p)
 {
 	CPlayer * pPlayer = GetPlayerPool()->GetAt((BYTE)p->playerIndex);
-	RakNet::BitStream bsPlayerSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsPlayerSync(p);
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
@@ -888,7 +888,7 @@ void CNetGame::Packet_PlayerSync(Packet *p)
 void CNetGame::Packet_AimSync(Packet *p)
 {
 	CPlayer * pPlayer = GetPlayerPool()->GetAt((BYTE)p->playerIndex);
-	RakNet::BitStream bsPlayerSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsPlayerSync(p);
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
@@ -907,7 +907,7 @@ void CNetGame::Packet_AimSync(Packet *p)
 void CNetGame::Packet_VehicleSync(Packet *p)
 {
 	CPlayer * pPlayer = GetPlayerPool()->GetAt((BYTE)p->playerIndex);
-	RakNet::BitStream bsVehicleSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsVehicleSync(p);
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
@@ -931,7 +931,7 @@ void CNetGame::Packet_VehicleSync(Packet *p)
 void CNetGame::Packet_PassengerSync(Packet *p)
 {
 	CPlayer * pPlayer = GetPlayerPool()->GetAt((BYTE)p->playerIndex);
-	RakNet::BitStream bsPassengerSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsPassengerSync(p);
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
@@ -954,7 +954,7 @@ void CNetGame::Packet_PassengerSync(Packet *p)
 void CNetGame::Packet_SpectatorSync(Packet *p)
 {
 	CPlayer * pPlayer = GetPlayerPool()->GetAt((BYTE)p->playerIndex);
-	RakNet::BitStream bsSpectatorSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsSpectatorSync(p);
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
@@ -971,7 +971,7 @@ void CNetGame::Packet_SpectatorSync(Packet *p)
 void CNetGame::Packet_TrailerSync(Packet *p)
 {
 	CPlayer * pPlayer = GetPlayerPool()->GetAt((BYTE)p->playerIndex);
-	RakNet::BitStream bsTrailerSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsTrailerSync(p);
 
 	if(GetGameState() != GAMESTATE_RUNNING) return;
 
@@ -990,7 +990,7 @@ void CNetGame::Packet_TrailerSync(Packet *p)
 
 void CNetGame::Packet_StatsUpdate(Packet *p)
 {
-	RakNet::BitStream bsStats((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsStats(p);
 	CPlayerPool *pPlayerPool = GetPlayerPool();
 	BYTE bytePlayerID = (BYTE)p->playerIndex;
 	int iMoney;
@@ -1013,7 +1013,7 @@ void CNetGame::Packet_StatsUpdate(Packet *p)
 
 void CNetGame::Packet_WeaponsUpdate(Packet *p)
 {
-	RakNet::BitStream bsData((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsData(p);
 	CPlayerPool *pPlayerPool = GetPlayerPool();
 	BYTE bytePlayerID = (BYTE)p->playerIndex;
 
@@ -1109,7 +1109,7 @@ void CNetGame::Packet_InGameRcon(Packet* packet)
 	if (pPlayer == NULL)
 		return;
 
-	RakNet::BitStream in(packet->data, packet->length, false);
+	RakNet::BitStream in(packet);
 	if (in.GetNumberOfUnreadBits() < 9)
 		return;
 

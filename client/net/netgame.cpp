@@ -385,7 +385,7 @@ void CNetGame::UpdateNetwork()
 void CNetGame::Packet_PlayerSync(Packet *p)
 {
 	CRemotePlayer * pPlayer;
-	RakNet::BitStream bsPlayerSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsPlayerSync(p);
 	ONFOOT_SYNC_DATA ofSync;
 	BYTE bytePlayerID=0;
 	
@@ -476,7 +476,7 @@ void CNetGame::Packet_PlayerSync(Packet *p)
 void CNetGame::Packet_AimSync(Packet *p)
 {
 	CRemotePlayer * pPlayer;
-	RakNet::BitStream bsAimSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsAimSync(p);
 	AIM_SYNC_DATA aimSync;
 	BYTE bytePlayerID=0;
 
@@ -498,7 +498,7 @@ void CNetGame::Packet_AimSync(Packet *p)
 void CNetGame::Packet_VehicleSync(Packet *p)
 {
 	CRemotePlayer * pPlayer;
-	RakNet::BitStream bsSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsSync(p);
 	BYTE		bytePlayerID=0;
 	INCAR_SYNC_DATA icSync;
 
@@ -594,7 +594,7 @@ void CNetGame::Packet_VehicleSync(Packet *p)
 void CNetGame::Packet_PassengerSync(Packet *p)
 {
 	CRemotePlayer * pPlayer;
-	RakNet::BitStream bsPassengerSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsPassengerSync(p);
 	BYTE		bytePlayerID=0;
 	PASSENGER_SYNC_DATA psSync;
 
@@ -618,7 +618,7 @@ void CNetGame::Packet_PassengerSync(Packet *p)
 void CNetGame::Packet_TrailerSync(Packet *p)
 {
 	CRemotePlayer * pPlayer;
-	RakNet::BitStream bsSpectatorSync((PCHAR)p->data, p->length, false);
+	RakNet::BitStream bsSpectatorSync(p);
 
 	if(GetGameState() != GAMESTATE_CONNECTED) return;
 
@@ -717,7 +717,7 @@ void CNetGame::Packet_ConnectAttemptFailed(Packet* packet)
 
 void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 {
-	RakNet::BitStream bsReturnParams((PCHAR)p->data, p->length, true);
+	RakNet::BitStream bsReturnParams(p);
 
 	unsigned int binaryAddr=0;
 	unsigned short port=0;
