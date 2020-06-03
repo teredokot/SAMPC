@@ -76,10 +76,9 @@ void CCmdWindow::Enable()
 	pCursor->m_bVisible = true;
 #endif
 
-	if (pNetGame)
-	{
+	if (pNetGame) {
 		RakNet::BitStream out;
-		out.Write<unsigned char>(1);
+		out.Write1();
 		pNetGame->Send(RPC_TypingEvent, &out);
 	}
 }
@@ -103,10 +102,9 @@ void CCmdWindow::Disable()
 	pCursor->m_bVisible = false;
 #endif
 
-	if (pNetGame)
-	{
+	if (pNetGame) {
 		RakNet::BitStream out;
-		out.Write<unsigned char>(0);
+		out.Write0();
 		pNetGame->Send(RPC_TypingEvent, &out);
 	}
 }

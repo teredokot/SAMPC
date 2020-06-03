@@ -782,17 +782,17 @@ void TypingEvent(RPCParameters* rpcParams)
 	int iSenderId = pNetGame->GetRakServer()->GetIndexFromPlayerID(rpcParams->sender);
 	CPlayerPool* pPool = pNetGame->GetPlayerPool();
 	unsigned char ucType = 0;
-	if (pPool && pPool->GetSlotState(iSenderId) && in.Read(ucType))
+	if (in.GetNumberOfUnreadBits() == 1 && pPool && pPool->GetSlotState(iSenderId))
 	{
 		CFilterScripts* pFS = pNetGame->GetFilterScripts();
 		CGameMode* pGM = pNetGame->GetGameMode();
 		if (pFS == NULL || pGM == NULL)
 			return;
 
-		if (ucType == 1) {
+		if (in.ReadBit()) {
 			pFS->OnPlayerBeginTyping(iSenderId);
 			pGM->OnPlayerBeginTyping(iSenderId);
-		} else if (ucType == 0) {
+		} else {
 			pFS->OnPlayerEndTyping(iSenderId);
 			pGM->OnPlayerEndTyping(iSenderId);
 		}
