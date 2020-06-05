@@ -3700,13 +3700,14 @@ static cell AMX_NATIVE_CALL n_DetachTrailerFromVehicle(AMX *amx, cell *params)
 
 //----------------------------------------------------
 
-static cell AMX_NATIVE_CALL n_IsTrailerAttachedToVehicle(AMX *amx, cell *params)
+static cell n_IsTrailerAttachedToVehicle(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "IsTrailerAttachedToVehicle", 1);
-	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
-	if ( pVehiclePool->GetAt((VEHICLEID)params[1])->m_TrailerID != 0 )
-	{
-		return 1;
+
+	CVehicle* pVehicle;
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
+	if (pPool && (pVehicle = pPool->GetAt((BYTE)params[1])) != NULL) {
+		return pVehicle->m_TrailerID != 0;
 	}
 	return 0;
 }
