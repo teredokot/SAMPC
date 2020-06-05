@@ -2788,6 +2788,13 @@ static cell n_SetWorldTime(AMX *amx, cell *params)
 	return 1;
 }
 
+// native GetWorldTime();
+static cell n_GetWorldTime(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetWorldTime", 0);
+	return pNetGame->m_byteWorldTime;
+}
+
 //----------------------------------------------------------------------------------
 // native SetPlayerTime(playerid, hour, min)
 
@@ -5698,6 +5705,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "ShowNameTags",			n_ShowNameTags },
 	{ "ShowPlayerMarkers",		n_ShowPlayerMarkers },
 	{ "SetWorldTime",			n_SetWorldTime },
+	DEFINE_NATIVE(GetWorldTime),
 	{ "GetWeaponName",			n_GetWeaponName },
 	{ "EnableTirePopping",		n_EnableTirePopping },
 	{ "AllowInteriorWeapons",	n_AllowInteriorWeapons },

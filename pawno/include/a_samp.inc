@@ -364,6 +364,7 @@ native ShowPlayerMarkers(show);
 native DisableNameTagLOS();
 native GameModeExit();
 native SetWorldTime(hour);
+native GetWorldTime();
 native GetWeaponName(weaponid, const buffer[], length);
 native EnableTirePopping(enable);
 native AllowInteriorWeapons(allow);
