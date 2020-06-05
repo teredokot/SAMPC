@@ -10,7 +10,6 @@ Based on original hook by Peter
 */
 
 #include "main.h"
-extern CNetGame *pNetGame;
 
 #define RGBA_ABGR(n) (((n >> 24) & 0x000000FF) | ((n >> 8) & 0x0000FF00) | ((n << 8) & 0x00FF0000) | ((n << 24) & 0xFF000000))
 

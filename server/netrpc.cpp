@@ -11,18 +11,11 @@
 #include "vehmods.h"
 //#include "anticheat.h"
 
-extern CNetGame *pNetGame;
-
 RakServerInterface		*pRak=0;
 
 // Removed for RakNet upgrade
 //#define REGISTER_STATIC_RPC REGISTER_AS_REMOTE_PROCEDURE_CALL
 //#define UNREGISTER_STATIC_RPC UNREGISTER_AS_REMOTE_PROCEDURE_CALL
-
-bool ContainsInvalidNickChars(char * szString);
-void ReplaceBadChars(char * szString);
-
-extern unsigned int _uiRndSrvChallenge;
 
 //----------------------------------------------------
 // Sent by a client who's wishing to join us in our

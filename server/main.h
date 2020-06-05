@@ -128,6 +128,7 @@ typedef struct _SERVER_SETTINGS {
 #include "plugins.h"
 //#include "rcon.h"
 #include "runutil.h"
+#include "scrcore.h"
 
 // ---------
 // EXTERNALS
@@ -143,9 +144,11 @@ extern CRcon *pRcon;
 
 extern BYTE byteRconUser;
 extern bool bRconSocketReply;
-
 extern bool g_bDBLogging;
 extern bool g_bDBLogQueries;
+extern bool bGameModeFinished;
+extern bool	bQuitApp;
+extern unsigned int _uiRndSrvChallenge;
 
 // -------------------
 // FUNCTION PROTOTYPES

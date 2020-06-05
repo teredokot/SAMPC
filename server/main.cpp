@@ -272,13 +272,13 @@ int main (int argc, char** argv)
 	bool bEnableAnnounce = true;
 	int iMaxPlayers	= DEFAULT_MAX_PLAYERS;
 	int iListenPort	= DEFAULT_LISTEN_PORT;
-	int iRconPort	= DEFAULT_RCON_PORT;
-	int iRconMaxAdmins	= DEFAULT_RCON_MAXUSERS;
+	//int iRconPort	= DEFAULT_RCON_PORT;
+	//int iRconMaxAdmins	= DEFAULT_RCON_MAXUSERS;
 	bool bLanModeEnable = false;
 	bool bEnableTimestamp = true;
 	bool bEnableInstagib = false;
-	bool bGameMod = false;
-	bool bEnableAC = false;
+	//bool bGameMod = false;
+	//bool bEnableAC = false;
 	bool bAllowQuery = true;
 	int iMTUSize = MAXIMUM_MTU_SIZE;
 	int iChatLogging = 1;

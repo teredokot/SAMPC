@@ -12,8 +12,6 @@
 
 float fRestartWaitTime=0.0f;
 
-int CanFileBeOpenedForReading(char * filename);
-
 char szGameModeFile[256];
 
 #define LOCAL_RANGE		210.0f

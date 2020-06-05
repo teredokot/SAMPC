@@ -8,7 +8,6 @@ Version: $Id: menu.cpp,v 1.0 2007/02/13 15:35:32 Y_Less Exp $
 */
 
 #include "main.h"
-extern CNetGame *pNetGame;
 
 CMenu::CMenu(PCHAR pTitle, float fX, float fY, BYTE byteColumns, float fCol1Width, float fCol2Width)
 {

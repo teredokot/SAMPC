@@ -21,6 +21,7 @@ int Util_strnicmp(const char *s1, const char *s2, size_t n);
 char *Util_strrev(char *str);
 char * Util_itoa(int v, char *s, int r);
 void Util_Base64Encode( char *cpInput, char *cpOutput );
+bool ContainsInvalidNickChars(char* szString);
 void ReplaceBadChars(char * szString);
-
+int CanFileBeOpenedForReading(char* filename);
 //----------------------------------------------------

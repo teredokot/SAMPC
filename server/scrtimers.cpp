@@ -16,8 +16,6 @@
 
 #include "main.h"
 
-extern CNetGame* pNetGame;
-
 //----------------------------------------------------------------------------------
 
 CScriptTimers::CScriptTimers()

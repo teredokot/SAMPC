@@ -16,28 +16,7 @@
 
 #define CHECK_INIT() { if (!m_bInitialised) return 0; };
 
-extern "C" int amx_CoreInit(AMX* amx);
-extern "C" int amx_CoreCleanup(AMX* amx);
-extern "C" int amx_FloatInit(AMX* amx);
-extern "C" int amx_FloatCleanup(AMX* amx);
-extern "C" int amx_StringInit(AMX* amx);
-extern "C" int amx_StringCleanup(AMX* amx);
-extern "C" int amx_FileInit(AMX* amx);
-extern "C" int amx_FileCleanup(AMX* amx);
-extern "C" int amx_TimeInit(AMX* amx);
-extern "C" int amx_TimeCleanup(AMX* amx);
-
-int AMXAPI aux_LoadProgram(AMX* amx, char* filename);
-int AMXAPI aux_FreeProgram(AMX *amx);
-char * AMXAPI aux_StrError(int errnum);
-void AMXPrintError(CGameMode* pGameMode, AMX *amx, int error);
-int amx_CustomInit(AMX *amx);
-int amx_sampDbInit(AMX* amx);
-int amx_sampDbCleanup(AMX *amx);
-
 char szGameModeFileName[256];
-
-extern CNetGame* pNetGame;
  
 //----------------------------------------------------------------------------------
 

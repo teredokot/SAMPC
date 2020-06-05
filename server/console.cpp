@@ -14,10 +14,6 @@
 
 #include "main.h"
 
-extern bool	bQuitApp;
-
-extern CNetGame* pNetGame;
-
 void con_exit()
 {
 	bQuitApp = true;
@@ -133,7 +129,6 @@ void con_ban()
 	}
 }
 
-bool IsStrIp(char* szIn);
 bool IsStrIp(char* szIn)
 {
 	char* part;
@@ -176,7 +171,6 @@ void con_unbanip()
 	}
 }
 
-extern bool bGameModeFinished;
 void con_gmx()
 {
 	if (pNetGame && pNetGame->GetGameState() == GAMESTATE_RUNNING)

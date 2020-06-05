@@ -6,15 +6,11 @@
 //----------------------------------------------------------
 
 #include "main.h"
-#include "plugins.h"
+//#include "plugins.h"
 //#include "signer.h"
 //#include "jenkinshash.h"
 //#include "pluginkey.h"
-#include "console.h"
-
-//---------------------------------------
-
-void logprintf(char* format, ...);
+//#include "console.h"
 
 //---------------------------------------
 // Some Helpers

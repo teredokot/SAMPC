@@ -2,11 +2,7 @@
 // 
 
 #include "main.h"
-#include "amx/amx.h"
-
 #include "format.h"
-
-cell* get_amxaddr(AMX *amx,cell amx_addr);
 
 #define ALT			0x00000001		/* alternate form */
 #define HEXPREFIX	0x00000002		/* add 0x or 0X prefix */

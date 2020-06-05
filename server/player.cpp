@@ -11,8 +11,6 @@
 
 #define NOT_KEY_FIRE 0xFB
 
-extern CNetGame *pNetGame;
-
 //----------------------------------------------------
 // Some Util functions for Vector compression
 

@@ -329,6 +329,7 @@
     <ClInclude Include="plugininternal.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="runutil.h" />
+    <ClInclude Include="scrcore.h" />
     <ClInclude Include="scrtimers.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="textdrawpool.h" />

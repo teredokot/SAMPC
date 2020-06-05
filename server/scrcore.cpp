@@ -19,7 +19,7 @@
 
 //----------------------------------------------------------------------------------
 
-int AMXAPI aux_LoadProgram(AMX* amx, char* filename)
+int aux_LoadProgram(AMX* amx, char* filename)
 {
 	FILE* fp;
 	if ((fp = fopen(filename, "rb")) == NULL)
@@ -62,7 +62,7 @@ int AMXAPI aux_LoadProgram(AMX* amx, char* filename)
 
 //----------------------------------------------------------------------------------
 
-int AMXAPI aux_LoadProgramFromMemory(AMX* amx, char* filedata)
+int aux_LoadProgramFromMemory(AMX* amx, char* filedata)
 {
 	AMX_HEADER hdr;
 
@@ -97,7 +97,7 @@ int AMXAPI aux_LoadProgramFromMemory(AMX* amx, char* filedata)
 }
 //----------------------------------------------------------------------------------
 
-int AMXAPI aux_FreeProgram(AMX *amx)
+int aux_FreeProgram(AMX *amx)
 {
 	if (amx->base != NULL)
 	{
@@ -110,7 +110,7 @@ int AMXAPI aux_FreeProgram(AMX *amx)
 
 //----------------------------------------------------------------------------------
 
-char * AMXAPI aux_StrError(int errnum)
+char* aux_StrError(int errnum)
 {
 	static char *messages[] = {
 		/* AMX_ERR_NONE      */ "(none)",

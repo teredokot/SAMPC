@@ -12,28 +12,6 @@
 
 #include "main.h"
 
-extern "C" int amx_CoreInit(AMX* amx);
-extern "C" int amx_CoreCleanup(AMX* amx);
-extern "C" int amx_FloatInit(AMX* amx);
-extern "C" int amx_FloatCleanup(AMX* amx);
-extern "C" int amx_StringInit(AMX* amx);
-extern "C" int amx_StringCleanup(AMX* amx);
-extern "C" int amx_FileInit(AMX* amx);
-extern "C" int amx_FileCleanup(AMX* amx);
-extern "C" int amx_TimeInit(AMX* amx);
-extern "C" int amx_TimeCleanup(AMX* amx);
-
-int AMXAPI aux_LoadProgram(AMX* amx, char* filename);
-int AMXAPI aux_LoadProgramFromMemory(AMX* amx, char* filedata);
-int AMXAPI aux_FreeProgram(AMX *amx);
-int amx_CustomInit(AMX *amx);
-int amx_sampDbInit(AMX* amx);
-int amx_sampDbCleanup(AMX *amx);
-
-void PrintMissingNatives(AMX* amx, const char* szScriptName);
-
-extern CNetGame* pNetGame;
- 
 //----------------------------------------------------------------------------------
 
 CFilterScripts::CFilterScripts()

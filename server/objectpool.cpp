@@ -9,8 +9,6 @@ Version: $Id: Objectpool.cpp,v 1.10 2006/04/12 19:26:45 mike Exp $
 
 #include "main.h"
 
-extern CNetGame *pNetGame;
-
 //----------------------------------------------------
 
 CObjectPool::CObjectPool()

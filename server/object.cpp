@@ -8,7 +8,6 @@ Version: $Id: vehicle.cpp,v 1.5 2006/05/07 15:35:32 kyeman Exp $
 */
 
 #include "main.h"
-extern CNetGame *pNetGame;
 
 //----------------------------------------------------------
 // Global
