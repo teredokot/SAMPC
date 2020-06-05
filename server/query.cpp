@@ -55,7 +55,7 @@ int CheckQueryFlood(unsigned int binaryAddress)
 
 int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* data, int length, SOCKET s)
 {
-	char* szPassword=NULL;
+	/*char* szPassword=NULL;
 	WORD wStrLen=0;
 	in_addr in;
 	in.s_addr = binaryAddress;
@@ -360,7 +360,7 @@ int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* da
 		return 1;
 	} else {
 		return 0;
-	}
+	}*/
 }
 
 //----------------------------------------------------
