@@ -1151,6 +1151,36 @@ static cell n_GetVehicleSpawnInfo(AMX* amx, cell* params)
 	return 0;
 }
 
+// native SetVehicleSpawnInfo(vehicleid, modelid, Float:fX, Float:fY, Float:fZ, Float:fAngle, color1, color2, respawndelay = -2, interior = -2);
+static cell n_SetVehicleSpawnInfo(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetVehicleSpawnInfo", 10);
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			if (params[2] >= 400 || params[2] <= 611)
+				pVehicle->m_SpawnInfo.iVehicleType = params[2];
+
+			pVehicle->m_SpawnInfo.vecPos.X = amx_ctof(params[3]);
+			pVehicle->m_SpawnInfo.vecPos.Y = amx_ctof(params[4]);
+			pVehicle->m_SpawnInfo.vecPos.Z = amx_ctof(params[5]);
+
+			pVehicle->m_SpawnInfo.fRotation = amx_ctof(params[6]);
+
+			pVehicle->m_SpawnInfo.iColor1 = params[7];
+			pVehicle->m_SpawnInfo.iColor2 = params[8];
+
+			if (params[9] != -2)
+				pVehicle->m_SpawnInfo.iRespawnDelay = params[9];
+
+			if (params[10] != -2)
+				pVehicle->m_SpawnInfo.iInterior = params[10];
+			return 1;
+		}
+	}
+	return 0;
+}
+
 // native RepairVehicle(vehicleid)
 static cell n_RepairVehicle(AMX* amx, cell* params)
 {
@@ -5962,6 +5992,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetVehicleVirtualWorld",		n_SetVehicleVirtualWorld },
 	{ "GetVehicleVirtualWorld",		n_GetVehicleVirtualWorld },
 	DEFINE_NATIVE(GetVehicleSpawnInfo),
+	DEFINE_NATIVE(SetVehicleSpawnInfo),
 	DEFINE_NATIVE(RepairVehicle),
 	DEFINE_NATIVE(SetVehicleParamsCarWindows),
 	DEFINE_NATIVE(ToggleTaxiLight),
