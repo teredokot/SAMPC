@@ -361,6 +361,7 @@ int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char* da
 	} else {
 		return 0;
 	}*/
+	return 0;
 }
 
 //----------------------------------------------------

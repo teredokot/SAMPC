@@ -29,6 +29,7 @@ private:
 	CVehicle *m_pVehicles[MAX_VEHICLES];
 	BYTE m_byteVirtualWorld[MAX_VEHICLES];
 	unsigned int m_uiLastVehicleId;
+	unsigned short m_usVehicleModelsUsed[212];
 public:
 	CVehiclePool();
 	~CVehiclePool();
@@ -64,6 +65,10 @@ public:
 
 	unsigned int GetVehicleLastId() { return m_uiLastVehicleId; }
 
+	unsigned short GetVehicleModelsUsed(int iId) const
+	{
+		return m_usVehicleModelsUsed[iId];
+	}
 };
 
 //----------------------------------------------------

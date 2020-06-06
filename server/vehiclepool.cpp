@@ -17,6 +17,8 @@ CVehiclePool::CVehiclePool()
 	for(VEHICLEID VehicleID = 0; VehicleID != MAX_VEHICLES; VehicleID++) {
 		m_bVehicleSlotState[VehicleID] = false;
 		m_pVehicles[VehicleID] = NULL;
+		if (VehicleID < 212)
+			m_usVehicleModelsUsed[VehicleID] = 0;
 	}
 }
 
@@ -60,6 +62,8 @@ VEHICLEID CVehiclePool::New(int iVehicleType,
 			}
 		}
 
+		m_usVehicleModelsUsed[iVehicleType - 400]++;
+
 		return VehicleID;
 	}
 	else
@@ -76,6 +80,8 @@ bool CVehiclePool::Delete(VEHICLEID VehicleID)
 	{
 		return false; // Vehicle already deleted or not used.
 	}
+
+	m_usVehicleModelsUsed[m_pVehicles[VehicleID]->m_SpawnInfo.iVehicleType - 400]--;
 
 	m_bVehicleSlotState[VehicleID] = false;
 	delete m_pVehicles[VehicleID];

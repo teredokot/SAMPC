@@ -27,6 +27,7 @@
 #define VEHICLE_DOOR_REAR_LEFT 		(3)
 #define VEHICLE_DOOR_REAR_RIGHT 	(4)
 
+native GetVehicleModelCount(modelid);
 native IsValidVehicle(vehicleid);
 native CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:a, color1, color2, respawndelay);
 native DestroyVehicle(vehicleid);

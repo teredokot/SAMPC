@@ -1603,6 +1603,19 @@ static cell n_IsValidVehicle(AMX* amx, cell* params)
 		return 0;
 }
 
+// native GetVehicleModelCount(modelid);
+static cell n_GetVehicleModelCount(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleModelCount", 1);
+	
+	if (pNetGame->GetVehiclePool()) {
+		if (params[1] >= 400 || params[1] <= 611) {
+			return pNetGame->GetVehiclePool()->GetVehicleModelsUsed(params[1] - 400);
+		}
+	}
+	return 0;
+}
+
 // native CreateVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawndelay)
 static cell n_CreateVehicle(AMX *amx, cell *params)
 {
@@ -5866,6 +5879,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 
 		// Vehicle
 	{ "GetVehiclePoolSize", n_GetVehiclePoolSize },
+	DEFINE_NATIVE(GetVehicleModelCount),
 	{ "IsValidVehicle",			n_IsValidVehicle },
 	{ "CreateVehicle",			n_CreateVehicle },
 	{ "DestroyVehicle",			n_DestroyVehicle },
