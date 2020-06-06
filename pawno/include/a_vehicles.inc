@@ -55,6 +55,7 @@ native DetachTrailerFromVehicle(vehicleid);
 native IsTrailerAttachedToVehicle(vehicleid);
 native GetVehicleTrailer(vehicleid);
 native SetVehicleNumberPlate(vehicleid, const numberplate[]);
+native GetVehicleNumberPlate(vehicleid, numberplate[], len = sizeof(plate));
 native GetVehicleModel(vehicleid);
 native RepairVehicle(vehicleid);
 native SetVehicleVirtualWorld(vehicleid, worldid);

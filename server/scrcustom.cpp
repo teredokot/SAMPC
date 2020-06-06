@@ -349,6 +349,19 @@ static cell n_SetVehicleNumberPlate(AMX *amx, cell *params)
 	return 0;
 }
 
+// native GetVehicleNumberPlate(vehicleid, numberplate[], len = sizeof(plate));
+static cell n_GetVehicleNumberPlate(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleNumberPlate", 3);
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			return set_amxstring(amx, params[2], pVehicle->m_szNumberPlate, params[3]);
+		}
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 // native GetVehicleModel(vehicleid);
 static cell n_GetVehicleModel(AMX *amx, cell *params)
@@ -5916,6 +5929,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "IsTrailerAttachedToVehicle",		n_IsTrailerAttachedToVehicle },
 	{ "GetVehicleTrailer",		n_GetVehicleTrailer },
 	{ "SetVehicleNumberPlate",	n_SetVehicleNumberPlate },
+	DEFINE_NATIVE(GetVehicleNumberPlate),
 	{ "GetVehicleModel",		n_GetVehicleModel },
 	{ "GetVehicleInterior", n_GetVehicleInterior },
 	{ "GetVehicleColor", n_GetVehicleColor },
