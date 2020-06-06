@@ -1616,6 +1616,19 @@ static cell n_GetVehicleModelCount(AMX* amx, cell* params)
 	return 0;
 }
 
+// native GetVehicleModelsUsed();
+static cell n_GetVehicleModelsUsed(AMX* amx, cell* params)
+{
+	unsigned char ucModels = 0;
+	if (pNetGame->GetVehiclePool()) {
+		for (unsigned char c = 0; c < 212; c++) {
+			if (pNetGame->GetVehiclePool()->GetVehicleModelsUsed(c) != 0)
+				ucModels++;
+		}
+	}
+	return ucModels;
+}
+
 // native CreateVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawndelay)
 static cell n_CreateVehicle(AMX *amx, cell *params)
 {
@@ -5880,6 +5893,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 		// Vehicle
 	{ "GetVehiclePoolSize", n_GetVehiclePoolSize },
 	DEFINE_NATIVE(GetVehicleModelCount),
+	DEFINE_NATIVE(GetVehicleModelsUsed),
 	{ "IsValidVehicle",			n_IsValidVehicle },
 	{ "CreateVehicle",			n_CreateVehicle },
 	{ "DestroyVehicle",			n_DestroyVehicle },
