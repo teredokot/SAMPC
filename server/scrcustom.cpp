@@ -1114,7 +1114,6 @@ static cell n_SetVehicleVirtualWorld(AMX *amx, cell *params)
 //----------------------------------------------------------------------------------
 
 // native GetVehicleVirtualWorld(vehicleid)
-
 static cell n_GetVehicleVirtualWorld(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "GetVehicleVirtualWorld", 1);
@@ -1122,6 +1121,32 @@ static cell n_GetVehicleVirtualWorld(AMX *amx, cell *params)
 	if (pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[1]))
 	{
 		return pNetGame->GetVehiclePool()->GetVehicleVirtualWorld((VEHICLEID)params[1]);
+	}
+	return 0;
+}
+
+// native GetVehicleSpawnInfo(vehicleid, &Float:fX, &Float:fY, &Float:fZ, &Float:fRot, &color1, &color2);
+static cell n_GetVehicleSpawnInfo(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleSpawnInfo", 7);
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			cell* cptr;
+			amx_GetAddr(amx, params[2], &cptr);
+			*cptr = amx_ftoc(pVehicle->m_SpawnInfo.vecPos.X);
+			amx_GetAddr(amx, params[3], &cptr);
+			*cptr = amx_ftoc(pVehicle->m_SpawnInfo.vecPos.Y);
+			amx_GetAddr(amx, params[4], &cptr);
+			*cptr = amx_ftoc(pVehicle->m_SpawnInfo.vecPos.Z);
+			amx_GetAddr(amx, params[5], &cptr);
+			*cptr = amx_ftoc(pVehicle->m_SpawnInfo.fRotation);
+			amx_GetAddr(amx, params[6], &cptr);
+			*cptr = amx_ftoc(pVehicle->m_SpawnInfo.iColor1);
+			amx_GetAddr(amx, params[7], &cptr);
+			*cptr = amx_ftoc(pVehicle->m_SpawnInfo.iColor2);
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -5936,6 +5961,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetVehiclePaintjob", n_GetVehiclePaintjob },
 	{ "SetVehicleVirtualWorld",		n_SetVehicleVirtualWorld },
 	{ "GetVehicleVirtualWorld",		n_GetVehicleVirtualWorld },
+	DEFINE_NATIVE(GetVehicleSpawnInfo),
 	DEFINE_NATIVE(RepairVehicle),
 	DEFINE_NATIVE(SetVehicleParamsCarWindows),
 	DEFINE_NATIVE(ToggleTaxiLight),
@@ -5960,6 +5986,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetVehicleDoorState),
 	DEFINE_NATIVE(SetVehicleFeature),
 	DEFINE_NATIVE(SetVehicleVisibility),
+
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },

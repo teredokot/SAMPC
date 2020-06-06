@@ -32,6 +32,7 @@ native GetVehicleModelsUsed();
 native IsValidVehicle(vehicleid);
 native CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:a, color1, color2, respawndelay);
 native DestroyVehicle(vehicleid);
+native GetVehicleSpawnInfo(vehicleid, &Float:fX, &Float:fY, &Float:fZ, &Float:fRot, &color1, &color2);
 native GetVehiclePos(vehicleid, &Float:x, &Float:y, &Float:z);
 native SetVehiclePos(vehicleid, Float:x, Float:y, Float:z);
 native GetVehicleZAngle(vehicleid, &Float:a);
