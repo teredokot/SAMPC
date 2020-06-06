@@ -1158,7 +1158,7 @@ static cell n_SetVehicleSpawnInfo(AMX* amx, cell* params)
 	if (pNetGame->GetVehiclePool()) {
 		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
 		if (pVehicle != nullptr) {
-			if (params[2] >= 400 || params[2] <= 611)
+			if (IsVehicleModelIdValid(params[2]))
 				pVehicle->m_SpawnInfo.iVehicleType = params[2];
 
 			pVehicle->m_SpawnInfo.vecPos.X = amx_ctof(params[3]);
@@ -1677,7 +1677,7 @@ static cell n_GetVehicleModelCount(AMX* amx, cell* params)
 	CHECK_PARAMS(amx, "GetVehicleModelCount", 1);
 	
 	if (pNetGame->GetVehiclePool()) {
-		if (params[1] >= 400 || params[1] <= 611) {
+		if (IsVehicleModelIdValid(params[1])) {
 			return pNetGame->GetVehiclePool()->GetVehicleModelsUsed(params[1] - 400);
 		}
 	}

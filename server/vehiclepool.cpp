@@ -39,6 +39,9 @@ VEHICLEID CVehiclePool::New(int iVehicleType,
 {
 	VEHICLEID VehicleID;
 
+	if (!IsVehicleModelIdValid(iVehicleType))
+		return 0xFFFF;
+
 	for(VehicleID=1; VehicleID != MAX_VEHICLES; VehicleID++)
 	{
 		if(m_bVehicleSlotState[VehicleID] == false) break;

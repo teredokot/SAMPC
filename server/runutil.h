@@ -12,6 +12,8 @@ namespace Utils
 	int GetTypeByComponentId(short sModelId);
 };
 
+bool IsVehicleModelIdValid(int iId);
+
 void Util_UrlUnencode(char *enc);
 char Util_toupper(char c);
 char *Util_stristr(const char *String, const char *Pattern);

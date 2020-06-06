@@ -79,6 +79,11 @@ int Utils::GetTypeByComponentId(short sModelId)
 	return -1;
 }
 
+bool IsVehicleModelIdValid(int iId)
+{
+	return (iId >= 400 && iId <= 611);
+}
+
 void Util_UrlUnencode(char *enc)
 {
 	char *write_pos = enc;
