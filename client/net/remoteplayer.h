@@ -51,7 +51,7 @@ public:
 	DWORD				m_dwWaitForEntryExitAnims;
 	
 	int					m_iIsInAModShop;
-	BYTE				m_byteVirtualWorld;
+	int					m_iVirtualWorld;
 
 public:
 
@@ -61,7 +61,7 @@ public:
 	BYTE GetState() { return m_byteState; };
 
 	// Process this player during the server loop.
-	void Process(BYTE byteLocalWorld);
+	void Process(int iLocalWorld);
 	void ProcessSpecialActions(BYTE byteSpecialAction);
 
 	void HandleVehicleEntryExit();
@@ -121,7 +121,7 @@ public:
 	void EnterVehicle(VEHICLEID VehicleID, bool bPassenger);
 	void ExitVehicle();
 	
-	void SetVirtualWorld(BYTE byteWorld) { m_byteVirtualWorld = byteWorld; };
+	void SetVirtualWorld(int iWorld) { m_iVirtualWorld = iWorld; };
 	
 	BYTE GetTeam() { return m_byteTeam; };
 	void SetTeam(BYTE byteTeam) { m_byteTeam = byteTeam; };

@@ -707,6 +707,11 @@ bool CNetGame::SendToPlayer(unsigned int uiPlayerId,
 		RELIABLE, 0, m_pRak->GetPlayerIDFromIndex(uiPlayerId), false, false);
 }
 
+bool CNetGame::SendToAll(short sUniqId, RakNet::BitStream* pBitStream)
+{
+	return m_pRak->RPC(sUniqId, pBitStream, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+}
+
 //----------------------------------------------------
 
 int CNetGame::GetBroadcastSendRateFromPlayerDistance(float fDistance)
@@ -743,7 +748,7 @@ void CNetGame::BroadcastData( RakNet::BitStream *bitStream,
 	float fDistance;
 	CPlayer *pPlayer;
 	
-	int iExVW = m_pPlayerPool->GetPlayerVirtualWorld(byteExcludedPlayer);
+	int iExVW = m_pPlayerPool->GetAt(byteExcludedPlayer)->GetVirtualWorld();
 
 	while(x!=MAX_PLAYERS)
 	{
@@ -752,7 +757,7 @@ void CNetGame::BroadcastData( RakNet::BitStream *bitStream,
 		{
 			pPlayer = m_pPlayerPool->GetAt(x);
 
-			if (m_pPlayerPool->GetPlayerVirtualWorld(x) == iExVW)
+			if (pPlayer->GetVirtualWorld() == iExVW)
 			{
 				fDistance = m_pPlayerPool->GetDistanceFromPlayerToPlayer(byteExcludedPlayer,x);
 
@@ -808,7 +813,7 @@ void CNetGame::BroadcastDistanceRPC( short szUniqueID,
 	float fDistance;
 	CPlayer *pPlayer;
 	
-	int iExVW = m_pPlayerPool->GetPlayerVirtualWorld(byteExcludedPlayer);
+	int iExVW = m_pPlayerPool->GetAt(byteExcludedPlayer)->GetVirtualWorld();
 
 	while(x!=MAX_PLAYERS)
 	{
@@ -816,7 +821,7 @@ void CNetGame::BroadcastDistanceRPC( short szUniqueID,
 			(x != byteExcludedPlayer) )
 		{
 			pPlayer = m_pPlayerPool->GetAt(x);
-			if (m_pPlayerPool->GetPlayerVirtualWorld(x) == iExVW) {
+			if (pPlayer->GetVirtualWorld() == iExVW) {
 				fDistance = m_pPlayerPool->GetDistanceFromPlayerToPlayer(byteExcludedPlayer,x);
 				if(fDistance <= fUseDistance) {
 					m_pRak->RPC(szUniqueID,bitStream,HIGH_PRIORITY,reliability,
@@ -1204,7 +1209,7 @@ void CNetGame::ProcessClientJoin(BYTE bytePlayerID)
 		
 		// Inform them of their VW as it doesn't actually work if called from OnPlayerConnect
 		// The server is updated but they're not connected fully so don't get it, so resend it
-		BYTE byteVW = m_pPlayerPool->GetPlayerVirtualWorld(bytePlayerID);
+		BYTE byteVW = m_pPlayerPool->GetAt(bytePlayerID)->GetVirtualWorld();
 		RakNet::BitStream bsData;
 		bsData.Write(bytePlayerID); // player id
 		bsData.Write(byteVW); // VW id

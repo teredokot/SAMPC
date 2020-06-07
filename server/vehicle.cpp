@@ -45,6 +45,7 @@ CVehicle::CVehicle( int iModel, VECTOR *vecPos,
 	m_byteDriverID = INVALID_ID;
 	m_fHealth = 1000.0f;
 	m_bDeathHasBeenNotified = false;
+	m_iVirtualWorld = 0;
 
 	m_bOnItsSide = false;
 	m_bUpsideDown = false;
@@ -289,4 +290,15 @@ float CVehicle::GetDistanceFromPoint(float fX, float fY, float fZ)
 		z = m_matWorld.pos.Z - fZ;
 
 	return sqrtf(z * z + y * y + x * x);
+}
+
+void CVehicle::SetVirtualWorld(int iVirtualWorld)
+{
+	m_iVirtualWorld = iVirtualWorld;
+
+	RakNet::BitStream bsData;
+	bsData.Write(m_VehicleID); // player id
+	bsData.Write(iVirtualWorld); // vw id
+	pNetGame->SendToAll(RPC_ScrSetVehicleVirtualWorld, &bsData);
+
 }

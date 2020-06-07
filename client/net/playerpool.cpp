@@ -97,7 +97,7 @@ bool CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 bool CPlayerPool::Process()
 {
 	// Process all CRemotePlayers
-	BYTE localVW = 0;
+	int localVW = 0;
 	if (m_pLocalPlayer) localVW = m_pLocalPlayer->GetVirtualWorld();
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++) {
 		if(true == m_bPlayerSlotState[bytePlayerID]) {

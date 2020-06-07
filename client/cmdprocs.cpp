@@ -1339,7 +1339,7 @@ void cmdShowPlayerVirtualWorld(PCHAR szCmd)
 	if(pNetGame) {
 		CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 		if(pPlayerPool->GetSlotState(bytePlayerID)) {
-			pChatWindow->AddDebugMessage("VW: %u",pPlayerPool->GetAt(bytePlayerID)->m_byteVirtualWorld);
+			pChatWindow->AddDebugMessage("VW: %u",pPlayerPool->GetAt(bytePlayerID)->m_iVirtualWorld);
 		}
 	}
 }

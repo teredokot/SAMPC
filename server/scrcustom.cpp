@@ -1067,60 +1067,59 @@ static cell n_GetPlayerWeaponState(AMX* amx, cell* params)
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)
-
-static cell n_SetPlayerVirtualWorld(AMX *amx, cell *params)
+static cell n_SetPlayerVirtualWorld(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetPlayerVirtualWorld", 2);
 
-	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
-	{
-		pNetGame->GetPlayerPool()->SetPlayerVirtualWorld((BYTE)params[1], (BYTE)params[2]);
-		return 1;
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			pPlayer->SetVirtualWorld(params[2]);
+			return 1;
+		}
 	}
 	return 0;
 }
 
-//----------------------------------------------------------------------------------
-
 // native GetPlayerVirtualWorld(playerid)
-
-static cell n_GetPlayerVirtualWorld(AMX *amx, cell *params)
+static cell n_GetPlayerVirtualWorld(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "GetPlayerVirtualWorld", 1);
 
-	if (pNetGame->GetPlayerPool()->GetSlotState((BYTE)params[1]))
-	{
-		return pNetGame->GetPlayerPool()->GetPlayerVirtualWorld((BYTE)params[1]);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			return pPlayer->GetVirtualWorld();
+		}
 	}
 	return 0;
 }
 
-//----------------------------------------------------------------------------------
-
 // native SetVehicleVirtualWorld(vehicleid, worldid)
-
-static cell n_SetVehicleVirtualWorld(AMX *amx, cell *params)
+static cell n_SetVehicleVirtualWorld(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetVehicleVirtualWorld", 2);
 
-	if (pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[1]))
-	{
-		pNetGame->GetVehiclePool()->SetVehicleVirtualWorld((VEHICLEID)params[1], (BYTE)params[2]);
-		return 1;
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != NULL) {
+			pVehicle->SetVirtualWorld(params[2]);
+			return 1;
+		}
 	}
 	return 0;
 }
 
-//----------------------------------------------------------------------------------
-
 // native GetVehicleVirtualWorld(vehicleid)
-static cell n_GetVehicleVirtualWorld(AMX *amx, cell *params)
+static cell n_GetVehicleVirtualWorld(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "GetVehicleVirtualWorld", 1);
 
-	if (pNetGame->GetVehiclePool()->GetSlotState((VEHICLEID)params[1]))
-	{
-		return pNetGame->GetVehiclePool()->GetVehicleVirtualWorld((VEHICLEID)params[1]);
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != NULL) {
+			return pVehicle->m_iVirtualWorld;
+		}
 	}
 	return 0;
 }

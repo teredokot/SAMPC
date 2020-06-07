@@ -60,7 +60,7 @@ CLocalPlayer::CLocalPlayer()
 	m_bWantsAnotherClass = false;
 	m_bWaitingForSpawnRequestReply = false;
 	m_iSelectedClass = 0;
-	m_byteVirtualWorld = 0;
+	m_iVirtualWorld = 0;
 	m_dwLastSpawnSelectionTick = GetTickCount();
 	m_dwLastHeadUpdate = GetTickCount();
 	m_bInRCMode = false;

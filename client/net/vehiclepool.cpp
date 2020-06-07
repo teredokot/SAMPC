@@ -19,7 +19,7 @@ CVehiclePool::CVehiclePool()
 		m_bVehicleSlotState[VehicleID] = false;
 		m_pVehicles[VehicleID] = NULL;
 		m_pGTAVehicles[VehicleID] = NULL;
-		m_byteVirtualWorld[VehicleID] = 0;
+		m_iVirtualWorld[VehicleID] = 0;
 	}
 }
 
@@ -51,7 +51,7 @@ bool CVehiclePool::New( VEHICLEID VehicleID, int iVehicleType,
 	m_SpawnInfo[VehicleID].iColor1 = iColor1;
 	m_SpawnInfo[VehicleID].iColor2 = iColor2;
 	
-	m_byteVirtualWorld[VehicleID] = 0;
+	m_iVirtualWorld[VehicleID] = 0;
 
 	// Now go ahead and spawn it at the location we got passed.
 	return Spawn(VehicleID,iVehicleType,vecPos,fRotation,iColor1,iColor2,iInterior,szNumberPlate);
@@ -177,10 +177,10 @@ int CVehiclePool::FindGtaIDFromGtaPtr(VEHICLE_TYPE * pGtaVehicle)
 
 //----------------------------------------------------
 
-void CVehiclePool::ProcessForVirtualWorld(VEHICLEID vehicleId, BYTE bytePlayerWorld)
+void CVehiclePool::ProcessForVirtualWorld(VEHICLEID vehicleId, int iPlayerWorld)
 {
-	BYTE byteVehicleVW = m_byteVirtualWorld[vehicleId];
-	if (bytePlayerWorld != byteVehicleVW)
+	int iVehicleVW = m_iVirtualWorld[vehicleId];
+	if (iPlayerWorld != iVehicleVW)
 	{
 		if(m_pVehicles[vehicleId]->m_dwMarkerID)
 		{
@@ -202,7 +202,7 @@ void CVehiclePool::Process()
 
 	//if(!pLocalPlayer->IsActive()) return;
 	
-	BYTE localVW = 0;
+	int localVW = 0;
 	if (pLocalPlayer) localVW = pLocalPlayer->GetVirtualWorld();
 
 	for(VEHICLEID x = 0; x != MAX_VEHICLES; x++)
@@ -278,7 +278,7 @@ void CVehiclePool::Process()
 #endif */
 				// Remove or Add vehicles as they leave/enter a radius around the player
 				if( (pVehicle->GetDistanceFromLocalPlayerPed() < LOCKING_DISTANCE)
-					&& m_byteVirtualWorld[x] == localVW ) {
+					&& m_iVirtualWorld[x] == localVW ) {
 
 					pVehicle->Add();
 					//pVehicle->SetLockedState(0);

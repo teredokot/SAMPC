@@ -29,7 +29,7 @@ public:
 	bool					m_bWantsAnotherClass;
 	int						m_iSelectedClass;
 	bool					m_bWaitingForSpawnRequestReply;
-	BYTE					m_byteVirtualWorld;
+	int						m_iVirtualWorld;
 
 	BYTE					m_byteSpectateMode;
 	BYTE					m_byteSpectateType;
@@ -131,8 +131,8 @@ public:
 	bool IsClearedToSpawn() { return m_bClearedToSpawn; };
 	
 	void CheckWeapons();
-	void SetVirtualWorld(BYTE byteWorld) { m_byteVirtualWorld = byteWorld; };
-	BYTE GetVirtualWorld() { return m_byteVirtualWorld; };
+	void SetVirtualWorld(int iWorld) { m_iVirtualWorld = iWorld; };
+	int GetVirtualWorld() const { return m_iVirtualWorld; };
 
 	void ToggleSpectating(bool bToggle);
 	void SpectateVehicle(VEHICLEID VehicleID);

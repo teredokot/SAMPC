@@ -739,7 +739,7 @@ void ScrSetPlayerVirtualWorld(RPCParameters *rpcParams)
 
 	BYTE byteCount = rpcParams->numberOfBitsOfData / 16;
 	BYTE bytePlayer;
-	BYTE byteVW;
+	int iVW;
 	
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 
@@ -748,16 +748,16 @@ void ScrSetPlayerVirtualWorld(RPCParameters *rpcParams)
 	for (BYTE i = 0; i < byteCount; i++)
 	{
 		bsData.Read(bytePlayer);
-		bsData.Read(byteVW);
+		bsData.Read(iVW);
 		if (bytePlayer == byteLocal)
 		{
 			CLocalPlayer* pPlayer = pPlayerPool->GetLocalPlayer();
-			if (pPlayer) pPlayer->SetVirtualWorld(byteVW);
+			if (pPlayer) pPlayer->SetVirtualWorld(iVW);
 		}
 		else
 		{
 			CRemotePlayer* pPlayer = pPlayerPool->GetAt(bytePlayer);
-			if (pPlayer) pPlayer->SetVirtualWorld(byteVW);
+			if (pPlayer) pPlayer->SetVirtualWorld(iVW);
 		}
 	}
 }
@@ -771,15 +771,15 @@ void ScrSetVehicleVirtualWorld(RPCParameters *rpcParams)
 	RakNet::BitStream bsData(rpcParams);
 
 	VEHICLEID Vehicle;
-	BYTE byteVW;
+	int iVW;
 	
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
 	
 	for (int i = 0; i < iCount; i++)
 	{
 		bsData.Read((VEHICLEID)Vehicle);
-		bsData.Read(byteVW);
-		pVehiclePool->SetVehicleVirtualWorld(Vehicle, byteVW);
+		bsData.Read(iVW);
+		pVehiclePool->SetVehicleVirtualWorld(Vehicle, iVW);
 	}
 }
 

@@ -35,7 +35,7 @@ CRemotePlayer::CRemotePlayer()
 	m_byteTeam = NO_TEAM;
 	m_bVisible = true;
 	m_bShowNameTag = true;
-	m_byteVirtualWorld = 0;
+	m_iVirtualWorld = 0;
 	m_dwLastHeadUpdate = GetTickCount();
 	m_dwStreamUpdate = 0;
 }
@@ -53,7 +53,7 @@ CRemotePlayer::~CRemotePlayer()
 
 //----------------------------------------------------
 
-void CRemotePlayer::Process(BYTE byteLocalWorld)
+void CRemotePlayer::Process(int iLocalWorld)
 {
 	CPlayerPool *pPool = pNetGame->GetPlayerPool();
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
@@ -68,7 +68,7 @@ void CRemotePlayer::Process(BYTE byteLocalWorld)
 			// Stream player markers based on the server script
 			// settings for the chat radius
 
-			if (m_byteVirtualWorld != byteLocalWorld || m_byteState == PLAYER_STATE_SPECTATING) m_bVisible = false;
+			if (m_iVirtualWorld != iLocalWorld || m_byteState == PLAYER_STATE_SPECTATING) m_bVisible = false;
 			else m_bVisible = true;			
 
 			m_pPlayerPed->ProcessMarkers(

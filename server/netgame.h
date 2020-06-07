@@ -136,6 +136,7 @@ public:
 	int GetBroadcastSendRateFromPlayerDistance(float fDistance);
 
 	bool SendToPlayer(unsigned int uiPlayerId, short szUniqId, RakNet::BitStream* pBitStream);
+	bool SendToAll(short sUniqId, RakNet::BitStream* pBitStream);
 
 	void BroadcastData( RakNet::BitStream *bitStream, PacketPriority priority,
 						PacketReliability reliability,

@@ -55,7 +55,7 @@ VEHICLEID CVehiclePool::New(int iVehicleType,
 	{
 		m_pVehicles[VehicleID]->SetID(VehicleID);
 		m_bVehicleSlotState[VehicleID] = true;
-		m_byteVirtualWorld[VehicleID] = 0;
+		//m_byteVirtualWorld[VehicleID] = 0;
 
 		for (unsigned int i = 0; i < MAX_VEHICLES; i++)
 		{
@@ -132,7 +132,7 @@ void CVehiclePool::InitForPlayer(BYTE bytePlayerID)
 
 //----------------------------------------------------
 
-void CVehiclePool::SetVehicleVirtualWorld(VEHICLEID VehicleID, BYTE byteVirtualWorld)
+/*void CVehiclePool::SetVehicleVirtualWorld(VEHICLEID VehicleID, BYTE byteVirtualWorld)
 {
 	if (VehicleID >= MAX_VEHICLES) return;
 	
@@ -143,6 +143,6 @@ void CVehiclePool::SetVehicleVirtualWorld(VEHICLEID VehicleID, BYTE byteVirtualW
 	bsData.Write(byteVirtualWorld); // vw id
 	RakServerInterface *pRak = pNetGame->GetRakServer();
 	pRak->RPC(RPC_ScrSetVehicleVirtualWorld , &bsData, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
-}
+}*/
 	
 //----------------------------------------------------

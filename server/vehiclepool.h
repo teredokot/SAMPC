@@ -27,7 +27,7 @@ private:
 	
 	bool m_bVehicleSlotState[MAX_VEHICLES];
 	CVehicle *m_pVehicles[MAX_VEHICLES];
-	BYTE m_byteVirtualWorld[MAX_VEHICLES];
+	//BYTE m_byteVirtualWorld[MAX_VEHICLES];
 	unsigned int m_uiLastVehicleId;
 	unsigned short m_usVehicleModelsUsed[212];
 public:
@@ -56,12 +56,12 @@ public:
 
 	void Process(float fElapsedTime);
 
-	void SetVehicleVirtualWorld(VEHICLEID VehicleID, BYTE byteVirtualWorld);
+	/*void SetVehicleVirtualWorld(VEHICLEID VehicleID, BYTE byteVirtualWorld);
 	
 	BYTE GetVehicleVirtualWorld(VEHICLEID VehicleID) {
 		if (VehicleID >= MAX_VEHICLES) { return 0; }
 		return m_byteVirtualWorld[VehicleID];		
-	};
+	};*/
 
 	unsigned int GetVehicleLastId() { return m_uiLastVehicleId; }
 

@@ -51,6 +51,7 @@ public:
 	bool					m_bHasBeenOccupied;
 	DWORD					m_dwLastSeenOccupiedTick;
 	DWORD					m_dwLastRespawnedTick;
+	int						m_iVirtualWorld;
 
 	bool m_bOnItsSide;
 	bool m_bUpsideDown;
@@ -83,6 +84,8 @@ public:
 	void Update(BYTE bytePlayerID, MATRIX4X4 * matWorld, float fHealth, VEHICLEID TrailerID);
 
 	float GetDistanceFromPoint(float fX, float fY, float fZ);
+
+	void SetVirtualWorld(int iVirtualWorld);
 };
 
 #endif

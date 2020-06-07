@@ -68,6 +68,8 @@ public:
 	unsigned int m_uiRconAttempt;
 	unsigned int m_uiMsgRecv;
 
+	int m_iVirtualWorld;
+
 	ONFOOT_SYNC_DATA* GetOnFootSyncData() { return &m_ofSync; }
 	INCAR_SYNC_DATA* GetInCarSyncData() { return &m_icSync; }
 	PASSENGER_SYNC_DATA* GetPassengerSyncData() { return &m_psSync; }
@@ -164,6 +166,11 @@ public:
 		if(GetState() == PLAYER_STATE_ONFOOT) return m_ofSync.byteSpecialAction;
 		return SPECIAL_ACTION_NONE;
 	};
+
+	void SetVirtualWorld(int iVirtualWorld);
+	int GetVirtualWorld() const {
+		return m_iVirtualWorld;
+	}
 };
 
 #endif

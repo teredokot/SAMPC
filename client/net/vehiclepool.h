@@ -38,7 +38,7 @@ public:
 	VEHICLE_SPAWN_INFO	m_SpawnInfo[MAX_VEHICLES];
 	
 	int					m_iRespawnDelay[MAX_VEHICLES];
-	BYTE				m_byteVirtualWorld[MAX_VEHICLES];
+	int					m_iVirtualWorld[MAX_VEHICLES];
 	CHAR				m_charNumberPlate[MAX_VEHICLES][9];
 
 	CVehiclePool();
@@ -69,7 +69,7 @@ public:
 				int iColor1, int iColor2, int iInterior, PCHAR szNumberPlate, 
 				int iObjective = 0, int iDoorsLocked = 0 );
 
-		void ProcessForVirtualWorld(VEHICLEID vehicleId, BYTE bytePlayerWorld);
+	void ProcessForVirtualWorld(VEHICLEID vehicleId, int iPlayerWorld);
 	void Process();
 	
 	void NotifyVehicleDeath(VEHICLEID VehicleID);
@@ -78,14 +78,14 @@ public:
 
 	void AssignSpecialParamsToVehicle(VEHICLEID VehicleID, BYTE byteObjective, BYTE byteDoorsLocked);
 	
-	BYTE GetVehicleVirtualWorld(VEHICLEID VehicleID) {
+	int GetVehicleVirtualWorld(VEHICLEID VehicleID) const {
 		if (VehicleID >= MAX_VEHICLES) { return 0; }
-		return m_byteVirtualWorld[VehicleID];		
+		return m_iVirtualWorld[VehicleID];		
 	};
 	
-	void SetVehicleVirtualWorld(VEHICLEID VehicleID, BYTE byteVirtualWorld) {
+	void SetVehicleVirtualWorld(VEHICLEID VehicleID, int iVirtualWorld) {
 		if (VehicleID >= MAX_VEHICLES) return;
-		m_byteVirtualWorld[VehicleID] = byteVirtualWorld;
+		m_iVirtualWorld[VehicleID] = iVirtualWorld;
 	};
 	
 	void SetForRespawn(VEHICLEID VehicleID, int iRespawnDelay = 1);

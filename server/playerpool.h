@@ -28,7 +28,7 @@ private:
 	int		m_iPlayerMoney[MAX_PLAYERS];
 	DWORD	m_dwPlayerAmmo[MAX_PLAYERS];
 	bool	m_bIsAnAdmin[MAX_PLAYERS];
-	BYTE	m_byteVirtualWorld[MAX_PLAYERS];
+	//BYTE	m_byteVirtualWorld[MAX_PLAYERS];
 	int		m_iPlayerCount;
 	unsigned int m_uiLastPlayerId;
 
@@ -95,15 +95,15 @@ public:
 	void ResetPlayerScoresAndMoney() {
 		memset(&m_iPlayerScore[0],0,sizeof(int) * MAX_PLAYERS);
 		memset(&m_iPlayerMoney[0],0,sizeof(int) * MAX_PLAYERS);	
-		memset(&m_byteVirtualWorld[0],0,sizeof(BYTE) * MAX_PLAYERS);	
+		//memset(&m_byteVirtualWorld[0],0,sizeof(BYTE) * MAX_PLAYERS);	
 	};
 	
-	void SetPlayerVirtualWorld(BYTE bytePlayerID, BYTE byteVirtualWorld);
+	/*void SetPlayerVirtualWorld(BYTE bytePlayerID, BYTE byteVirtualWorld);
 	
 	BYTE GetPlayerVirtualWorld(BYTE bytePlayerID) {
 		if (bytePlayerID >= MAX_PLAYERS) { return 0; }
 		return m_byteVirtualWorld[bytePlayerID];		
-	};
+	};*/
 
 	void SetAdmin(unsigned int iPlayerId, bool bToggle) { m_bIsAnAdmin[iPlayerId] = bToggle; }
 	void SetAdmin(BYTE bytePlayerID) { m_bIsAnAdmin[bytePlayerID] = true; };

@@ -78,6 +78,7 @@ CPlayer::CPlayer()
 	m_SpectateID = 0xFFFFFFFF;
 	m_iDrunkLevel = 0;
 	m_uiRconAttempt = 0;
+	m_iVirtualWorld = 0;
 
 	m_bInCheckpoint = false;
 	m_bInRaceCheckpoint = false;
@@ -1112,6 +1113,16 @@ void CPlayer::CheckKeyUpdatesForScript(WORD wKeys)
 		}
 		m_wLastKeys = wKeys;
 	}
+}
+
+void CPlayer::SetVirtualWorld(int iVirtualWorld)
+{
+	m_iVirtualWorld = iVirtualWorld;
+
+	RakNet::BitStream bsData;
+	bsData.Write(m_bytePlayerID); // player id
+	bsData.Write(iVirtualWorld); // vw id
+	pNetGame->SendToAll(RPC_ScrSetPlayerVirtualWorld, &bsData);
 }
 
 //----------------------------------------------------

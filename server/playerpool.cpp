@@ -50,7 +50,7 @@ bool CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
 		m_iPlayerScore[bytePlayerID] = 0;
 		m_iPlayerMoney[bytePlayerID] = 0;
 		m_bIsAnAdmin[bytePlayerID] = false;
-		m_byteVirtualWorld[bytePlayerID] = 0;
+		//m_byteVirtualWorld[bytePlayerID] = 0;
 
 		// Notify all the other players of a newcommer with
 		// a 'ServerJoin' join RPC 
@@ -196,7 +196,7 @@ void CPlayerPool::InitPlayersForPlayer(BYTE bytePlayerID)
 			
 			// Send all the VW data in one lump
 			bsPlayerVW.Write(lp);
-			bsPlayerVW.Write(GetPlayerVirtualWorld(lp));
+			bsPlayerVW.Write(GetAt(lp)->GetVirtualWorld());
 			send = true;
 		}
 		lp++;
@@ -328,13 +328,13 @@ void CPlayerPool::DeactivateAll()
 			pGameMode->OnPlayerDisconnect(bytePlayerID, 1);
 			pFilterScripts->OnPlayerDisconnect(bytePlayerID, 1);
 		}
-		m_byteVirtualWorld[bytePlayerID] = 0;
+		//m_byteVirtualWorld[bytePlayerID] = 0;
 	}
 }
 
 //----------------------------------------------------
 
-void CPlayerPool::SetPlayerVirtualWorld(BYTE bytePlayerID, BYTE byteVirtualWorld)
+/*void CPlayerPool::SetPlayerVirtualWorld(BYTE bytePlayerID, BYTE byteVirtualWorld)
 {
 	if (bytePlayerID >= MAX_PLAYERS) return;
 	
@@ -345,6 +345,6 @@ void CPlayerPool::SetPlayerVirtualWorld(BYTE bytePlayerID, BYTE byteVirtualWorld
 	bsData.Write(byteVirtualWorld); // vw id
 	RakServerInterface *pRak = pNetGame->GetRakServer();
 	pRak->RPC(RPC_ScrSetPlayerVirtualWorld , &bsData, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
-}
+}*/
 	
 //----------------------------------------------------
