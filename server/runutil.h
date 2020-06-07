@@ -14,6 +14,7 @@ namespace Utils
 
 bool IsVehicleModelIdValid(int iId);
 const char* GetVehicleName(int iModelId);
+bool IsPedSkinIdValid(int iId);
 
 void Util_UrlUnencode(char *enc);
 char Util_toupper(char c);

@@ -115,6 +115,11 @@ const char* GetVehicleName(int iModelId)
 	return g_szVehicleNames[iModelId - 400];
 }
 
+bool IsPedSkinIdValid(int iId)
+{
+	return (iId >= 0 && iId <= 299);
+}
+
 void Util_UrlUnencode(char *enc)
 {
 	char *write_pos = enc;

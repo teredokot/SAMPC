@@ -79,24 +79,28 @@ static cell n_SetTeamCount(AMX *amx, cell *params)
 static cell n_AddPlayerClass(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "AddPlayerClass", 11);
-	PLAYER_SPAWN_INFO Spawn;
+	
+	if (IsPedSkinIdValid(params[1])) {
+		PLAYER_SPAWN_INFO Spawn;
 
-	Spawn.byteTeam = 255; // Auto team assignment for the old AddPlayerClass
-	Spawn.iSkin = (int)params[1];
-	Spawn.vecPos.X = amx_ctof(params[2]);
-	Spawn.vecPos.Y = amx_ctof(params[3]);
-	Spawn.vecPos.Z = amx_ctof(params[4]);
-	Spawn.fRotation = amx_ctof(params[5]);
+		Spawn.byteTeam = 255; // Auto team assignment for the old AddPlayerClass
+		Spawn.iSkin = (int)params[1];
+		Spawn.vecPos.X = amx_ctof(params[2]);
+		Spawn.vecPos.Y = amx_ctof(params[3]);
+		Spawn.vecPos.Z = amx_ctof(params[4]);
+		Spawn.fRotation = amx_ctof(params[5]);
 
-	// WEAPONS 
-	Spawn.iSpawnWeapons[0] = (int)params[6];
-	Spawn.iSpawnWeaponsAmmo[0] = (int)params[7];
-	Spawn.iSpawnWeapons[1] = (int)params[8];
-	Spawn.iSpawnWeaponsAmmo[1] = (int)params[9];
-	Spawn.iSpawnWeapons[2] = (int)params[10];
-	Spawn.iSpawnWeaponsAmmo[2] = (int)params[11];
+		// WEAPONS 
+		Spawn.iSpawnWeapons[0] = (int)params[6];
+		Spawn.iSpawnWeaponsAmmo[0] = (int)params[7];
+		Spawn.iSpawnWeapons[1] = (int)params[8];
+		Spawn.iSpawnWeaponsAmmo[1] = (int)params[9];
+		Spawn.iSpawnWeapons[2] = (int)params[10];
+		Spawn.iSpawnWeaponsAmmo[2] = (int)params[11];
 
-	return pNetGame->AddSpawn(&Spawn);
+		return pNetGame->AddSpawn(&Spawn);
+	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------------
@@ -104,25 +108,29 @@ static cell n_AddPlayerClass(AMX *amx, cell *params)
 static cell n_AddPlayerClassEx(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "AddPlayerClassEx", 12);
-	PLAYER_SPAWN_INFO Spawn;
 
-	// BASE INFO
-	Spawn.byteTeam = (BYTE)params[1];
-	Spawn.iSkin = (int)params[2];
-	Spawn.vecPos.X = amx_ctof(params[3]);
-	Spawn.vecPos.Y = amx_ctof(params[4]);
-	Spawn.vecPos.Z = amx_ctof(params[5]);
-	Spawn.fRotation = amx_ctof(params[6]);
+	if (IsPedSkinIdValid(params[2])) {
+		PLAYER_SPAWN_INFO Spawn;
 
-	// WEAPONS 
-	Spawn.iSpawnWeapons[0] = (int)params[7];
-	Spawn.iSpawnWeaponsAmmo[0] = (int)params[8];
-	Spawn.iSpawnWeapons[1] = (int)params[9];
-	Spawn.iSpawnWeaponsAmmo[1] = (int)params[10];
-	Spawn.iSpawnWeapons[2] = (int)params[11];
-	Spawn.iSpawnWeaponsAmmo[2] = (int)params[12];
+		// BASE INFO
+		Spawn.byteTeam = (BYTE)params[1];
+		Spawn.iSkin = (int)params[2];
+		Spawn.vecPos.X = amx_ctof(params[3]);
+		Spawn.vecPos.Y = amx_ctof(params[4]);
+		Spawn.vecPos.Z = amx_ctof(params[5]);
+		Spawn.fRotation = amx_ctof(params[6]);
 
-	return pNetGame->AddSpawn(&Spawn);
+		// WEAPONS 
+		Spawn.iSpawnWeapons[0] = (int)params[7];
+		Spawn.iSpawnWeaponsAmmo[0] = (int)params[8];
+		Spawn.iSpawnWeapons[1] = (int)params[9];
+		Spawn.iSpawnWeaponsAmmo[1] = (int)params[10];
+		Spawn.iSpawnWeapons[2] = (int)params[11];
+		Spawn.iSpawnWeaponsAmmo[2] = (int)params[12];
+
+		return pNetGame->AddSpawn(&Spawn);
+	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------------
@@ -780,32 +788,33 @@ static cell n_SetSpawnInfo(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "SetSpawnInfo", 13);
 
-	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
-	if (pPlayer)
-	{
-		PLAYER_SPAWN_INFO SpawnInfo;
-		SpawnInfo.byteTeam = (BYTE)params[2];
-		SpawnInfo.iSkin = (int)params[3];
-		SpawnInfo.vecPos.X = amx_ctof(params[4]);
-		SpawnInfo.vecPos.Y = amx_ctof(params[5]);
-		SpawnInfo.vecPos.Z = amx_ctof(params[6]);
-		SpawnInfo.fRotation = amx_ctof(params[7]);
-		SpawnInfo.iSpawnWeapons[0] = (int)params[8];
-		SpawnInfo.iSpawnWeaponsAmmo[0] = (int)params[9];
-		SpawnInfo.iSpawnWeapons[1] = (int)params[10];
-		SpawnInfo.iSpawnWeaponsAmmo[1] = (int)params[11];
-		SpawnInfo.iSpawnWeapons[2] = (int)params[12];
-		SpawnInfo.iSpawnWeaponsAmmo[2] = (int)params[13];
+	if (IsPedSkinIdValid(params[3])) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
+		if (pPlayer)
+		{
+			PLAYER_SPAWN_INFO SpawnInfo;
+			SpawnInfo.byteTeam = (BYTE)params[2];
+			SpawnInfo.iSkin = (int)params[3];
+			SpawnInfo.vecPos.X = amx_ctof(params[4]);
+			SpawnInfo.vecPos.Y = amx_ctof(params[5]);
+			SpawnInfo.vecPos.Z = amx_ctof(params[6]);
+			SpawnInfo.fRotation = amx_ctof(params[7]);
+			SpawnInfo.iSpawnWeapons[0] = (int)params[8];
+			SpawnInfo.iSpawnWeaponsAmmo[0] = (int)params[9];
+			SpawnInfo.iSpawnWeapons[1] = (int)params[10];
+			SpawnInfo.iSpawnWeaponsAmmo[1] = (int)params[11];
+			SpawnInfo.iSpawnWeapons[2] = (int)params[12];
+			SpawnInfo.iSpawnWeaponsAmmo[2] = (int)params[13];
 
-		pPlayer->SetSpawnInfo(&SpawnInfo);
-		RakNet::BitStream bsData;
-		bsData.Write((PCHAR)&SpawnInfo, sizeof(PLAYER_SPAWN_INFO));
-		RakServerInterface *pRak = pNetGame->GetRakServer();
-		pRak->RPC(RPC_ScrSetSpawnInfo , &bsData, HIGH_PRIORITY, RELIABLE, 0, pRak->GetPlayerIDFromIndex((int)params[1]), false, false);
-		return 1;
-	} else {
-		return 0;
+			pPlayer->SetSpawnInfo(&SpawnInfo);
+			RakNet::BitStream bsData;
+			bsData.Write((PCHAR)&SpawnInfo, sizeof(PLAYER_SPAWN_INFO));
+			RakServerInterface* pRak = pNetGame->GetRakServer();
+			pRak->RPC(RPC_ScrSetSpawnInfo, &bsData, HIGH_PRIORITY, RELIABLE, 0, pRak->GetPlayerIDFromIndex((int)params[1]), false, false);
+			return 1;
+		}
 	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------------
@@ -916,27 +925,26 @@ static cell n_SetPlayerSkin(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "SetPlayerSkin", 2);
 
-	if(pNetGame->GetPlayerPool()->GetSlotState(BYTE(params[1])))
-	{
-		CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
-
-		// Check to make sure the player has spawned before setting the skin remotely
-		if (pPlayer->m_bHasSpawnInfo)
+	if (IsPedSkinIdValid(params[2])) {
+		if (pNetGame->GetPlayerPool()->GetSlotState(BYTE(params[1])))
 		{
-			RakNet::BitStream bsData;
-			bsData.Write((int)params[1]); // player id
-			bsData.Write((int)params[2]); // skin id
-			RakServerInterface *pRak = pNetGame->GetRakServer();
-			pRak->RPC(RPC_ScrSetPlayerSkin , &bsData, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
-		} 
-		pPlayer->m_SpawnInfo.iSkin = (int)params[2];
+			CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 
-		return 1;
+			// Check to make sure the player has spawned before setting the skin remotely
+			if (pPlayer->m_bHasSpawnInfo)
+			{
+				RakNet::BitStream bsData;
+				bsData.Write((int)params[1]); // player id
+				bsData.Write((int)params[2]); // skin id
+				RakServerInterface* pRak = pNetGame->GetRakServer();
+				pRak->RPC(RPC_ScrSetPlayerSkin, &bsData, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+			}
+			pPlayer->m_SpawnInfo.iSkin = (int)params[2];
+
+			return 1;
+		}
 	}
-	else
-	{
-		return 0;
-	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------------
