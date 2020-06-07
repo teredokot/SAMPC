@@ -28,7 +28,7 @@ private:
 	bool m_bVehicleSlotState[MAX_VEHICLES];
 	CVehicle *m_pVehicles[MAX_VEHICLES];
 	//BYTE m_byteVirtualWorld[MAX_VEHICLES];
-	unsigned int m_uiLastVehicleId;
+	int m_iLastVehicleId;
 	unsigned short m_usVehicleModelsUsed[212];
 public:
 	CVehiclePool();
@@ -63,7 +63,7 @@ public:
 		return m_byteVirtualWorld[VehicleID];		
 	};*/
 
-	unsigned int GetVehicleLastId() { return m_uiLastVehicleId; }
+	int GetVehicleLastId() const { return m_iLastVehicleId; }
 
 	unsigned short GetVehicleModelsUsed(int iId) const
 	{

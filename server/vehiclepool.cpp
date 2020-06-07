@@ -20,6 +20,7 @@ CVehiclePool::CVehiclePool()
 		if (VehicleID < 212)
 			m_usVehicleModelsUsed[VehicleID] = 0;
 	}
+	m_iLastVehicleId = -1;
 }
 
 //----------------------------------------------------
@@ -57,11 +58,12 @@ VEHICLEID CVehiclePool::New(int iVehicleType,
 		m_bVehicleSlotState[VehicleID] = true;
 		//m_byteVirtualWorld[VehicleID] = 0;
 
-		for (unsigned int i = 0; i < MAX_VEHICLES; i++)
+		m_iLastVehicleId = -1;
+		for (int i = 0; i < MAX_VEHICLES; i++)
 		{
-			if (GetSlotState(i))
+			if (m_bVehicleSlotState[i])
 			{
-				m_uiLastVehicleId = i;
+				m_iLastVehicleId = i;
 			}
 		}
 
@@ -90,11 +92,12 @@ bool CVehiclePool::Delete(VEHICLEID VehicleID)
 	delete m_pVehicles[VehicleID];
 	m_pVehicles[VehicleID] = NULL;
 
-	for (unsigned int i = 0; i < MAX_VEHICLES; i++)
+	m_iLastVehicleId = -1;
+	for (int i = 0; i < MAX_VEHICLES; i++)
 	{
-		if (GetSlotState(i))
+		if (m_bVehicleSlotState[i])
 		{
-			m_uiLastVehicleId = i;
+			m_iLastVehicleId = i;
 		}
 	}
 	return true;

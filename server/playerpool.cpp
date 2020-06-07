@@ -19,6 +19,7 @@ CPlayerPool::CPlayerPool()
 		m_pPlayers[bytePlayerID] = NULL;
 	}
 	m_iPlayerCount = 0;
+	m_iLastPlayerId = -1;
 }
 
 //----------------------------------------------------
@@ -90,10 +91,11 @@ bool CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
 		
 		m_iPlayerCount++;
 
-		for (unsigned int i = 0; i < MAX_PLAYERS; i++)
+		m_iLastPlayerId = -1;
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			if (GetSlotState((BYTE)i))
-				m_uiLastPlayerId = i;
+			if (m_bPlayerSlotState[i])
+				m_iLastPlayerId = i;
 		}
 		return true;
 	}
@@ -146,10 +148,11 @@ bool CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 
 	m_iPlayerCount--;
 
-	for (unsigned int i = 0; i < MAX_PLAYERS; i++)
+	m_iLastPlayerId = -1;
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (GetSlotState((BYTE)i))
-			m_uiLastPlayerId = i;
+		if (m_bPlayerSlotState[i])
+			m_iLastPlayerId = i;
 	}
 	return true;
 }
