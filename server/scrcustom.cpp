@@ -1650,6 +1650,16 @@ static cell n_GetWeaponName(AMX *amx, cell *params)
 	return set_amxstring(amx,params[2],pNetGame->GetWeaponName(params[1]),params[3]);
 }
 
+// native GetVehicleName(modelid, name[], len)
+static cell n_GetVehicleName(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleName", 3);
+	if (IsVehicleModelIdValid(params[1])) {
+		return set_amxstring(amx, params[2], GetVehicleName(params[1]), params[3]);
+	}
+	return 0;
+}
+
 static cell n_GetVehiclePoolSize(AMX* amx, cell* params)
 {
 	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
@@ -5800,6 +5810,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetWorldTime",			n_SetWorldTime },
 	DEFINE_NATIVE(GetWorldTime),
 	{ "GetWeaponName",			n_GetWeaponName },
+	DEFINE_NATIVE(GetVehicleName),
 	{ "EnableTirePopping",		n_EnableTirePopping },
 	{ "AllowInteriorWeapons",	n_AllowInteriorWeapons },
 	{ "SetGravity",				n_SetGravity },

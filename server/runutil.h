@@ -13,6 +13,7 @@ namespace Utils
 };
 
 bool IsVehicleModelIdValid(int iId);
+const char* GetVehicleName(int iModelId);
 
 void Util_UrlUnencode(char *enc);
 char Util_toupper(char c);

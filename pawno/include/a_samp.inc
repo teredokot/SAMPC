@@ -366,6 +366,7 @@ native GameModeExit();
 native SetWorldTime(hour);
 native GetWorldTime();
 native GetWeaponName(weaponid, const buffer[], length);
+native GetVehicleName(modelid, name[], len = sizeof(name));
 native EnableTirePopping(enable);
 native AllowInteriorWeapons(allow);
 native SetWeather(weatherid);
