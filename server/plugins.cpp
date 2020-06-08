@@ -12,6 +12,14 @@
 //#include "pluginkey.h"
 //#include "console.h"
 
+// TODO: Place plugins here which will not be compatible with SAMPC
+static const char* g_szBlacklist[] = {
+	"pawnraknet",
+	"pawncmd",
+	"sky",
+	"ysf",
+};
+
 //---------------------------------------
 // Some Helpers
 
@@ -431,6 +439,13 @@ void CPlugins::LoadPlugins(std::string strPath)
 		while (std::getline(issPlugins, strPlugin, ' '))
 		{
 			logprintf(" Loading plugin: %s", strPlugin.c_str());
+
+			for (unsigned char i = 0; i < sizeof(g_szBlacklist); i++) {
+				if (stricmp(strPlugin.c_str(), g_szBlacklist[i]) == 0) {
+					logprintf("  Blacklisted - Loading this plugin will cause a server crash.");
+					continue;
+				}
+			}
 
 			std::string strFullPath;
 			strFullPath = strPath + strPlugin;
