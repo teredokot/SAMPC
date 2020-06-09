@@ -535,6 +535,8 @@ void InitSettings()
 
 void d3d9DestroyDeviceObjects()
 {
+	GUI_Release();
+
 	if (pDialogResourceManager)
 		pDialogResourceManager->OnLostDevice();
 
