@@ -45,6 +45,7 @@
 	#include <malloc.h>
 	#include <shellapi.h>
 	#include <time.h>
+	#include <Shlwapi.h>
 #else
 	#define SLEEP(x) { usleep(x * 1000); }
 	#define MAX_PATH 260
