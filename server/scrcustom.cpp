@@ -1658,6 +1658,27 @@ static cell n_GetWeaponName(AMX *amx, cell *params)
 	return set_amxstring(amx,params[2],pNetGame->GetWeaponName(params[1]),params[3]);
 }
 
+// native FindWeaponID(const name[])
+static cell n_FindWeaponID(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "FindWeaponID", 1);
+	char* mn;
+	amx_StrParam(amx, params[1], mn);
+	if (mn) {
+		for (unsigned char i = 0; i <= 46; i++) {
+#ifdef WIN32
+			if (StrStrI(pNetGame->GetWeaponName(i), mn) != NULL)
+#else
+			if (strcasestr(pNetGame->GetWeaponName(i), mn) != NULL)
+#endif
+			{
+				return (cell)i;
+			}
+		}
+	}
+	return 0;
+}
+
 // native GetVehicleName(modelid, name[], len)
 static cell n_GetVehicleName(AMX* amx, cell* params)
 {
@@ -5840,6 +5861,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetWorldTime",			n_SetWorldTime },
 	DEFINE_NATIVE(GetWorldTime),
 	{ "GetWeaponName",			n_GetWeaponName },
+	DEFINE_NATIVE(FindWeaponID),
 	DEFINE_NATIVE(GetVehicleName),
 	DEFINE_NATIVE(FindVehicleModel),
 	{ "EnableTirePopping",		n_EnableTirePopping },
