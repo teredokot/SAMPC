@@ -335,7 +335,6 @@
     <ClInclude Include="textdrawpool.h" />
     <ClInclude Include="vehicle.h" />
     <ClInclude Include="vehiclepool.h" />
-    <ClInclude Include="vehmods.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

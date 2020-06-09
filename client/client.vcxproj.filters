@@ -221,7 +221,6 @@
     <ClCompile Include="scoreboard.cpp" />
     <ClCompile Include="spawnscreen.cpp" />
     <ClCompile Include="subclass.cpp" />
-    <ClCompile Include="svrnetstats.cpp" />
     <ClCompile Include="..\sdk\raknet\BitStream.cpp">
       <Filter>sdk\raknet</Filter>
     </ClCompile>
@@ -523,7 +522,6 @@
     <ClInclude Include="runutil.h" />
     <ClInclude Include="scoreboard.h" />
     <ClInclude Include="spawnscreen.h" />
-    <ClInclude Include="svrnetstats.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="..\sdk\raknet\BitStream.h">
       <Filter>sdk\raknet</Filter>

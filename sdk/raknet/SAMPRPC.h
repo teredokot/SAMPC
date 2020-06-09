@@ -32,7 +32,7 @@ enum eRPCTable
 	RPC_EnterVehicle,
 	RPC_ExitVehicle,
 	RPC_UpdateScoresPingsIPs,
-	RPC_SvrStats,
+	//RPC_SvrStats,
 	RPC_ScmEvent,
 	RPC_ScrSetSpawnInfo,
 	RPC_ScrSetPlayerTeam,

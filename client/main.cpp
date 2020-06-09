@@ -40,7 +40,7 @@ CPlayerTags				*pPlayerTags=NULL;
 CScoreBoard				*pScoreBoard=NULL;
 CLabel					*pLabel=NULL;
 CNetStats				*pNetStats=NULL;
-CSvrNetStats			*pSvrNetStats=NULL;
+//CSvrNetStats			*pSvrNetStats=NULL;
 //CHelpDialog				*pHelpDialog=NULL;
 
 bool					bShowDebugLabels = false;
@@ -319,7 +319,7 @@ void DoInitStuff()
 			pPlayerTags = new CPlayerTags(pD3DDevice);
 			pScoreBoard = new CScoreBoard(pD3DDevice, FALSE);
 			pNetStats = new CNetStats(pD3DDevice);
-			pSvrNetStats = new CSvrNetStats(pD3DDevice);
+			//pSvrNetStats = new CSvrNetStats(pD3DDevice);
 			//pHelpDialog = new CHelpDialog(pD3DDevice);
 
 			pDeathWindow->CreateFonts();

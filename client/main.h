@@ -73,7 +73,7 @@ typedef struct _GAME_SETTINGS {
 #include "scoreboard.h"
 #include "label.h"
 #include "netstats.h"
-#include "svrnetstats.h"
+//#include "svrnetstats.h"
 //#include "helpdialog.h"
 #include "archive/ArchiveFS.h"
 #include "game/scripting.h"
@@ -98,7 +98,7 @@ extern CPlayerTags* pPlayerTags;
 extern CScoreBoard* pScoreBoard;
 extern CLabel* pLabel;
 extern CNetStats* pNetStats;
-extern CSvrNetStats* pSvrNetStats;
+//extern CSvrNetStats* pSvrNetStats;
 //extern CHelpDialog* pHelpDialog;
 extern CFileSystem* pFileSystem;
 #ifndef USE_NUKLEAR_INPUT

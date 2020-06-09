@@ -257,11 +257,11 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 			pNetStats->Draw(); 
 		} 
 		// Server Net Statistics
-		else if(pNetGame && GetAsyncKeyState(VK_F10))
+		/*else if(pNetGame && GetAsyncKeyState(VK_F10))
 		{
 			pGame->DisplayHud(FALSE);
 			pSvrNetStats->Draw(); 
-		} 
+		}*/
 		else
 		{
 			pGame->DisplayHud(TRUE);

@@ -487,7 +487,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS</PreprocessorDefinitions>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
     </ClCompile>
-    <ClCompile Include="svrnetstats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\sdk\detours\detours.h" />
@@ -642,7 +641,6 @@
     <ClInclude Include="runutil.h" />
     <ClInclude Include="scoreboard.h" />
     <ClInclude Include="spawnscreen.h" />
-    <ClInclude Include="svrnetstats.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\sdk\detours\detours.lib" />

@@ -447,7 +447,7 @@ void UpdateScoresPingsIPs(RPCParameters *rpcParams)
 
 //----------------------------------------------------
 
-void SvrStats(RPCParameters *rpcParams)
+/*void SvrStats(RPCParameters *rpcParams)
 {
 	PlayerID sender = rpcParams->sender;
 
@@ -462,7 +462,7 @@ void SvrStats(RPCParameters *rpcParams)
 
 	bsParams.Write((const char *)pRak->GetStatistics(UNASSIGNED_PLAYER_ID),sizeof(RakNetStatisticsStruct));
 	pRak->RPC(RPC_SvrStats, &bsParams, HIGH_PRIORITY, RELIABLE, 0, sender, false, false);
-}
+}*/
 
 //----------------------------------------------------
 
@@ -808,7 +808,7 @@ void RegisterRPCs(RakServerInterface * pRakServer)
 	REGISTER_STATIC_RPC(pRakServer, ExitVehicle);
 	REGISTER_STATIC_RPC(pRakServer, ServerCommand);
 	REGISTER_STATIC_RPC(pRakServer, UpdateScoresPingsIPs);
-	REGISTER_STATIC_RPC(pRakServer, SvrStats);
+	//REGISTER_STATIC_RPC(pRakServer, SvrStats);
 	REGISTER_STATIC_RPC(pRakServer, SetInteriorId);
 	REGISTER_STATIC_RPC(pRakServer, ScmEvent);
 	REGISTER_STATIC_RPC(pRakServer, AdminMapTeleport);

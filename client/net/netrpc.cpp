@@ -505,13 +505,13 @@ void UpdateScoresPingsIPs(RPCParameters *rpcParams)
 }
 
 //----------------------------------------------------
-extern RakNetStatisticsStruct RakServerStats;
+/*extern RakNetStatisticsStruct RakServerStats;
 
 void SvrStats(RPCParameters *rpcParams)
 {
 	RakNet::BitStream bsData(rpcParams);
 	bsData.Read((char *)&RakServerStats,sizeof(RakNetStatisticsStruct));
-}
+}*/
 
 //----------------------------------------------------
 
@@ -774,7 +774,7 @@ void RegisterRPCs(RakClientInterface * pRakClient)
 	REGISTER_STATIC_RPC(pRakClient,SetRaceCheckpoint);
 	REGISTER_STATIC_RPC(pRakClient,DisableRaceCheckpoint);
 	REGISTER_STATIC_RPC(pRakClient,UpdateScoresPingsIPs);
-	REGISTER_STATIC_RPC(pRakClient,SvrStats);
+	//REGISTER_STATIC_RPC(pRakClient,SvrStats);
 	REGISTER_STATIC_RPC(pRakClient,GameModeRestart);
 	REGISTER_STATIC_RPC(pRakClient,ConnectionRejected);
 	REGISTER_STATIC_RPC(pRakClient,ClientMessage);
