@@ -23,11 +23,11 @@ private:
 	
 	bool	m_bPlayerSlotState[MAX_PLAYERS];
 	CPlayer *m_pPlayers[MAX_PLAYERS];
-	CHAR	m_szPlayerName[MAX_PLAYERS][MAX_PLAYER_NAME+1];
-	int 	m_iPlayerScore[MAX_PLAYERS];
-	int		m_iPlayerMoney[MAX_PLAYERS];
+	//CHAR	m_szPlayerName[MAX_PLAYERS][MAX_PLAYER_NAME+1];
+	//int 	m_iPlayerScore[MAX_PLAYERS];
+	//int	m_iPlayerMoney[MAX_PLAYERS];
 	DWORD	m_dwPlayerAmmo[MAX_PLAYERS];
-	bool	m_bIsAnAdmin[MAX_PLAYERS];
+	//bool	m_bIsAnAdmin[MAX_PLAYERS];
 	//BYTE	m_byteVirtualWorld[MAX_PLAYERS];
 	int		m_iPlayerCount;
 	int		m_iLastPlayerId;
@@ -53,7 +53,7 @@ public:
 		return m_bPlayerSlotState[bytePlayerID];
 	};
 
-	PCHAR GetPlayerName(BYTE bytePlayerID) {
+	/*PCHAR GetPlayerName(BYTE bytePlayerID) {
 		if(bytePlayerID >= MAX_PLAYERS) { return NULL; }
 		return m_szPlayerName[bytePlayerID];
 	};
@@ -80,7 +80,7 @@ public:
 	void SetPlayerMoney(BYTE bytePlayerID, int iMoney) {
 		if(bytePlayerID >= MAX_PLAYERS) return;
 		m_iPlayerMoney[bytePlayerID] = iMoney;
-	};
+	};*/
 
 	DWORD GetPlayerAmmo(BYTE bytePlayerID) {
 		if(bytePlayerID >= MAX_PLAYERS) { return 0; }
@@ -92,22 +92,22 @@ public:
 		m_dwPlayerAmmo[bytePlayerID] = dwAmmo;
 	};
 
-	void ResetPlayerScoresAndMoney() {
-		memset(&m_iPlayerScore[0],0,sizeof(int) * MAX_PLAYERS);
-		memset(&m_iPlayerMoney[0],0,sizeof(int) * MAX_PLAYERS);	
+	/*void ResetPlayerScoresAndMoney() {
+		//memset(&m_iPlayerScore[0],0,sizeof(int) * MAX_PLAYERS);
+		//memset(&m_iPlayerMoney[0],0,sizeof(int) * MAX_PLAYERS);	
 		//memset(&m_byteVirtualWorld[0],0,sizeof(BYTE) * MAX_PLAYERS);	
 	};
 	
-	/*void SetPlayerVirtualWorld(BYTE bytePlayerID, BYTE byteVirtualWorld);
+	void SetPlayerVirtualWorld(BYTE bytePlayerID, BYTE byteVirtualWorld);
 	
 	BYTE GetPlayerVirtualWorld(BYTE bytePlayerID) {
 		if (bytePlayerID >= MAX_PLAYERS) { return 0; }
 		return m_byteVirtualWorld[bytePlayerID];		
 	};*/
 
-	void SetAdmin(unsigned int iPlayerId, bool bToggle) { m_bIsAnAdmin[iPlayerId] = bToggle; }
+	/*void SetAdmin(unsigned int iPlayerId, bool bToggle) { m_bIsAnAdmin[iPlayerId] = bToggle; }
 	void SetAdmin(BYTE bytePlayerID) { m_bIsAnAdmin[bytePlayerID] = true; };
-	bool IsAdmin(BYTE bytePlayerID) { return m_bIsAnAdmin[bytePlayerID]; };
+	bool IsAdmin(BYTE bytePlayerID) { return m_bIsAnAdmin[bytePlayerID]; };*/
 
 	void InitPlayersForPlayer(BYTE bytePlayerID);
 	void InitSpawnsForPlayer(BYTE bytePlayerID);

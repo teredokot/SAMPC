@@ -16,6 +16,9 @@ class CPlayer
 {
 private:
 	BYTE					m_bytePlayerID;
+	char					m_szName[MAX_PLAYER_NAME];
+	unsigned char			m_ucNameLength;
+
 	BYTE					m_byteUpdateFromNetwork;
 
 	// Information that is synced.
@@ -30,7 +33,7 @@ private:
 
 	bool					m_bHasAimUpdates;
 	bool					m_bHasTrailerUpdates;
-	BYTE					m_byteSeatID;
+	//BYTE					m_byteSeatID;
 	BYTE					m_byteState;
 
 	VECTOR					m_vecCheckpoint;
@@ -53,7 +56,10 @@ public:
 	bool					m_bRaceCheckpointEnabled;
 	int						m_iInteriorId;
 	int						m_iDrunkLevel;
-		
+	bool					m_bIsAdmin;
+	int						m_iMoney;
+	int						m_iScore;
+
 	// Weapon data
 	DWORD					m_dwSlotAmmo[13];
 	BYTE					m_byteSlotWeapon[13];
@@ -69,6 +75,10 @@ public:
 	unsigned int m_uiMsgRecv;
 
 	int m_iVirtualWorld;
+
+	void SetName(const char* szName, unsigned char ucLenght);
+	const char* GetName() const { return m_szName; }
+	unsigned char GetNameLength() const { return m_ucNameLength; }
 
 	ONFOOT_SYNC_DATA* GetOnFootSyncData() { return &m_ofSync; }
 	INCAR_SYNC_DATA* GetInCarSyncData() { return &m_icSync; }

@@ -161,12 +161,13 @@ void Chat(RPCParameters *rpcParams)
 
 	ReplaceBadChars((char *)szText);
 
+	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
+	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
+
 	if(pConsole->GetIntVariable("chatlogging"))
 		logprintf("[chat] [%s]: %s",
-			pPool->GetPlayerName(pRak->GetIndexFromPlayerID(sender)),
+			pPlayer->GetName(),
 			szText);
-
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
 
 /*#ifdef RAKRCON
 	RakNet::BitStream bsSend;
@@ -178,7 +179,6 @@ void Chat(RPCParameters *rpcParams)
 	pRcon->GetRakServer()->RPC( RPC_Chat, &bsSend, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false );
 #endif*/
 
-	CPlayer *pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
 	CGameMode *pGameMode = pNetGame->GetGameMode();
 	
 	if (pPlayer)
@@ -437,7 +437,7 @@ void UpdateScoresPingsIPs(RPCParameters *rpcParams)
 		if (pPlayerPool->GetSlotState(i))
 		{
 			bsParams.Write(i);
-			bsParams.Write((DWORD)pPlayerPool->GetPlayerScore(i));
+			bsParams.Write(pPlayerPool->GetAt(i)->m_iScore);
 			bsParams.Write((DWORD)pRak->GetLastPing(pRak->GetPlayerIDFromIndex(i)));
 		}
 	}
@@ -458,7 +458,7 @@ void SvrStats(RPCParameters *rpcParams)
 	BYTE bytePlayerId = pRak->GetIndexFromPlayerID(sender);
 
 	if(!pPlayerPool->GetSlotState(bytePlayerId)) return;
-	if(!pPlayerPool->IsAdmin(bytePlayerId)) return;
+	if(!pPlayerPool->GetAt(bytePlayerId)->m_bIsAdmin) return;
 
 	bsParams.Write((const char *)pRak->GetStatistics(UNASSIGNED_PLAYER_ID),sizeof(RakNetStatisticsStruct));
 	pRak->RPC(RPC_SvrStats, &bsParams, HIGH_PRIORITY, RELIABLE, 0, sender, false, false);
@@ -668,7 +668,7 @@ void AdminMapTeleport(RPCParameters *rpcParams)
 				vecPos.X, vecPos.Y, vecPos.Z);
 		}
 
-		if (pNetGame->m_bAdminTeleport && pPlayer->m_bCanTeleport && pPlayerPool->IsAdmin(bytePlayerId))
+		if (pNetGame->m_bAdminTeleport && pPlayer->m_bCanTeleport && pPlayer->m_bIsAdmin)
 		{
 			RakNet::BitStream bsParams;
 			bsParams.Write(vecPos.X);	// X

@@ -50,6 +50,8 @@ void DecompressNormalVector(VECTOR * vec, C_VECTOR1 * c1)
 
 CPlayer::CPlayer()
 {
+	memset(m_szName, 0, sizeof(char) * MAX_PLAYER_NAME);
+	m_ucNameLength = 0;
 	m_byteUpdateFromNetwork = UPDATE_TYPE_NONE;
 	m_bytePlayerID = INVALID_PLAYER_ID;
 	m_VehicleID = 0;
@@ -79,10 +81,17 @@ CPlayer::CPlayer()
 	m_iDrunkLevel = 0;
 	m_uiRconAttempt = 0;
 	m_iVirtualWorld = 0;
+	m_bIsAdmin = false;
+	m_iMoney = 0;
+	m_bHasSpawnInfo = false;
+	m_iScore = 0;
 
 	m_bInCheckpoint = false;
 	m_bInRaceCheckpoint = false;
-	
+	m_byteRaceCheckpointType = -1;
+	m_fCheckpointSize = -1.0f;
+	m_fRaceCheckpointSize = -1.0f;
+
 	// World bound is set in client by this default values
 	m_fWorldBounds[0] = 20000.0f;
 	m_fWorldBounds[1] = -20000.0f;
@@ -97,6 +106,12 @@ CPlayer::CPlayer()
 		m_byteSlotWeapon[i] = 0;
 		m_dwSlotAmmo[i] = 0;
 	}
+}
+
+void CPlayer::SetName(const char* szName, unsigned char ucLength)
+{
+	strcpy_s(m_szName, szName);
+	m_ucNameLength = ucLength;
 }
 
 //----------------------------------------------------
@@ -594,7 +609,7 @@ void CPlayer::StoreAimSyncData(AIM_SYNC_DATA *paimSync)
 void CPlayer::StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync)
 {
 	m_VehicleID = picSync->VehicleID;
-	m_byteSeatID = 0;
+	//m_byteSeatID = 0;
 
 	CFilterScripts * pFilterScripts = pNetGame->GetFilterScripts();
 	CGameMode * pGameMode = pNetGame->GetGameMode();
@@ -765,6 +780,7 @@ void CPlayer::Say(unsigned char * szText, size_t byteTextLen)
 
 //----------------------------------------------------
 
+// TODO: Move CPlayer::HandleDeath to CPlayerPool? 
 void CPlayer::HandleDeath(BYTE byteReason, BYTE byteWhoWasResponsible)
 {
 	RakNet::BitStream bsPlayerDeath;
@@ -795,9 +811,10 @@ void CPlayer::HandleDeath(BYTE byteReason, BYTE byteWhoWasResponsible)
 
 	if ( byteWhoWasResponsible == INVALID_PLAYER_ID )
 	{
-		logprintf("[death] %s died %d",pNetGame->GetPlayerPool()->GetPlayerName(m_bytePlayerID), byteReason);
+		logprintf("[death] %s died %d", m_szName, byteReason);
 	} else {
-		logprintf("[kill] %s killed %s %s", pNetGame->GetPlayerPool()->GetPlayerName(byteWhoWasResponsible), pNetGame->GetPlayerPool()->GetPlayerName(m_bytePlayerID), pNetGame->GetWeaponName(byteReason));
+		CPlayer* pKiller = pNetGame->GetPlayerPool()->GetAt(byteWhoWasResponsible);
+		logprintf("[kill] %s killed %s %s", pKiller->GetName(), m_szName, pNetGame->GetWeaponName(byteReason));
 	}
 }
 

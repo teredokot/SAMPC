@@ -613,7 +613,7 @@ static cell n_Ban(AMX *amx, cell *params)
 
 		in_addr in;
 		in.s_addr = Player.binaryAddress;
-		pNetGame->AddBan(pNetGame->GetPlayerPool()->GetPlayerName((BYTE)params[1]), inet_ntoa(in), "INGAME BAN");
+		pNetGame->AddBan((char*)pNetGame->GetPlayerPool()->GetAt((BYTE)params[1])->GetName(), inet_ntoa(in), "INGAME BAN");
 		pNetGame->KickPlayer((BYTE)params[1]);
 		return 1;
 	}
@@ -637,7 +637,7 @@ static cell n_BanEx(AMX *amx, cell *params)
 		char *szReason;
 		amx_StrParam(amx, params[2], szReason);
 
-		pNetGame->AddBan(pNetGame->GetPlayerPool()->GetPlayerName((BYTE)params[1]), inet_ntoa(in), szReason);
+		pNetGame->AddBan((char*)pNetGame->GetPlayerPool()->GetAt((BYTE)params[1])->GetName(), inet_ntoa(in), szReason);
 		pNetGame->KickPlayer((BYTE)params[1]);
 		return 1;
 	}
@@ -706,16 +706,16 @@ static cell n_GetServerTickRate(AMX* amx, cell* params)
 	return pNetGame->m_uiNumOfTicksInSec;
 }
 
-//----------------------------------------------------------------------------------
 // native IsPlayerAdmin(playerid)
 static cell n_IsPlayerAdmin(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "IsPlayerAdmin", 1);
-	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
 
-	if (pPlayerPool->GetSlotState((BYTE)params[1]))
-	{
-		return pPlayerPool->IsAdmin((BYTE)params[1]);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			return pPlayer->m_bIsAdmin;
+		}
 	}
 	return 0;
 }
@@ -725,11 +725,12 @@ static cell n_SetPlayerAdmin(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetPlayerAdmin", 2);
 
-	CPlayerPool* pPool = pNetGame->GetPlayerPool();
-	if (pPool && pPool->GetSlotState(params[1]))
-	{
-		pPool->SetAdmin(params[1], !!params[2]);
-		return 1;
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			pPlayer->m_bIsAdmin = params[2] ? true : false;
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -738,17 +739,17 @@ static cell n_GetPlayerIDFromName(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "GetPlayerIDFromName", 1);
 
-	char* szSearchName = 0;
-	amx_StrParam(amx, params[1], szSearchName);
-
-	for (size_t uiIndex = 0; uiIndex < MAX_PLAYERS; uiIndex++)
-	{
-		if (!pNetGame->GetPlayerPool()->GetSlotState((unsigned char)uiIndex))
-			continue;
-		
-		char* szPlayerName = pNetGame->GetPlayerPool()->GetPlayerName((unsigned char)uiIndex);
-		if (szSearchName && Util_stristr(szPlayerName, szSearchName))
-			return uiIndex;
+	if (pNetGame->GetPlayerPool()) {
+		char* szSearchName = 0;
+		amx_StrParam(amx, params[1], szSearchName);
+		if (szSearchName) {
+			CPlayer* pPlayer;
+			for (size_t uiIndex = 0; uiIndex < MAX_PLAYERS; uiIndex++) {
+				pPlayer = pNetGame->GetPlayerPool()->GetAt(uiIndex);
+				if (pPlayer != NULL && Util_stristr(pPlayer->GetName(), szSearchName) != NULL)
+					return uiIndex;
+			}
+		}
 	}
 	return -1;
 }
@@ -874,48 +875,45 @@ static cell n_SetPlayerName(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "SetPlayerName", 2);
 
-	if (pNetGame->GetPlayerPool()->GetSlotState(BYTE(params[1])))
-	{
-		char *szNewNick;
-		char szOldNick[MAX_PLAYER_NAME+1];
-		amx_StrParam(amx, params[2], szNewNick);
+	char* szNewNick, szOldNick[MAX_PLAYER_NAME];
+	unsigned char ucSuccess = 0;
+	size_t uiNickLen;
+	CPlayer* pPlayer;
 
-		if(ContainsInvalidNickChars(szNewNick)) return -1;
+	if (pNetGame->GetPlayerPool()) {
+		pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			amx_StrParam(amx, params[2], szNewNick);
+			if (szNewNick) {
+				if (ContainsInvalidNickChars(szNewNick))
+					return -1;
 
-		BYTE bytePlayerID = (BYTE)params[1];
-		size_t uiNickLen = strlen(szNewNick);
-		BYTE byteSuccess;
+				uiNickLen = strlen(szNewNick);
+				if (uiNickLen > MAX_PLAYER_NAME)
+					return -1;
 
-		if(uiNickLen > MAX_PLAYER_NAME) return -1;
+				if (!pNetGame->GetPlayerPool()->IsNickInUse(szNewNick)) {
+					strcpy_s(szOldNick, pPlayer->GetName());
 
-		strncpy(szOldNick,pNetGame->GetPlayerPool()->GetPlayerName(bytePlayerID),MAX_PLAYER_NAME);
-		
-		if (uiNickLen == 0 || pNetGame->GetPlayerPool()->IsNickInUse(szNewNick)) byteSuccess = 0;
-		else byteSuccess = 1;
+					RakNet::BitStream bsData;
+					// TODO: Remove success stream, and change name length to 'unsigned char' type
+					bsData.Write((unsigned char)params[1]); // player id
+					bsData.Write(uiNickLen); // nick length
+					bsData.Write(szNewNick, uiNickLen); // name
+					bsData.Write<unsigned char>(1); // if the nickname was rejected
+					if (pNetGame->SendToAll(RPC_ScrSetPlayerName, &bsData)) {
+						pPlayer->SetName(szNewNick, (unsigned char)uiNickLen);
 
-		RakNet::BitStream bsData;
-		bsData.Write(bytePlayerID); // player id
-		bsData.Write(uiNickLen); // nick length
-		bsData.Write(szNewNick, uiNickLen); // name
-		bsData.Write(byteSuccess); // if the nickname was rejected
+						if (pConsole->GetIntVariable("chatlogging"))
+							logprintf("[nick] %s nick changed to %s", szOldNick, szNewNick);
 
-		if (byteSuccess != 0)
-		{
-			pNetGame->GetPlayerPool()->SetPlayerName(bytePlayerID, szNewNick);
-
-			if(pConsole->GetIntVariable("chatlogging"))
-				logprintf("[nick] %s nick changed to %s", szOldNick, szNewNick);
-
-			pNetGame->GetRakServer()->RPC(RPC_ScrSetPlayerName , &bsData, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
-
+						return 1;
+					}
+				}
+			}
 		}
-
-		return byteSuccess;
 	}
-	else
-	{
-		return 0;
-	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------------
@@ -1641,10 +1639,12 @@ static cell n_IsPlayerInAnyVehicle(AMX *amx, cell *params)
 static cell n_GetPlayerName(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "GetPlayerName", 3);
-	BYTE bytePlayerID = (BYTE)params[1];
-	if (bytePlayerID > MAX_PLAYERS || !pNetGame->GetPlayerPool()->GetSlotState(bytePlayerID)) return 0;
-	return set_amxstring(amx, params[2], pNetGame->GetPlayerPool()->
-		GetPlayerName(bytePlayerID), params[3]);
+
+	CPlayer* pPlayer = NULL;
+	if (pNetGame->GetPlayerPool()) {
+		pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+	}
+	return set_amxstring(amx, params[2], (pPlayer != NULL) ? pPlayer->GetName() : "", params[3]);
 }
 
 //----------------------------------------------------------------------------------
@@ -2645,103 +2645,98 @@ static cell n_SetVehicleParamsForPlayer(AMX *amx, cell *params)
 	return 1;
 }
 
-//----------------------------------------------------------------------------------
 // native SetPlayerScore(playerid,score)
-
 static cell n_SetPlayerScore(AMX *amx, cell *params)
 {	
 	CHECK_PARAMS(amx, "SetPlayerScore", 2);
-	BYTE bytePlayerID = (BYTE)params[1];
-	int iScore = (int)params[2];
 
-	if(pNetGame->GetPlayerPool()->GetSlotState(bytePlayerID)) {
-		pNetGame->GetPlayerPool()->SetPlayerScore(bytePlayerID,iScore);
-		return 1;
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			pPlayer->m_iScore = params[2];
+			return 1;
+		}
 	}
-
 	return 0;
 }
 
-//----------------------------------------------------------------------------------
 // native GetPlayerScore(playerid)
-
 static cell n_GetPlayerScore(AMX *amx, cell *params)
 {	
 	CHECK_PARAMS(amx, "GetPlayerScore", 1);
-	BYTE bytePlayerID = (BYTE)params[1];
-	if (!pNetGame->GetPlayerPool()->GetSlotState(bytePlayerID)) return 0;
 
-	return pNetGame->GetPlayerPool()->GetPlayerScore(bytePlayerID);
-}
-
-//----------------------------------------------------------------------------------
-// native GivePlayerMoney(playerid,money)
-
-static cell n_GivePlayerMoney(AMX *amx, cell *params)
-{	
-	CHECK_PARAMS(amx, "GivePlayerMoney", 2);
-	RakNet::BitStream bsMoney;
-	bsMoney.Write((int)params[2]);
-
-	CPlayerPool *pPool = pNetGame->GetPlayerPool();
-
-	if( pPool->GetSlotState((BYTE)params[1]) ) {
-		pPool->SetPlayerMoney((BYTE)params[1], pPool->GetPlayerMoney((BYTE)params[1]) + params[2]);
-
-		pNetGame->GetRakServer()->RPC(RPC_ScrHaveSomeMoney , &bsMoney, HIGH_PRIORITY, 
-			RELIABLE, 0, pNetGame->GetRakServer()->GetPlayerIDFromIndex(params[1]), false, false);
-		return 1;
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			return pPlayer->m_iScore;
+		}
 	}
-
 	return 0;
 }
 
+// native GivePlayerMoney(playerid, money)
+static cell n_GivePlayerMoney(AMX* amx, cell* params)
+{	
+	CHECK_PARAMS(amx, "GivePlayerMoney", 2);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			RakNet::BitStream bsMoney;
+			bsMoney.Write(params[2]);
+			if (pNetGame->SendToPlayer(params[1], RPC_ScrHaveSomeMoney, &bsMoney)) {
+				pPlayer->m_iMoney = pPlayer->m_iMoney + params[2];
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+// native SetPlayerMoney(playerid, money)
 static cell n_SetPlayerMoney(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetPlayerMoney", 2);
-	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-	if (pPlayerPool && pPlayerPool->GetSlotState(params[1]))
-	{
-		pPlayerPool->SetPlayerMoney(params[1], params[2]);
-		return 1;
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			pPlayer->m_iMoney = params[2];
+			return 1;
+		}
 	}
 	return 0;
 }
 
-//----------------------------------------------------------------------------------
 // native GetPlayerMoney(playerid)
-
-static cell n_GetPlayerMoney(AMX *amx, cell *params)
+static cell n_GetPlayerMoney(AMX* amx, cell* params)
 {	
 	CHECK_PARAMS(amx, "GetPlayerMoney", 1);
-	BYTE bytePlayerID = (BYTE)params[1];
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-
-	if(pPlayerPool->GetSlotState(bytePlayerID)) {
-		return pPlayerPool->GetPlayerMoney(bytePlayerID);
+	
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			return pPlayer->m_iMoney;
+		}
 	}
-
 	return 0;
 }
 
-//----------------------------------------------------------------------------------
 // native ResetPlayerMoney(playerid)
-
 static cell n_ResetPlayerMoney(AMX *amx, cell *params)
 {		
 	CHECK_PARAMS(amx, "ResetPlayerMoney", 1);
-	RakNet::BitStream bsMoney;
 
-	BYTE bytePlayerID = (BYTE)params[1];
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-
-	if(pPlayerPool->GetSlotState(bytePlayerID)) {
-		pPlayerPool->SetPlayerMoney(bytePlayerID,0);
-		pNetGame->GetRakServer()->RPC(RPC_ScrResetMoney , &bsMoney, HIGH_PRIORITY, 
-			RELIABLE, 0, pNetGame->GetRakServer()->GetPlayerIDFromIndex(bytePlayerID), false, false);
-		return 1;
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			RakNet::BitStream bsMoney;
+			if (pNetGame->SendToPlayer(params[1], RPC_ScrResetMoney, &bsMoney)) {
+				pPlayer->m_iMoney = 0;
+				return 1;
+			}
+		}
 	}
-
 	return 0;
 }
 
@@ -5893,7 +5888,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GangZoneStopFlashForAll",	n_GangZoneStopFlashForAll },
 
 	// Admin
-	{ "IsPlayerAdmin",			n_IsPlayerAdmin },
+	DEFINE_NATIVE(IsPlayerAdmin),
 	DEFINE_NATIVE(SetPlayerAdmin),
 	{ "Kick",					n_Kick },
 	{ "Ban",					n_Ban },
@@ -5957,14 +5952,14 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "SetCameraBehindPlayer",	n_SetCameraBehindPlayer },
 	{ "TogglePlayerControllable",	n_TogglePlayerControllable },
 	{ "PlayerPlaySound",		n_PlayerPlaySound },
-	{ "SetPlayerScore",			n_SetPlayerScore },
-	{ "GetPlayerScore",			n_GetPlayerScore },
+	DEFINE_NATIVE(SetPlayerScore),
+	DEFINE_NATIVE(GetPlayerScore),
 	{ "SetPlayerFacingAngle",	n_SetPlayerFacingAngle },
 	{ "GetPlayerFacingAngle",	n_GetPlayerFacingAngle },
-	{ "GivePlayerMoney",		n_GivePlayerMoney },
-	{ "SetPlayerMoney",			n_SetPlayerMoney },
-	{ "GetPlayerMoney",			n_GetPlayerMoney },
-	{ "ResetPlayerMoney",		n_ResetPlayerMoney },
+	DEFINE_NATIVE(GivePlayerMoney),
+	DEFINE_NATIVE(SetPlayerMoney),
+	DEFINE_NATIVE(GetPlayerMoney),
+	DEFINE_NATIVE(ResetPlayerMoney),
 	{ "IsPlayerConnected",		n_IsPlayerConnected },
 	{ "GetPlayerState",			n_GetPlayerState },
 	{ "ResetPlayerWeapons",		n_ResetPlayerWeapons },

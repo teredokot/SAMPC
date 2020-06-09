@@ -37,29 +37,31 @@ CPlayerPool::~CPlayerPool()
 bool CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName, char* szVersion)
 {
 	if(bytePlayerID > MAX_PLAYERS) return false;
-	if(strlen(szPlayerName) > MAX_PLAYER_NAME) return false;
+	size_t len = strlen(szPlayerName);
+	if(len > MAX_PLAYER_NAME) return false;
 
 	m_pPlayers[bytePlayerID] = new CPlayer();
 
 	if(m_pPlayers[bytePlayerID])
 	{
-		strcpy(m_szPlayerName[bytePlayerID],szPlayerName);
+		m_pPlayers[bytePlayerID]->SetName(szPlayerName, (unsigned char)len);
+		//strcpy(m_szPlayerName[bytePlayerID],szPlayerName);
 		strcpy(m_pPlayers[bytePlayerID]->m_szClientVersion, szVersion);
 
 		m_pPlayers[bytePlayerID]->SetID(bytePlayerID);
 		m_bPlayerSlotState[bytePlayerID] = true;
-		m_iPlayerScore[bytePlayerID] = 0;
-		m_iPlayerMoney[bytePlayerID] = 0;
-		m_bIsAnAdmin[bytePlayerID] = false;
+		//m_iPlayerScore[bytePlayerID] = 0;
+		//m_iPlayerMoney[bytePlayerID] = 0;
+		//m_bIsAnAdmin[bytePlayerID] = false;
 		//m_byteVirtualWorld[bytePlayerID] = 0;
 
 		// Notify all the other players of a newcommer with
 		// a 'ServerJoin' join RPC 
 		RakNet::BitStream bsSend;
 		bsSend.Write(bytePlayerID);
-		size_t uiNameLen = strlen(szPlayerName);
-		bsSend.Write(uiNameLen);
-		bsSend.Write(szPlayerName, uiNameLen);
+		//size_t uiNameLen = strlen(szPlayerName);
+		bsSend.Write(len);
+		bsSend.Write(szPlayerName, len);
 
 		pNetGame->GetRakServer()->RPC(RPC_ServerJoin ,&bsSend,HIGH_PRIORITY,RELIABLE,0,
 			pNetGame->GetRakServer()->GetPlayerIDFromIndex(bytePlayerID),true,false);
@@ -120,10 +122,13 @@ bool CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 		pGameMode->OnPlayerDisconnect(bytePlayerID, byteReason);
 	}
 
+	char szName[MAX_PLAYER_NAME];
+	strcpy_s(szName, m_pPlayers[bytePlayerID]->GetName());
+
 	m_bPlayerSlotState[bytePlayerID] = false;
 	delete m_pPlayers[bytePlayerID];
 	m_pPlayers[bytePlayerID] = NULL;
-	m_bIsAnAdmin[bytePlayerID] = false;
+	//m_bIsAnAdmin[bytePlayerID] = false;
 	
 	// Notify all the other players that this client is quiting.
 	RakNet::BitStream bsSend;
@@ -139,7 +144,7 @@ bool CPlayerPool::Delete(BYTE bytePlayerID, BYTE byteReason)
 		pObjectPool->DeleteForPlayer(bytePlayerID, i);
 	}
 
-	logprintf("[part] %s has left the server (%u:%u)",m_szPlayerName[bytePlayerID],bytePlayerID,byteReason);
+	logprintf("[part] %s has left the server (%u:%u)",szName,bytePlayerID,byteReason);
 
 /*#ifdef RAKRCON
 	pRcon->GetRakServer()->RPC( RPC_ServerQuit, &bsSend, HIGH_PRIORITY, RELIABLE, 0,
@@ -188,11 +193,11 @@ void CPlayerPool::InitPlayersForPlayer(BYTE bytePlayerID)
 
 	while(lp!=MAX_PLAYERS) {
 		if((GetSlotState(lp) == true) && (lp != bytePlayerID)) {
-			size_t uiNameLen = strlen(GetPlayerName(lp));
+			size_t uiNameLen = (unsigned int)m_pPlayers[lp]->GetNameLength();
 
 			bsExistingClient.Write(lp);
-			bsExistingClient.Write(uiNameLen);
-			bsExistingClient.Write(GetPlayerName(lp), uiNameLen);
+			bsExistingClient.Write(uiNameLen); // TODO: change it to 'unsigned char' type
+			bsExistingClient.Write(m_pPlayers[lp]->GetName(), uiNameLen);
 
 			pNetGame->GetRakServer()->RPC(RPC_ServerJoin,&bsExistingClient,HIGH_PRIORITY,RELIABLE,0,Player,false,false);
 			bsExistingClient.Reset();
@@ -310,7 +315,7 @@ bool CPlayerPool::IsNickInUse(PCHAR szNick)
 	while(x!=MAX_PLAYERS) {
 		if(GetSlotState((BYTE)x)) {
 			//if(!stricmp(GetPlayerName((BYTE)x),szNick)) {
-			if (!strcmp(GetPlayerName((BYTE)x), szNick)) {
+			if (!strcmp(m_pPlayers[x]->GetName(), szNick)) {
 				return true;
 			}
 		}

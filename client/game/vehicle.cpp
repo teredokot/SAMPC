@@ -49,7 +49,7 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		if (szNumberPlate && szNumberPlate[0]) 
 			ScriptCommand(&set_car_numberplate, iType, szNumberPlate);
 
-		ScriptCommand(&create_car,iType,fPosX,fPosY,fPosZ+0.5f,&dwRetID);
+		ScriptCommand(&create_car,iType,fPosX,fPosY,fPosZ,&dwRetID);
 		ScriptCommand(&set_car_z_angle,dwRetID,fRotation);
 		ScriptCommand(&car_gas_tank_explosion,dwRetID,0);
 		ScriptCommand(&set_car_hydraulics,dwRetID,0);

@@ -1041,7 +1041,7 @@ bool CLocalPlayer::Spawn()
 			m_SpawnInfo.vecPos.Y, m_SpawnInfo.vecPos.Z);
 	else
 		m_pPlayerPed->TeleportTo(m_SpawnInfo.vecPos.X,
-			m_SpawnInfo.vecPos.Y, (m_SpawnInfo.vecPos.Z + 1.0f));
+			m_SpawnInfo.vecPos.Y, (m_SpawnInfo.vecPos.Z));
 
 	m_pPlayerPed->SetTargetRotation(m_SpawnInfo.fRotation);
 	
