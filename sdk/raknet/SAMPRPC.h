@@ -2,6 +2,8 @@
 #ifndef _SAMPRPC_H
 #define _SAMPRPC_H
 
+// TODO: Make RPCMap use only important IDs per side (client/server)
+
 enum eRPCTable
 {
 	RPC_ServerJoin,
@@ -117,14 +119,14 @@ enum eRPCTable
 	RPC_PickedUpPickup,
 	RPC_MenuSelect,
 	RPC_MenuQuit,
-	RPC_RconConnect,
-	RPC_RconCommand,
-	RPC_RconEvent,
-	RPC_RconPlayerInfo,
-	RPC_ACAuthRequest,
-	RPC_ACAuthResponse,
-	RPC_ACAuthEngineLoaded,
-	RPC_ACServerProtected,
+	//RPC_RconConnect,
+	//RPC_RconCommand,
+	//RPC_RconEvent,
+	//RPC_RconPlayerInfo,
+	//RPC_ACAuthRequest,
+	//RPC_ACAuthResponse,
+	//RPC_ACAuthEngineLoaded,
+	//RPC_ACServerProtected,
 	RPC_ScrInterpolateCamera,
 	RPC_TypingEvent,
 	RPC_ScrVehicleComponent,

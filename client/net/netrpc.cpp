@@ -748,10 +748,10 @@ void Instagib(RPCParameters *rpcParams)
 //----------------------------------------------------
 
 // AntiCheat
-void ACServerProtected(RPCParameters *rpcParams)
+/*void ACServerProtected(RPCParameters *rpcParams)
 {
 	
-}
+}*/
 
 //----------------------------------------------------
 
@@ -787,7 +787,7 @@ void RegisterRPCs(RakClientInterface * pRakClient)
 	REGISTER_STATIC_RPC(pRakClient,Instagib);
 	REGISTER_STATIC_RPC(pRakClient,SetTimeEx);
 	REGISTER_STATIC_RPC(pRakClient,ToggleClock); // 31
-	REGISTER_STATIC_RPC(pRakClient,ACServerProtected);
+	//REGISTER_STATIC_RPC(pRakClient,ACServerProtected);
 }
 
 //----------------------------------------------------
