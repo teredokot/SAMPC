@@ -5604,6 +5604,30 @@ static cell n_NetStats_GetIpPort(AMX* amx, cell* params)
 	return -1;
 }
 
+// native GetPlayerNetworkStats(playerid, retstr[], retstr_size)
+static cell n_GetPlayerNetworkStats(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerNetworkStats", 3);
+
+	char szBuffer[500] = { 0 };
+	int iLength = -1;
+
+	PlayerID pid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(params[1]);
+	if (pid != UNASSIGNED_PLAYER_ID) {
+		RakNetStatisticsStruct* pStat = pNetGame->GetRakServer()->GetStatistics(pid);
+		if (pStat != 0) {
+			RemoteSystemStruct* pRemote = pNetGame->GetRakServer()->GetRemoteSystemFromPlayerID(pid);
+			if (pRemote != 0)
+				iLength = sprintf_s(szBuffer, "Network Active: %d\nNetwork State: %d\n", pRemote->isActive, pRemote->connectMode);
+			else
+				iLength = sprintf_s(szBuffer, "Network Active: 0\nNetwork State: 0\n");
+
+			StatisticsToString(pStat, (iLength != -1) ? &szBuffer[iLength] : szBuffer, 1);
+		}
+	}
+	return set_amxstring(amx, params[2], szBuffer, params[3]);
+}
+
 //----------------------------------------------------------------------------------
 
 // native EnableStuntBonusForAll(enable)
@@ -5913,6 +5937,8 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(NetStats_PacketLossPercent),
 	DEFINE_NATIVE(NetStats_ConnectionStatus),
 	DEFINE_NATIVE(NetStats_GetIpPort),
+
+	DEFINE_NATIVE(GetPlayerNetworkStats),
 
 	// Player
 	{ "GetPlayerIDFromName", n_GetPlayerIDFromName },
