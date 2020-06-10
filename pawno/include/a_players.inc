@@ -154,4 +154,3 @@ native InterpolateCameraLookAt(playerid, Float:FromX, Float:FromY, Float:FromZ, 
 native SetPlayerBlurLevel(playerid, blur_level);
 native SetPlayerGameSpeed(playerid, Float:speed);
 native GetPlayerWeaponState(playerid);
-native GetPlayerNetworkStats(playerid, retstr[], retstr_size = sizeof(retstr));

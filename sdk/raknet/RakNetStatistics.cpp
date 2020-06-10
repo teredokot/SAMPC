@@ -67,8 +67,8 @@ void StatisticsToString( RakNetStatisticsStruct *s, char *buffer, int verbosityL
 			"Acks received: %u\n"
 			"Duplicate acks received: %u\n"
 			"Inst. KBits per second: %.1f\n"
-			"KBits per second sent:\t\t\t%.1f\n"
-			"KBits per second received:\t\t%.1f\n",
+			"KBits per second sent: %.1f\n"
+			"KBits per second received: %.1f\n",
 			s->messageSendBuffer[ SYSTEM_PRIORITY ] + s->messageSendBuffer[ HIGH_PRIORITY ] + s->messageSendBuffer[ MEDIUM_PRIORITY ] + s->messageSendBuffer[ LOW_PRIORITY ],
 			s->messagesSent[ SYSTEM_PRIORITY ] + s->messagesSent[ HIGH_PRIORITY ] + s->messagesSent[ MEDIUM_PRIORITY ] + s->messagesSent[ LOW_PRIORITY ],
 			BITS_TO_BYTES( s->totalBitsSent ),

@@ -5628,6 +5628,24 @@ static cell n_GetPlayerNetworkStats(AMX* amx, cell* params)
 	return set_amxstring(amx, params[2], szBuffer, params[3]);
 }
 
+// native GetNetworkStats(retstr[], retstr_size)
+static cell n_GetNetworkStats(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetNetworkStats", 2);
+
+	RakNetStatisticsStruct* pStat;
+	char szBuffer[500] = { 0 };
+	int iLength;
+
+	iLength = sprintf_s(szBuffer, "Server Ticks: %u\n", pNetGame->m_uiNumOfTicksInSec);
+
+	pStat = pNetGame->GetRakServer()->GetStatistics(UNASSIGNED_PLAYER_ID);
+	if (pStat != 0) {
+		StatisticsToString(pStat, (iLength != -1) ? &szBuffer[iLength] : szBuffer, 1);
+	}
+	return set_amxstring(amx, params[1], szBuffer, params[2]);
+}
+
 //----------------------------------------------------------------------------------
 
 // native EnableStuntBonusForAll(enable)
@@ -5939,6 +5957,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(NetStats_GetIpPort),
 
 	DEFINE_NATIVE(GetPlayerNetworkStats),
+	DEFINE_NATIVE(GetNetworkStats),
 
 	// Player
 	{ "GetPlayerIDFromName", n_GetPlayerIDFromName },

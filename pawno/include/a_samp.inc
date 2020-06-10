@@ -450,6 +450,8 @@ native NetStats_MessagesRecvPerSecond(playerid);
 native Float:NetStats_PacketLossPercent(playerid);
 native NetStats_ConnectionStatus(playerid);
 native NetStats_GetIpPort(playerid, ip_port[], ip_port_len);
+native GetPlayerNetworkStats(playerid, retstr[], retstr_size = sizeof(retstr));
+native GetNetworkStats(retstr[], retstr_size = sizeof(retstr));
 
 forward OnGameModeInit();
 forward OnGameModeExit();
