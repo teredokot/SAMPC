@@ -1208,10 +1208,10 @@ void CNetGame::ProcessClientJoin(BYTE bytePlayerID)
 		
 		// Inform them of their VW as it doesn't actually work if called from OnPlayerConnect
 		// The server is updated but they're not connected fully so don't get it, so resend it
-		BYTE byteVW = m_pPlayerPool->GetAt(bytePlayerID)->GetVirtualWorld();
+		int iVW = m_pPlayerPool->GetAt(bytePlayerID)->GetVirtualWorld();
 		RakNet::BitStream bsData;
 		bsData.Write(bytePlayerID); // player id
-		bsData.Write(byteVW); // VW id
+		bsData.Write(iVW); // VW id
 		m_pRak->RPC(RPC_ScrSetPlayerVirtualWorld, &bsData, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 	} 
 	else if(GetGameState() == GAMESTATE_RESTARTING)
