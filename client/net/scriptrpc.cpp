@@ -777,7 +777,7 @@ void ScrSetVehicleVirtualWorld(RPCParameters *rpcParams)
 	
 	for (int i = 0; i < iCount; i++)
 	{
-		bsData.Read((VEHICLEID)Vehicle);
+		bsData.Read(Vehicle);
 		bsData.Read(iVW);
 		pVehiclePool->SetVehicleVirtualWorld(Vehicle, iVW);
 	}

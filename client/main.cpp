@@ -109,7 +109,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 		if(tSettings.bDebug || tSettings.bPlayOnline)
 		{
 			SetProcessAffinityMask(GetCurrentProcess(),1);
-
+			DisableThreadLibraryCalls(hinstDLL);
 			SetUnhandledExceptionFilter(exc_handler);
 			//dwGameLoop = (DWORD)TheGameLoop;
 			dwGraphicsLoop = (DWORD)TheGraphicsLoop;
