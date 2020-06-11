@@ -4168,27 +4168,29 @@ static cell n_SetObjectRot(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "SetObjectRot", 4);
 
-	VECTOR vecRot;
-	vecRot.X = amx_ctof(params[2]);
-	vecRot.Y = amx_ctof(params[3]);
-	vecRot.Z = amx_ctof(params[4]);
+	if (pNetGame->GetObjectPool()) {
+		CObject* pObject = pNetGame->GetObjectPool()->GetAt(params[1]);
+		if (pObject != nullptr) {
+			RakNet::BitStream out;
+			float
+				fX = amx_ctof(params[2]),
+				fY = amx_ctof(params[3]),
+				fZ = amx_ctof(params[4]);
 
-	RakNet::BitStream bsParams;
-	bsParams.Write((BYTE)params[1]); // byteObjectID
-	bsParams.Write(vecRot.X);	// X
-	bsParams.Write(vecRot.Y);	// Y
-	bsParams.Write(vecRot.Z);	// Z
+			out.Write((BYTE)params[1]);
+			out.Write(fX);
+			out.Write(fY);
+			out.Write(fZ);
 
-	RakServerInterface* pRak = pNetGame->GetRakServer();
-	pRak->RPC(RPC_ScrSetObjectRotation , &bsParams, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
-
-	CObjectPool *pObjectPool = pNetGame->GetObjectPool();
-	CObject*	pObject = pObjectPool->GetAt(params[1]);
-	pObject->m_matWorld.up.X = vecRot.X;
-	pObject->m_matWorld.up.Y = vecRot.Y;
-	pObject->m_matWorld.up.Z = vecRot.Z;
-
-	return 1;
+			if (pNetGame->SendToAll(RPC_ScrSetObjectRotation, &out)) {
+				pObject->m_matWorld.up.X = fX;
+				pObject->m_matWorld.up.Y = fY;
+				pObject->m_matWorld.up.Z = fZ;
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
 
 static cell n_GetObjectRot(AMX *amx, cell *params)
