@@ -31,10 +31,9 @@ public:
 	void HideForPlayer(BYTE bytePlayer, WORD wText);
 	void HideForAll(WORD wText);
 
-	bool GetSlotState(WORD wText)
+	bool GetSlotState(int iText)
 	{
-		if (wText >= MAX_TEXT_DRAWS) return false;
-		return m_bSlotState[wText];
+		return (iText >= 0 && iText < MAX_TEXT_DRAWS) ? m_bSlotState[iText] : false;
 	};
 	
 	void SetLetterSize(WORD wText, float fXSize, float fYSize);

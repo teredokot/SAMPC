@@ -42,15 +42,13 @@ public:
 	bool Delete(BYTE bytePlayerID, BYTE byteReason);
 		
 	// Retrieve a player
-	CPlayer* GetAt(BYTE bytePlayerID) {
-		if (bytePlayerID >= MAX_PLAYERS) { return NULL; }
-		return m_pPlayers[bytePlayerID];
+	CPlayer* GetAt(int iPlayerID) {
+		return (iPlayerID >= 0 && iPlayerID < MAX_PLAYERS) ? m_pPlayers[iPlayerID] : nullptr;
 	};
 
 	// Find out if the slot is inuse.
-	bool GetSlotState(BYTE bytePlayerID) {
-		if(bytePlayerID >= MAX_PLAYERS) { return false; }
-		return m_bPlayerSlotState[bytePlayerID];
+	bool GetSlotState(int iPlayerID) {
+		return (iPlayerID >= 0 && iPlayerID < MAX_PLAYERS) ? m_bPlayerSlotState[iPlayerID] : false;
 	};
 
 	/*PCHAR GetPlayerName(BYTE bytePlayerID) {
@@ -82,6 +80,7 @@ public:
 		m_iPlayerMoney[bytePlayerID] = iMoney;
 	};*/
 
+	// TODO: Move these to CPlayer
 	DWORD GetPlayerAmmo(BYTE bytePlayerID) {
 		if(bytePlayerID >= MAX_PLAYERS) { return 0; }
 		return m_dwPlayerAmmo[bytePlayerID];

@@ -310,8 +310,8 @@ int CGameMode::OnPlayerText(cell playerid, unsigned char * szText)
 		amx_Release(&m_amx, amx_addr);
 	}
 
-	if (ret && pNetGame->GetPlayerPool()->GetSlotState((BYTE)playerid)) {
-		pNetGame->GetPlayerPool()->GetAt((BYTE)playerid)->Say(szText, strlen((char*)szText));
+	if (ret && pNetGame->GetPlayerPool()->GetSlotState(playerid)) {
+		pNetGame->GetPlayerPool()->GetAt(playerid)->Say(szText, strlen((char*)szText));
 	}
 
 	return (int)ret;
@@ -328,7 +328,7 @@ int CGameMode::OnPlayerCommandText(cell playerid, unsigned char * szCommandText)
 	cell ret = 0;
 	int orig_strlen = strlen((char*)szCommandText);
 
-	if(!pNetGame->GetPlayerPool()->GetSlotState((BYTE)playerid))
+	if(!pNetGame->GetPlayerPool()->GetSlotState(playerid))
 		return (int)ret;
 
 	if (!amx_FindPublic(&m_amx, "OnPlayerCommandText", &idx))

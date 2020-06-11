@@ -39,17 +39,15 @@ public:
 	bool Delete(VEHICLEID VehicleID);	
 		
 	// Retrieve a vehicle by id
-	CVehicle* GetAt(VEHICLEID VehicleID)
+	CVehicle* GetAt(int iVehicleID)
 	{
-		if(VehicleID >= MAX_VEHICLES) { return NULL; }
-		return m_pVehicles[VehicleID];
+		return (iVehicleID >= 0 && iVehicleID < MAX_VEHICLES) ? m_pVehicles[iVehicleID] : nullptr;
 	};
 
 	// Find out if the slot is inuse.
-	bool GetSlotState(VEHICLEID VehicleID)
+	bool GetSlotState(int iVehicleID)
 	{
-		if(VehicleID > MAX_VEHICLES) { return false; }
-		return m_bVehicleSlotState[VehicleID];
+		return (iVehicleID >= 0 && iVehicleID < MAX_VEHICLES) ? m_bVehicleSlotState[iVehicleID] : false;
 	};
 
 	void InitForPlayer(BYTE bytePlayerID);

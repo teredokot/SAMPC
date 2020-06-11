@@ -45,7 +45,7 @@ void ClientJoin(RPCParameters *rpcParams)
 	PlayerID MyPlayerID = pRak->GetPlayerIDFromIndex(bytePlayerID);
 
 	for (size_t i = 0; i < MAX_PLAYERS; i++) {
-		if (pPlayerPool->GetSlotState((BYTE)i)) {
+		if (pPlayerPool->GetSlotState(i)) {
 			otherPlayerId = pRak->GetPlayerIDFromIndex(i);
 			if (otherPlayerId != UNASSIGNED_PLAYER_ID &&
 				otherPlayerId.binaryAddress == MyPlayerID.binaryAddress)

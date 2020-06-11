@@ -29,11 +29,10 @@ public:
 	void FlashForAll(WORD wZone, DWORD dwColor);
 	void StopFlashForPlayer(BYTE bytePlayer, WORD wZone);
 	void StopFlashForAll(WORD wZone);
-	bool GetSlotState(WORD wZone)
+	bool GetSlotState(int iZone)
 	{
-		if (wZone >= MAX_GANG_ZONES) return false;
-		return m_bSlotState[wZone];
-	};
+		return (iZone >= 0 && iZone < MAX_GANG_ZONES) ? m_bSlotState[iZone] : false;
+	}
 };
 
 //----------------------------------------------------

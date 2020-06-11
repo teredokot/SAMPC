@@ -29,17 +29,15 @@ public:
 	bool Delete(BYTE byteMenuID);
 	
 	// Retrieve a menu by id
-	CMenu* GetAt(BYTE byteMenuID)
+	CMenu* GetAt(int iMenuID)
 	{
-		if(byteMenuID > MAX_MENUS) { return NULL; }
-		return m_pMenus[byteMenuID];
+		return (iMenuID >= 0 && iMenuID < MAX_MENUS) ? m_pMenus[iMenuID] : nullptr;
 	};
-	
+
 	// Find out if the slot is inuse.
-	bool GetSlotState(BYTE byteMenuID)
+	bool GetSlotState(int iMenuID)
 	{
-		if(byteMenuID > MAX_MENUS) { return false; }
-		return m_bMenuSlotState[byteMenuID];
+		return (iMenuID >= 0 && iMenuID < MAX_MENUS) ? m_bMenuSlotState[iMenuID] : false;
 	};
 	
 	void ResetPlayer(BYTE bytePlayerID)
