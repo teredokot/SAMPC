@@ -310,13 +310,34 @@ void ApplyInGamePatches()
 	SetTimedObjects(1000);*/
 	// ----END GTAU
 	
-	// Increase the ped pool limit (210)
-	//UnFuck(0x550FF2,1);
-	*(PBYTE)0x550FF2 = 0xD2;
+	// Increase "Buildings" pool (default is 13000)
+	*(DWORD*)0x55105F = 20000;
 
-	// And we need 210 ped intelligence too plz
+	// Increase "Dummys" pool (default is 2500)
+	*(DWORD*)0x5510CF = 4000;
+
+	// Increase "PtrNode Single" pool (default is 70000)
+	*(DWORD*)0x550F46 = 100000;
+
+	// Increase "PtrNode Double" pool (default is 3200)
+	*(DWORD*)0x550F82 = 8000;
+
+	// Increase "EntryInfoNode" pool (default is 500)
+	*(DWORD*)0x550FBA = 5000;
+
+	// Increase "Objects" pool (default is 350)
+	*(DWORD*)0x551097 = 3000;
+
+	// Increase matrix array pool (default is 900)
+	*(DWORD*)0x54F3A1 = 6000;
+
+	// Increase the ped pool limit (default is 140)
+	//UnFuck(0x550FF2,1);
+	*(PBYTE)0x550FF2 = 240;
+
+	// And we need 210 ped intelligence too plz (default is 140)
 	//UnFuck(0x551283,1);
-	*(PBYTE)0x551283 = 0xD2; // thx
+	*(PBYTE)0x551283 = 240;
 	
 	// And a larger task pool
 	//UnFuck(0x551140,1);
@@ -339,7 +360,7 @@ void ApplyInGamePatches()
 	*(BYTE*)0x5B8FDE = 0x6A;	// push imm8
 	*(BYTE*)0x5B8FDF = 0x00;	// 0
 	*(BYTE*)0x5B8FE0 = 0x68;	// push imm32
-	*(BYTE*)0x5B8FE1 = 127;		// 127 types
+	*(BYTE*)0x5B8FE1 = 200;		// 127 types
 	*(BYTE*)0x5B8FE2 = 0x00;
 	*(BYTE*)0x5B8FE3 = 0x00;
 	*(BYTE*)0x5B8FE4 = 0x00;
