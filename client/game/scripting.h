@@ -260,6 +260,7 @@ const SCRIPT_COMMAND toggle_actor_cellphone				= { 0x0729, "ii" };
 const SCRIPT_COMMAND actor_task_sit						= { 0x06b0, "ii" };
 const SCRIPT_COMMAND actor_task_handsup					= { 0x5c4, "ii" };
 const SCRIPT_COMMAND actor_task_use_atm					= { 0x5c7, "ii" };
+const SCRIPT_COMMAND clear_task = { 0x0687, "i" };
 const SCRIPT_COMMAND change_stat						= { 0x0629, "ii" };
 const SCRIPT_COMMAND unk_gang_war1						= { 0x08A3, "i" };
 const SCRIPT_COMMAND unk_gang_war2						= { 0x0879, "i" };
@@ -306,3 +307,4 @@ const SCRIPT_COMMAND create_property_pickup				= { 0x518, "i" };
 
 const SCRIPT_COMMAND set_car_extra_parts_angle_to		= { 0x8A4, "if" };
 const SCRIPT_COMMAND set_car_visibility					= { 0x338, "ii" };
+const SCRIPT_COMMAND scale_object						= { 0x08D2, "if" };

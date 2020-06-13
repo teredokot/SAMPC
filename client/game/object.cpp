@@ -88,3 +88,8 @@ void CObject::InstantRotate(float X, float Y, float Z)
 {
 	ScriptCommand(&set_object_rotation, m_dwGTAId, X, Y, Z);
 }
+
+void CObject::SetScale(float fScale)
+{
+	ScriptCommand(&scale_object, m_dwGTAId, fScale);
+}

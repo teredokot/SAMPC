@@ -83,6 +83,7 @@ enum eRPCTable
 	RPC_ScrShowNameTag,
 	RPC_ScrMoveObject,
 	RPC_ScrStopObject,
+	RPC_ScrSetObjectScale,
 	RPC_ScrNumberPlate,
 	RPC_ScrTogglePlayerSpectating,
 	RPC_ScrSetPlayerSpectating,

@@ -31,4 +31,6 @@ public:
 	void MoveTo(float X, float Y, float Z, float speed);
 	
 	void InstantRotate(float X, float Y, float Z);
+
+	void SetScale(float fScale);
 };

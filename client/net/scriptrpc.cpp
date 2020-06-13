@@ -730,6 +730,24 @@ void ScrDestroyObject(RPCParameters *rpcParams)
 	}
 }
 
+void ScrSetObjectScale(RPCParameters* rpcParams)
+{
+	RakNet::BitStream in(rpcParams);
+
+	BYTE byteObjectID;
+	CObject* pObject;
+	float fScale;
+
+	if (pNetGame->GetObjectPool() && in.GetNumberOfUnreadBits() == 40) {
+		if (in.Read(byteObjectID) && in.Read(fScale)) {
+			pObject = pNetGame->GetObjectPool()->GetAt(byteObjectID);
+			if (pObject != NULL) {
+				pObject->SetScale(fScale);
+			}
+		}
+	}
+}
+
 //----------------------------------------------------
 
 void ScrSetPlayerVirtualWorld(RPCParameters *rpcParams)
@@ -1627,6 +1645,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrShowNameTag);
 	REGISTER_STATIC_RPC(pRakClient, ScrMoveObject);
 	REGISTER_STATIC_RPC(pRakClient, ScrStopObject);
+	REGISTER_STATIC_RPC(pRakClient, ScrSetObjectScale);
 	REGISTER_STATIC_RPC(pRakClient, ScrNumberPlate);
 	REGISTER_STATIC_RPC(pRakClient, ScrTogglePlayerSpectating);
 	REGISTER_STATIC_RPC(pRakClient, ScrSetPlayerSpectating);

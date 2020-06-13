@@ -4327,6 +4327,28 @@ static cell n_StopObject(AMX *amx, cell *params)
 	return 0;
 }
 
+// TODO: Will need GetObjectScale and Get/SetPlayerObjectScale
+// native SetObjectScale(objectid, Float:scale);
+static cell n_SetObjectScale(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetObjectScale", 2);
+
+	if (pNetGame->GetObjectPool()) {
+		if (pNetGame->GetObjectPool()->GetSlotState(params[1])) {
+			float fScale = amx_ctof(params[2]);
+			RakNet::BitStream out;
+
+			out.Write((unsigned char)params[1]);
+			out.Write(fScale);
+
+			if (pNetGame->SendToAll(RPC_ScrSetObjectScale, &out)) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
 // =======================
 // Start of player object code
 // =======================
@@ -6169,6 +6191,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(IsObjectMoving),
 	{ "MoveObject",				n_MoveObject },
 	{ "StopObject",				n_StopObject },
+	DEFINE_NATIVE(SetObjectScale),
 	
 	{ "CreatePlayerObject",			n_CreatePlayerObject },
 	{ "SetPlayerObjectPos",			n_SetPlayerObjectPos },
