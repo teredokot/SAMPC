@@ -1933,6 +1933,7 @@ void CPlayerPed::ProcessVehicleHorn()
 	if(!GamePool_Ped_GetAt(m_dwGTAId)) return;
 
 	GTA_CONTROLSET *pPlayerControls;
+	bool bHasHydraulics = false;
 
 	if(!m_bytePlayerNumber) {
 		pPlayerControls = GameGetInternalKeys();
@@ -1941,9 +1942,14 @@ void CPlayerPed::ProcessVehicleHorn()
 	}
 
 	VEHICLE_TYPE *pGtaVehicle = (VEHICLE_TYPE *)m_pPed->pVehicle;
-
 	if(pGtaVehicle) {
-		if(IN_VEHICLE(m_pPed) && (pGtaVehicle->pDriver == m_pPed)) {
+		for (unsigned i = 0; i < 15; i++) {
+			if (pGtaVehicle->sComponent[i] == 1087) {
+				bHasHydraulics = true;
+				break;
+			}
+		}
+		if(IN_VEHICLE(m_pPed) && (pGtaVehicle->pDriver == m_pPed) && !bHasHydraulics) {
 			if(pPlayerControls->wKeys1[18]) {
                 //pGtaVehicle->byteHorn = 1;
 				pGtaVehicle->byteHorn2 = 1;

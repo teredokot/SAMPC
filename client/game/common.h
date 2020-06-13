@@ -154,7 +154,11 @@ typedef struct _VEHICLE_TYPE
 	PADDING(_pad212,6);  // 1070-1076
 	BYTE byteColor1;      // 1076-1077
 	BYTE byteColor2;      // 1077-1078
-	PADDING(_pad230,42);  // 1078-1120
+	BYTE byteColor3;	// 1078-1079
+	BYTE byteColor4;	// 1079-1080
+	PADDING(_pad1080_to_1082, 2); // 1080-1082
+	unsigned short sComponent[15]; // 1082-1112
+	PADDING(_pad1112_to_1120, 8); // 1112-1120
 	PED_TYPE * pDriver;   // 1120-1124
 	PED_TYPE * pPassengers[7]; // 1124-1152
 
