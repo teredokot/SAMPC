@@ -27,6 +27,16 @@
 #define VEHICLE_DOOR_REAR_LEFT 		(3)
 #define VEHICLE_DOOR_REAR_RIGHT 	(4)
 
+#define VEHICLE_MODEL_INFO_SIZE				(1)
+#define VEHICLE_MODEL_INFO_FRONTSEAT		(2)
+#define VEHICLE_MODEL_INFO_REARSEAT			(3)
+#define VEHICLE_MODEL_INFO_PETROLCAP		(4)
+#define VEHICLE_MODEL_INFO_WHEELSFRONT		(5)
+#define VEHICLE_MODEL_INFO_WHEELSREAR		(6)
+#define VEHICLE_MODEL_INFO_WHEELSMID		(7)
+#define VEHICLE_MODEL_INFO_FRONT_BUMPER_Z	(8)
+#define VEHICLE_MODEL_INFO_REAR_BUMPER_Z	(9)
+
 native GetVehicleModelCount(modelid);
 native GetVehicleModelsUsed();
 native IsValidVehicle(vehicleid);
@@ -83,3 +93,4 @@ native SetVehicleTrunkState(vehicleid, bool:trunk_state);
 native SetVehicleDoorState(vehicleid, doorid, bool:door_state);
 native SetVehicleFeature(vehicleid, toggle);
 native SetVehicleVisibility(vehicleid, visible);
+native GetVehicleModelInfo(vehiclemodel, infotype, &Float:X, &Float:Y, &Float:Z);

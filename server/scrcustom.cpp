@@ -2135,6 +2135,31 @@ static cell n_SetVehicleVisibility(AMX* amx, cell* params)
 	return 0;
 }
 
+static cell n_GetVehicleModelInfo(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleModelInfo", 5);
+	if (IsVehicleModelIdValid(params[1])) {
+		const float* pos = GetVehicleModelInfoData(params[1], params[2]);
+		if (pos != NULL) {
+			cell* addr;
+			if (params[3] != -1) {
+				amx_GetAddr(amx, params[3], &addr);
+				*addr = amx_ftoc(pos[0]);
+			}
+			if (params[4] != -1) {
+				amx_GetAddr(amx, params[4], &addr);
+				*addr = amx_ftoc(pos[1]);
+			}
+			if (params[5] != -1) {
+				amx_GetAddr(amx, params[5], &addr);
+				*addr = amx_ftoc(pos[2]);
+			}
+			return 1;
+		}
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SendClientMessage(playerid, color, const message[])
@@ -6148,7 +6173,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetVehicleDoorState),
 	DEFINE_NATIVE(SetVehicleFeature),
 	DEFINE_NATIVE(SetVehicleVisibility),
-
+	DEFINE_NATIVE(GetVehicleModelInfo),
 
 	// Messaging
 	{ "SendClientMessage",		n_SendClientMessage },
