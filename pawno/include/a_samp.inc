@@ -317,6 +317,11 @@
 #define VEHICLE_FARMTR1     (610)
 #define VEHICLE_UTILTR1     (611)
 
+#define SERVER_VARTYPE_NONE		(0)
+#define SERVER_VARTYPE_INT 		(1)
+#define SERVER_VARTYPE_STRING	(2)
+#define SERVER_VARTYPE_FLOAT	(3)
+
 native print(const output[]);
 native printf(const output[], {Float,_}:...);
 native format(buffer[], length, const format[], {Float,_}:...);
@@ -440,6 +445,17 @@ native GangZoneFlashForPlayer(playerid, gangzoneid, color);
 native GangZoneFlashForAll(gangzoneid, color);
 native GangZoneStopFlashForPlayer(playerid, gangzoneid);
 native GangZoneStopFlashForAll(gangzoneid);
+
+native SetSVarInt(varname[], int_value);
+native SetSVarString(varname[], string_value[]);
+native SetSVarFloat(varname[], Float:float_value);
+native GetSVarInt(varname[]);
+native GetSVarString(varname[], string_return[], len);
+native Float:GetSVarFloat(varname[]);
+native DeleteSVar(varname[]);
+native GetSVarType(varname[]);
+native GetSVarNameAtIndex(index, ret_varname[], ret_len);
+native GetSVarsUpperIndex();
 
 native NetStats_GetConnectedTime(playerid);
 native NetStats_MessagesReceived(playerid);

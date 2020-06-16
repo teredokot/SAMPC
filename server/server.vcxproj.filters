@@ -189,6 +189,7 @@
       <Filter>sdk\raknet</Filter>
     </ClCompile>
     <ClCompile Include="scrdatabase.cpp" />
+    <ClCompile Include="variable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="console.h" />
@@ -471,6 +472,7 @@
       <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="scrcore.h" />
+    <ClInclude Include="variable.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sdk">

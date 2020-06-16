@@ -51,6 +51,7 @@ private:
 	CMenuPool					*m_pMenuPool;
 	CTextDrawPool				*m_pTextPool;
 	CGangZonePool				*m_pGangZonePool;
+	CVariables					*m_pVariable;
 
     int							m_iCurrentGameModeIndex;
 	int							m_iCurrentGameModeRepeat;
@@ -65,6 +66,7 @@ private:
 public:
 
 	CScriptTimers* GetTimers() { return m_pScriptTimers; };
+	CVariables* GetVariable() const { return m_pVariable; };
 
 	bool m_bNameTagLOS;
 	bool m_bShowPlayerMarkers;

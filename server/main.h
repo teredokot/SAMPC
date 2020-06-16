@@ -108,6 +108,7 @@ typedef struct _SERVER_SETTINGS {
 #include "shared.h"
 
 // SA:MP
+#include "variable.h"
 #include "system.h"
 #include "console.h"
 #include "scrtimers.h"

@@ -41,6 +41,128 @@
 
 //----------------------------------------------------------------------------------
 
+// native SetSVarInt(varname[], int_value)
+static cell n_SetSVarInt(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetSVarInt", 2);
+
+	char* szVarName;
+	amx_StrParam(amx, params[1], szVarName);
+	if (szVarName != NULL) {
+		return pNetGame->GetVariable()->SetNumber(szVarName, params[2], false);
+	}
+	return 0;
+}
+
+// native SetSVarString(varname[], string_value[])
+static cell n_SetSVarString(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetSVarString", 2);
+
+	char* szVarName;
+	char* szValue;
+	amx_StrParam(amx, params[1], szVarName);
+	amx_StrParam(amx, params[2], szValue);
+	if (szVarName != NULL && szValue != NULL) {
+		return pNetGame->GetVariable()->SetString(szVarName, szValue);
+	}
+	return 0;
+}
+
+// native SetSVarFloat(varname[], Float:float_value)
+static cell n_SetSVarFloat(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetSVarFloat", 2);
+
+	char* szVarName;
+	amx_StrParam(amx, params[1], szVarName);
+	if (szVarName != NULL) {
+		return pNetGame->GetVariable()->SetNumber(szVarName, params[2], true);
+	}
+	return 0;
+}
+
+// native GetSVarInt(varname[])
+static cell n_GetSVarInt(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetSVarInt", 1);
+
+	char* szVarName;
+	amx_StrParam(amx, params[1], szVarName);
+	if (szVarName != NULL) {
+		return pNetGame->GetVariable()->GetNumber(szVarName);
+	}
+	return 0;
+}
+
+// native GetSVarString(varname[], string_return[], len)
+static cell n_GetSVarString(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetSVarString", 3);
+
+	char* szVarName;
+	amx_StrParam(amx, params[1], szVarName);
+	if (szVarName != NULL) {
+		char* szValue = pNetGame->GetVariable()->GetString(szVarName);
+		return set_amxstring(amx, params[2], szValue ? szValue : "", params[3]);
+	}
+	return 0;
+}
+
+// native GetSVarFloat(varname[])
+static cell n_GetSVarFloat(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetSVarFloat", 1);
+
+	char* szVarName;
+	amx_StrParam(amx, params[1], szVarName);
+	if (szVarName != NULL) {
+		return pNetGame->GetVariable()->GetNumber(szVarName);
+	}
+	return 0;
+}
+
+// native DeleteSVar(varname[])
+static cell n_DeleteSVar(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetSVarFloat", 1);
+
+	char* szVarName;
+	amx_StrParam(amx, params[1], szVarName);
+	if (szVarName != NULL) {
+		return pNetGame->GetVariable()->Delete(szVarName);
+	}
+	return 0;
+}
+
+// native GetSVarType(varname[])
+static cell n_GetSVarType(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetSVarType", 1);
+
+	char* szVarName;
+	amx_StrParam(amx, params[1], szVarName);
+	if (szVarName != NULL) {
+		return pNetGame->GetVariable()->GetType(szVarName);
+	}
+	return 0;
+}
+
+// native GetSVarNameAtIndex(index, ret_varname[], ret_len)
+static cell n_GetSVarNameAtIndex(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetSVarNameAtIndex", 3);
+
+	char* szVarName = pNetGame->GetVariable()->GetNameAtIndex(params[1]);
+	return set_amxstring(amx, params[2], szVarName ? szVarName : "", params[3]);
+}
+
+// native GetSVarsUpperIndex()
+static cell n_GetSVarsUpperIndex(AMX* amx, cell* params)
+{
+	return pNetGame->GetVariable()->GetUpperIndex();
+}
+
 static cell n_GameModeExit(AMX *amx, cell *params)
 {
 	if(pNetGame->SetNextScriptFile(NULL)) {
@@ -5925,6 +6047,18 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "acos",					n_acos },
 	{ "atan2",					n_atan2 },
 	{ "atan",					n_atan },
+
+	// Server Variable
+	DEFINE_NATIVE(SetSVarInt),
+	DEFINE_NATIVE(SetSVarString),
+	DEFINE_NATIVE(SetSVarFloat),
+	DEFINE_NATIVE(GetSVarInt),
+	DEFINE_NATIVE(GetSVarString),
+	DEFINE_NATIVE(GetSVarFloat),
+	DEFINE_NATIVE(DeleteSVar),
+	DEFINE_NATIVE(GetSVarType),
+	DEFINE_NATIVE(GetSVarNameAtIndex),
+	DEFINE_NATIVE(GetSVarsUpperIndex),
 
 	// Game
 	{ "GameModeExit",			n_GameModeExit },

@@ -221,6 +221,7 @@
     <ClCompile Include="scrdatabase.cpp" />
     <ClCompile Include="scrtimers.cpp" />
     <ClCompile Include="textdrawpool.cpp" />
+    <ClCompile Include="variable.cpp" />
     <ClCompile Include="vehicle.cpp" />
     <ClCompile Include="vehiclepool.cpp" />
   </ItemGroup>
@@ -333,6 +334,7 @@
     <ClInclude Include="scrtimers.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="textdrawpool.h" />
+    <ClInclude Include="variable.h" />
     <ClInclude Include="vehicle.h" />
     <ClInclude Include="vehiclepool.h" />
   </ItemGroup>
