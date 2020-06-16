@@ -2686,6 +2686,182 @@ static cell n_SetPlayerDrunkLevel(AMX* amx, cell* params)
 	return 1;
 }
 
+// native SetPVarInt(playerid, varname[], int_value)
+static cell n_SetPVarInt(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetPVarInt", 3);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName;
+			amx_StrParam(amx, params[2], szVarName);
+			if (szVarName != NULL) {
+				return pPlayer->m_pVariables->SetNumber(szVarName, params[3], false);
+			}
+		}
+	}
+	return 0;
+}
+
+// native SetPVarString(playerid, varname[], string_value[])
+static cell n_SetPVarString(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetPVarString", 3);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName;
+			char* szValue;
+			amx_StrParam(amx, params[2], szVarName);
+			amx_StrParam(amx, params[3], szValue);
+			if (szVarName != NULL && szValue != NULL) {
+				return pPlayer->m_pVariables->SetString(szVarName, szValue);
+			}
+		}
+	}
+	return 0;
+}
+
+// native SetPVarFloat(playerid, varname[], Float:float_value)
+static cell n_SetPVarFloat(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetPVarFloat", 3);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName;
+			amx_StrParam(amx, params[2], szVarName);
+			if (szVarName != NULL) {
+				return pPlayer->m_pVariables->SetNumber(szVarName, params[3], true);
+			}
+		}
+	}
+	return 0;
+}
+
+// native GetPVarInt(playerid, varname[])
+static cell n_GetPVarInt(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPVarInt", 2);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName;
+			amx_StrParam(amx, params[2], szVarName);
+			if (szVarName != NULL) {
+				return pPlayer->m_pVariables->GetNumber(szVarName);
+			}
+		}
+	}
+	return 0;
+}
+
+// native GetPVarString(playerid, varname[], string_return[], len)
+static cell n_GetPVarString(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPVarString", 4);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName;
+			amx_StrParam(amx, params[2], szVarName);
+			if (szVarName != NULL) {
+				char* szValue = pPlayer->m_pVariables->GetString(szVarName);
+				return set_amxstring(amx, params[3], szValue ? szValue : "", params[4]);
+			}
+		}
+	}
+	return 0;
+}
+
+// native Float:GetPVarFloat(playerid, varname[])
+static cell n_GetPVarFloat(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPVarFloat", 2);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName;
+			amx_StrParam(amx, params[2], szVarName);
+			if (szVarName != NULL) {
+				return pPlayer->m_pVariables->GetNumber(szVarName);
+			}
+		}
+	}
+	return 0;
+}
+
+// native DeletePVar(playerid, varname[])
+static cell n_DeletePVar(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "DeletePVar", 2);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName;
+			amx_StrParam(amx, params[2], szVarName);
+			if (szVarName != NULL) {
+				return pPlayer->m_pVariables->Delete(szVarName);
+			}
+		}
+	}
+	return 0;
+}
+
+// native GetPVarType(playerid, varname[])
+static cell n_GetPVarType(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPVarType", 2);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName;
+			amx_StrParam(amx, params[2], szVarName);
+			if (szVarName != NULL) {
+				return pPlayer->m_pVariables->GetType(szVarName);
+			}
+		}
+	}
+	return 0;
+}
+
+// native GetPVarNameAtIndex(playerid, index, ret_varname[], ret_len)
+static cell n_GetPVarNameAtIndex(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPVarNameAtIndex", 4);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			char* szVarName = pPlayer->m_pVariables->GetNameAtIndex(params[2]);
+			return set_amxstring(amx, params[3], szVarName ? szVarName : "", params[4]);
+		}
+	}
+	return 0;
+}
+
+// native GetPVarsUpperIndex(playerid)
+static cell n_GetPVarsUpperIndex(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPVarsUpperIndex", 1);
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL && pPlayer->m_pVariables) {
+			return pPlayer->m_pVariables->GetUpperIndex();
+		}
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerCameraPos(playerid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
@@ -6242,6 +6418,18 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "GetPlayerSpecialAction", n_GetPlayerSpecialAction },
 	DEFINE_NATIVE(GetPlayerDrunkLevel),
 	DEFINE_NATIVE(SetPlayerDrunkLevel),
+
+	// Player Variable
+	DEFINE_NATIVE(SetPVarInt),
+	DEFINE_NATIVE(SetPVarString),
+	DEFINE_NATIVE(SetPVarFloat),
+	DEFINE_NATIVE(GetPVarInt),
+	DEFINE_NATIVE(GetPVarString),
+	DEFINE_NATIVE(GetPVarFloat),
+	DEFINE_NATIVE(DeletePVar),
+	DEFINE_NATIVE(GetPVarType),
+	DEFINE_NATIVE(GetPVarNameAtIndex),
+	DEFINE_NATIVE(GetPVarsUpperIndex),
 
 	{ "CreatePlayerPickup",		n_CreatePlayerPickup },
 	{ "DestroyPlayerPickup",	n_DestroyPlayerPickup },

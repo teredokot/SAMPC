@@ -46,6 +46,7 @@ private:
 	float					m_fRaceCheckpointSize;
 	bool					m_bInRaceCheckpoint;
 public:
+	CVariables* m_pVariables;
 	PLAYER_SPAWN_INFO		m_SpawnInfo;
 	bool					m_bHasSpawnInfo;
 	BYTE					m_byteWantedLevel;
@@ -90,7 +91,7 @@ public:
 	BYTE GetState() { return m_byteState; };
 
 	CPlayer();
-	~CPlayer() {};
+	~CPlayer();
 
 	float	m_fHealth;
 	float	m_fArmour;

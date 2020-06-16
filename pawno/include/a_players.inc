@@ -52,6 +52,11 @@
 #define WEAPONSTATE_MORE_BULLETS	(2)
 #define WEAPONSTATE_RELOADING 		(3)
 
+#define PLAYER_VARTYPE_NONE		(0)
+#define PLAYER_VARTYPE_INT		(1)
+#define PLAYER_VARTYPE_STRING	(2)
+#define PLAYER_VARTYPE_FLOAT	(3)
+
 native GetPlayerCount();
 native GetPlayerIDFromName(const name[]);
 native SetSpawnInfo(playerid, teamid, skinid, Float:x, Float:y, Float:z, Float:a, weap1, ammo1, weap2, ammo2, weap3, ammo3);
@@ -154,3 +159,14 @@ native InterpolateCameraLookAt(playerid, Float:FromX, Float:FromY, Float:FromZ, 
 native SetPlayerBlurLevel(playerid, blur_level);
 native SetPlayerGameSpeed(playerid, Float:speed);
 native GetPlayerWeaponState(playerid);
+
+native SetPVarInt(playerid, varname[], int_value);
+native SetPVarString(playerid, varname[], string_value[]);
+native SetPVarFloat(playerid, varname[], Float:float_value);
+native GetPVarInt(playerid, varname[]);
+native GetPVarString(playerid, varname[], string_return[], len);
+native Float:GetPVarFloat(playerid, varname[]);
+native DeletePVar(playerid, varname[]);
+native GetPVarType(playerid, varname[]);
+native GetPVarNameAtIndex(playerid, index, ret_varname[], ret_len);
+native GetPVarsUpperIndex(playerid);

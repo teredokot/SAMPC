@@ -86,6 +86,8 @@ CPlayer::CPlayer()
 	m_bHasSpawnInfo = false;
 	m_iScore = 0;
 
+	m_pVariables = new CVariables;
+
 	m_bInCheckpoint = false;
 	m_bInRaceCheckpoint = false;
 	m_byteRaceCheckpointType = -1;
@@ -106,6 +108,11 @@ CPlayer::CPlayer()
 		m_byteSlotWeapon[i] = 0;
 		m_dwSlotAmmo[i] = 0;
 	}
+}
+
+CPlayer::~CPlayer()
+{
+	SAFE_DELETE(m_pVariables);
 }
 
 void CPlayer::SetName(const char* szName, unsigned char ucLength)
