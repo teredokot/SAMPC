@@ -24,15 +24,11 @@
 #include "SocketLayer.h"
 #include "PacketEnumerations.h"
 
-#ifdef SAMPSRV
-#include "../server/main.h"
-#endif
-
 #include <assert.h>
 #include "MTUSize.h"
 
 #include <zlib/zlib.h>
-#define COMPRESS_DECOMPRESS_BUFFERSIZE  50000
+#define COMPRESS_DECOMPRESS_BUFFERSIZE  50000 // TODO?: Do we actually need 50000 bytes?
 
 #ifdef _WIN32
 #include <process.h>
@@ -313,15 +309,13 @@ unsigned long _sendtoCompressedTotal=0;
 
 void SocketLayer::Write( const SOCKET writeSocket, const char* data, const int length )
 {
-	unsigned char pCompressBuffer[COMPRESS_DECOMPRESS_BUFFERSIZE]={0};
-
 #ifdef _DEBUG
 	assert( writeSocket != INVALID_SOCKET );
 #endif
 //----------------------------------------------
 // Kye Added: Zlib in socketlayer headend (client compresses)
-
   #ifndef SAMPSRV
+	unsigned char pCompressBuffer[COMPRESS_DECOMPRESS_BUFFERSIZE] = { 0 };
 	uLongf destLen = COMPRESS_DECOMPRESS_BUFFERSIZE;
 	if(compress2(pCompressBuffer,&destLen,(Bytef *)data,length,1) != Z_OK) {
 		return;
@@ -337,19 +331,15 @@ void SocketLayer::Write( const SOCKET writeSocket, const char* data, const int l
 #ifdef SAMPSRV
 	int ProcessQueryPacket(unsigned int binaryAddress, unsigned short port, char *data, int length, SOCKET s);
 #endif
-    
-unsigned long _recvfromUncompressedTotal=0;
-unsigned long _recvfromCompressedTotal=0;
-unsigned int lastBinaryAddr=0;
-DWORD		 dwLastConnectionTick=0;
-DWORD		 dwLastConnectAddr=0;
+
+//unsigned long _recvfromUncompressedTotal=0;
+//unsigned long _recvfromCompressedTotal=0;
 
 int SocketLayer::RecvFrom( const SOCKET s, RakPeer *rakPeer, int *errorCode )
 {
 	int len;
 	char data[ MAXIMUM_MTU_SIZE ];
 	sockaddr_in sa;
-	unsigned char pDecompressBuffer[COMPRESS_DECOMPRESS_BUFFERSIZE] = {0};
 
 	const socklen_t len2 = sizeof( struct sockaddr_in );
 	sa.sin_family = AF_INET;
@@ -408,26 +398,17 @@ int SocketLayer::RecvFrom( const SOCKET s, RakPeer *rakPeer, int *errorCode )
 		//----------------------------------------------
 		// Kye Added: Zlib in socketlayer headend.
 #ifdef SAMPSRV
+			unsigned char pDecompressBuffer[COMPRESS_DECOMPRESS_BUFFERSIZE] = { 0 };
 			uLongf destLen = COMPRESS_DECOMPRESS_BUFFERSIZE;
 		
-			PlayerID thisPlayerId;
-			thisPlayerId.binaryAddress = sa.sin_addr.s_addr;
-			thisPlayerId.port = portnum;
-
 			if(uncompress(pDecompressBuffer,&destLen,(Bytef *)data,len) != Z_OK) {
 				*errorCode = 0;
 				return 1;
 			}
 
-			_recvfromCompressedTotal+=len;
-			_recvfromUncompressedTotal+=destLen;
+			//_recvfromCompressedTotal+=len;
+			//_recvfromUncompressedTotal+=destLen;
 
-			// Code patch for sampfp DoS
-			if(pDecompressBuffer[0] == ID_OPEN_CONNECTION_REQUEST) {
-				
-			}
-			//logprintf("Decompressed ID: %u",pDecompressBuffer[0]);
-		
 			ProcessNetworkPacket( sa.sin_addr.s_addr, portnum, (char*)pDecompressBuffer, destLen, rakPeer );
 #else
 			ProcessNetworkPacket( sa.sin_addr.s_addr, portnum, data, len, rakPeer );  
@@ -488,8 +469,6 @@ int SocketLayer::RecvFrom( const SOCKET s, RakPeer *rakPeer, int *errorCode )
 
 int SocketLayer::SendTo( SOCKET s, const char *data, int length, unsigned int binaryAddress, unsigned short port )
 {
-	unsigned char pCompressBuffer[COMPRESS_DECOMPRESS_BUFFERSIZE] = {0};
-
 	if ( s == INVALID_SOCKET )
 	{
 		return -1;
@@ -505,28 +484,22 @@ int SocketLayer::SendTo( SOCKET s, const char *data, int length, unsigned int bi
 // Kye Added: Zlib in socketlayer headend. (client sends compressed)
 
 #ifndef SAMPSRV
-
+	unsigned char pCompressBuffer[COMPRESS_DECOMPRESS_BUFFERSIZE] = { 0 };
 	uLongf destLen = COMPRESS_DECOMPRESS_BUFFERSIZE;
 	if(compress2(pCompressBuffer,&destLen,(Bytef *)data,length,1) != Z_OK) {
 		return 1;
 	}
-
 	_sendtoUncompressedTotal+=length;
 	_sendtoCompressedTotal+=destLen;
-
 #endif
 
-	do
-	{
+	do {
 #ifndef SAMPSRV
 		len = sendto( s, (char *)pCompressBuffer, destLen, 0, ( const sockaddr* ) & sa, sizeof( struct sockaddr_in ) );
 #else
 		len = sendto( s, data, length, 0, ( const sockaddr* ) & sa, sizeof( struct sockaddr_in ) );
 #endif
-	}
-	while ( len == 0 );
-
-//----------------------------------------------
+	} while ( len == 0 );
 
 	if ( len != SOCKET_ERROR )
 		return 0;
