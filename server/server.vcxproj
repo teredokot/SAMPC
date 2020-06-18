@@ -220,6 +220,7 @@
     <ClCompile Include="scrcustom.cpp" />
     <ClCompile Include="scrdatabase.cpp" />
     <ClCompile Include="scrtimers.cpp" />
+    <ClCompile Include="sha256.cpp" />
     <ClCompile Include="textdrawpool.cpp" />
     <ClCompile Include="variable.cpp" />
     <ClCompile Include="vehicle.cpp" />
@@ -332,6 +333,7 @@
     <ClInclude Include="runutil.h" />
     <ClInclude Include="scrcore.h" />
     <ClInclude Include="scrtimers.h" />
+    <ClInclude Include="sha256.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="textdrawpool.h" />
     <ClInclude Include="variable.h" />
