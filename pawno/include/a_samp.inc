@@ -346,6 +346,7 @@ native Float:asin(Float:value);
 native Float:acos(Float:value);
 native Float:atan(Float:value);
 native Float:atan2(Float:y, Float:x);
+native SHA256_PassHash(password[], salt[], ret_hash[], ret_hash_len);
 native GetPlayerPoolSize();
 native GetVehiclePoolSize();
 native SetGameModeText(gamemode[]);
