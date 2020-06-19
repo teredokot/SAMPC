@@ -919,12 +919,7 @@ void CPlayer::EnterVehicle(VEHICLEID VehicleID, BYTE bytePassenger)
 	RakNet::BitStream bsVehicle;
 	PlayerID playerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(m_bytePlayerID);
 
-	/*
-	if(bytePassenger) {
-		SetState(PLAYER_STATE_ENTER_VEHICLE_PASSENGER);
-	} else {
-		SetState(PLAYER_STATE_ENTER_VEHICLE_DRIVER);
-	}*/
+	SetState((bytePassenger) ? PLAYER_STATE_ENTER_VEHICLE_PASSENGER : PLAYER_STATE_ENTER_VEHICLE_DRIVER);
 	
 	pNetGame->GetFilterScripts()->OnPlayerEnterVehicle((cell)m_bytePlayerID, (cell)VehicleID, (cell)bytePassenger);
 	CGameMode *pGameMode = pNetGame->GetGameMode();
@@ -945,7 +940,7 @@ void CPlayer::ExitVehicle(VEHICLEID VehicleID)
 	RakNet::BitStream bsVehicle;
 	PlayerID playerid = pNetGame->GetRakServer()->GetPlayerIDFromIndex(m_bytePlayerID);
 
-	//SetState(PLAYER_STATE_EXIT_VEHICLE);
+	SetState(PLAYER_STATE_EXIT_VEHICLE);
 
 	pNetGame->GetFilterScripts()->OnPlayerExitVehicle((cell)m_bytePlayerID, (cell)VehicleID);
 	CGameMode *pGameMode = pNetGame->GetGameMode();
