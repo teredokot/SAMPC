@@ -132,6 +132,7 @@ enum eRPCTable
 	RPC_TypingEvent,
 	RPC_ScrVehicleComponent,
 	RPC_ScrSetGameSpeed,
+	RPC_ClientCheck,
 
 	MAX_RPC_ID_AVAILABLE
 };

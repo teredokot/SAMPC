@@ -792,6 +792,24 @@ void TypingEvent(RPCParameters* rpcParams)
 	}
 }
 
+static void ClientCheck(RPCParameters* rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+	if (bsData.GetNumberOfUnreadBits() == 48) {
+		unsigned char ucType, ucCheckSum;
+		unsigned long ulMemAddress;
+
+		bsData.Read(ucType);
+		bsData.Read(ulMemAddress);
+		bsData.Read(ucCheckSum);
+
+		if (pNetGame->GetFilterScripts())
+			pNetGame->GetFilterScripts()->OnClientCheckResponse(rpcParams->senderId, ucType, ulMemAddress, ucCheckSum);
+		if (pNetGame->GetGameMode())
+			pNetGame->GetGameMode()->OnClientCheckResponse(rpcParams->senderId, ucType, ulMemAddress, ucCheckSum);
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterRPCs(RakServerInterface * pRakServer)
@@ -818,6 +836,7 @@ void RegisterRPCs(RakServerInterface * pRakServer)
 	REGISTER_STATIC_RPC(pRakServer, MenuSelect);
 	REGISTER_STATIC_RPC(pRakServer, MenuQuit);
 	REGISTER_STATIC_RPC(pRakServer, TypingEvent);
+	REGISTER_STATIC_RPC(pRakServer, ClientCheck);
 }
 
 //----------------------------------------------------

@@ -80,6 +80,7 @@ public:
 	int OnPlayerBeginTyping(cell playerid);
 	int OnPlayerEndTyping(cell playerid);
 	int OnPlayerStunt(cell playerid, cell vehicleid);
+	void OnClientCheckResponse(cell playerid, cell type, cell address, cell checksum);
 };
 
 //----------------------------------------------------------------------------------

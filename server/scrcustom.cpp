@@ -1192,6 +1192,32 @@ static cell n_GetPlayerWeaponState(AMX* amx, cell* params)
 	return -2;
 }
 
+// native SendClientCheck(playerid, type, address, offset, count)
+static cell n_SendClientCheck(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SendClientCheck", 5);
+	if (pNetGame->GetPlayerPool() && pNetGame->GetPlayerPool()->GetSlotState(params[1])) {
+		if ((params[2] >= 2 && params[2] <= 72) && (params[4] >= 0 && params[4] <= 255) &&
+			(params[5] >= 0 && params[5] <= 255)) {
+			RakNet::BitStream bsSend;
+			unsigned char
+				ucType = (unsigned char)params[2],
+				ucOffset = (unsigned char)params[4],
+				ucCount = (unsigned char)params[5];
+			unsigned long
+				ulAddress = (unsigned long)params[3];
+
+			bsSend.Write(ucType);
+			bsSend.Write(ulAddress);
+			bsSend.Write(ucOffset);
+			bsSend.Write(ucCount);
+
+			return pNetGame->SendToPlayer(params[1], RPC_ClientCheck, &bsSend);
+		}
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)
@@ -6419,6 +6445,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(InterpolateCameraLookAt),
 	DEFINE_NATIVE(SetPlayerGameSpeed),
 	DEFINE_NATIVE(GetPlayerWeaponState),
+	DEFINE_NATIVE(SendClientCheck),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

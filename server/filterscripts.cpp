@@ -1195,3 +1195,22 @@ int CFilterScripts::OnPlayerStunt(cell playerid, cell vehicleid)
 	}
 	return 1;
 }
+
+void CFilterScripts::OnClientCheckResponse(cell playerid, cell type, cell address, cell checksum)
+{
+	int idx = 0;
+	for (unsigned i = 0; i < MAX_FILTER_SCRIPTS; i++)
+	{
+		if (m_pFilterScripts[i] == NULL)
+			continue;
+
+		if (!amx_FindPublic(m_pFilterScripts[i], "OnClientCheckResponse", &idx))
+		{
+			amx_Push(m_pFilterScripts[i], checksum);
+			amx_Push(m_pFilterScripts[i], address);
+			amx_Push(m_pFilterScripts[i], type);
+			amx_Push(m_pFilterScripts[i], playerid);
+			amx_Exec(m_pFilterScripts[i], NULL, idx);
+		}
+	}
+}

@@ -900,3 +900,20 @@ int CGameMode::OnPlayerStunt(cell playerid, cell vehicleid)
 	}
 	return 1;
 }
+
+void CGameMode::OnClientCheckResponse(cell playerid, cell type, cell address, cell checksum)
+{
+	int idx = 0;
+
+	if (!m_bInitialised)
+		return;
+
+	if (!amx_FindPublic(&m_amx, "OnClientCheckResponse", &idx))
+	{
+		amx_Push(&m_amx, checksum);
+		amx_Push(&m_amx, address);
+		amx_Push(&m_amx, type);
+		amx_Push(&m_amx, playerid);
+		amx_Exec(&m_amx, NULL, idx);
+	}
+}

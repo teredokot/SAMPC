@@ -159,6 +159,7 @@ native InterpolateCameraLookAt(playerid, Float:FromX, Float:FromY, Float:FromZ, 
 native SetPlayerBlurLevel(playerid, blur_level);
 native SetPlayerGameSpeed(playerid, Float:speed);
 native GetPlayerWeaponState(playerid);
+native SendClientCheck(playerid, type, address, offset, count);
 
 native SetPVarInt(playerid, varname[], int_value);
 native SetPVarString(playerid, varname[], string_value[]);

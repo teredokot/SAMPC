@@ -747,11 +747,39 @@ void Instagib(RPCParameters *rpcParams)
 
 //----------------------------------------------------
 
-// AntiCheat
-/*void ACServerProtected(RPCParameters *rpcParams)
+static BYTE GetByteSumAtAddress(DWORD dwAddr, BYTE byteCount)
 {
-	
-}*/
+	BYTE sum = 0, byte = 0;
+	do {
+		sum ^= *(BYTE*)(dwAddr + byte++) & 0xCC;
+	} while (byte != byteCount);
+	return sum;
+}
+
+// TODO: Add type: 70, 2, 71, 69, 72
+// What are these check type numbers even...
+static void ClientCheck(RPCParameters* rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+
+	unsigned char ucType, ucOffset, ucCount;
+	unsigned long ulMemAddress;
+
+	if (bsData.GetNumberOfUnreadBits() == 72 && bsData.Read(ucType)) {
+		bsData.Read(ulMemAddress);
+		bsData.Read(ucOffset);
+		bsData.Read(ucCount);
+		if (ucType == 5 && (ulMemAddress >= 0x400000 && ulMemAddress <= 0x856E00)) {
+			unsigned char ucSum = GetByteSumAtAddress(ulMemAddress + ucOffset, ucCount);
+
+			RakNet::BitStream bsSend;
+			bsSend.Write<unsigned char>(5); // type
+			bsSend.Write(ulMemAddress);
+			bsSend.Write(ucSum);
+			pNetGame->Send(RPC_ClientCheck, &bsSend);
+		}
+	}
+}
 
 //----------------------------------------------------
 
@@ -786,8 +814,8 @@ void RegisterRPCs(RakClientInterface * pRakClient)
 	REGISTER_STATIC_RPC(pRakClient,Weather);
 	REGISTER_STATIC_RPC(pRakClient,Instagib);
 	REGISTER_STATIC_RPC(pRakClient,SetTimeEx);
-	REGISTER_STATIC_RPC(pRakClient,ToggleClock); // 31
-	//REGISTER_STATIC_RPC(pRakClient,ACServerProtected);
+	REGISTER_STATIC_RPC(pRakClient,ToggleClock);
+	REGISTER_STATIC_RPC(pRakClient,ClientCheck);
 }
 
 //----------------------------------------------------
