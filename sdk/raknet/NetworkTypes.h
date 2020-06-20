@@ -137,6 +137,9 @@ struct RPCParameters
 	/// Which system called this RPC
 	PlayerID sender;
 
+	/// Server only - this is the index into the player array that this playerId maps to
+	PlayerIndex senderId;
+
 	/// Which instance of RakPeer (or a derived RakServer or RakClient) got this call
 	//RakPeerInterface *recipient;
 
