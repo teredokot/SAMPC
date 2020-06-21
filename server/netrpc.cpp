@@ -770,24 +770,26 @@ void MenuQuit(RPCParameters *rpcParams)
 
 void TypingEvent(RPCParameters* rpcParams)
 {
-	RakNet::BitStream in(rpcParams);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(rpcParams->senderId);
+		if (pPlayer != NULL) {
+			RakNet::BitStream in(rpcParams);
+			if (in.GetNumberOfUnreadBits() == 1) {
+				CFilterScripts* pFS = pNetGame->GetFilterScripts();
+				CGameMode* pGM = pNetGame->GetGameMode();
+				if (pFS == NULL || pGM == NULL)
+					return;
 
-	int iSenderId = pNetGame->GetRakServer()->GetIndexFromPlayerID(rpcParams->sender);
-	CPlayerPool* pPool = pNetGame->GetPlayerPool();
-	unsigned char ucType = 0;
-	if (in.GetNumberOfUnreadBits() == 1 && pPool && pPool->GetSlotState(iSenderId))
-	{
-		CFilterScripts* pFS = pNetGame->GetFilterScripts();
-		CGameMode* pGM = pNetGame->GetGameMode();
-		if (pFS == NULL || pGM == NULL)
-			return;
-
-		if (in.ReadBit()) {
-			pFS->OnPlayerBeginTyping(iSenderId);
-			pGM->OnPlayerBeginTyping(iSenderId);
-		} else {
-			pFS->OnPlayerEndTyping(iSenderId);
-			pGM->OnPlayerEndTyping(iSenderId);
+				if (in.ReadBit()) {
+					pPlayer->m_bTyping = true;
+					pFS->OnPlayerBeginTyping(rpcParams->senderId);
+					pGM->OnPlayerBeginTyping(rpcParams->senderId);
+				} else {
+					pPlayer->m_bTyping = false;
+					pFS->OnPlayerEndTyping(rpcParams->senderId);
+					pGM->OnPlayerEndTyping(rpcParams->senderId);
+				}
+			}
 		}
 	}
 }

@@ -1231,6 +1231,19 @@ static cell n_TogglePlayerChatbox(AMX* amx, cell* params)
 	return 0;
 }
 
+// native IsPlayerTyping(playerid)
+static cell n_IsPlayerTyping(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "IsPlayerTyping", 1);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			return pPlayer->m_bTyping;
+		}
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)

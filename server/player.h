@@ -60,6 +60,7 @@ public:
 	bool					m_bIsAdmin;
 	int						m_iMoney;
 	int						m_iScore;
+	bool					m_bTyping;
 
 	// Weapon data
 	DWORD					m_dwSlotAmmo[13];
