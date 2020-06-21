@@ -1231,6 +1231,19 @@ static cell n_TogglePlayerChatbox(AMX* amx, cell* params)
 	return 0;
 }
 
+// native TogglePlayerWidescreen(playerid, on)
+static cell n_TogglePlayerWidescreen(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "TogglePlayerWidescreen", 2);
+
+	if (pNetGame->GetPlayerPool() && pNetGame->GetPlayerPool()->GetSlotState(params[1])) {
+		RakNet::BitStream bsSend;
+		bsSend.Write(params[2] ? true : false);
+		return pNetGame->SendToPlayer(params[1], RPC_ScrToggleWidescreen, &bsSend);
+	}
+	return 0;
+}
+
 // native IsPlayerTyping(playerid)
 static cell n_IsPlayerTyping(AMX* amx, cell* params)
 {
@@ -6473,6 +6486,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerWeaponState),
 	DEFINE_NATIVE(SendClientCheck),
 	DEFINE_NATIVE(TogglePlayerChatbox),
+	DEFINE_NATIVE(TogglePlayerWidescreen),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

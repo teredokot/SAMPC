@@ -134,6 +134,7 @@ enum eRPCTable
 	RPC_ScrSetGameSpeed,
 	RPC_ClientCheck,
 	RPC_ScrToggleChatbox,
+	RPC_ScrToggleWidescreen,
 
 	MAX_RPC_ID_AVAILABLE
 };

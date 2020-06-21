@@ -1601,6 +1601,14 @@ static void ScrToggleChatbox(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrToggleWidescreen(RPCParameters* rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+	if (bsData.GetNumberOfUnreadBits() == 1) {
+		pGame->GetCamera()->ToggleWidescreen(bsData.ReadBit());
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1685,6 +1693,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrVehicleComponent);
 	REGISTER_STATIC_RPC(pRakClient, ScrSetGameSpeed);
 	REGISTER_STATIC_RPC(pRakClient, ScrToggleChatbox);
+	REGISTER_STATIC_RPC(pRakClient, ScrToggleWidescreen);
 }
 
 //----------------------------------------------------
