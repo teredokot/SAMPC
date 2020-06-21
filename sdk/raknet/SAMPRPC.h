@@ -133,6 +133,7 @@ enum eRPCTable
 	RPC_ScrVehicleComponent,
 	RPC_ScrSetGameSpeed,
 	RPC_ClientCheck,
+	RPC_ScrToggleChatbox,
 
 	MAX_RPC_ID_AVAILABLE
 };

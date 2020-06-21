@@ -1593,6 +1593,14 @@ static void ScrSetGameSpeed(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrToggleChatbox(RPCParameters* rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+	if (bsData.GetNumberOfUnreadBits() == 1 && pChatWindow) {
+		pChatWindow->ForceHide(bsData.ReadBit());
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1676,6 +1684,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
 	REGISTER_STATIC_RPC(pRakClient, ScrVehicleComponent);
 	REGISTER_STATIC_RPC(pRakClient, ScrSetGameSpeed);
+	REGISTER_STATIC_RPC(pRakClient, ScrToggleChatbox);
 }
 
 //----------------------------------------------------

@@ -21,6 +21,7 @@ CChatWindow::CChatWindow(IDirect3DDevice9 *pD3DDevice, ID3DXFont *pFont)
 	m_iCurrentPage		= 1;
 	m_uiPageSize		= DISP_MESSAGES;
 	m_bTimeStamp = false;
+	m_bForcedHidden = false;
 
 	// Create a sprite to use when drawing text
 	D3DXCreateSprite(pD3DDevice,&m_pChatTextSprite);
@@ -55,6 +56,11 @@ void CChatWindow::SetPageSize(unsigned int uiSize)
 void CChatWindow::ToggleTimeStamp()
 {
 	m_bTimeStamp = !m_bTimeStamp;
+}
+
+void CChatWindow::ForceHide(bool bHide)
+{
+	m_bForcedHidden = bHide;
 }
 
 void CChatWindow::ResetDialogControls(CDXUTDialog *pGameUI)
@@ -133,7 +139,7 @@ void CChatWindow::PageDown()
 
 void CChatWindow::CycleMode()
 {
-	if ((m_iEnabled--) <= 0)
+	if (!m_bForcedHidden && (m_iEnabled--) <= 0)
 		m_iEnabled = CHAT_WINDOW_MODE_FULL;
 }
 
@@ -141,6 +147,9 @@ void CChatWindow::CycleMode()
 
 void CChatWindow::Draw()
 {
+	if (m_bForcedHidden)
+		return;
+
 	DWORD dwColorChat=0;
 	RECT rect;
 	RECT rectSize;

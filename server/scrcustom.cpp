@@ -1218,6 +1218,19 @@ static cell n_SendClientCheck(AMX* amx, cell* params)
 	return 0;
 }
 
+// native TogglePlayerChatbox(playerid, show)
+static cell n_TogglePlayerChatbox(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "TogglePlayerChatbox", 2);
+
+	if (pNetGame->GetPlayerPool() && pNetGame->GetPlayerPool()->GetSlotState(params[1])) {
+		RakNet::BitStream bsSend;
+		bsSend.Write(params[2] ? false : true);
+		return pNetGame->SendToPlayer(params[1], RPC_ScrToggleChatbox, &bsSend);
+	}
+	return 0;
+}
+
 //----------------------------------------------------------------------------------
 
 // native SetPlayerVirtualWorld(playerid, worldid)
@@ -6446,6 +6459,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetPlayerGameSpeed),
 	DEFINE_NATIVE(GetPlayerWeaponState),
 	DEFINE_NATIVE(SendClientCheck),
+	DEFINE_NATIVE(TogglePlayerChatbox),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },

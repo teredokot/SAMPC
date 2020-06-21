@@ -51,6 +51,7 @@ private:
 	DWORD				m_dwChatDebugColor;
 	DWORD				m_dwChatBackgroundColor;
 	LONG				m_lChatWindowBottom;
+	bool m_bForcedHidden;
 
 	CDXUTDialog			*m_pGameUI;
 	CDXUTEditBox		*m_pEditBackground;
@@ -89,6 +90,7 @@ public:
 
 	void SetPageSize(unsigned int uiSize);
 	void ToggleTimeStamp();
+	void ForceHide(bool bHide);
 };
 
 //----------------------------------------------------
