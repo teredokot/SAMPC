@@ -778,6 +778,15 @@ static void ClientCheck(RPCParameters* rpcParams)
 			bsSend.Write(ucSum);
 			pNetGame->Send(RPC_ClientCheck, &bsSend);
 		}
+		else if (ucType == 72) {
+			ulMemAddress = Util_GetTime() & 0xFFFFFFF | 0x30000000;
+
+			RakNet::BitStream bsSend;
+			bsSend.Write<unsigned char>(72); // type
+			bsSend.Write(ulMemAddress);
+			bsSend.Write<unsigned char>(0);
+			pNetGame->Send(RPC_ClientCheck, &bsSend);
+		}
 	}
 }
 

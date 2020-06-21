@@ -264,6 +264,8 @@ void DoInitStuff()
 	{	
 		OutputDebugString("Start of DoInitStuff()");
 
+		Util_GetTime();
+
 		timeBeginPeriod(5); // increases the accuracy of Sleep()
 		SubclassGameWindow();
 

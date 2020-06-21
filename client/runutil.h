@@ -21,4 +21,6 @@ void Util_Base64Encode( char *cpInput, char *cpOutput );
 char * K_DecodeString(unsigned char *szInput);
 void K_EncodeString(char *szInput, char *szOutput);
 
+unsigned long Util_GetTime();
+
 //----------------------------------------------------
