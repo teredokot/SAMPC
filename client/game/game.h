@@ -168,6 +168,9 @@ public:
 	~CGame() {};
 
 	void DisableCamera(bool bDisable);
+
+	static float GetFPS();
+	static float GetAspectRatio();
 };
 
 //-----------------------------------------------------------

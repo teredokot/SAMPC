@@ -5435,6 +5435,22 @@ static cell n_GetPlayerCameraMode(AMX* amx, cell* params)
 	return -1;
 }
 
+// native GetPlayerCameraAspectRatio(playerid)
+static cell n_GetPlayerCameraAspectRatio(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerCameraAspectRatio", 1);
+
+	float fRet = 0.0f;
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			fRet = pPlayer->GetAimSyncData()->ucAspectRatio * 0.0039215689 + 1.0;
+			return amx_ftoc(fRet);
+		}
+	}
+	return amx_ftoc(fRet);
+}
+
 // native SetPlayerArmedWeapon(playerid, weaponid)
 static cell n_SetPlayerArmedWeapon(AMX* amx, cell* params)
 {
@@ -6477,6 +6493,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerSurfingVehicleID),
 	DEFINE_NATIVE(GetPlayerVehicleSeat),
 	DEFINE_NATIVE(GetPlayerCameraMode),
+	DEFINE_NATIVE(GetPlayerCameraAspectRatio),
 	DEFINE_NATIVE(SetPlayerArmedWeapon),
 	DEFINE_NATIVE(SetPlayerFightingStyle),
 	DEFINE_NATIVE(SetPlayerMaxHealth),

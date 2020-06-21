@@ -919,5 +919,14 @@ void CGame::DisableCamera(bool bDisable)
 		*(BYTE*)0x531140 = 0x83; // sub (keyboard event process)
 		SetCursor(NULL);
 	}
-	
+}
+
+float CGame::GetFPS()
+{
+	return *(float*)0xB7CB50;
+}
+
+float CGame::GetAspectRatio()
+{
+	return *(float*)0xC3EFA4;
 }

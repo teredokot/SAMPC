@@ -215,6 +215,7 @@ typedef struct {
 	VECTOR vecAimf2;
 	VECTOR vecAimPos;
 	float fAimZ;
+	unsigned char ucAspectRatio;
 } AIM_SYNC_DATA;
 
 typedef struct {

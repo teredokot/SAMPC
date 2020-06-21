@@ -673,6 +673,8 @@ void CLocalPlayer::SendAimSyncData()
 	aimSync.vecAimPos.Z = caAim->pos1z;
 
 	aimSync.fAimZ = m_pPlayerPed->GetAimZ();
+
+	aimSync.ucAspectRatio = (unsigned char)((CGame::GetAspectRatio() - 1.0f) * 255.0f);
 	
 	aimSync.byteCamExtZoom = (BYTE)(m_pPlayerPed->GetCameraExtendedZoom() * 63.0f);
 	
