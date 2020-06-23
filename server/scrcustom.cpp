@@ -965,9 +965,8 @@ static cell n_ForceClassSelection(AMX *amx, cell *params)
 	CHECK_PARAMS(amx, "ForceClassSelection", 1);
 	if (pNetGame->GetPlayerPool()->GetSlotState(params[1]))
 	{
-		RakNet::BitStream bsData;
 		RakServerInterface *pRak = pNetGame->GetRakServer();
-		pRak->RPC(RPC_ScrForceSpawnSelection , &bsData, HIGH_PRIORITY, RELIABLE, 0, pRak->GetPlayerIDFromIndex((int)params[1]), false, false);
+		pRak->RPC(RPC_ScrForceSpawnSelection , NULL, HIGH_PRIORITY, RELIABLE, 0, pRak->GetPlayerIDFromIndex((int)params[1]), false, false);
 		return 1;
 	} else {
 		return 0;
@@ -1771,10 +1770,9 @@ static cell n_RemovePlayerFromVehicle(AMX *amx, cell *params)
 	CHECK_PARAMS(amx, "RemovePlayerFromVehicle", 1);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
-	RakNet::BitStream bsParams;
 
 	RakServerInterface *pRak = pNetGame->GetRakServer();
-	pNetGame->GetRakServer()->RPC(RPC_ScrRemovePlayerFromVehicle , &bsParams, HIGH_PRIORITY,
+	pNetGame->GetRakServer()->RPC(RPC_ScrRemovePlayerFromVehicle, NULL, HIGH_PRIORITY,
 		RELIABLE, 0, pRak->GetPlayerIDFromIndex(params[1]), false, false);
 
 	return 1;
@@ -2985,9 +2983,8 @@ static cell n_SetCameraBehindPlayer(AMX *amx, cell *params)
 {	
 	CHECK_PARAMS(amx, "SetCameraBehindPlayer", 1);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
-	RakNet::BitStream bsParams;
 	RakServerInterface* pRak = pNetGame->GetRakServer();
-	pRak->RPC(RPC_ScrSetCameraBehindPlayer , &bsParams, HIGH_PRIORITY, RELIABLE, 0,
+	pRak->RPC(RPC_ScrSetCameraBehindPlayer, NULL, HIGH_PRIORITY, RELIABLE, 0,
 		pRak->GetPlayerIDFromIndex(params[1]), false, false);
 
 	return 1;
@@ -3118,8 +3115,7 @@ static cell n_ResetPlayerMoney(AMX *amx, cell *params)
 	if (pNetGame->GetPlayerPool()) {
 		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 		if (pPlayer != nullptr) {
-			RakNet::BitStream bsMoney;
-			if (pNetGame->SendToPlayer(params[1], RPC_ScrResetMoney, &bsMoney)) {
+			if (pNetGame->SendToPlayer(params[1], RPC_ScrResetMoney, NULL)) {
 				pPlayer->m_iMoney = 0;
 				return 1;
 			}
@@ -3290,8 +3286,7 @@ static cell n_ResetPlayerWeapons(AMX *amx, cell *params)
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 
-	RakNet::BitStream bsData;
-	pNetGame->GetRakServer()->RPC(RPC_ScrResetPlayerWeapons , &bsData, HIGH_PRIORITY, 
+	pNetGame->GetRakServer()->RPC(RPC_ScrResetPlayerWeapons, NULL, HIGH_PRIORITY, 
 		RELIABLE, 0, pNetGame->GetRakServer()->GetPlayerIDFromIndex(params[1]), false, false);
 	return 1;
 }

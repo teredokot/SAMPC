@@ -764,8 +764,7 @@ void CNetGame::UpdatePlayerScoresAndPings()
 
 	if ((GetTickCount() - dwLastUpdateTick) > 3000) {
 		dwLastUpdateTick = GetTickCount();
-		RakNet::BitStream bsParams;
-		m_pRakClient->RPC(RPC_UpdateScoresPingsIPs, &bsParams, HIGH_PRIORITY, RELIABLE, 0, false);
+		m_pRakClient->RPC(RPC_UpdateScoresPingsIPs, NULL, HIGH_PRIORITY, RELIABLE, 0, false);
 	}
 }
 

@@ -424,7 +424,7 @@ void UpdateScoresPingsIPs(RPCParameters *rpcParams)
 {
 	PlayerID sender = rpcParams->sender;
 
-	RakNet::BitStream bsData(rpcParams);
+	//RakNet::BitStream bsData(rpcParams);
 
 	RakNet::BitStream bsParams;
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();

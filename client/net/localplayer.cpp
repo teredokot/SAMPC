@@ -975,8 +975,7 @@ void CLocalPlayer::RequestClass(int iClass)
 
 void CLocalPlayer::RequestSpawn()
 {
-	RakNet::BitStream bsSpawnRequest;
-	pNetGame->GetRakClient()->RPC(RPC_RequestSpawn,&bsSpawnRequest,HIGH_PRIORITY,RELIABLE,0,false);
+	pNetGame->Send(RPC_RequestSpawn, NULL);
 }
 
 //----------------------------------------------------------
@@ -1060,8 +1059,7 @@ bool CLocalPlayer::Spawn()
 	m_bWaitingForSpawnRequestReply = false;
 
 	// Let the rest of the network know we're spawning.
-	RakNet::BitStream bsSendSpawn;
-	pNetGame->GetRakClient()->RPC(RPC_Spawn,&bsSendSpawn,HIGH_PRIORITY,
+	pNetGame->GetRakClient()->RPC(RPC_Spawn,NULL,HIGH_PRIORITY,
 		RELIABLE_SEQUENCED,0,false);
 
 	m_iDisplayZoneTick = GetTickCount() + 1000;

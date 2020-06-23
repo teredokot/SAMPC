@@ -1223,9 +1223,8 @@ void CNetGame::ProcessClientJoin(BYTE bytePlayerID)
 		InitGameForPlayer(bytePlayerID);
 		m_pPlayerPool->InitPlayersForPlayer(bytePlayerID); // let them know who's on the server
 		// Tell them that the world is currently restarting.
-		RakNet::BitStream bsParams;
 		PlayerID sender = m_pRak->GetPlayerIDFromIndex(bytePlayerID);
-		m_pRak->RPC(RPC_GameModeRestart, &bsParams, HIGH_PRIORITY,
+		m_pRak->RPC(RPC_GameModeRestart, NULL, HIGH_PRIORITY,
 			RELIABLE,0,sender,false,false);
 	}
 	

@@ -1010,7 +1010,7 @@ void CPlayer::ToggleCheckpoint(bool bEnabled)
 		pRak->RPC(RPC_SetCheckpoint, &bsParams, HIGH_PRIORITY, RELIABLE, 0,
 			pRak->GetPlayerIDFromIndex(m_bytePlayerID), false, false);
 	} else {
-		pRak->RPC(RPC_DisableCheckpoint, &bsParams, HIGH_PRIORITY, RELIABLE, 0,
+		pRak->RPC(RPC_DisableCheckpoint, NULL, HIGH_PRIORITY, RELIABLE, 0,
 			pRak->GetPlayerIDFromIndex(m_bytePlayerID), false, false);
 	}
 }
@@ -1082,7 +1082,7 @@ void CPlayer::ToggleRaceCheckpoint(bool bEnabled)
 		pRak->RPC(RPC_SetRaceCheckpoint, &bsParams, HIGH_PRIORITY, RELIABLE, 0,
 			pRak->GetPlayerIDFromIndex(m_bytePlayerID), false, false);
 	} else {
-		pRak->RPC(RPC_DisableRaceCheckpoint, &bsParams, HIGH_PRIORITY, RELIABLE, 0,
+		pRak->RPC(RPC_DisableRaceCheckpoint, NULL, HIGH_PRIORITY, RELIABLE, 0,
 			pRak->GetPlayerIDFromIndex(m_bytePlayerID), false, false);
 	}
 }

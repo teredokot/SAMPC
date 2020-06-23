@@ -213,7 +213,7 @@ void ScrPutPlayerInVehicle(RPCParameters *rpcParams)
 
 void ScrRemovePlayerFromVehicle(RPCParameters *rpcParams)
 {
-	RakNet::BitStream bsData(rpcParams);
+	//RakNet::BitStream bsData(rpcParams);
 
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 	pPlayerPool->GetLocalPlayer()->GetPlayerPed()->ExitCurrentVehicle();
