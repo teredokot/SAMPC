@@ -128,10 +128,10 @@ void CEntity::SetModelIndex(UINT uiModel)
 {
 	if(!m_pEntity) return;
 
-	if(!pGame->IsModelLoaded(uiModel)) {
-		pGame->RequestModel(uiModel);
-		pGame->LoadRequestedModels();
-		while(!pGame->IsModelLoaded(uiModel)) Sleep(1);
+	if(!CGame::IsModelLoaded(uiModel)) {
+		CGame::RequestModel(uiModel);
+		CGame::LoadRequestedModels();
+		while(!CGame::IsModelLoaded(uiModel)) Sleep(1);
 	}
 
 	DWORD dwThisEntity = (DWORD)m_pEntity;
@@ -149,8 +149,6 @@ void CEntity::SetModelIndex(UINT uiModel)
 		mov     word ptr [esi+34], dx
 		call    dword ptr [eax+20] ; SetModelIndex
 	}
-
-	pGame->RemoveModel(uiModel);
 }
 
 //-----------------------------------------------------------

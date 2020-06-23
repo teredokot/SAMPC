@@ -726,10 +726,10 @@ void CPlayerPed::GiveWeapon(int iWeaponID, int iAmmo)
 
 	if(iModelID == -1) return;
 
-	if(!pGame->IsModelLoaded(iModelID)) {
-		pGame->RequestModel(iModelID);
-		pGame->LoadRequestedModels();
-		while(!pGame->IsModelLoaded(iModelID)) Sleep(1);
+	if(!CGame::IsModelLoaded(iModelID)) {
+		CGame::RequestModel(iModelID);
+		CGame::LoadRequestedModels();
+		while(!CGame::IsModelLoaded(iModelID)) Sleep(1);
 	}
 
 	//ScriptCommand(&give_actor_weapon,this->m_dwGTAId,iWeaponID,iAmmo);
@@ -1379,9 +1379,9 @@ void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 		//szAnimName,szAnimFile,fT,opt1,opt2,opt3,opt4,iUnk);
 #endif
 
-	if (!pGame->IsAnimationLoaded(szAnimFile)) {
-		pGame->RequestAnimation(szAnimFile);
-		while(!pGame->IsAnimationLoaded(szAnimFile)) {
+	if (!CGame::IsAnimationLoaded(szAnimFile)) {
+		CGame::RequestAnimation(szAnimFile);
+		while(!CGame::IsAnimationLoaded(szAnimFile)) {
 			Sleep(5);
 			iWaitAnimLoad++;
 			if(iWaitAnimLoad == 10) return; // we can't wait forever

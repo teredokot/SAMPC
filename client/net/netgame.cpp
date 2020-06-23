@@ -203,28 +203,28 @@ void CNetGame::Process()
 	pGame->SetWorldWeather(m_byteWeather);
 
 	// KEEP THE FOLLOWING ANIMS LOADED DURING THE NETGAME
-	if(!pGame->IsAnimationLoaded("PARACHUTE")) pGame->RequestAnimation("PARACHUTE");
-	if(!pGame->IsAnimationLoaded("DANCING")) pGame->RequestAnimation("DANCING");
-	if(!pGame->IsAnimationLoaded("GFUNK")) pGame->RequestAnimation("GFUNK");
-	if(!pGame->IsAnimationLoaded("RUNNINGMAN"))	pGame->RequestAnimation("RUNNINGMAN");
-    if(!pGame->IsAnimationLoaded("WOP")) pGame->RequestAnimation("WOP");
-	if(!pGame->IsAnimationLoaded("STRIP")) pGame->RequestAnimation("STRIP");
-	if(!pGame->IsAnimationLoaded("PAULNMAC")) pGame->RequestAnimation("PAULNMAC");
+	if(!CGame::IsAnimationLoaded("PARACHUTE")) CGame::RequestAnimation("PARACHUTE");
+	if(!CGame::IsAnimationLoaded("DANCING")) CGame::RequestAnimation("DANCING");
+	if(!CGame::IsAnimationLoaded("GFUNK")) CGame::RequestAnimation("GFUNK");
+	if(!CGame::IsAnimationLoaded("RUNNINGMAN"))	CGame::RequestAnimation("RUNNINGMAN");
+	if(!CGame::IsAnimationLoaded("WOP")) CGame::RequestAnimation("WOP");
+	if(!CGame::IsAnimationLoaded("STRIP")) CGame::RequestAnimation("STRIP");
+	if(!CGame::IsAnimationLoaded("PAULNMAC")) CGame::RequestAnimation("PAULNMAC");
 				
-	if(!pGame->IsModelLoaded(OBJECT_PARACHUTE)) {
-		pGame->RequestModel(OBJECT_PARACHUTE);
+	if(!CGame::IsModelLoaded(OBJECT_PARACHUTE)) {
+		CGame::RequestModel(OBJECT_PARACHUTE);
 	}
 
 	// keep the throwable weapon models loaded
-	if (!pGame->IsModelLoaded(WEAPON_MODEL_TEARGAS))
-		pGame->RequestModel(WEAPON_MODEL_TEARGAS);
-	if (!pGame->IsModelLoaded(WEAPON_MODEL_GRENADE))
-		pGame->RequestModel(WEAPON_MODEL_GRENADE);
-	if (!pGame->IsModelLoaded(WEAPON_MODEL_MOLTOV))
-		pGame->RequestModel(WEAPON_MODEL_MOLTOV);
+	if (!CGame::IsModelLoaded(WEAPON_MODEL_TEARGAS))
+		CGame::RequestModel(WEAPON_MODEL_TEARGAS);
+	if (!CGame::IsModelLoaded(WEAPON_MODEL_GRENADE))
+		CGame::RequestModel(WEAPON_MODEL_GRENADE);
+	if (!CGame::IsModelLoaded(WEAPON_MODEL_MOLTOV))
+		CGame::RequestModel(WEAPON_MODEL_MOLTOV);
 
 	// cellphone
-	if (!pGame->IsModelLoaded(330)) pGame->RequestModel(330);
+	if (!CGame::IsModelLoaded(330)) CGame::RequestModel(330);
 
 	if(GetGameState() == GAMESTATE_CONNECTED) {
 

@@ -40,10 +40,10 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		(iType != TRAIN_TRAM)) {
 
 		// NORMAL VEHICLE
-		if(!pGame->IsModelLoaded(iType)) {
-			pGame->RequestModel(iType);
-			pGame->LoadRequestedModels();
-			while(!pGame->IsModelLoaded(iType)) Sleep(5);
+		if(!CGame::IsModelLoaded(iType)) {
+			CGame::RequestModel(iType);
+			CGame::LoadRequestedModels();
+			while(!CGame::IsModelLoaded(iType)) Sleep(5);
 		}
 
 		if (szNumberPlate && szNumberPlate[0]) 
@@ -64,8 +64,7 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		m_pVehicle->dwDoorsLocked = 0;
 		m_bIsLocked = FALSE;
 		
-		Remove(); // They'll be added manually during pool processing.
-		pGame->RemoveModel(iType);						
+		Remove(); // They'll be added manually during pool processing.					
 	}
 	else if( (iType == TRAIN_PASSENGER_LOCO) || 
 		(iType == TRAIN_FREIGHT_LOCO) ||
@@ -93,9 +92,9 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 			15 538 0   0   0   0   0   0  0  0  0  0  0  0  0  0  0
 		*/
 
-		pGame->RequestModel(iType);
-		pGame->LoadRequestedModels();
-		while (!pGame->IsModelLoaded(iType)) Sleep(1);
+		CGame::RequestModel(iType);
+		CGame::LoadRequestedModels();
+		while (!CGame::IsModelLoaded(iType)) Sleep(1);
 
 		if (iType == TRAIN_PASSENGER_LOCO) iType = 10; // 5
 		else if (iType == TRAIN_FREIGHT_LOCO) iType = 15; // 3
@@ -105,17 +104,17 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		if(fRotation != 0.0f) {
 			dwDirection = 1;
 		}
-		pGame->RequestModel(TRAIN_PASSENGER_LOCO);
-		pGame->RequestModel(TRAIN_PASSENGER);
-		pGame->RequestModel(TRAIN_FREIGHT_LOCO);
-		pGame->RequestModel(TRAIN_FREIGHT);
-		pGame->RequestModel(TRAIN_TRAM);
-		pGame->LoadRequestedModels();
-		while(!pGame->IsModelLoaded(TRAIN_PASSENGER_LOCO)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_PASSENGER)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_FREIGHT_LOCO)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_FREIGHT)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_TRAM)) Sleep(1);*/
+		CGame::RequestModel(TRAIN_PASSENGER_LOCO);
+		CGame::RequestModel(TRAIN_PASSENGER);
+		CGame::RequestModel(TRAIN_FREIGHT_LOCO);
+		CGame::RequestModel(TRAIN_FREIGHT);
+		CGame::RequestModel(TRAIN_TRAM);
+		CGame::LoadRequestedModels();
+		while(!CGame::IsModelLoaded(TRAIN_PASSENGER_LOCO)) Sleep(1);
+		while(!CGame::IsModelLoaded(TRAIN_PASSENGER)) Sleep(1);
+		while(!CGame::IsModelLoaded(TRAIN_FREIGHT_LOCO)) Sleep(1);
+		while(!CGame::IsModelLoaded(TRAIN_FREIGHT)) Sleep(1);
+		while(!CGame::IsModelLoaded(TRAIN_TRAM)) Sleep(1);*/
 	
 		ScriptCommand(&create_train,iType,fPosX,fPosY,fPosZ,fRotation!=0.0f,&dwRetID);
 
@@ -127,10 +126,10 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		GamePrepareTrain(m_pVehicle);
 		//ScriptCommand(&set_train_flag, &dwRetID, 0);
 
-		//pGame->RemoveModel(TRAIN_PASSENGER_LOCO);
-		//pGame->RemoveModel(TRAIN_PASSENGER);
-		//pGame->RemoveModel(TRAIN_FREIGHT_LOCO);
-		//pGame->RemoveModel(TRAIN_FREIGHT);
+		//CGame::RemoveModel(TRAIN_PASSENGER_LOCO);
+		//CGame::RemoveModel(TRAIN_PASSENGER);
+		//CGame::RemoveModel(TRAIN_FREIGHT_LOCO);
+		//CGame::RemoveModel(TRAIN_FREIGHT);
 	}
 	else if((iType == TRAIN_PASSENGER) ||
 			(iType == TRAIN_FREIGHT) ) {
@@ -263,10 +262,10 @@ void CVehicle::Recreate()
 
 		ScriptCommand(&destroy_car,m_dwGTAId);
 
-		if(!pGame->IsModelLoaded(uiType)) {
-			pGame->RequestModel(uiType);
-			pGame->LoadRequestedModels();
-			while(!pGame->IsModelLoaded(uiType)) Sleep(5);
+		if(!CGame::IsModelLoaded(uiType)) {
+			CGame::RequestModel(uiType);
+			CGame::LoadRequestedModels();
+			while(!CGame::IsModelLoaded(uiType)) Sleep(5);
 		}
 
 		ScriptCommand(&create_car,uiType,mat.pos.X,mat.pos.Y,mat.pos.Z,&dwRetID);
@@ -284,7 +283,7 @@ void CVehicle::Recreate()
 		SetMatrix(mat);
 		SetColor(byteColor1,byteColor2);
 
-		//pGame->RemoveModel(uiType);
+		//CGame::RemoveModel(uiType);
 	}
 	
 }

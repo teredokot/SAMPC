@@ -73,10 +73,10 @@ public:
 	void	InitGame();
 	bool	IsMenuActive();
 	bool	IsGameLoaded();
-	void	RequestModel(int iModelID);
-	void	LoadRequestedModels();
-	bool	IsModelLoaded(int iModelID);
-	void    RemoveModel(int iModelID);
+	static void RequestModel(int iModelID);
+	static void LoadRequestedModels();
+	static bool IsModelLoaded(int iModelID);
+	static void RemoveModel(int iModelID);
 	void	SetWorldTime(int iHour, int iMinute);
 	void	GetWorldTime(int* iHour, int* iMinute);
 	void	ToggleThePassingOfTime(BYTE byteOnOff);
@@ -87,9 +87,9 @@ public:
 	void	SetMaxStats();
 	void	DisableTrainTraffic();
 	void	RefreshStreamingAt(float x, float y);
-	void    RequestAnimation(char *szAnimFile);
-	int		IsAnimationLoaded(char *szAnimFile);
-	void	ReleaseAnimation(char *szAnimFile);
+	static void RequestAnimation(char *szAnimFile);
+	static int IsAnimationLoaded(char *szAnimFile);
+	static void ReleaseAnimation(char *szAnimFile);
 	void	ToggleRadar(int iToggle);
 	void	DisplayGameText(char *szStr,int iTime,int iSize);
 	void	PlaySound(int iSound, float fX, float fY, float fZ);

@@ -191,50 +191,63 @@ bool CGame::IsGameLoaded()
 
 //-----------------------------------------------------------
 
+// OPC: 0247 (0047EF90) request_model
 void CGame::RequestModel(int iModelID)
 {
-	/*
-	_asm push 2
-	_asm push iModelID
-	_asm mov edx, 0x4087E0
-	_asm call edx
-	_asm add esp, 8*/
+	if (iModelID < 0)
+		return;
 
-	ScriptCommand(&request_model,iModelID);
+	DWORD dwFunc = 0x4087E0;
+	_asm {
+		push 2
+		push iModelID
+		call dwFunc
+		add esp, 8
+	}
 }
 
-//-----------------------------------------------------------
-
+// OPC: 038B (00483DDB) load_requested_models
 void CGame::LoadRequestedModels()
 {
-	/*
-	_asm push 0
-	_asm mov edx, 0x40EA10
-	_asm call edx
-	_asm add esp, 4*/
-
-	ScriptCommand(&load_requested_models);
+	DWORD dwFunc = 0x40EA10;
+	_asm {
+		push 0
+		call dwFunc
+		add esp, 4
+	}
 }
 
-//-----------------------------------------------------------
-
+// OPC: 0248 (0047EFDE) is_model_available
+// [0x8E4CC0 + 0x10] g_struModelInfo.iState (0=not loaded, 1=loaded, 2=requested)
 bool CGame::IsModelLoaded(int iModelID)
 {
-	return ScriptCommand(&is_model_available,iModelID);
+	if (iModelID < 0)
+		return false;
+
+	DWORD dwFunc = 0x4044C0;
+	bool bRet = false;
+	_asm {
+		push iModelID
+		call dwFunc
+		mov bRet, al
+		add esp, 4
+	}
+	return bRet;
 }
 
-//-----------------------------------------------------------
-
+// OPC: 0249 (0047F03E) release_model
+// sub_4089A0() has internal checks, so IsModelLoaded is not needed here
 void CGame::RemoveModel(int iModelID)
 {
-	/*
-	_asm push iModelID
-	_asm mov edx, 0x4089A0
-	_asm call edx
-	_asm add esp, 4*/
+	if (iModelID < 0)
+		return;
 
-	if (IsModelLoaded(iModelID))
-		ScriptCommand(&release_model,iModelID);
+	DWORD dwFunc = 0x4089A0;
+	_asm {
+		push iModelID
+		call dwFunc
+		add esp, 4
+	}
 }
 
 //-----------------------------------------------------------
@@ -330,24 +343,65 @@ void CGame::RefreshStreamingAt(float x, float y)
 
 //-----------------------------------------------------------
 
+// OPC: 04ED (0048C351) load_animation
 void CGame::RequestAnimation(char *szAnimFile)
 {
-	ScriptCommand(&request_animation, szAnimFile);
+	DWORD dwFunc1 = 0x4D3990;
+	DWORD dwFunc2 = 0x4087E0;
+	_asm {
+		push szAnimFile
+		call dwFunc1
+		test eax, eax
+		jz sub_4D3990_failed
+		mov edi, eax
+		lea eax, [edi+63E7h]
+		push 4
+		push eax
+		call dwFunc2
+		add esp, 8
+	sub_4D3990_failed:
+		add esp, 4
+	}
 }
 
-//-----------------------------------------------------------
-
+// OPC: 04EE (0048C391) is_animation_loaded
 int CGame::IsAnimationLoaded(char *szAnimFile)
 {
-	return ScriptCommand(&is_animation_loaded,szAnimFile);
+	DWORD dwFunc = 0x4D3940;
+	bool bRet = false;
+	_asm {
+		push szAnimFile
+		call dwFunc
+		test eax, eax
+		jz sub_4D3940_failed
+		mov cl, [eax+10h]
+		mov bRet, cl
+	sub_4D3940_failed:
+		add esp, 4	
+	}
+	return bRet;
 }
 
-//-----------------------------------------------------------
-
+// OPC: 04EF (0048C3D5) release_animation
+// IsAnimationLoaded not needed here. sub_48B570() has internal check for loaded animation.
 void CGame::ReleaseAnimation(char *szAnimFile)
 {
-	if (IsAnimationLoaded(szAnimFile))
-		ScriptCommand(&release_animation,szAnimFile);
+	DWORD dwFunc1 = 0x4D3990;
+	DWORD dwFunc2 = 0x48B570;
+	int iModelId = 0;
+	_asm {
+		push szAnimFile
+		call dwFunc1
+		add esp, 4
+		test eax, eax
+		jz sub_4D3990_failed
+		mov edi, eax
+		push edi
+		call dwFunc2
+		add esp, 4
+	sub_4D3990_failed:
+		add esp, 4
+	}
 }
 
 //-----------------------------------------------------------

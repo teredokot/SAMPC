@@ -261,8 +261,8 @@ void cmdCreateVehicle(PCHAR szCmd)
 
 	if(pGame->IsGameLoaded())
 	{
-		pGame->RequestModel(iVehicleType);
-		pGame->LoadRequestedModels();
+		CGame::RequestModel(iVehicleType);
+		CGame::LoadRequestedModels();
 
 		// place this actor near the player.
 		CPlayerPed *pPlayer = pGame->FindPlayerPed();
@@ -385,8 +385,8 @@ void cmdCreatePlayer(PCHAR szCmd)
 
 	if(pGame->IsGameLoaded()) {
 
-		pGame->RequestModel(iActorSkin);
-		pGame->LoadRequestedModels();
+		CGame::RequestModel(iActorSkin);
+		CGame::LoadRequestedModels();
 
 		// place this new player near the local player.
 		CPlayerPed *pPlayer = pGame->FindPlayerPed();
@@ -691,9 +691,9 @@ void cmdSay(PCHAR szCmd)
 DWORD MyCreateActor(int iModelID, float X, float Y, float Z, float fRotation)
 {
 	DWORD dwRetID;
-	pGame->RequestModel(iModelID);
-	pGame->LoadRequestedModels();
-	while(!pGame->IsModelLoaded(iModelID)) Sleep(5);
+	CGame::RequestModel(iModelID);
+	CGame::LoadRequestedModels();
+	while(!CGame::IsModelLoaded(iModelID)) Sleep(5);
 	ScriptCommand(&create_actor,5,iModelID,X,Y,Z,&dwRetID);
 	ScriptCommand(&set_actor_z_angle,dwRetID,fRotation);
 	pChatWindow->AddDebugMessage("New Actor: 0x%X\n",GamePool_Ped_GetAt(dwRetID));

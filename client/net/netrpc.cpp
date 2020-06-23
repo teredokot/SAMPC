@@ -386,8 +386,8 @@ void VehicleSpawn(RPCParameters *rpcParams)
 				DWORD data = m_CarModInfo.ucCarMod[i] + 1000;
 				DWORD v = 0;
 
-				pGame->RequestModel(data);
-				pGame->LoadRequestedModels();
+				CGame::RequestModel(data);
+				CGame::LoadRequestedModels();
 				ScriptCommand(&request_car_component, data);
 
 				int iWait = 10;
