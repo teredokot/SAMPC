@@ -23,14 +23,12 @@ CPlayerPool::CPlayerPool()
 {
 	m_pLocalPlayer = new CLocalPlayer();
 
-	m_iLocalPlayerScore = 0;
 	m_dwLocalPlayerPing = 0;
 
 	// loop through and initialize all net players to null and slot states to false
 	for(BYTE bytePlayerID = 0; bytePlayerID < MAX_PLAYERS; bytePlayerID++) {
 		m_bPlayerSlotState[bytePlayerID] = false;
 		m_pPlayers[bytePlayerID] = NULL;
-		m_iPlayerScores[bytePlayerID] = 0;
 		m_dwPlayerPings[bytePlayerID] = 0;
 	}
 }

@@ -52,6 +52,7 @@ public:
 	
 	int					m_iIsInAModShop;
 	int					m_iVirtualWorld;
+	int					m_iScore;
 
 public:
 

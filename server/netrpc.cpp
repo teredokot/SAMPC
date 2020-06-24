@@ -437,7 +437,6 @@ void UpdateScoresPingsIPs(RPCParameters *rpcParams)
 		if (pPlayerPool->GetSlotState(i))
 		{
 			bsParams.Write(i);
-			bsParams.Write(pPlayerPool->GetAt(i)->m_iScore);
 			bsParams.Write((DWORD)pRak->GetLastPing(pRak->GetPlayerIDFromIndex(i)));
 		}
 	}

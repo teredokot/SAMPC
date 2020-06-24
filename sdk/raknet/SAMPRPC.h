@@ -135,6 +135,7 @@ enum eRPCTable
 	RPC_ClientCheck,
 	RPC_ScrToggleChatbox,
 	RPC_ScrToggleWidescreen,
+	RPC_ScrSetScore,
 
 	MAX_RPC_ID_AVAILABLE
 };

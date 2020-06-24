@@ -1609,6 +1609,19 @@ static void ScrToggleWidescreen(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrSetScore(RPCParameters * rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+	if (bsData.GetNumberOfUnreadBits() == 48) {
+		unsigned short usPlayerId;
+		int iScore;
+		if (bsData.Read(usPlayerId) && usPlayerId < MAX_PLAYERS) {
+			bsData.Read(iScore);
+			pNetGame->GetPlayerPool()->UpdateScore(usPlayerId, iScore);
+		}
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1694,6 +1707,7 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrSetGameSpeed);
 	REGISTER_STATIC_RPC(pRakClient, ScrToggleChatbox);
 	REGISTER_STATIC_RPC(pRakClient, ScrToggleWidescreen);
+	REGISTER_STATIC_RPC(pRakClient, ScrSetScore);
 }
 
 //----------------------------------------------------

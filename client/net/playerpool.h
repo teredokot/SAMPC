@@ -17,13 +17,11 @@ private:
 
 	CLocalPlayer	*m_pLocalPlayer;
 	BYTE			m_byteLocalPlayerID;
-	int				m_iLocalPlayerScore;
 	DWORD			m_dwLocalPlayerPing;
 
 	bool			m_bPlayerSlotState[MAX_PLAYERS];
 	CRemotePlayer	*m_pPlayers[MAX_PLAYERS];
 	DWORD			m_dwPlayerPings[MAX_PLAYERS];
-	int				m_iPlayerScores[MAX_PLAYERS];
 
 	CHAR			m_szPlayerNames[MAX_PLAYERS][MAX_PLAYER_NAME+1];
 	CHAR			m_szLocalPlayerName[MAX_PLAYER_NAME+1];	
@@ -65,14 +63,16 @@ public:
 
 	BYTE GetCount();
 
-	void UpdateScore(BYTE bytePlayerId, int iScore)
+	void UpdateScore(unsigned short usPlayerId, int iScore)
 	{ 
-		if (bytePlayerId == m_byteLocalPlayerID)
-		{
-			m_iLocalPlayerScore = iScore;
+		if (usPlayerId > MAX_PLAYERS - 1)
+			return;
+
+		if (usPlayerId == m_byteLocalPlayerID) {
+			m_pLocalPlayer->m_iScore = iScore;
 		} else {
-			if (bytePlayerId > MAX_PLAYERS-1) { return; }
-			m_iPlayerScores[bytePlayerId] = iScore;
+			if (m_pPlayers[usPlayerId] != NULL)
+				m_pPlayers[usPlayerId]->m_iScore = iScore;
 		}
 	};
 
@@ -87,16 +87,16 @@ public:
 	};
 
 	int GetLocalPlayerScore() {
-		return m_iLocalPlayerScore;
+		return m_pLocalPlayer->m_iScore;
+	};
+
+	// Used in scoreboard.cpp, and array index gets checked by GetSlotState()
+	int GetPlayerScore(BYTE bytePlayerId) {
+		return m_pPlayers[bytePlayerId]->m_iScore;
 	};
 
 	DWORD GetLocalPlayerPing() {
 		return m_dwLocalPlayerPing;
-	};
-
-	int GetPlayerScore(BYTE bytePlayerId) {
-		if (bytePlayerId > MAX_PLAYERS-1) { return 0; }
-		return m_iPlayerScores[bytePlayerId];
 	};
 
 	DWORD GetPlayerPing(BYTE bytePlayerId)

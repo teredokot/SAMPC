@@ -30,6 +30,7 @@ public:
 	int						m_iSelectedClass;
 	bool					m_bWaitingForSpawnRequestReply;
 	int						m_iVirtualWorld;
+	int						m_iScore;
 
 	BYTE					m_byteSpectateMode;
 	BYTE					m_byteSpectateType;

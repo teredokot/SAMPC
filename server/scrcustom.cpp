@@ -3038,8 +3038,13 @@ static cell n_SetPlayerScore(AMX *amx, cell *params)
 	if (pNetGame->GetPlayerPool()) {
 		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 		if (pPlayer != nullptr) {
-			pPlayer->m_iScore = params[2];
-			return 1;
+			RakNet::BitStream bsSend;
+			bsSend.Write((unsigned short)params[1]);
+			bsSend.Write((int)params[2]);
+			if (pNetGame->SendToAll(RPC_ScrSetScore, &bsSend)) {
+				pPlayer->m_iScore = params[2];
+				return 1;
+			}
 		}
 	}
 	return 0;

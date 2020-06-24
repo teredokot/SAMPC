@@ -26,6 +26,7 @@ void ServerJoin(RPCParameters *rpcParams)
 	CHAR szPlayerName[MAX_PLAYER_NAME+1];
 	BYTE bytePlayerID;
 	BYTE byteNameLen=0;
+	int iPlayerScore;
 
 	RakNet::BitStream bsData(rpcParams);
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
@@ -34,9 +35,11 @@ void ServerJoin(RPCParameters *rpcParams)
 	bsData.Read(byteNameLen);
 	bsData.Read(szPlayerName,byteNameLen);
 	szPlayerName[byteNameLen] = '\0';
+	bsData.Read(iPlayerScore);
 
 	// Add this client to the player pool.
 	pPlayerPool->New(bytePlayerID, szPlayerName);
+	pPlayerPool->UpdateScore(bytePlayerID, iPlayerScore);
 
 	/*
 	switch (bytePlayerState) {
@@ -488,7 +491,6 @@ void UpdateScoresPingsIPs(RPCParameters *rpcParams)
 	RakNet::BitStream bsData(rpcParams);
 
 	BYTE bytePlayerId;
-	int  iPlayerScore;
 	DWORD dwPlayerPing;
 
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
@@ -496,10 +498,8 @@ void UpdateScoresPingsIPs(RPCParameters *rpcParams)
 	for (BYTE i=0; i<(rpcParams->numberOfBitsOfData/72); i++)
 	{
 		bsData.Read(bytePlayerId);
-		bsData.Read(iPlayerScore);
 		bsData.Read(dwPlayerPing);
 
-		pPlayerPool->UpdateScore(bytePlayerId, iPlayerScore);
 		pPlayerPool->UpdatePing(bytePlayerId, dwPlayerPing);
 	}
 }
