@@ -95,21 +95,21 @@ void ScrSetPlayerName(RPCParameters *rpcParams)
 	// a.k.a. when the nick is not in use?
 	bsData.Read(byteSuccess);
 	
-	if (pPlayerPool->GetLocalPlayerID() == bytePlayerID)
-	{
-		PCHAR szOldNick = pPlayerPool->GetLocalPlayerName();
-		pPlayerPool->SetLocalPlayerName(szNewName);
+	if (pPlayerPool->GetLocalPlayerID() == bytePlayerID) {
+		CLocalPlayer* pPlayer = pPlayerPool->GetLocalPlayer();
 
 		if (pDeathWindow)
-			pDeathWindow->ChangeNick(szOldNick, szNewName);
-	}
-	else if(pPlayerPool->GetSlotState(bytePlayerID))
-	{
-		PCHAR szOldNick = pPlayerPool->GetPlayerName(bytePlayerID);
-		pPlayerPool->SetPlayerName(bytePlayerID, szNewName);
+			pDeathWindow->ChangeNick((PCHAR)pPlayer->GetName(), szNewName);
 
-		if (pDeathWindow)
-			pDeathWindow->ChangeNick(szOldNick, szNewName);
+		pPlayer->SetName(szNewName);
+	} else {
+		CRemotePlayer* pPlayer = pPlayerPool->GetAt(bytePlayerID);
+		if (pPlayer != NULL) {
+			if (pDeathWindow)
+				pDeathWindow->ChangeNick((PCHAR)pPlayer->GetName(), szNewName);
+
+			pPlayer->SetName(szNewName);
+		}
 	}
 }
 
@@ -508,12 +508,13 @@ void ScrDeathMessage(RPCParameters *rpcParams)
 		szKillerName = NULL; dwKillerColor = 0;
 	} else {
 		if(pPlayerPool->GetLocalPlayerID() == byteKiller) {
-			szKillerName = pPlayerPool->GetLocalPlayerName();
+			szKillerName = (PCHAR)pPlayerPool->GetLocalPlayer()->GetName();
 			dwKillerColor = pPlayerPool->GetLocalPlayer()->GetPlayerColorAsARGB();
 		} else {
-			if(pPlayerPool->GetSlotState(byteKiller)) {
-				szKillerName = pPlayerPool->GetPlayerName(byteKiller);
-				dwKillerColor = pPlayerPool->GetAt(byteKiller)->GetPlayerColorAsARGB();
+			CRemotePlayer* pPlayer = pPlayerPool->GetAt(byteKiller);
+			if (pPlayer != NULL) {
+				szKillerName = (PCHAR)pPlayer->GetName();
+				dwKillerColor = pPlayer->GetPlayerColorAsARGB();
 			} else {
 				//pChatWindow->AddDebugMessage("Slot State Killer FALSE");
 				szKillerName = NULL; dwKillerColor = 0;
@@ -523,12 +524,13 @@ void ScrDeathMessage(RPCParameters *rpcParams)
 
 	// Determine the killee's name and color
 	if(pPlayerPool->GetLocalPlayerID() == byteKillee) {
-		szKilleeName = pPlayerPool->GetLocalPlayerName();
+		szKilleeName = (PCHAR)pPlayerPool->GetLocalPlayer()->GetName();
 		dwKilleeColor = pPlayerPool->GetLocalPlayer()->GetPlayerColorAsARGB();
 	} else {
-		if(pPlayerPool->GetSlotState(byteKillee)) {
-			szKilleeName = pPlayerPool->GetPlayerName(byteKillee);
-			dwKilleeColor = pPlayerPool->GetAt(byteKillee)->GetPlayerColorAsARGB();
+		CRemotePlayer* pPlayer = pPlayerPool->GetAt(byteKillee);
+		if (pPlayer != NULL) {
+			szKilleeName = (PCHAR)pPlayer->GetName();
+			dwKilleeColor = pPlayer->GetPlayerColorAsARGB();
 		} else {
 			//pChatWindow->AddDebugMessage("Slot State Killee FALSE");
 			szKilleeName = NULL; dwKilleeColor = 0;

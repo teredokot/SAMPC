@@ -153,7 +153,7 @@ void CScoreBoard::Draw()
 	PLAYER_SCORE_INFO* Players;
 	Players = (PLAYER_SCORE_INFO*)malloc(playercount * sizeof(PLAYER_SCORE_INFO));
 	Players[0].dwId = pPlayerPool->GetLocalPlayerID();
-	Players[0].szName = pPlayerPool->GetLocalPlayerName();
+	Players[0].szName = (char*)pPlayerPool->GetLocalPlayer()->GetName();
 	Players[0].iScore = pPlayerPool->GetLocalPlayerScore();
 	Players[0].dwPing = pPlayerPool->GetLocalPlayerPing();
 	Players[0].dwColor = pPlayerPool->GetLocalPlayer()->GetPlayerColorAsARGB();
@@ -163,8 +163,9 @@ void CScoreBoard::Draw()
 	{
 		if (pPlayerPool->GetSlotState(x) == TRUE)
 		{
+			// TODO: Will need changes here to not check index ranges multiple times to retrieve an info from player
 			Players[i].dwId = x;
-			Players[i].szName = pPlayerPool->GetPlayerName(x);
+			Players[i].szName = (char*)pPlayerPool->GetAt(x)->GetName();
 			Players[i].iScore = pPlayerPool->GetPlayerScore(x);
 			Players[i].dwPing = pPlayerPool->GetPlayerPing(x);
 			Players[i].dwColor = pPlayerPool->GetAt(x)->GetPlayerColorAsARGB();

@@ -40,6 +40,7 @@ CRemotePlayer::CRemotePlayer()
 	m_dwStreamUpdate = 0;
 	m_iScore = 0;
 	m_usPing = 0;
+	m_szName[0] = '\0';
 }
 
 //----------------------------------------------------
@@ -51,6 +52,16 @@ CRemotePlayer::~CRemotePlayer()
 		delete m_pPlayerPed;
 		m_pPlayerPed = NULL;
 	}
+}
+
+void CRemotePlayer::SetName(const char* szName)
+{
+	strncpy_s(m_szName, szName, MAX_PLAYER_NAME);
+}
+
+const char* CRemotePlayer::GetName()
+{
+	return m_szName;
 }
 
 //----------------------------------------------------
@@ -969,8 +980,7 @@ void CRemotePlayer::HandleDeath()
 
 void CRemotePlayer::Say(unsigned char *szText)
 {
-	char * szPlayerName = pNetGame->GetPlayerPool()->GetPlayerName(m_bytePlayerID);
-	pChatWindow->AddChatMessage(szPlayerName,GetPlayerColorAsARGB(),(char*)szText);
+	pChatWindow->AddChatMessage(m_szName,GetPlayerColorAsARGB(),(char*)szText);
 }
 
 //----------------------------------------------------

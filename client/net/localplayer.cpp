@@ -68,6 +68,7 @@ CLocalPlayer::CLocalPlayer()
 	m_sNormalIncarRate = NETMODE_NORMAL_INCAR_SENDRATE;
 	m_iScore = 0;
 	m_usPing = 0;
+	m_szName[0] = '\0';
 
 	m_bIsSpectating = false;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;
@@ -84,6 +85,16 @@ CLocalPlayer::CLocalPlayer()
 }
 
 //----------------------------------------------------------
+
+void CLocalPlayer::SetName(const char* szName)
+{
+	strncpy_s(m_szName, szName, MAX_PLAYER_NAME);
+}
+
+const char* CLocalPlayer::GetName()
+{
+	return m_szName;
+}
 
 bool CLocalPlayer::DestroyPlayer()
 {

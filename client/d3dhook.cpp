@@ -71,7 +71,7 @@ void __stdcall RenderPlayerTags()
 							dwHitEntity = 1;
 
 						if (dwHitEntity) {
-							sprintf_s(szBuffer, "%s(%d)", pPlayerPool->GetPlayerName(x), x);
+							sprintf_s(szBuffer, "%s(%d)", Player->GetName(), x);
 							pPlayerTags->Draw(
 								{matPlayer.pos.X, matPlayer.pos.Y, matPlayer.pos.Z},
 								szBuffer,

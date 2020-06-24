@@ -50,8 +50,8 @@ bool CPlayerPool::New(BYTE bytePlayerID, PCHAR szPlayerName)
 
 	if(m_pPlayers[bytePlayerID])
 	{
-		strcpy_s(m_szPlayerNames[bytePlayerID],szPlayerName);
 		m_pPlayers[bytePlayerID]->SetID(bytePlayerID);
+		m_pPlayers[bytePlayerID]->SetName(szPlayerName);
 		m_bPlayerSlotState[bytePlayerID] = true;
 		//if(pChatWindow) 
 			//pChatWindow->AddInfoMessage("*** %s joined the server.",szPlayerName);

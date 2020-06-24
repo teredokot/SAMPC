@@ -22,8 +22,8 @@ enum eWeaponState
 class CLocalPlayer
 {
 public:
-
 	CPlayerPed				*m_pPlayerPed;
+	char					m_szName[MAX_PLAYER_NAME];
 	bool					m_bIsActive;
 	bool					m_bIsWasted;
 	bool					m_bWantsAnotherClass;
@@ -74,12 +74,13 @@ private:
 	DWORD					m_dwLastStatsUpdateTick;
 	DWORD					m_dwLastHeadUpdate;
 
-	CHAR					m_szPlayerName[256];
-
 public:
 
 	CLocalPlayer();
 	~CLocalPlayer(){};
+
+	void SetName(const char* szName);
+	const char* GetName();
 
 	bool IsActive() { return m_bIsActive; };
 	bool IsWasted() { return m_bIsWasted; };

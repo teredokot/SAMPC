@@ -21,19 +21,9 @@ private:
 	bool			m_bPlayerSlotState[MAX_PLAYERS];
 	CRemotePlayer	*m_pPlayers[MAX_PLAYERS];
 
-	CHAR			m_szPlayerNames[MAX_PLAYERS][MAX_PLAYER_NAME+1];
-	CHAR			m_szLocalPlayerName[MAX_PLAYER_NAME+1];	
-	
 public:
 	// Process All CPlayers
 	bool Process();
-
-	void SetLocalPlayerName(PCHAR szName) { strcpy_s(m_szLocalPlayerName,szName); };
-	PCHAR GetLocalPlayerName() { return m_szLocalPlayerName; };
-	PCHAR GetPlayerName(BYTE bytePlayerID) { return m_szPlayerNames[bytePlayerID]; };
-	void SetPlayerName(BYTE bytePlayerID, PCHAR szName) {
-		strcpy_s(m_szPlayerNames[bytePlayerID], szName);
-	}
 
 	CLocalPlayer * GetLocalPlayer() { return m_pLocalPlayer; };
 	BYTE FindRemotePlayerIDFromGtaPtr(PED_TYPE * pActor);
@@ -53,7 +43,6 @@ public:
 	};
 	
 	void SetLocalPlayerID(BYTE byteID) {
-		strcpy_s(m_szPlayerNames[byteID],m_szLocalPlayerName);
 		m_byteLocalPlayerID = byteID;
 	};
 

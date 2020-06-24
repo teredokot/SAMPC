@@ -53,7 +53,7 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 
 	// Setup player pool
 	m_pPlayerPool = new CPlayerPool();
-	m_pPlayerPool->SetLocalPlayerName(szPlayerName);
+	m_pPlayerPool->GetLocalPlayer()->SetName(szPlayerName);
 
 	m_pVehiclePool = new CVehiclePool();
 	m_pPickupPool  = new CPickupPool();
@@ -723,6 +723,7 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 	unsigned short port=0;
 	unsigned short playerId=0;
 	unsigned int uiChallenge=0;
+	CLocalPlayer* pPlayer = m_pPlayerPool->GetLocalPlayer();
 
 	bsReturnParams.IgnoreBits(8);
 	bsReturnParams.Read(binaryAddr);
@@ -740,13 +741,13 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 
 	int iVersion = NETGAME_VERSION;
 	//BYTE byteMod = MOD_VERSION;
-	BYTE byteNameLen = (BYTE)strlen(m_pPlayerPool->GetLocalPlayerName());
+	BYTE byteNameLen = (BYTE)strlen(pPlayer->GetName());
 
 	RakNet::BitStream bsSend;
 	bsSend.Write(iVersion);
 	//bsSend.Write(byteMod);
 	bsSend.Write(byteNameLen);
-	bsSend.Write(m_pPlayerPool->GetLocalPlayerName(),byteNameLen);
+	bsSend.Write(pPlayer->GetName(),byteNameLen);
 	bsSend.Write(uiChallenge);
 	
 	size_t uiVersionLen = strlen(SAMP_VERSION);

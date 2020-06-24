@@ -156,13 +156,13 @@ void Chat(RPCParameters *rpcParams)
 	szText[uiTextLen] = '\0';
 
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
-	{
-		pChatWindow->AddChatMessage(pPlayerPool->GetLocalPlayerName(),
-			pPlayerPool->GetLocalPlayer()->GetPlayerColorAsARGB(), (char*)szText);
+	if (bytePlayerID == pPlayerPool->GetLocalPlayerID()) {
+		CLocalPlayer* pPlayer = pPlayerPool->GetLocalPlayer();
+		pChatWindow->AddChatMessage((CHAR*)pPlayer->GetName(),
+			pPlayer->GetPlayerColorAsARGB(), (char*)szText);
 	} else {
-		CRemotePlayer *pRemotePlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-		if(pRemotePlayer) {
+		CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt(bytePlayerID);
+		if(pRemotePlayer != NULL) {
 			pRemotePlayer->Say(szText);	
 		}
 	}
