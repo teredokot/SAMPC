@@ -296,7 +296,7 @@ unsigned long Util_GetTime()
 		bInited = true;
 	}
 	QueryPerformanceCounter(&cli);
-	return (cli.QuadPart * 1000 / fli.QuadPart);
+	return (unsigned long)(cli.QuadPart * 1000 / fli.QuadPart);
 }
 
 //----------------------------------------------------

@@ -23,7 +23,6 @@ private:
 	bool			m_bPlayerSlotState[MAX_PLAYERS];
 	CRemotePlayer	*m_pPlayers[MAX_PLAYERS];
 	DWORD			m_dwPlayerPings[MAX_PLAYERS];
-	ULONG			m_ulIPAddresses[MAX_PLAYERS];
 	int				m_iPlayerScores[MAX_PLAYERS];
 
 	CHAR			m_szPlayerNames[MAX_PLAYERS][MAX_PLAYER_NAME+1];
@@ -87,11 +86,6 @@ public:
 		}
 	};
 
-	void UpdateIPAddress(BYTE bytePlayerId, ULONG ulIPAddress) {
-		if (bytePlayerId > MAX_PLAYERS-1) { return; }
-		m_ulIPAddresses[bytePlayerId] = ulIPAddress;
-	}
-
 	int GetLocalPlayerScore() {
 		return m_iLocalPlayerScore;
 	};
@@ -109,11 +103,6 @@ public:
 	{
 		if (bytePlayerId > MAX_PLAYERS-1) { return 0; }
 		return m_dwPlayerPings[bytePlayerId];
-	};
-
-	ULONG GetPlayerIP(BYTE bytePlayerId) {
-		if (bytePlayerId > MAX_PLAYERS-1) { return 0; }
-		return m_ulIPAddresses[bytePlayerId];
 	};
 
 	void DeactivateAll();
