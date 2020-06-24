@@ -31,7 +31,6 @@ public:
 	
 	bool				m_bVehicleSlotState[MAX_VEHICLES];
 	CVehicle			*m_pVehicles[MAX_VEHICLES];
-	VEHICLE_TYPE		*m_pGTAVehicles[MAX_VEHICLES]; // pointers to actual ingame vehicles.
 
 	bool				m_bIsActive[MAX_VEHICLES];
 	bool				m_bIsWasted[MAX_VEHICLES];

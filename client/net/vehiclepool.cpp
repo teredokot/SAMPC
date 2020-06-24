@@ -18,7 +18,6 @@ CVehiclePool::CVehiclePool()
 	for(VEHICLEID VehicleID = 0; VehicleID < MAX_VEHICLES; VehicleID++) {
 		m_bVehicleSlotState[VehicleID] = false;
 		m_pVehicles[VehicleID] = NULL;
-		m_pGTAVehicles[VehicleID] = NULL;
 		m_iVirtualWorld[VehicleID] = 0;
 	}
 }
@@ -94,7 +93,6 @@ bool CVehiclePool::Spawn( VEHICLEID VehicleID, int iVehicleType,
 			m_pVehicles[VehicleID]->SetColor(iColor1,iColor2);
 		}
 
-		m_pGTAVehicles[VehicleID] = m_pVehicles[VehicleID]->m_pVehicle;
 		m_bVehicleSlotState[VehicleID] = true;
 
 		if(iObjective) m_pVehicles[VehicleID]->m_byteObjectiveVehicle = 1;
@@ -154,7 +152,7 @@ VEHICLEID CVehiclePool::FindIDFromGtaPtr(VEHICLE_TYPE * pGtaVehicle)
 	int x=1;
 	
 	while(x!=MAX_VEHICLES) {
-		if(pGtaVehicle == m_pGTAVehicles[x]) return x;
+		if(m_pVehicles[x] != NULL && pGtaVehicle == m_pVehicles[x]->m_pVehicle) return x;
 		x++;
 	}
 
@@ -165,7 +163,10 @@ VEHICLEID CVehiclePool::FindIDFromGtaPtr(VEHICLE_TYPE * pGtaVehicle)
 
 int CVehiclePool::FindGtaIDFromID(int iID)
 {
-	return GamePool_Vehicle_GetIndex(m_pGTAVehicles[iID]);
+	if (m_pVehicles[iID] == NULL)
+		return 0;
+
+	return GamePool_Vehicle_GetIndex(m_pVehicles[iID]->m_pVehicle);
 }
 
 //----------------------------------------------------
@@ -312,11 +313,6 @@ void CVehiclePool::Process()
 					pVehicle->SetEngineState(false);
 				}
 
-				// Update the actual ingame pointer if it's not
-				// the same as the one we have listed.
-				if(pVehicle->m_pVehicle != m_pGTAVehicles[x]) {
-					m_pGTAVehicles[x] = pVehicle->m_pVehicle;
-				}
 				// Put at the END so other processing is still done!
 				ProcessForVirtualWorld(x, localVW);
 			}
