@@ -39,6 +39,7 @@ CRemotePlayer::CRemotePlayer()
 	m_dwLastHeadUpdate = GetTickCount();
 	m_dwStreamUpdate = 0;
 	m_iScore = 0;
+	m_usPing = 0;
 }
 
 //----------------------------------------------------

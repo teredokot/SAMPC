@@ -85,6 +85,7 @@ CPlayer::CPlayer()
 	m_iMoney = 0;
 	m_bHasSpawnInfo = false;
 	m_iScore = 0;
+	m_nLastPingUpdate = 0;
 
 	m_pVariables = new CVariables;
 

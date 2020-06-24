@@ -33,7 +33,7 @@ enum eRPCTable
 	RPC_Death,
 	RPC_EnterVehicle,
 	RPC_ExitVehicle,
-	RPC_UpdateScoresPingsIPs,
+	RPC_UpdatePings,
 	//RPC_SvrStats,
 	RPC_ScmEvent,
 	RPC_ScrSetSpawnInfo,

@@ -17,11 +17,9 @@ private:
 
 	CLocalPlayer	*m_pLocalPlayer;
 	BYTE			m_byteLocalPlayerID;
-	DWORD			m_dwLocalPlayerPing;
 
 	bool			m_bPlayerSlotState[MAX_PLAYERS];
 	CRemotePlayer	*m_pPlayers[MAX_PLAYERS];
-	DWORD			m_dwPlayerPings[MAX_PLAYERS];
 
 	CHAR			m_szPlayerNames[MAX_PLAYERS][MAX_PLAYER_NAME+1];
 	CHAR			m_szLocalPlayerName[MAX_PLAYER_NAME+1];	
@@ -63,6 +61,15 @@ public:
 
 	BYTE GetCount();
 
+	int GetLocalPlayerScore() {
+		return m_pLocalPlayer->m_iScore;
+	};
+
+	// Used in scoreboard.cpp, and array index gets checked by GetSlotState()
+	int GetPlayerScore(BYTE bytePlayerId) {
+		return m_pPlayers[bytePlayerId]->m_iScore;
+	};
+
 	void UpdateScore(unsigned short usPlayerId, int iScore)
 	{ 
 		if (usPlayerId > MAX_PLAYERS - 1)
@@ -76,33 +83,24 @@ public:
 		}
 	};
 
-	void UpdatePing(BYTE bytePlayerId, DWORD dwPing) { 
-		if (bytePlayerId == m_byteLocalPlayerID)
-		{
-			m_dwLocalPlayerPing = dwPing;
+	unsigned short GetLocalPlayerPing() {
+		return m_pLocalPlayer->m_usPing;
+	};
+
+	// Used in netrpc.cpp at UpdatePings(), and player index is checked by GetSlotState()
+	void UpdatePing(unsigned short usPlayerId, unsigned short usPing) {
+		if (usPlayerId == m_byteLocalPlayerID) {
+			m_pLocalPlayer->m_usPing = usPing;
 		} else {
-			if (bytePlayerId > MAX_PLAYERS-1) { return; }
-			m_dwPlayerPings[bytePlayerId] = dwPing;
+			if (m_pPlayers[usPlayerId] != NULL)
+				m_pPlayers[usPlayerId]->m_usPing = usPing;
 		}
 	};
 
-	int GetLocalPlayerScore() {
-		return m_pLocalPlayer->m_iScore;
-	};
-
-	// Used in scoreboard.cpp, and array index gets checked by GetSlotState()
-	int GetPlayerScore(BYTE bytePlayerId) {
-		return m_pPlayers[bytePlayerId]->m_iScore;
-	};
-
-	DWORD GetLocalPlayerPing() {
-		return m_dwLocalPlayerPing;
-	};
-
-	DWORD GetPlayerPing(BYTE bytePlayerId)
+	// Used in scoreboard.cpp, and player index gets checked by GetSlotState()
+	unsigned short GetPlayerPing(BYTE bytePlayerId)
 	{
-		if (bytePlayerId > MAX_PLAYERS-1) { return 0; }
-		return m_dwPlayerPings[bytePlayerId];
+		return m_pPlayers[bytePlayerId]->m_usPing;
 	};
 
 	void DeactivateAll();

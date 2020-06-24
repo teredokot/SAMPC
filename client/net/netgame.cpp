@@ -758,13 +758,13 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 
 //----------------------------------------------------
 
-void CNetGame::UpdatePlayerScoresAndPings()
+void CNetGame::UpdatePlayerPings()
 {
 	static DWORD dwLastUpdateTick = 0;
 
-	if ((GetTickCount() - dwLastUpdateTick) > 3000) {
+	if ((GetTickCount() - dwLastUpdateTick) > RPC_PING_UPDATE_TIME) {
 		dwLastUpdateTick = GetTickCount();
-		m_pRakClient->RPC(RPC_UpdateScoresPingsIPs, NULL, HIGH_PRIORITY, RELIABLE, 0, false);
+		m_pRakClient->RPC(RPC_UpdatePings, NULL, HIGH_PRIORITY, RELIABLE, 0, false);
 	}
 }
 

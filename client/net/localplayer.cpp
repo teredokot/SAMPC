@@ -67,6 +67,7 @@ CLocalPlayer::CLocalPlayer()
 	m_sNormalOnfootRate = NETMODE_NORMAL_ONFOOT_SENDRATE;
 	m_sNormalIncarRate = NETMODE_NORMAL_INCAR_SENDRATE;
 	m_iScore = 0;
+	m_usPing = 0;
 
 	m_bIsSpectating = false;
 	m_byteSpectateType = SPECTATE_TYPE_NONE;

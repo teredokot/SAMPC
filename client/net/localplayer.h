@@ -31,6 +31,7 @@ public:
 	bool					m_bWaitingForSpawnRequestReply;
 	int						m_iVirtualWorld;
 	int						m_iScore;
+	unsigned short			m_usPing;
 
 	BYTE					m_byteSpectateMode;
 	BYTE					m_byteSpectateType;

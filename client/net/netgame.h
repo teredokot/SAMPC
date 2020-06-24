@@ -108,7 +108,7 @@ public:
 	void InitGameLogic();
 	void Process();
 
-	void UpdatePlayerScoresAndPings();
+	void UpdatePlayerPings();
 	void ResetVehiclePool();
 	void ResetPlayerPool();
 	void ResetPickupPool();

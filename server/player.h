@@ -61,6 +61,7 @@ public:
 	int						m_iMoney;
 	int						m_iScore;
 	bool					m_bTyping;
+	RakNet::Time			m_nLastPingUpdate;
 
 	// Weapon data
 	DWORD					m_dwSlotAmmo[13];

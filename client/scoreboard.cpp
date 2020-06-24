@@ -131,7 +131,7 @@ void CScoreBoard::Draw()
 			return;
 	}
 
-	pNetGame->UpdatePlayerScoresAndPings();
+	pNetGame->UpdatePlayerPings();
 
 	m_pOldStates->Capture();
 	m_pNewStates->Apply();

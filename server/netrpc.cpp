@@ -420,28 +420,25 @@ void ServerCommand(RPCParameters *rpcParams)
 
 //----------------------------------------------------
 
-void UpdateScoresPingsIPs(RPCParameters *rpcParams)
+static void UpdatePings(RPCParameters* rpcParams)
 {
-	PlayerID sender = rpcParams->sender;
-
-	//RakNet::BitStream bsData(rpcParams);
-
-	RakNet::BitStream bsParams;
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-	BYTE bytePlayerId = pRak->GetIndexFromPlayerID(sender);
-
-	if(!pPlayerPool->GetSlotState(bytePlayerId)) return;
-
-	for (BYTE i=0; i<MAX_PLAYERS; i++)
-	{
-		if (pPlayerPool->GetSlotState(i))
-		{
-			bsParams.Write(i);
-			bsParams.Write((DWORD)pRak->GetLastPing(pRak->GetPlayerIDFromIndex(i)));
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (pPlayerPool) {
+		CPlayer* pPlayer = pPlayerPool->GetAt(rpcParams->senderId);
+		RakNet::Time nTimeNow = RakNet::GetTime();
+		if (pPlayer != NULL && (nTimeNow - pPlayer->m_nLastPingUpdate) >= RPC_PING_UPDATE_TIME) {
+			pPlayer->m_nLastPingUpdate = nTimeNow;
+			RakNet::BitStream bsParams;
+			for (unsigned short i = 0; i < pPlayerPool->GetLastPlayerId(); i++) {
+				if (pPlayerPool->GetSlotState(i)) {
+					bsParams.Write(i);
+					// GetLastPing could return -1 when fails, but its only overflow back to 65535
+					bsParams.Write((unsigned short)pRak->GetLastPing(pRak->GetPlayerIDFromIndex(i)));
+				}
+			}
+			pNetGame->SendToPlayer(rpcParams->senderId, RPC_UpdatePings, &bsParams);
 		}
 	}
-
-	pRak->RPC(RPC_UpdateScoresPingsIPs, &bsParams, HIGH_PRIORITY, RELIABLE, 0, sender, false, false);
 }
 
 //----------------------------------------------------
@@ -826,7 +823,7 @@ void RegisterRPCs(RakServerInterface * pRakServer)
 	REGISTER_STATIC_RPC(pRakServer, EnterVehicle);
 	REGISTER_STATIC_RPC(pRakServer, ExitVehicle);
 	REGISTER_STATIC_RPC(pRakServer, ServerCommand);
-	REGISTER_STATIC_RPC(pRakServer, UpdateScoresPingsIPs);
+	REGISTER_STATIC_RPC(pRakServer, UpdatePings);
 	//REGISTER_STATIC_RPC(pRakServer, SvrStats);
 	REGISTER_STATIC_RPC(pRakServer, SetInteriorId);
 	REGISTER_STATIC_RPC(pRakServer, ScmEvent);

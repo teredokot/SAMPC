@@ -486,21 +486,20 @@ void DisableRaceCheckpoint(RPCParameters *rpcParams)
 
 //----------------------------------------------------
 
-void UpdateScoresPingsIPs(RPCParameters *rpcParams)
+static void UpdatePings(RPCParameters* rpcParams)
 {
-	RakNet::BitStream bsData(rpcParams);
-
-	BYTE bytePlayerId;
-	DWORD dwPlayerPing;
-
-	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-
-	for (BYTE i=0; i<(rpcParams->numberOfBitsOfData/72); i++)
-	{
-		bsData.Read(bytePlayerId);
-		bsData.Read(dwPlayerPing);
-
-		pPlayerPool->UpdatePing(bytePlayerId, dwPlayerPing);
+	if (pNetGame->GetPlayerPool()) {
+		RakNet::BitStream bsData(rpcParams);
+		if (bsData.GetNumberOfUnreadBits() >= 32 && bsData.GetNumberOfUnreadBits() <= (32 * MAX_PLAYERS)) {
+			unsigned short usPlayerId = INVALID_PLAYER_ID_EX;
+			unsigned short usPlayerPing = 0;
+			for (unsigned short i = 0; i < (rpcParams->numberOfBitsOfData / 32); i++) {
+				if (bsData.Read(usPlayerId) && pNetGame->GetPlayerPool()->GetSlotState((unsigned char)usPlayerId)) {
+					bsData.Read(usPlayerPing);
+					pNetGame->GetPlayerPool()->UpdatePing(usPlayerId, usPlayerPing);
+				}
+			}
+		}
 	}
 }
 
@@ -810,7 +809,7 @@ void RegisterRPCs(RakClientInterface * pRakClient)
 	REGISTER_STATIC_RPC(pRakClient,DisableCheckpoint);
 	REGISTER_STATIC_RPC(pRakClient,SetRaceCheckpoint);
 	REGISTER_STATIC_RPC(pRakClient,DisableRaceCheckpoint);
-	REGISTER_STATIC_RPC(pRakClient,UpdateScoresPingsIPs);
+	REGISTER_STATIC_RPC(pRakClient,UpdatePings);
 	//REGISTER_STATIC_RPC(pRakClient,SvrStats);
 	REGISTER_STATIC_RPC(pRakClient,GameModeRestart);
 	REGISTER_STATIC_RPC(pRakClient,ConnectionRejected);

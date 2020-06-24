@@ -53,6 +53,7 @@ public:
 	int					m_iIsInAModShop;
 	int					m_iVirtualWorld;
 	int					m_iScore;
+	unsigned short		m_usPing;
 
 public:
 
