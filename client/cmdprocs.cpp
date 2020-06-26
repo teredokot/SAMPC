@@ -10,6 +10,9 @@
 #include "main.h"
 #include "game/util.h"
 #include "game/task.h"
+#include <shlobj.h>
+#include <filesystem>
+#include <fstream>
 
 extern BYTE	*pbyteCameraMode;
 
@@ -168,14 +171,20 @@ void cmdCmpStat(PCHAR szCmd)
 void cmdSavePos(PCHAR szCmd)
 {
 	CPlayerPed *pPlayer = pGame->FindPlayerPed();
-	FILE *fileOut;
 	DWORD dwVehicleID;
 	float fZAngle;
 
 	//if(!tSettings.bDebug) return;
 
-	fopen_s(&fileOut, "savedpositions.txt","a");
-	if(!fileOut) {
+	char cPath[MAX_PATH];
+	SHGetSpecialFolderPath(0, cPath, CSIDL_PERSONAL, 0);
+	const std::filesystem::path path(cPath);
+	if (!std::filesystem::exists(path / "GTA San Andreas User Files" / "SAMP"))
+		std::filesystem::create_directories(path / "GTA San Andreas User Files" / "SAMP");
+
+	std::ofstream file(path / "GTA San Andreas User Files" / "SAMP" / "savedpositions.txt", std::ios_base::out | std::ios_base::app);
+	if (!file.is_open())
+	{
 		pChatWindow->AddDebugMessage("I can't open the savepositions.txt file for append.");
 		return;
 	}
@@ -189,11 +198,11 @@ void cmdSavePos(PCHAR szCmd)
 		dwVehicleID = GamePool_Vehicle_GetIndex(pVehicle);
 		ScriptCommand(&get_car_z_angle,dwVehicleID,&fZAngle);
 
-		fprintf(fileOut,"AddStaticVehicle(%u,%.4f,%.4f,%.4f,%.4f,%u,%u); // %s\n",
-			pVehicle->entity.nModelIndex,pVehicle->entity.mat->pos.X,pVehicle->entity.mat->pos.Y,pVehicle->entity.mat->pos.Z,
-			fZAngle,pVehicle->byteColor1,pVehicle->byteColor2,szCmd);
+		file << "AddStaticVehicle(" << pVehicle->entity.nModelIndex << "," << pVehicle->entity.mat->pos.X
+			<< "," << pVehicle->entity.mat->pos.Y << "," << pVehicle->entity.mat->pos.Z << "," << fZAngle
+			<< "," << pVehicle->byteColor1 << "," << pVehicle->byteColor2 << "); // " << szCmd << std::endl;
 
-		fclose(fileOut);
+		file.close();
 
 		pChatWindow->AddDebugMessage("-> Vehicle pos saved");
 
@@ -205,12 +214,13 @@ void cmdSavePos(PCHAR szCmd)
 	PED_TYPE *pActor = pPlayer->GetGtaActor();
 	ScriptCommand(&get_actor_z_angle,pPlayer->m_dwGTAId,&fZAngle);
 
-	fprintf(fileOut,"AddPlayerClass(%u,%.4f,%.4f,%.4f,%.4f,0,0,0,0,0,0); // %s\n",pPlayer->GetModelIndex(),
-		pActor->entity.mat->pos.X,pActor->entity.mat->pos.Y,pActor->entity.mat->pos.Z,fZAngle,szCmd);
+	file << "AddPlayerClass(" << pPlayer->GetModelIndex() << "," << pActor->entity.mat->pos.X
+		<< "," << pActor->entity.mat->pos.Y << "," << pActor->entity.mat->pos.Z << ","
+		<< fZAngle << ",0,0,0,0,0,0); // " << szCmd << std::endl;
 
 	pChatWindow->AddDebugMessage("-> Class pos saved");
 
-	fclose(fileOut);
+	file.close();
 }
 
 //----------------------------------------------------
