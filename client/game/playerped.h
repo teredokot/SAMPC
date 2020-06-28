@@ -171,6 +171,8 @@ public:
 
 	void SetFightingStyle(unsigned char style, unsigned char move);
 
+	bool IsDucking();
+
 	PED_TYPE    *m_pPed;
 	BYTE		m_bytePlayerNumber;
 	DWORD		m_dwMarkerID;

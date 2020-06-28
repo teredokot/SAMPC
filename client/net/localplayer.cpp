@@ -508,6 +508,9 @@ void CLocalPlayer::ApplySpecialAction(BYTE byteSpecialAction)
 
 BYTE CLocalPlayer::GetSpecialAction()
 {
+	if (m_pPlayerPed->IsDucking())
+		return SPECIAL_ACTION_DUCK;
+
 	if(m_pPlayerPed->IsInJetpackMode()) {
 		return SPECIAL_ACTION_USEJETPACK;
 	}

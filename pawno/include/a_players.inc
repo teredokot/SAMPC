@@ -5,6 +5,7 @@
 #define _players_included
 
 #define SPECIAL_ACTION_NONE				(0)
+#define SPECIAL_ACTION_DUCK 			(1)
 #define SPECIAL_ACTION_USEJETPACK		(2)
 #define SPECIAL_ACTION_DANCE1			(5)
 #define SPECIAL_ACTION_DANCE2			(6)
