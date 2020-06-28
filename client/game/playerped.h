@@ -172,6 +172,7 @@ public:
 	void SetFightingStyle(unsigned char style, unsigned char move);
 
 	bool IsDucking();
+	unsigned char IsEnteringVehicle();
 
 	PED_TYPE    *m_pPed;
 	BYTE		m_bytePlayerNumber;

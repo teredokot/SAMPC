@@ -1997,3 +1997,15 @@ bool CPlayerPed::IsDucking()
 {
 	return (m_pPed->dwStateFlags >> 26) & 1;
 }
+
+unsigned char CPlayerPed::IsEnteringVehicle()
+{
+	if (m_pPed && m_pPed->Tasks && m_pPed->Tasks->pdwJumpJetPack) {
+		int iType = GetTaskTypeFromTask(m_pPed->Tasks->pdwJumpJetPack);
+		if (iType == 700 || iType == 712)
+			return 2;
+		if (iType == 701 || iType == 713)
+			return 1;
+	}
+	return 0;
+}
