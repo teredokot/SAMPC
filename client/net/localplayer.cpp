@@ -518,6 +518,9 @@ BYTE CLocalPlayer::GetSpecialAction()
 	if (m_pPlayerPed->IsEnteringVehicle())
 		return SPECIAL_ACTION_ENTER_VEHICLE;
 
+	if (m_pPlayerPed->IsExitingVehicle())
+		return SPECIAL_ACTION_EXIT_VEHICLE;
+
 	if(m_pPlayerPed->IsDancing()) {
 		switch(m_pPlayerPed->m_iDanceStyle) {
 			case 0:

@@ -2009,3 +2009,12 @@ unsigned char CPlayerPed::IsEnteringVehicle()
 	}
 	return 0;
 }
+
+bool CPlayerPed::IsExitingVehicle()
+{
+	if (m_pPed && m_pPed->Tasks && m_pPed->Tasks->pdwJumpJetPack) {
+		if (GetTaskTypeFromTask(m_pPed->Tasks->pdwJumpJetPack) == 704)
+			return true;
+	}
+	return false;
+}

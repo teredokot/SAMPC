@@ -173,6 +173,7 @@ public:
 
 	bool IsDucking();
 	unsigned char IsEnteringVehicle();
+	bool IsExitingVehicle();
 
 	PED_TYPE    *m_pPed;
 	BYTE		m_bytePlayerNumber;
