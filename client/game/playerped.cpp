@@ -1363,7 +1363,7 @@ void CPlayerPed::SetMoney(int iAmount)
 void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 								 int opt1, int opt2, int opt3, int opt4, int iUnk )
 {
-	bool bLoaded = false;
+	//bool bLoaded = false;
 	int iWaitAnimLoad=0;
 
 	
@@ -1379,22 +1379,24 @@ void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 		//szAnimName,szAnimFile,fT,opt1,opt2,opt3,opt4,iUnk);
 #endif
 
-	if (!CGame::IsAnimationLoaded(szAnimFile)) {
+	int iRet = CGame::IsAnimationLoaded(szAnimFile);
+	if (iRet == 0) {
 		CGame::RequestAnimation(szAnimFile);
 		while(!CGame::IsAnimationLoaded(szAnimFile)) {
 			Sleep(5);
 			iWaitAnimLoad++;
 			if(iWaitAnimLoad == 10) return; // we can't wait forever
 		}		
-		bLoaded = true;
-	}
+		//bLoaded = true;
+	} else if (iRet == -1)
+		return;
 
 	ScriptCommand(&apply_animation,m_dwGTAId,szAnimName,szAnimFile,fT,opt1,opt2,opt3,opt4,iUnk);
 
-	if (bLoaded) {
+	//if (bLoaded) {
 		// not sure about this (how many anim files can we keep loaded?)
 		//pGame->ReleaseAnimation(szAnimFile);
-	}
+	//}
 }
 
 //-----------------------------------------------------------

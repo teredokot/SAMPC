@@ -203,13 +203,13 @@ void CNetGame::Process()
 	pGame->SetWorldWeather(m_byteWeather);
 
 	// KEEP THE FOLLOWING ANIMS LOADED DURING THE NETGAME
-	if(!CGame::IsAnimationLoaded("PARACHUTE")) CGame::RequestAnimation("PARACHUTE");
-	if(!CGame::IsAnimationLoaded("DANCING")) CGame::RequestAnimation("DANCING");
-	if(!CGame::IsAnimationLoaded("GFUNK")) CGame::RequestAnimation("GFUNK");
-	if(!CGame::IsAnimationLoaded("RUNNINGMAN"))	CGame::RequestAnimation("RUNNINGMAN");
-	if(!CGame::IsAnimationLoaded("WOP")) CGame::RequestAnimation("WOP");
-	if(!CGame::IsAnimationLoaded("STRIP")) CGame::RequestAnimation("STRIP");
-	if(!CGame::IsAnimationLoaded("PAULNMAC")) CGame::RequestAnimation("PAULNMAC");
+	if(CGame::IsAnimationLoaded("PARACHUTE") == 0) CGame::RequestAnimation("PARACHUTE");
+	if(CGame::IsAnimationLoaded("DANCING") == 0) CGame::RequestAnimation("DANCING");
+	if(CGame::IsAnimationLoaded("GFUNK") == 0) CGame::RequestAnimation("GFUNK");
+	if(CGame::IsAnimationLoaded("RUNNINGMAN") == 0)	CGame::RequestAnimation("RUNNINGMAN");
+	if(CGame::IsAnimationLoaded("WOP") == 0) CGame::RequestAnimation("WOP");
+	if(CGame::IsAnimationLoaded("STRIP") == 0) CGame::RequestAnimation("STRIP");
+	if(CGame::IsAnimationLoaded("PAULNMAC") == 0) CGame::RequestAnimation("PAULNMAC");
 				
 	if(!CGame::IsModelLoaded(OBJECT_PARACHUTE)) {
 		CGame::RequestModel(OBJECT_PARACHUTE);

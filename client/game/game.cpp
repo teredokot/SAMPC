@@ -368,18 +368,18 @@ void CGame::RequestAnimation(char *szAnimFile)
 int CGame::IsAnimationLoaded(char *szAnimFile)
 {
 	DWORD dwFunc = 0x4D3940;
-	bool bRet = false;
+	char cRet = -1;
 	_asm {
 		push szAnimFile
 		call dwFunc
 		test eax, eax
 		jz sub_4D3940_failed
 		mov cl, [eax+10h]
-		mov bRet, cl
+		mov cRet, cl
 	sub_4D3940_failed:
 		add esp, 4	
 	}
-	return bRet;
+	return cRet;
 }
 
 // OPC: 04EF (0048C3D5) release_animation
