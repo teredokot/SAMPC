@@ -78,7 +78,7 @@ native SetPlayerHealth(playerid, Float:health);
 native GetPlayerHealth(playerid, &Float:health);
 native SetPlayerArmour(playerid, Float:health);
 native GetPlayerArmour(playerid, &Float:health);
-native SetPlayerAmmo(playerid, weaponslot, ammo);
+native SetPlayerAmmo(playerid, weaponid, ammo);
 native GetPlayerAmmo(playerid);
 native SetPlayerTeam(playerid, teamid);
 native GetPlayerTeam(playerid);
