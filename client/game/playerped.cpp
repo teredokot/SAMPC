@@ -1371,9 +1371,6 @@ void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 	if(!GamePool_Ped_GetAt(m_dwGTAId)) return;
 	if(IsPissing()) StopPissing();
     
-	// Can't allow 'naughty' anims!
-	if(!_stricmp(szAnimFile,"SEX")) return;
-
 #ifdef _DEBUG
 	//if(pChatWindow) pChatWindow->AddDebugMessage("Anim(%s,%s,%f,%d,%d,%d,%d,%d)",
 		//szAnimName,szAnimFile,fT,opt1,opt2,opt3,opt4,iUnk);
