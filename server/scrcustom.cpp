@@ -3747,14 +3747,14 @@ static cell n_GetPlayerPing(AMX *amx, cell *params)
 static cell n_GetPlayerWeapon(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "GetPlayerWeapon", 1);
-	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
-	if(!pPlayer) return -1;	
-	BYTE byteState = pPlayer->GetState();
-	if ((byteState != PLAYER_STATE_DRIVER) || (byteState != PLAYER_STATE_PASSENGER))
-	{
-		return pPlayer->GetCurrentWeapon();
-	} else { return 0; }
-	
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			return pPlayer->GetCurrentWeapon();
+		}
+	}
+	return -1;
 }
 
 // native SetTimerEx(funcname[], interval, repeating, parameter)

@@ -158,7 +158,14 @@ public:
 	bool IsInCheckpoint() { return m_bInCheckpoint; };
 	bool IsInRaceCheckpoint() { return m_bInRaceCheckpoint; };
 	BYTE GetTeam() { return m_SpawnInfo.byteTeam; };
-	BYTE GetCurrentWeapon() { return m_ofSync.byteCurrentWeapon; };
+	unsigned char GetCurrentWeapon() {
+		if (m_byteState == PLAYER_STATE_PASSENGER)
+			return m_psSync.byteCurrentWeapon;
+		else if (m_byteState == PLAYER_STATE_DRIVER)
+			return m_icSync.byteCurrentWeapon;
+		// Return onfoot weapon in any other state
+		return m_ofSync.byteCurrentWeapon;
+	};
 	
 	//WEAPON_SLOT_TYPE* GetWeaponSlotsData();
 	void SetWeaponSlot(BYTE byteSlot, DWORD dwWeapon, DWORD dwAmmo);
