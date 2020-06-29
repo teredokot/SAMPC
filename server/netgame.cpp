@@ -1010,7 +1010,6 @@ void CNetGame::Packet_StatsUpdate(Packet *p)
 	if(pPlayerPool) {
 		if(pPlayerPool->GetSlotState(p->playerIndex)) {
 			pPlayerPool->GetAt(p->playerIndex)->m_iMoney = iMoney;
-			pPlayerPool->SetPlayerAmmo((BYTE)p->playerIndex, (DWORD)wAmmo);
 			pPlayerPool->GetAt(p->playerIndex)->SetCurrentWeaponAmmo((DWORD)wAmmo);
 		}
 	}	

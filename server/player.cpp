@@ -1145,5 +1145,23 @@ void CPlayer::SetVirtualWorld(int iVirtualWorld)
 	pNetGame->SendToAll(RPC_ScrSetPlayerVirtualWorld, &bsData);
 }
 
+unsigned long CPlayer::GetCurrentWeaponAmmo()
+{
+	unsigned char ucWeapon = -1;
+	if (m_byteState == PLAYER_STATE_DRIVER)
+		ucWeapon = m_ofSync.byteCurrentWeapon;
+	else if (m_byteState == PLAYER_STATE_PASSENGER)
+		ucWeapon = m_psSync.byteCurrentWeapon;
+	else
+		ucWeapon = m_ofSync.byteCurrentWeapon;
+
+	for (unsigned char i = 0; i < 13; i++) {
+		if (m_byteSlotWeapon[i] == ucWeapon) {
+			return m_dwSlotAmmo[i];
+		}
+	}
+	return 0;
+}
+
 //----------------------------------------------------
 // EOF

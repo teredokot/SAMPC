@@ -191,6 +191,8 @@ public:
 	int GetVirtualWorld() const {
 		return m_iVirtualWorld;
 	}
+
+	unsigned long GetCurrentWeaponAmmo();
 };
 
 #endif

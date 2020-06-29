@@ -3131,17 +3131,16 @@ static cell n_ResetPlayerMoney(AMX *amx, cell *params)
 
 //----------------------------------------------------------------------------------
 // native GetPlayerAmmo(playerid)
-
-static cell n_GetPlayerAmmo(AMX *amx, cell *params)
+static cell n_GetPlayerAmmo(AMX* amx, cell* params)
 {	
 	CHECK_PARAMS(amx, "GetPlayerAmmo", 1);
-	BYTE bytePlayerID = (BYTE)params[1];
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
-	if(pPlayerPool->GetSlotState(bytePlayerID)) {
-		return pPlayerPool->GetPlayerAmmo(bytePlayerID);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			return pPlayer->GetCurrentWeaponAmmo();
+		}
 	}
-
 	return 0;
 }
 
