@@ -362,7 +362,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_WINDOWS</PreprocessorDefinitions>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
     </ClCompile>
-    <ClCompile Include="guitest.cpp" />
     <ClCompile Include="label.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;_DEBUG;_WINDOWS</PreprocessorDefinitions>
@@ -498,8 +497,6 @@
     <ClInclude Include="..\sdk\dxut\DXUTmisc.h" />
     <ClInclude Include="..\sdk\dxut\DXUTSettingsDlg.h" />
     <ClInclude Include="..\sdk\md5\md5.h" />
-    <ClInclude Include="..\sdk\nuklear\nuklear.h" />
-    <ClInclude Include="..\sdk\nuklear\nuklear_d3d9.h" />
     <ClInclude Include="..\sdk\raknet\BigTypes.h" />
     <ClInclude Include="..\sdk\raknet\BitStream.h" />
     <ClInclude Include="..\sdk\raknet\CheckSum.h" />
@@ -618,7 +615,6 @@
     <ClInclude Include="game\textdraw.h" />
     <ClInclude Include="game\util.h" />
     <ClInclude Include="game\vehicle.h" />
-    <ClInclude Include="guitest.h" />
     <ClInclude Include="label.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mod.h" />

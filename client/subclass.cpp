@@ -164,9 +164,9 @@ BOOL HandleKeyPress(DWORD vKey)
 			}
 			break;
 		}
-		case VK_F1:
+		/*case VK_F1:
 			GUI_ToggleHelp();
-			break;
+			break;*/
 
 		case 38: // Will be up
 			if (pCmdWindow->isEnabled())
@@ -243,14 +243,9 @@ bool SubclassGameWindow()
 LRESULT APIENTRY NewWndProc( HWND hwnd,UINT uMsg,
 							 WPARAM wParam,LPARAM lParam ) 
 {
-#ifdef USE_NUKLEAR_INPUT
-	if (pCmdWindow && pCmdWindow->isEnabled() && GUI_Event(hwnd, uMsg, wParam, lParam))
-		return 0;
-#else
 	if(pCmdWindow) {
 		pCmdWindow->MsgProc(uMsg,wParam,lParam);
 	}
-#endif
 
 	switch(uMsg) {
 		case WM_SYSKEYUP:

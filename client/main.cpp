@@ -21,9 +21,7 @@ CDeathWindow			*pDeathWindow=0;
 CSpawnScreen			*pSpawnScreen=0;
 CNetGame				*pNetGame=0;
 CFontRender				*pDefaultFont=0;
-#ifndef USE_NUKLEAR_INPUT
 CCursor					*pCursor = NULL;
-#endif
 
 static bool				bGameInited=false;
 static bool				bNetworkInited=false;
@@ -307,12 +305,8 @@ void DoInitStuff()
 
 		SetupGameUI();
 
-#ifndef USE_NUKLEAR_INPUT
 		pCursor = new CCursor;
 		pCursor->Init();
-#endif
-
-		GUI_Init();
 
 		if(tSettings.bPlayOnline) {
 			pDeathWindow = new CDeathWindow(pD3DDevice);
@@ -537,15 +531,11 @@ void InitSettings()
 
 void d3d9DestroyDeviceObjects()
 {
-	GUI_Release();
-
 	if (pDialogResourceManager)
 		pDialogResourceManager->OnLostDevice();
 
-#ifndef USE_NUKLEAR_INPUT
 	if (pCursor)
 		pCursor->DeleteDeviceObjects();
-#endif
 
 	if (pPlayerTags)
 		pPlayerTags->DeleteDeviceObjects();
@@ -573,10 +563,8 @@ void d3d9RestoreDeviceObjects()
 	if (pDialogResourceManager)
 		pDialogResourceManager->OnResetDevice();
 
-#ifndef USE_NUKLEAR_INPUT
 	if (pCursor)
 		pCursor->RestoreDeviceObjects();
-#endif
 
 	if (pPlayerTags)
 		pPlayerTags->RestoreDeviceObjects();
