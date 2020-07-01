@@ -16,6 +16,7 @@ bool IsVehicleModelIdValid(int iId);
 const char* GetVehicleName(int iModelId);
 bool IsPedSkinIdValid(int iId);
 const float* GetVehicleModelInfoData(int modelid, int infotype);
+const char* GetWeaponName(int iWeaponID);
 
 void Util_UrlUnencode(char *enc);
 char Util_toupper(char c);

@@ -822,7 +822,7 @@ void CPlayer::HandleDeath(BYTE byteReason, BYTE byteWhoWasResponsible)
 		logprintf("[death] %s died %d", m_szName, byteReason);
 	} else {
 		CPlayer* pKiller = pNetGame->GetPlayerPool()->GetAt(byteWhoWasResponsible);
-		logprintf("[kill] %s killed %s %s", pKiller->GetName(), m_szName, pNetGame->GetWeaponName(byteReason));
+		logprintf("[kill] %s killed %s %s", pKiller->GetName(), m_szName, GetWeaponName(byteReason));
 	}
 }
 

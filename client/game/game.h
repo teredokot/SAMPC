@@ -144,8 +144,6 @@ public:
 		return m_pGamePlayer;
 	};
 
-	const PCHAR GetWeaponName(int iWeaponID);
-
 	DWORD CreatePickup(int iModel, int iType, float fX, float fY, float fZ);
 	DWORD CreateWeaponPickup(int iModel, DWORD dwAmmo, float fX, float fY, float fZ);
 

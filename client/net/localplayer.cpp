@@ -1273,9 +1273,9 @@ void CLocalPlayer::ProcessClassSelection()
 			strcat_s(szMsg,"Press SHIFT when ready to spawn.\n\n");
 			
 			sprintf_s(szClassInfo,"Class %u Weapons:\n- %s\n- %s\n- %s",m_iSelectedClass,
-				pGame->GetWeaponName(m_SpawnInfo.iSpawnWeapons[0]),
-				pGame->GetWeaponName(m_SpawnInfo.iSpawnWeapons[1]),
-				pGame->GetWeaponName(m_SpawnInfo.iSpawnWeapons[2]));
+				GetWeaponName(m_SpawnInfo.iSpawnWeapons[0]),
+				GetWeaponName(m_SpawnInfo.iSpawnWeapons[1]),
+				GetWeaponName(m_SpawnInfo.iSpawnWeapons[2]));
 
 			strcat_s(szMsg, szClassInfo);
 		

@@ -188,7 +188,6 @@ public:
 	void SetWeather(BYTE byteWeather);
 	void SetGravity(float fGravity);
 	void UpdateInstagib();
-	const PCHAR GetWeaponName(int iWeaponID);
 };
 
 //----------------------------------------------------

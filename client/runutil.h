@@ -22,5 +22,6 @@ char * K_DecodeString(unsigned char *szInput);
 void K_EncodeString(char *szInput, char *szOutput);
 
 unsigned long Util_GetTime();
+const char* GetWeaponName(int iWeaponID);
 
 //----------------------------------------------------
