@@ -63,6 +63,9 @@ public:
 	bool					m_bTyping;
 	RakNet::Time			m_nLastPingUpdate;
 
+	unsigned char			m_ucFightingStyle;
+	unsigned char			m_ucFightingMove;
+
 	// Weapon data
 	DWORD					m_dwSlotAmmo[13];
 	BYTE					m_byteSlotWeapon[13];

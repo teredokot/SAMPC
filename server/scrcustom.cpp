@@ -1081,18 +1081,39 @@ static cell n_GetPlayerSkin(AMX *amx, cell *params)
 	return 0;
 }
 
+// native GetPlayerFightingStyle(playerid)
+static cell n_GetPlayerFightingStyle(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerFightingStyle", 1);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			return pPlayer->m_ucFightingStyle;
+		}
+	}
+	return 4; // FIGHT_STYLE_NORMAL
+}
+
+// native SetPlayerFightingStyle(playerid, style, moves = 6)
 static cell n_SetPlayerFightingStyle(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetPlayerFightingStyle", 3);
-	CPlayerPool* pPool = pNetGame->GetPlayerPool();
-	if (pPool && pPool->GetSlotState(params[1]))
-	{
-		RakNet::BitStream out;
-		out.Write<int>(4);
-		out.Write((unsigned char)params[2]);
-		out.Write((unsigned char)params[3]);
-		pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out);
-		return 1;
+
+	if (VALIDATE_FIGHTING(params[2], params[3])) {
+		if (pNetGame->GetPlayerPool()) {
+			CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+			if (pPlayer != nullptr) {
+				RakNet::BitStream out;
+				out.Write<int>(4);
+				out.Write((unsigned char)params[2]);
+				out.Write((unsigned char)params[3]);
+				if (pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out)) {
+					pPlayer->m_ucFightingStyle = (unsigned char)params[2];
+					pPlayer->m_ucFightingMove = (unsigned char)params[3];
+					return 1;
+				}
+			}
+		}
 	}
 	return 0;
 }
@@ -6494,6 +6515,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerCameraMode),
 	DEFINE_NATIVE(GetPlayerCameraAspectRatio),
 	DEFINE_NATIVE(SetPlayerArmedWeapon),
+	DEFINE_NATIVE(GetPlayerFightingStyle),
 	DEFINE_NATIVE(SetPlayerFightingStyle),
 	DEFINE_NATIVE(SetPlayerMaxHealth),
 	DEFINE_NATIVE(InterpolateCameraPos),

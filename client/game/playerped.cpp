@@ -1993,6 +1993,12 @@ void CPlayerPed::SetFightingStyle(unsigned char style, unsigned char move)
 	}
 }
 
+void CPlayerPed::GetFightingStyle(unsigned char* style, unsigned char* move)
+{
+	*style = *(BYTE*)(m_pPed + 0x72D);
+	*move = *(BYTE*)(m_pPed + 0x72E);
+}
+
 bool CPlayerPed::IsDucking()
 {
 	return (m_pPed->dwStateFlags >> 26) & 1;

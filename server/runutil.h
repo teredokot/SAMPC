@@ -7,6 +7,10 @@
 //
 //----------------------------------------------------
 
+#define VALIDATE_FIGHTING(style, moves) \
+	(((style) >= 4 && (style) <= 7) || (style) == 15 || (style) == 16) && \
+	((moves) >= 0 && (moves) <= 5)
+
 namespace Utils
 {
 	int GetTypeByComponentId(short sModelId);

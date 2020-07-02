@@ -86,6 +86,8 @@ CPlayer::CPlayer()
 	m_bHasSpawnInfo = false;
 	m_iScore = 0;
 	m_nLastPingUpdate = 0;
+	m_ucFightingStyle = 4; // FIGHT_STYLE_NORMAL
+	m_ucFightingMove = 0;
 
 	m_pVariables = new CVariables;
 

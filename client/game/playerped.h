@@ -170,6 +170,7 @@ public:
 	void		SetAimZ(float fAimZ);
 
 	void SetFightingStyle(unsigned char style, unsigned char move);
+	void GetFightingStyle(unsigned char* style, unsigned char* move);
 
 	bool IsDucking();
 	unsigned char IsEnteringVehicle();
