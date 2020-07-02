@@ -61,6 +61,13 @@
 #define PLAYER_VARTYPE_STRING	(2)
 #define PLAYER_VARTYPE_FLOAT	(3)
 
+#define FIGHT_STYLE_NORMAL 		(4)
+#define FIGHT_STYLE_BOXING 		(5)
+#define FIGHT_STYLE_KUNGFU 		(6)
+#define FIGHT_STYLE_KNEEHEAD 	(7)
+#define FIGHT_STYLE_GRABKICK	(15)
+#define FIGHT_STYLE_ELBOW 		(16)
+
 native GetPlayerCount();
 native GetPlayerIDFromName(const name[]);
 native SetSpawnInfo(playerid, teamid, skinid, Float:x, Float:y, Float:z, Float:a, weap1, ammo1, weap2, ammo2, weap3, ammo3);
