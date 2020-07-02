@@ -164,6 +164,7 @@ native GetPlayerVehicleSeat(playerid);
 native GetPlayerCameraMode(playerid);
 native SetPlayerArmedWeapon(playerid, weaponid);
 native GetPlayerFightingStyle(playerid);
+native GetPlayerFightingMove(playerid);
 native SetPlayerFightingStyle(playerid, style, moves = 6);
 native SetPlayerMaxHealth(playerid, Float:max_health);
 native InterpolateCameraPos(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = CAMERA_CUT);

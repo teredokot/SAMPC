@@ -1094,6 +1094,19 @@ static cell n_GetPlayerFightingStyle(AMX* amx, cell* params)
 	return 4; // FIGHT_STYLE_NORMAL
 }
 
+// native GetPlayerFightingMove(playerid)
+static cell n_GetPlayerFightingMove(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerFightingMove", 1);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			return pPlayer->m_ucFightingMove;
+		}
+	}
+	return 0;
+}
+
 // native SetPlayerFightingStyle(playerid, style, moves = 6)
 static cell n_SetPlayerFightingStyle(AMX* amx, cell* params)
 {
@@ -6516,6 +6529,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerCameraAspectRatio),
 	DEFINE_NATIVE(SetPlayerArmedWeapon),
 	DEFINE_NATIVE(GetPlayerFightingStyle),
+	DEFINE_NATIVE(GetPlayerFightingMove),
 	DEFINE_NATIVE(SetPlayerFightingStyle),
 	DEFINE_NATIVE(SetPlayerMaxHealth),
 	DEFINE_NATIVE(InterpolateCameraPos),
