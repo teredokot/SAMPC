@@ -162,6 +162,7 @@ native SetPlayerSkillLevel(playerid, skill, level);
 native GetPlayerSurfingVehicleID(playerid);
 native GetPlayerVehicleSeat(playerid);
 native GetPlayerCameraMode(playerid);
+native GetPlayerCameraZoom(playerid);
 native SetPlayerArmedWeapon(playerid, weaponid);
 native GetPlayerFightingStyle(playerid);
 native GetPlayerFightingMove(playerid);
