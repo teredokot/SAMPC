@@ -5484,6 +5484,27 @@ static cell n_GetPlayerCameraZoom(AMX* amx, cell* params)
 	return amx_ftoc(fRet);
 }
 
+// native GetPlayerCameraPos(playerid, &Float:x, &Float:y, &Float:z)
+static cell n_GetPlayerCameraPos(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerCameraPos", 4);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			VECTOR* pAimCam = &pPlayer->GetAimSyncData()->vecAimPos;
+			cell* cptr;
+			if (amx_GetAddr(amx, params[2], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->X;
+			if (amx_GetAddr(amx, params[3], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->Y;
+			if (amx_GetAddr(amx, params[4], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->Z;
+			return 1;
+		}
+	}
+	return 0;
+}
+
 // native GetPlayerCameraFrontVector(playerid, &Float:x, &Float:y, &Float:z)
 static cell n_GetPlayerCameraFrontVector(AMX* amx, cell* params)
 {
@@ -6565,6 +6586,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerCameraMode),
 	DEFINE_NATIVE(GetPlayerCameraZoom),
 	DEFINE_NATIVE(GetPlayerCameraAspectRatio),
+	DEFINE_NATIVE(GetPlayerCameraPos),
 	DEFINE_NATIVE(GetPlayerCameraFrontVector),
 	DEFINE_NATIVE(SetPlayerArmedWeapon),
 	DEFINE_NATIVE(GetPlayerFightingStyle),
