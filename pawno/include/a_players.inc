@@ -163,6 +163,7 @@ native GetPlayerSurfingVehicleID(playerid);
 native GetPlayerVehicleSeat(playerid);
 native GetPlayerCameraMode(playerid);
 native GetPlayerCameraZoom(playerid);
+native GetPlayerCameraFrontVector(playerid, &Float:x=0.0, &Float:y=0.0, &Float:z=0.0);
 native SetPlayerArmedWeapon(playerid, weaponid);
 native GetPlayerFightingStyle(playerid);
 native GetPlayerFightingMove(playerid);
