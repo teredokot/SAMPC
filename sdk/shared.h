@@ -19,6 +19,7 @@
 #define MAX_COLUMNS 2
 #define MAX_PICKUPS 400
 #define MAX_TEXT_DRAW_LINE 256
+#define MAX_MAP_ICON 200
 #define INVALID_PLAYER_ID_EX 65535
 
 #define RPC_PING_UPDATE_TIME 3000 // in ms (3 seconds)

@@ -3898,7 +3898,7 @@ static cell n_SetPlayerMarkerForPlayer(AMX *amx, cell *params)
 static cell n_SetPlayerMapIcon(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "SetPlayerMapIcon", 7); // Playerid,
-	if ((BYTE)params[2] >= 32) return 0;
+	if ((BYTE)params[2] >= MAX_MAP_ICON) return 0;
 	
 	//CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 

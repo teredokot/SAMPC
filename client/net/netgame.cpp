@@ -86,7 +86,7 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_bNameTagLOS = true;
 
 	int i;
-	for (i = 0; i < 32; i++) m_dwMapIcon[i] = NULL;
+	for (i = 0; i < MAX_MAP_ICON; i++) m_dwMapIcon[i] = NULL;
 
 	m_byteFriendlyFire = 1;
 	pGame->EnableClock(0); // Hide the clock by default
@@ -845,7 +845,7 @@ void CNetGame::ResetGangZonePool()
 
 void CNetGame::SetMapIcon(BYTE byteIndex, float fX, float fY, float fZ, BYTE byteIcon, DWORD dwColor)
 {
-	if (byteIndex >= 32) return;
+	if (byteIndex >= MAX_MAP_ICON) return;
 	if (m_dwMapIcon[byteIndex] != NULL) DisableMapIcon(byteIndex);
 	//ScriptCommand(&create_radar_marker_without_sphere, fX, fY, fZ, byteIcon, &m_dwMapIcon);
 	m_dwMapIcon[byteIndex] = pGame->CreateRadarMarkerIcon(byteIcon, fX, fY, fZ, dwColor);
@@ -856,7 +856,7 @@ void CNetGame::SetMapIcon(BYTE byteIndex, float fX, float fY, float fZ, BYTE byt
 
 void CNetGame::DisableMapIcon(BYTE byteIndex)
 {
-	if (byteIndex >= 32) return;
+	if (byteIndex >= MAX_MAP_ICON) return;
 	ScriptCommand(&disable_marker, m_dwMapIcon[byteIndex]);
 	m_dwMapIcon[byteIndex] = NULL;
 }
@@ -866,7 +866,7 @@ void CNetGame::DisableMapIcon(BYTE byteIndex)
 void CNetGame::ResetMapIcons()
 {
 	BYTE i;
-	for (i = 0; i < 32; i++)
+	for (i = 0; i < MAX_MAP_ICON; i++)
 	{
 		if (m_dwMapIcon[i] != NULL) DisableMapIcon(i);
 	}

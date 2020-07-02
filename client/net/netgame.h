@@ -85,7 +85,7 @@ public:
 	char		m_szHostOrIp[256];
 	int			m_iPort;
 
-	DWORD		m_dwMapIcon[32];
+	DWORD		m_dwMapIcon[MAX_MAP_ICON];
 
 	CNetGame(PCHAR szHostOrIp,int iPort,PCHAR szPlayerName,PCHAR szPass);
 	~CNetGame();
