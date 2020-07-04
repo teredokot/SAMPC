@@ -62,7 +62,7 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		m_dwGTAId = dwRetID;
 		dwLastCreatedVehicleID = dwRetID;
 		m_pVehicle->dwDoorsLocked = 0;
-		m_bIsLocked = FALSE;
+		//m_bIsLocked = FALSE;
 		
 		Remove(); // They'll be added manually during pool processing.					
 	}
@@ -277,7 +277,7 @@ void CVehicle::Recreate()
 		m_dwGTAId = dwRetID;
 		dwLastCreatedVehicleID = dwRetID;
 		m_pVehicle->dwDoorsLocked = 0;
-		m_bIsLocked = FALSE;
+		//m_bIsLocked = FALSE;
 		//LinkToInterior(m_byteInterior);
 
 		SetMatrix(mat);
@@ -799,18 +799,18 @@ void CVehicle::RemoveEveryoneFromVehicle()
 
 	float fPosX = m_pVehicle->entity.mat->pos.X;
 	float fPosY = m_pVehicle->entity.mat->pos.Y;
-	float fPosZ = m_pVehicle->entity.mat->pos.Z;
+	float fPosZ = m_pVehicle->entity.mat->pos.Z + 2.0f;
 
 	int iPlayerID = 0;
 	if (m_pVehicle->pDriver) {
 		iPlayerID = GamePool_Ped_GetIndex( m_pVehicle->pDriver );
-		ScriptCommand( &remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY, fPosZ + 2 );
+		ScriptCommand( &remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY, fPosZ );
 	}
 
 	for (int i = 0; i < 7; i++) {
 		if (m_pVehicle->pPassengers[i] != NULL) {
 			iPlayerID = GamePool_Ped_GetIndex( m_pVehicle->pPassengers[i] );
-			ScriptCommand( &remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY, fPosZ + 2 );
+			ScriptCommand( &remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY, fPosZ );
 		}
 	}
 }

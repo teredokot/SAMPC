@@ -1001,7 +1001,7 @@ float CRemotePlayer::GetDistanceFromRemotePlayer(CRemotePlayer *pFromPlayer)
 	fSY = (matThisPlayer.pos.Y - matFromPlayer.pos.Y) * (matThisPlayer.pos.Y - matFromPlayer.pos.Y);
 	fSZ = (matThisPlayer.pos.Z - matFromPlayer.pos.Z) * (matThisPlayer.pos.Z - matFromPlayer.pos.Z);
 		
-	return (float)sqrt(fSX + fSY + fSZ);	
+	return sqrtf(fSX + fSY + fSZ);	
 }
 
 //----------------------------------------------------

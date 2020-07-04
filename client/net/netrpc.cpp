@@ -112,7 +112,7 @@ void InitGame(RPCParameters *rpcParams)
 	pGame->EnableStuntBonus(bStuntBonus);
 	if (bLanMode) pNetGame->SetLanMode(true);
 
-	pNetGame->InitGameLogic();
+	//pNetGame->InitGameLogic();
 
 	// Set the gravity now
 	pGame->SetGravity(pNetGame->m_fGravity);

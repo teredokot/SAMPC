@@ -505,7 +505,7 @@ DWORD __stdcall TranslateColorCodeToRGBA(int iCode)
 	if(iCode == 201) return 0xAA0000FF;
 	if(iCode == 202) return 0xE2C063FF;
 
-	if(iCode < sizeof(dwUseHudColors)) {
+	if(iCode >= 0 && iCode < NUM_RADAR_COLORS) {
 		return dwUseHudColors[iCode];
 	} else {
 		return 0x999999FF;
@@ -615,7 +615,7 @@ float DistanceBetweenHorizontalPoints(float x1, float y1, float x2, float y2)
 	fSX = (x1 - x2) * (x1 - x2);
 	fSY = (y1 - y2) * (y1 - y2);
 	
-	return (float)sqrt(fSX + fSY);
+	return sqrtf(fSX + fSY);
 }
 
 //-----------------------------------------------------------
@@ -628,7 +628,7 @@ float DistanceBetweenPoints(float x1, float y1, float z1, float x2, float y2, fl
 	fSY = (y1 - y2) * (y1 - y2);
 	fSZ = (z1 - z2) * (z1 - z2);
 	
-	return (float)sqrt(fSX + fSY + fSZ);
+	return sqrtf(fSX + fSY + fSZ);
 }
 
 //----------------------------------------------------

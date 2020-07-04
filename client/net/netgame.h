@@ -105,7 +105,7 @@ public:
 	bool GetWalkStyle() { return m_bUseCJWalk; };
 	void SetLanMode(bool bMode) { m_bLanMode = bMode; };
 
-	void InitGameLogic();
+	//void InitGameLogic();
 	void Process();
 
 	void UpdatePlayerPings();

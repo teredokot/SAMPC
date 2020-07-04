@@ -98,7 +98,7 @@ public:
 	void	EnableZoneNames(BYTE byteEnable);
 	void	SetWantedLevel(BYTE byteLevel);
 	void	SetGameTextCount(WORD wCount);
-	void	DrawGangZone(float* fPos, DWORD dwColor);
+	void	DrawGangZone(float fPos[], DWORD dwColor);
 	void    EnableStuntBonus(bool bEnable);
 	void	SetDrunkLevel(float fLevel);
 	void   UpdateCheckpoints();
@@ -163,7 +163,7 @@ public:
 	float GetGameSpeed();
 
 	CGame();
-	~CGame() {};
+	//~CGame() {};
 
 	void DisableCamera(bool bDisable);
 

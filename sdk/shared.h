@@ -139,7 +139,7 @@
 #define INVALID_PLAYER_ID 255
 #define NO_TEAM 255
 
-#define PI 3.14159265
+#define PI 3.14159265f
 
 #define PACK_VEHICLE_HEALTH(f) (unsigned char)(f / 4)
 #define UNPACK_VEHICLE_HEALTH(b) (float)b * 4

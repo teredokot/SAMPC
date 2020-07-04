@@ -76,7 +76,7 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_byteWorldTime = 12;
 	m_byteWorldMinute = 0;
 	m_byteWeather	= 10;
-	m_fGravity = (float)0.008000000;
+	m_fGravity = 0.008000000f;
 	m_iDeathDropMoney = 0;
 	m_bLanMode = false;
 	m_byteHoldTime = 1;
@@ -84,6 +84,15 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_bDisableEnterExits = false;
 	m_fNameTagDrawDistance = 70.0f;
 	m_bNameTagLOS = true;
+	m_bAllowWeapons = true;
+	m_bLimitGlobalMarkerRadius = false;
+	m_bShowPlayerMarkers = true;
+	m_bShowPlayerTags = true;
+	m_bTirePopping = true;
+	m_fGlobalMarkerRadius = 10000.0f;
+
+	m_WorldBounds[0] = m_WorldBounds[2] = 20000.0f;
+	m_WorldBounds[1] = m_WorldBounds[3] = -20000.0f;
 
 	int i;
 	for (i = 0; i < MAX_MAP_ICON; i++) m_dwMapIcon[i] = NULL;
@@ -179,7 +188,7 @@ void CNetGame::ShutdownForGameModeRestart()
 
 //----------------------------------------------------
 
-void CNetGame::InitGameLogic()
+/*void CNetGame::InitGameLogic()
 {
 	//GameResetRadarColors();
 
@@ -187,7 +196,7 @@ void CNetGame::InitGameLogic()
 	m_WorldBounds[1] = -20000.0f;
 	m_WorldBounds[2] = 20000.0f;
 	m_WorldBounds[3] = -20000.0f;
-}
+}*/
 
 //----------------------------------------------------
 

@@ -102,7 +102,7 @@ public:
 
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;
-	BOOL		m_bIsLocked; // No control state
+	//BOOL		m_bIsLocked; // No control state
 	BOOL		m_bDoorsLocked; // Vehicle is enterable TRUE/FALSE
 	BYTE		m_byteObjectiveVehicle; // Is this a special objective vehicle? 0/1
 	BOOL		m_bSpecialMarkerEnabled;

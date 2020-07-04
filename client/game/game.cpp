@@ -37,6 +37,11 @@ CGame::CGame()
 	m_bCheckpointsEnabled = false;
 	m_bRaceCheckpointsEnabled = false;
 	m_dwRaceCheckpointHandle = NULL;
+	m_byteRaceType = 0;
+	m_dwCheckpointMarker = 0;
+	m_dwRaceCheckpointMarker = 0;
+	m_fRaceCheckpointSize = 0.0f;
+	m_vecCheckpointPos = m_vecCheckpointExtent = m_vecRaceCheckpointPos = m_vecRaceCheckpointNext = { 0.0f, 0.0f, 0.0f };
 }
 
 //-----------------------------------------------------------

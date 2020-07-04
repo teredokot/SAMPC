@@ -72,7 +72,7 @@ float CObject::DistanceRemaining(MATRIX4X4* matPos)
 	fSX = (matPos->pos.X - m_matTarget.pos.X) * (matPos->pos.X - m_matTarget.pos.X);
 	fSY = (matPos->pos.Y - m_matTarget.pos.Y) * (matPos->pos.Y - m_matTarget.pos.Y);
 	fSZ = (matPos->pos.Z - m_matTarget.pos.Z) * (matPos->pos.Z - m_matTarget.pos.Z);
-	return (float)sqrt(fSX + fSY + fSZ);
+	return sqrtf(fSX + fSY + fSZ);
 }
 
 void CObject::MoveTo(float X, float Y, float Z, float speed)

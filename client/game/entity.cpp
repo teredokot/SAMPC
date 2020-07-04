@@ -7,11 +7,6 @@
 //
 //----------------------------------------------------------
 
-
-#include <windows.h>
-#include <math.h>
-#include <stdio.h>
-
 #include "../main.h"
 #include "util.h"
 #include "entity.h"
@@ -212,7 +207,7 @@ float CEntity::GetDistanceFromLocalPlayerPed()
 	fSY = (matThis.pos.Y - matFromPlayer.pos.Y) * (matThis.pos.Y - matFromPlayer.pos.Y);
 	fSZ = (matThis.pos.Z - matFromPlayer.pos.Z) * (matThis.pos.Z - matFromPlayer.pos.Z);
 	
-	return (float)sqrt(fSX + fSY + fSZ);
+	return sqrtf(fSX + fSY + fSZ);
 }
 
 //-----------------------------------------------------------
@@ -227,7 +222,7 @@ float CEntity::GetDistanceFromPoint(float X, float Y, float Z)
 	fSY = (matThis.pos.Y - Y) * (matThis.pos.Y - Y);
 	fSZ = (matThis.pos.Z - Z) * (matThis.pos.Z - Z);
 	
-	return (float)sqrt(fSX + fSY + fSZ);
+	return sqrtf(fSX + fSY + fSZ);
 }
 
 //-----------------------------------------------------------

@@ -31,15 +31,19 @@ public:
 	bool New(BYTE bytePlayerID, PCHAR szPlayerName);
 	bool Delete(BYTE bytePlayerID, BYTE byteReason);
 
-	CRemotePlayer* GetAt(BYTE bytePlayerID) {
-		if(bytePlayerID > MAX_PLAYERS) { return NULL; }
-		return m_pPlayers[bytePlayerID];
+	CRemotePlayer* GetAt(unsigned short usPlayerID) {
+		if (usPlayerID < MAX_PLAYERS) {
+			return m_pPlayers[usPlayerID];
+		}
+		return NULL;
 	};
 
 	// Find out if the slot is inuse.
-	bool GetSlotState(BYTE bytePlayerID) {
-		if(bytePlayerID > MAX_PLAYERS) { return false; }
-		return m_bPlayerSlotState[bytePlayerID];
+	bool GetSlotState(unsigned short usPlayerID) {
+		if (usPlayerID < MAX_PLAYERS) {
+			return m_bPlayerSlotState[usPlayerID];
+		}
+		return false;
 	};
 	
 	void SetLocalPlayerID(BYTE byteID) {

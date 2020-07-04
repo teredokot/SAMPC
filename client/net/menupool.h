@@ -31,15 +31,19 @@ public:
 	// Retrieve a menu by id
 	CMenu* GetAt(BYTE byteMenuID)
 	{
-		if(byteMenuID > MAX_MENUS) { return NULL; }
-		return m_pMenus[byteMenuID];
+		if (byteMenuID < MAX_MENUS) {
+			return m_pMenus[byteMenuID];
+		}
+		return NULL;
 	};
 	
 	// Find out if the slot is inuse.
 	bool GetSlotState(BYTE byteMenuID)
 	{
-		if(byteMenuID > MAX_MENUS) { return false; }
-		return m_bMenuSlotState[byteMenuID];
+		if (byteMenuID < MAX_MENUS) {
+			return m_bMenuSlotState[byteMenuID];
+		}
+		return false;
 	};
 	
 	void ShowMenu(BYTE byteMenuID);
