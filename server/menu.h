@@ -10,15 +10,6 @@ Version: $Id: menu.h,v 1.0 2007/02/13 19:26:45 Y_Less Exp $
 #ifndef SAMPSRV_MENU_H
 #define SAMPSRV_MENU_H
 
-//----------------------------------------------------
-
-struct MENU_INT
-{
-	bool bMenu;
-	bool bRow[MAX_MENU_ITEMS];
-	bool bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)]; 
-};
-
 class CMenu
 {
 private:

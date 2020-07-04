@@ -318,4 +318,11 @@ typedef struct _CAR_MOD_INFO
 	int iColor1;
 } CAR_MOD_INFO;
 
+struct MENU_INT
+{
+	bool bMenu;
+	bool bRow[MAX_MENU_ITEMS];
+	bool bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)];
+};
+
 #endif // _SAMP_SHARED_H

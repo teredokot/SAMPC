@@ -13,18 +13,11 @@ Version: $Id: menu.h,v 1.0 2007/02/13 19:26:45 Y_Less Exp $
 
 //----------------------------------------------------
 
-struct MENU_INT
-{
-	bool bMenu;
-	bool bRow[MAX_MENU_ITEMS];
-	bool bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)]; 
-};
-
 class CMenu
 {
 private:
 	
-	BYTE m_byteMenuID;
+	//BYTE m_byteMenuID;
 	
 	CHAR m_charTitle[MAX_MENU_LINE];
 	CHAR m_charItems[MAX_MENU_ITEMS][MAX_COLUMNS][MAX_MENU_LINE];
@@ -38,7 +31,7 @@ private:
 	MENU_INT m_MenuInteraction;
 	//float fHeight
 	
-	BYTE m_byteColCount[MAX_COLUMNS];
+	//BYTE m_byteColCount[MAX_COLUMNS];
 	
 	DWORD m_dwPanel;
 	
