@@ -32,10 +32,10 @@ WORD CGangZonePool::New(float fMinX, float fMinY, float fMaxX, float fMaxY)
 		wZone++;
 	}
 	if (wZone == MAX_GANG_ZONES) return 0xFFFF;
-	m_fGangZone[wZone][0] = fMinX;
-	m_fGangZone[wZone][1] = fMinY;
-	m_fGangZone[wZone][2] = fMaxX;
-	m_fGangZone[wZone][3] = fMaxY;
+	m_fGangZone[wZone][0] = fMinX - (fMinX - floor(fMinX));
+	m_fGangZone[wZone][1] = fMinY - (fMinY - floor(fMinY));
+	m_fGangZone[wZone][2] = fMaxX - (fMaxX - floor(fMaxX));
+	m_fGangZone[wZone][3] = fMaxY - (fMaxY - floor(fMaxY));
 	m_bSlotState[wZone] = true;
 	return wZone;
 }
