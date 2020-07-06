@@ -1370,6 +1370,7 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 	in.Read(iOP);
 	in.Read(iVehicleID);
 
+	CVehiclePool* pPool = pNetGame->GetVehiclePool();
 	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(iVehicleID);
 	if (pVehicle == NULL)
 		return;
@@ -1379,19 +1380,22 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 	case 1:
 		pVehicle->Fix();
 		break;
-	case 2:
-		int d, p, bl, br;
+	case 2: {
+		if (in.GetNumberOfUnreadBits() == 4) {
+			in.ReadBits((unsigned char*)&pPool->m_Windows[iVehicleID], 4);
 
-		in.Read(d);
-		in.Read(p);
-		in.Read(bl);
-		in.Read(br);
-
-		pVehicle->ToggleWindow(10, !!d);
-		pVehicle->ToggleWindow(8, !!p);
-		pVehicle->ToggleWindow(11, !!bl);
-		pVehicle->ToggleWindow(9, !!br);
+			// TODO: Need checking at and add model filtering here and/or server
+			// Seems like it works on most of the vehicles, but on some vehicles it crashes the game,
+			// with gta_sa.exe:0x6D30B5 crash address. ecx at [ecx+18h] looks like not initialized.
+			if (pVehicle->GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR) {
+				pVehicle->ToggleWindow(10, pPool->m_Windows[iVehicleID].bDriver);
+				pVehicle->ToggleWindow(8, pPool->m_Windows[iVehicleID].bPassenger);
+				pVehicle->ToggleWindow(11, pPool->m_Windows[iVehicleID].bBackLeft);
+				pVehicle->ToggleWindow(9, pPool->m_Windows[iVehicleID].bBackRight);
+			}
+		}
 		break;
+	}
 	case 3:
 	{
 		int iOn = 0;

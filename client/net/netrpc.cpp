@@ -362,6 +362,8 @@ void VehicleSpawn(RPCParameters *rpcParams)
 	bsData.Read(fSpawnRotation);
 	bsData.Read(iInterior);
 
+	bsData.ReadBits((unsigned char*)&pVehiclePool->m_Windows[VehicleID], 4);
+
 	bsData.Read(bHasNumberPlate);
 	if(bHasNumberPlate) {
 		bsData.Read(cNumberPlate, 9); // Constant size defined by SA

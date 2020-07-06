@@ -52,7 +52,7 @@ public:
 	DWORD					m_dwLastSeenOccupiedTick;
 	DWORD					m_dwLastRespawnedTick;
 	int						m_iVirtualWorld;
-	unsigned char			m_ucWindows : 4;
+	CAR_WINDOW_FLAG			m_Windows;
 
 	bool m_bOnItsSide;
 	bool m_bUpsideDown;

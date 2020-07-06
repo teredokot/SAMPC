@@ -330,4 +330,12 @@ struct MENU_INT
 	bool bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)];
 };
 
+typedef struct
+{
+	unsigned char bDriver : 1;
+	unsigned char bPassenger : 1;
+	unsigned char bBackLeft : 1;
+	unsigned char bBackRight : 1;
+} CAR_WINDOW_FLAG;
+
 #endif // _SAMP_SHARED_H

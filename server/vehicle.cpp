@@ -46,7 +46,7 @@ CVehicle::CVehicle( int iModel, VECTOR *vecPos,
 	m_fHealth = 1000.0f;
 	m_bDeathHasBeenNotified = false;
 	m_iVirtualWorld = 0;
-	m_ucWindows = ~0; // Close all window 
+	m_Windows = { 1, 1, 1, 1 }; // Close all window 
 
 	m_bOnItsSide = false;
 	m_bUpsideDown = false;
@@ -117,6 +117,8 @@ void CVehicle::SpawnForPlayer(BYTE byteForPlayerID)
 	bsVehicleSpawn.Write(m_SpawnInfo.vecPos.Z);
 	bsVehicleSpawn.Write(m_SpawnInfo.fRotation);
 	bsVehicleSpawn.Write(m_SpawnInfo.iInterior);
+
+	bsVehicleSpawn.WriteBits((unsigned char*)&m_Windows, 4);
 
 	if(m_szNumberPlate[0] == '\0') {
 		bsVehicleSpawn.Write(false);

@@ -90,7 +90,7 @@ public:
 	BOOL	HasADriver();
 	BOOL	VerifyInstance();
 
-	void ToggleWindow(unsigned char ucDoorId, bool bOpen);
+	void ToggleWindow(unsigned char ucDoorId, bool bClosed);
 	void ToggleTaxiLight(bool bToggle);
 	void ToggleEngine(bool bToggle);
 	bool IsUpsideDown();

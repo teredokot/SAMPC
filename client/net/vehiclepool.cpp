@@ -19,6 +19,7 @@ CVehiclePool::CVehiclePool()
 		m_bVehicleSlotState[VehicleID] = false;
 		m_pVehicles[VehicleID] = NULL;
 		m_iVirtualWorld[VehicleID] = 0;
+		m_Windows[VehicleID] = { 1,1,1,1 };
 	}
 }
 
@@ -100,6 +101,16 @@ bool CVehiclePool::Spawn( VEHICLEID VehicleID, int iVehicleType,
 		if (iInterior > 0)
 		{
 			LinkToInterior(VehicleID, iInterior);
+		}
+
+		// TODO: Need checking at and add model filtering here and/or server
+		// Seems like it works on most of the vehicles, but on some vehicles it crashes the game,
+		// with gta_sa.exe:0x6D30B5 crash address. ecx at [ecx+18h] looks like not initialized.
+		if (m_pVehicles[VehicleID]->GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR) {
+			m_pVehicles[VehicleID]->ToggleWindow(10, m_Windows[VehicleID].bDriver);
+			m_pVehicles[VehicleID]->ToggleWindow(8, m_Windows[VehicleID].bPassenger);
+			m_pVehicles[VehicleID]->ToggleWindow(11, m_Windows[VehicleID].bBackLeft);
+			m_pVehicles[VehicleID]->ToggleWindow(9, m_Windows[VehicleID].bBackRight);
 		}
 
 		m_bIsActive[VehicleID] = true;

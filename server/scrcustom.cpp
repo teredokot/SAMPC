@@ -1430,20 +1430,23 @@ static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetVehicleParamsCarWindows", 5);
 
-	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
-	if (pVehiclePool && pVehiclePool->GetSlotState(params[1]))
-	{
-		RakNet::BitStream out;
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			RakNet::BitStream out;
 
-		out.Write<int>(VEHICLE_OP_WINDOW);
-		out.Write(params[1]); // vehicleid
-		out.Write(params[2]); // driver
-		out.Write(params[3]); // passenger
-		out.Write(params[4]); // back-left
-		out.Write(params[5]); // back-right
+			// Ignore negative numbers, this can ditches calling GetVehicleParamsCarWindows before this call
+			if (params[2] >= 0) pVehicle->m_Windows.bDriver = (params[2] != 0);
+			if (params[3] >= 0) pVehicle->m_Windows.bPassenger = (params[3] != 0);
+			if (params[4] >= 0) pVehicle->m_Windows.bBackLeft = (params[4] != 0);
+			if (params[5] >= 0) pVehicle->m_Windows.bBackRight = (params[5] != 0);
 
-		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
-			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+			out.Write<int>(2);
+			out.Write(params[1]); // vehicleid
+			out.WriteBits((unsigned char*)&pVehicle->m_Windows, 4);
+
+			return pNetGame->SendToAll(RPC_ScrSetVehicle, &out);
+		}
 	}
 	return 0;
 }
@@ -1452,18 +1455,19 @@ static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
 static cell n_GetVehicleParamsCarWindows(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "GetVehicleParamsCarWindows", 5);
+
 	if (pNetGame->GetVehiclePool()) {
 		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
 		if (pVehicle != nullptr) {
 			cell* cptr;
 			if (amx_GetAddr(amx, params[2], &cptr) == AMX_ERR_NONE)
-				*cptr = (pVehicle->m_ucWindows & VEHICLE_WINDOW_DRIVER) ? 1 : 0;
+				*cptr = pVehicle->m_Windows.bDriver;
 			if (amx_GetAddr(amx, params[3], &cptr) == AMX_ERR_NONE)
-				*cptr = (pVehicle->m_ucWindows & VEHICLE_WINDOW_PASSENGER) ? 1 : 0;
+				*cptr = pVehicle->m_Windows.bPassenger;
 			if (amx_GetAddr(amx, params[4], &cptr) == AMX_ERR_NONE)
-				*cptr = (pVehicle->m_ucWindows & VEHICLE_WINDOW_BACKLEFT) ? 1 : 0;
+				*cptr = pVehicle->m_Windows.bBackLeft;
 			if (amx_GetAddr(amx, params[5], &cptr) == AMX_ERR_NONE)
-				*cptr = (pVehicle->m_ucWindows & VEHICLE_WINDOW_BACKRIGHT) ? 1 : 0;
+				*cptr = pVehicle->m_Windows.bBackRight;
 
 			return 1;
 		}
