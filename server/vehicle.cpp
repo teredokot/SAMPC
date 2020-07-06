@@ -46,6 +46,7 @@ CVehicle::CVehicle( int iModel, VECTOR *vecPos,
 	m_fHealth = 1000.0f;
 	m_bDeathHasBeenNotified = false;
 	m_iVirtualWorld = 0;
+	m_ucWindows = ~0; // Close all window 
 
 	m_bOnItsSide = false;
 	m_bUpsideDown = false;

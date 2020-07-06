@@ -1448,6 +1448,29 @@ static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
 	return 0;
 }
 
+// native GetVehicleParamsCarWindows(vehicleid, &driver, &passenger, &backleft, &backright)
+static cell n_GetVehicleParamsCarWindows(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleParamsCarWindows", 5);
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			cell* cptr;
+			if (amx_GetAddr(amx, params[2], &cptr) == AMX_ERR_NONE)
+				*cptr = (pVehicle->m_ucWindows & VEHICLE_WINDOW_DRIVER) ? 1 : 0;
+			if (amx_GetAddr(amx, params[3], &cptr) == AMX_ERR_NONE)
+				*cptr = (pVehicle->m_ucWindows & VEHICLE_WINDOW_PASSENGER) ? 1 : 0;
+			if (amx_GetAddr(amx, params[4], &cptr) == AMX_ERR_NONE)
+				*cptr = (pVehicle->m_ucWindows & VEHICLE_WINDOW_BACKLEFT) ? 1 : 0;
+			if (amx_GetAddr(amx, params[5], &cptr) == AMX_ERR_NONE)
+				*cptr = (pVehicle->m_ucWindows & VEHICLE_WINDOW_BACKRIGHT) ? 1 : 0;
+
+			return 1;
+		}
+	}
+	return 0;
+}
+
 // native ToggleTaxiLight(vehicleid, toggle)
 static cell n_ToggleTaxiLight(AMX* amx, cell* params)
 {
@@ -6672,6 +6695,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(SetVehicleSpawnInfo),
 	DEFINE_NATIVE(RepairVehicle),
 	DEFINE_NATIVE(SetVehicleParamsCarWindows),
+	DEFINE_NATIVE(GetVehicleParamsCarWindows),
 	DEFINE_NATIVE(ToggleTaxiLight),
 	DEFINE_NATIVE(SetVehicleEngineState),
 	DEFINE_NATIVE(GetVehicleVelocity),

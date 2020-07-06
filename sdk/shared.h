@@ -144,6 +144,11 @@
 #define PACK_VEHICLE_HEALTH(f) (unsigned char)(f / 4)
 #define UNPACK_VEHICLE_HEALTH(b) (float)b * 4
 
+#define VEHICLE_WINDOW_DRIVER 1
+#define VEHICLE_WINDOW_PASSENGER 2
+#define VEHICLE_WINDOW_BACKLEFT 4
+#define VEHICLE_WINDOW_BACKRIGHT 8
+
 #ifndef ARRAY_SIZE
 	#define ARRAY_SIZE(a) ( sizeof((a)) / sizeof(*(a)) )
 #endif
