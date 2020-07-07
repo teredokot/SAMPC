@@ -53,6 +53,7 @@ public:
 	DWORD					m_dwLastRespawnedTick;
 	int						m_iVirtualWorld;
 	CAR_WINDOW_FLAG			m_Windows;
+	VEHICLE_OPEN_CLOSE_FLAG m_Doors;
 
 	bool m_bOnItsSide;
 	bool m_bUpsideDown;

@@ -47,6 +47,7 @@ CVehicle::CVehicle( int iModel, VECTOR *vecPos,
 	m_bDeathHasBeenNotified = false;
 	m_iVirtualWorld = 0;
 	m_Windows = { 1, 1, 1, 1 }; // Close all window 
+	m_Doors = { 0,0,0,0 }; // Close all doors
 
 	m_bOnItsSide = false;
 	m_bUpsideDown = false;
