@@ -1362,82 +1362,72 @@ void ScrEnableStuntBonus(RPCParameters *rpcParams)
 
 static void ScrSetVehicle(RPCParameters* rpcParams)
 {
-	RakNet::BitStream in(rpcParams);
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	if (pVehiclePool) {
+		RakNet::BitStream in(rpcParams);
+		if (in.GetNumberOfUnreadBits() >= 24) {
+			unsigned char ucOP = 0;
+			VEHICLEID nVehicleID = 0;
 
-	int iOP = 0;
-	VEHICLEID iVehicleID = 0;
+			in.Read(ucOP);
+			in.Read(nVehicleID);
 
-	in.Read(iOP);
-	in.Read(iVehicleID);
+			CVehicle* pVehicle = pVehiclePool->GetAt(nVehicleID);
+			if (pVehicle != NULL) {
+				switch (ucOP) {
+				case 1:
+					pVehicle->Fix();
+					break;
+				case 2: {
+					if (in.GetNumberOfUnreadBits() == 4) {
+						in.ReadBits((unsigned char*)&pVehiclePool->m_Windows[nVehicleID], 4);
 
-	CVehiclePool* pPool = pNetGame->GetVehiclePool();
-	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(iVehicleID);
-	if (pVehicle == NULL)
-		return;
-	
-	switch (iOP)
-	{
-	case 1:
-		pVehicle->Fix();
-		break;
-	case 2: {
-		if (in.GetNumberOfUnreadBits() == 4) {
-			in.ReadBits((unsigned char*)&pPool->m_Windows[iVehicleID], 4);
+						// TODO: Need checking at and add model filtering here and/or server
+						// Seems like it works on most of the vehicles, but on some vehicles it crashes the game,
+						// with gta_sa.exe:0x6D30B5 crash address. ecx at [ecx+18h] looks like not initialized.
+						if (pVehicle->GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR) {
+							pVehicle->ToggleWindow(10, pVehiclePool->m_Windows[nVehicleID].bDriver);
+							pVehicle->ToggleWindow(8, pVehiclePool->m_Windows[nVehicleID].bPassenger);
+							pVehicle->ToggleWindow(11, pVehiclePool->m_Windows[nVehicleID].bBackLeft);
+							pVehicle->ToggleWindow(9, pVehiclePool->m_Windows[nVehicleID].bBackRight);
+						}
+					}
+					break;
+				}
+				case 3: {
+					pVehicle->ToggleTaxiLight(in.ReadBit());
+					break;
+				}
+				case 4: {
+					pVehicle->ToggleEngine(in.ReadBit());
+					break;
+				}
+				case 5: {
+					pVehicle->SetLightState(in.ReadBit());
+					break;
+				}
+				case 6: {
+					pVehicle->SetFeature(in.ReadBit());
+					break;
+				}
+				case 7: {
+					pVehicle->SetVisibility(in.ReadBit());
+					break;
+				}
+				case 8: {
+					if (in.GetNumberOfUnreadBits() == 4) {
+						in.ReadBits((unsigned char*)&pVehiclePool->m_Doors[nVehicleID], 4);
 
-			// TODO: Need checking at and add model filtering here and/or server
-			// Seems like it works on most of the vehicles, but on some vehicles it crashes the game,
-			// with gta_sa.exe:0x6D30B5 crash address. ecx at [ecx+18h] looks like not initialized.
-			if (pVehicle->GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR) {
-				pVehicle->ToggleWindow(10, pPool->m_Windows[iVehicleID].bDriver);
-				pVehicle->ToggleWindow(8, pPool->m_Windows[iVehicleID].bPassenger);
-				pVehicle->ToggleWindow(11, pPool->m_Windows[iVehicleID].bBackLeft);
-				pVehicle->ToggleWindow(9, pPool->m_Windows[iVehicleID].bBackRight);
+						pVehicle->ToggleDoor(2, 10, pVehiclePool->m_Doors[nVehicleID].bDriver ? 1.0f : 0.0f);
+						pVehicle->ToggleDoor(3, 8, pVehiclePool->m_Doors[nVehicleID].bPassenger ? 1.0f : 0.0f);
+						pVehicle->ToggleDoor(4, 11, pVehiclePool->m_Doors[nVehicleID].bBackLeft ? 1.0f : 0.0f);
+						pVehicle->ToggleDoor(5, 9, pVehiclePool->m_Doors[nVehicleID].bBackRight ? 1.0f : 0.0f);
+					}
+					break;
+				}
+				}
 			}
 		}
-		break;
-	}
-	case 3:
-	{
-		int iOn = 0;
-		in.Read(iOn);
-		pVehicle->ToggleTaxiLight(!!iOn);
-		break;
-	}
-	case 4:
-	{
-		int iEngineState = 0;
-		in.Read(iEngineState);
-		pVehicle->ToggleEngine(!!iEngineState);
-		break;
-	}
-	case 5:
-	{
-		unsigned char ucState = 0;
-		in.Read(ucState);
-		pVehicle->SetLightState(ucState);
-		break;
-	}
-	case 6:
-	{
-		pVehicle->SetFeature(in.ReadBit());
-		break;
-	}
-	case 7:
-	{
-		pVehicle->SetVisibility(in.ReadBit());
-		break;
-	}
-	case 8: {
-		if (in.GetNumberOfUnreadBits() == 4) {
-			in.ReadBits((unsigned char*)&pPool->m_Doors[iVehicleID], 4);
-
-			pVehicle->ToggleDoor(2, 10, pPool->m_Doors[iVehicleID].bDriver ? 1.0f : 0.0f);
-			pVehicle->ToggleDoor(3, 8, pPool->m_Doors[iVehicleID].bPassenger ? 1.0f : 0.0f);
-			pVehicle->ToggleDoor(4, 11, pPool->m_Doors[iVehicleID].bBackLeft ? 1.0f : 0.0f);
-			pVehicle->ToggleDoor(5, 9, pPool->m_Doors[iVehicleID].bBackRight ? 1.0f : 0.0f);
-		}
-		break;
-	}
 	}
 }
 
