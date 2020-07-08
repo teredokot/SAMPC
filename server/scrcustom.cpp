@@ -1417,10 +1417,36 @@ static cell n_RepairVehicle(AMX* amx, cell* params)
 		RakNet::BitStream bs;
 
 		bs.Write<int>(VEHICLE_OP_REPAIR);
-		bs.Write(params[1]);
+		bs.Write((VEHICLEID)params[1]);
 
 		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &bs, HIGH_PRIORITY,
 			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
+
+// native SetVehicleParamsCarDoors(vehicleid, driver, passenger, backleft, backright)
+static cell n_SetVehicleParamsCarDoors(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetVehicleParamsCarDoors", 5);
+
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			RakNet::BitStream bsSend;
+
+			// Ignore negative numbers, this ditches calling GetVehicleParamsCarDoors before this call
+			if (params[2] >= 0) pVehicle->m_Doors.bDriver = (params[2] != 0);
+			if (params[3] >= 0) pVehicle->m_Doors.bPassenger = (params[3] != 0);
+			if (params[4] >= 0) pVehicle->m_Doors.bBackLeft = (params[4] != 0);
+			if (params[5] >= 0) pVehicle->m_Doors.bBackRight = (params[5] != 0);
+
+			bsSend.Write<int>(8);
+			bsSend.Write((VEHICLEID)params[1]); // vehicleid
+			bsSend.WriteBits((unsigned char*)&pVehicle->m_Doors, 4);
+
+			return pNetGame->SendToAll(RPC_ScrSetVehicle, &bsSend);
+		}
 	}
 	return 0;
 }
@@ -1466,7 +1492,7 @@ static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
 			if (params[5] >= 0) pVehicle->m_Windows.bBackRight = (params[5] != 0);
 
 			out.Write<int>(2);
-			out.Write(params[1]); // vehicleid
+			out.Write((VEHICLEID)params[1]); // vehicleid
 			out.WriteBits((unsigned char*)&pVehicle->m_Windows, 4);
 
 			return pNetGame->SendToAll(RPC_ScrSetVehicle, &out);
@@ -1510,7 +1536,7 @@ static cell n_ToggleTaxiLight(AMX* amx, cell* params)
 		RakNet::BitStream out;
 
 		out.Write<int>(VEHICLE_OP_TAXI_LIGHT);
-		out.Write(params[1]); // vehicleid
+		out.Write((VEHICLEID)params[1]); // vehicleid
 		out.Write(params[2]); // toggle
 
 		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
@@ -1530,7 +1556,7 @@ static cell n_SetVehicleEngineState(AMX* amx, cell* params)
 		RakNet::BitStream out;
 
 		out.Write<int>(4);
-		out.Write(params[1]); // vehicleid
+		out.Write((VEHICLEID)params[1]); // vehicleid
 		out.Write(params[2]); // toggle
 
 		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
@@ -6722,6 +6748,7 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetVehicleSpawnInfo),
 	DEFINE_NATIVE(SetVehicleSpawnInfo),
 	DEFINE_NATIVE(RepairVehicle),
+	DEFINE_NATIVE(SetVehicleParamsCarDoors),
 	DEFINE_NATIVE(GetVehicleParamsCarDoors),
 	DEFINE_NATIVE(SetVehicleParamsCarWindows),
 	DEFINE_NATIVE(GetVehicleParamsCarWindows),

@@ -36,7 +36,8 @@ public:
 	bool				m_bIsWasted[MAX_VEHICLES];
 	VEHICLE_SPAWN_INFO	m_SpawnInfo[MAX_VEHICLES];
 	CAR_WINDOW_FLAG		m_Windows[MAX_VEHICLES];
-	
+	VEHICLE_OPEN_CLOSE_FLAG m_Doors[MAX_VEHICLES];
+
 	int					m_iRespawnDelay[MAX_VEHICLES];
 	int					m_iVirtualWorld[MAX_VEHICLES];
 	CHAR				m_charNumberPlate[MAX_VEHICLES][9];

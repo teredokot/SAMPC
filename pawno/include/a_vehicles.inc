@@ -50,6 +50,7 @@ native GetVehicleZAngle(vehicleid, &Float:a);
 native Float:GetVehicleDistanceFromPoint(vehicleid, Float:X, Float:Y, Float:Z);
 native SetVehicleZAngle(vehicleid, Float:a);
 native SetVehicleParamsForPlayer(vehicleid, playerid, objective, locked);
+native SetVehicleParamsCarDoors(vehicleid, driver, passenger, backleft, backright);
 native GetVehicleParamsCarDoors(vehicleid, &driver, &passenger, &backleft, &backright);
 native SetVehicleParamsCarWindows(vehicleid, driver, passenger, backleft, backright);
 native GetVehicleParamsCarWindows(vehicleid, &driver, &passenger, &backleft, &backright);

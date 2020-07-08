@@ -20,6 +20,7 @@ CVehiclePool::CVehiclePool()
 		m_pVehicles[VehicleID] = NULL;
 		m_iVirtualWorld[VehicleID] = 0;
 		m_Windows[VehicleID] = { 1,1,1,1 };
+		m_Doors[VehicleID] = { 0,0,0,0 };
 	}
 }
 
@@ -52,6 +53,10 @@ bool CVehiclePool::New( VEHICLEID VehicleID, int iVehicleType,
 	m_SpawnInfo[VehicleID].iColor2 = iColor2;
 	
 	m_iVirtualWorld[VehicleID] = 0;
+
+	// New vehicle added, resetting values...
+	m_Windows[VehicleID] = { 1,1,1,1 };
+	m_Doors[VehicleID] = { 0,0,0,0 };
 
 	// Now go ahead and spawn it at the location we got passed.
 	return Spawn(VehicleID,iVehicleType,vecPos,fRotation,iColor1,iColor2,iInterior,szNumberPlate);
@@ -112,6 +117,13 @@ bool CVehiclePool::Spawn( VEHICLEID VehicleID, int iVehicleType,
 			m_pVehicles[VehicleID]->ToggleWindow(11, m_Windows[VehicleID].bBackLeft);
 			m_pVehicles[VehicleID]->ToggleWindow(9, m_Windows[VehicleID].bBackRight);
 		}
+
+		// Wiki: 1 to open, 0 to close
+		m_pVehicles[VehicleID]->ToggleDoor(2, 10, m_Doors[VehicleID].bDriver ? 1.0f : 0.0f);
+		m_pVehicles[VehicleID]->ToggleDoor(3, 8, m_Doors[VehicleID].bPassenger ? 1.0f : 0.0f);
+		m_pVehicles[VehicleID]->ToggleDoor(4, 11, m_Doors[VehicleID].bBackLeft ? 1.0f : 0.0f);
+		m_pVehicles[VehicleID]->ToggleDoor(5, 9, m_Doors[VehicleID].bBackRight ? 1.0f : 0.0f);
+		
 
 		m_bIsActive[VehicleID] = true;
 		m_bIsWasted[VehicleID] = false;

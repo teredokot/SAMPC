@@ -1427,6 +1427,17 @@ static void ScrSetVehicle(RPCParameters* rpcParams)
 		pVehicle->SetVisibility(in.ReadBit());
 		break;
 	}
+	case 8: {
+		if (in.GetNumberOfUnreadBits() == 4) {
+			in.ReadBits((unsigned char*)&pPool->m_Doors[iVehicleID], 4);
+
+			pVehicle->ToggleDoor(2, 10, pPool->m_Doors[iVehicleID].bDriver ? 1.0f : 0.0f);
+			pVehicle->ToggleDoor(3, 8, pPool->m_Doors[iVehicleID].bPassenger ? 1.0f : 0.0f);
+			pVehicle->ToggleDoor(4, 11, pPool->m_Doors[iVehicleID].bBackLeft ? 1.0f : 0.0f);
+			pVehicle->ToggleDoor(5, 9, pPool->m_Doors[iVehicleID].bBackRight ? 1.0f : 0.0f);
+		}
+		break;
+	}
 	}
 }
 

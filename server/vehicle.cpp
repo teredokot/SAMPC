@@ -120,6 +120,7 @@ void CVehicle::SpawnForPlayer(BYTE byteForPlayerID)
 	bsVehicleSpawn.Write(m_SpawnInfo.iInterior);
 
 	bsVehicleSpawn.WriteBits((unsigned char*)&m_Windows, 4);
+	bsVehicleSpawn.WriteBits((unsigned char*)&m_Doors, 4);
 
 	if(m_szNumberPlate[0] == '\0') {
 		bsVehicleSpawn.Write(false);

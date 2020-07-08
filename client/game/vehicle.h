@@ -99,6 +99,7 @@ public:
 	void ToggleComponent(DWORD dwComp, FLOAT fAngle);
 	void SetFeature(bool bToggle);
 	void SetVisibility(bool bVisible);
+	void ToggleDoor(int iDoor, int iNodeIndex, float fAngle);
 
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;

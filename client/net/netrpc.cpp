@@ -363,6 +363,7 @@ void VehicleSpawn(RPCParameters *rpcParams)
 	bsData.Read(iInterior);
 
 	bsData.ReadBits((unsigned char*)&pVehiclePool->m_Windows[VehicleID], 4);
+	bsData.ReadBits((unsigned char*)&pVehiclePool->m_Doors[VehicleID], 4);
 
 	bsData.Read(bHasNumberPlate);
 	if(bHasNumberPlate) {

@@ -939,5 +939,33 @@ void CVehicle::SetVisibility(bool bVisible)
 	ScriptCommand(&set_car_visibility, m_dwGTAId, bVisible);
 }
 
+/*
+	Door & Node indexes:
+		2 & 10 = Front Left
+		3 & 8 = Front Right
+		4 & 11 - Rear Left
+		5 & 9 - Rear Right
+	Angles:
+		0.0f = fully closed
+		1.0f = fully open
+*/
+void CVehicle::ToggleDoor(int iDoor, int iNodeIndex, float fAngle)
+{
+	if (GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR) {
+		DWORD dwFunc = 0x6A6AE0;
+		DWORD dwThis = (DWORD)m_pVehicle;
+		_asm {
+			push 1
+			push fAngle
+			push iDoor
+			push iNodeIndex
+			push 0
+			mov ecx, dwThis
+			call dwFunc
+			//add esp, 20
+		}
+	}
+}
+
 //-----------------------------------------------------------
 // EOF
