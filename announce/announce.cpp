@@ -27,9 +27,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	//OutputDebugString(lpszCmdLine);
 
 	char szURL[255];
+	// From server-0.3.7-R2-1-1: "server.sa-mp.com/0.3.7/announce/%s"
+	// Note: Apperently changing this URL not enough, also requies adding 0.3 specific headers to request
 	sprintf(szURL, "server.sa-mp.com/0.2.X/announce/%s",lpszCmdLine);
 	
-	pHttpClient->ProcessURL(HTTP_GET, szURL, NULL, "Bonus");
+	pHttpClient->ProcessURL(HTTP_GET, szURL, NULL, (char*)"Bonus");
 
 	delete pHttpClient;
 
