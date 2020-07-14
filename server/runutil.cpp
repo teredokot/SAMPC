@@ -688,18 +688,16 @@ return;
 
 bool ContainsInvalidNickChars(char * szString)
 {
-	int x=0;
-
 	while(*szString) {
 		if( (*szString >= '0' && *szString <= '9') ||
 			(*szString >= 'A' && *szString <= 'Z') ||
 			(*szString >= 'a' && *szString <= 'z')  ||
 			*szString == ']' || *szString == '[' ||
-			*szString == '_'  /* || *szString == '\'' ||
-			*szString == '$' || *szString == ':' ||
+			*szString == '_' || //*szString == '\'' ||
+			*szString == '$' || //*szString == ':' ||
 			*szString == '=' || *szString == '(' ||
 			*szString == ')' || *szString == '@' || 
-			*szString == '.' */ ) {
+			*szString == '.' ) {
 
 			szString++;
 		} else {
