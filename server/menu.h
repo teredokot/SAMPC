@@ -56,6 +56,7 @@ public:
 	void DisableInteraction() { m_MenuInteraction.bMenu = false; };
 	void DisableRow(BYTE byteRow) { m_MenuInteraction.bRow[byteRow] = false; };
 	
+	bool ValidRow(unsigned char ucRow);
 };
 
 #endif // SAMPSRV_MENU_H

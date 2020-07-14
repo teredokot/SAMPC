@@ -734,34 +734,56 @@ void PickedUpPickup(RPCParameters *rpcParams)
 }
 
 void MenuSelect(RPCParameters *rpcParams)
-{	
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(rpcParams->sender);
-
-	RakNet::BitStream bsData(rpcParams);
-
-	BYTE byteRow;
-	bsData.Read(byteRow);
-
-	CGameMode *pGameMode = pNetGame->GetGameMode();
-	CFilterScripts *pFilters = pNetGame->GetFilterScripts();
-
-	if(pGameMode) pGameMode->OnPlayerSelectedMenuRow(bytePlayerID, byteRow);
-	if(pFilters) pFilters->OnPlayerSelectedMenuRow(bytePlayerID, byteRow);
-
-	pNetGame->GetMenuPool()->ResetPlayer(bytePlayerID);
+{
+	// Checking if the menu pool is initialized
+	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
+	if (pMenuPool) {
+		// Do we have shown menu to player?
+		unsigned char ucMenuId = pMenuPool->GetPlayerMenu(rpcParams->senderId);
+		if (ucMenuId != INVALID_MENU_ID) {
+			// Checking if the actual menu is valid, and get the data of it for validating row
+			CMenu* pMenu = pMenuPool->GetAt(ucMenuId);
+			if (pMenu != nullptr) {
+				RakNet::BitStream bsData(rpcParams);
+				// Expecting a 1 byte packet size
+				if (bsData.GetNumberOfUnreadBits() == 8) {
+					unsigned char ucRow = MAX_MENU_ITEMS;
+					bsData.Read(ucRow);
+					// Validate menu row, if valid then notify scripts
+					if (pMenu->ValidRow(ucRow)) {
+						if (pNetGame->GetGameMode())
+							pNetGame->GetGameMode()->OnPlayerSelectedMenuRow(rpcParams->senderId, ucRow);
+						if (pNetGame->GetFilterScripts())
+							pNetGame->GetFilterScripts()->OnPlayerSelectedMenuRow(rpcParams->senderId, ucRow);
+					}
+				}
+			}
+		}
+		// Reset anyway, even it fails
+		pMenuPool->ResetForPlayer(rpcParams->senderId);
+	}
 }
 
 void MenuQuit(RPCParameters *rpcParams)
 {
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(rpcParams->sender);
-		
-	CGameMode *pGameMode = pNetGame->GetGameMode();
-	CFilterScripts *pFilters = pNetGame->GetFilterScripts();
-
-	if(pGameMode) pGameMode->OnPlayerExitedMenu(bytePlayerID);
-	if(pFilters) pFilters->OnPlayerExitedMenu(bytePlayerID);
-
-	pNetGame->GetMenuPool()->ResetPlayer(bytePlayerID);
+	// Checking if the menu pool is initialized
+	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
+	if (pMenuPool) {
+		// Do we have shown menu to player?
+		unsigned char ucMenuId = pMenuPool->GetPlayerMenu(rpcParams->senderId);
+		if (ucMenuId != INVALID_MENU_ID) {
+			// Probably already valid at this point, but still making sure..
+			//if (pMenuPool->GetSlotState(ucMenuId)) {
+				// Notify the scripts
+				if (pNetGame->GetGameMode())
+					pNetGame->GetGameMode()->OnPlayerExitedMenu(rpcParams->senderId);
+				if (pNetGame->GetFilterScripts())
+					pNetGame->GetFilterScripts()->OnPlayerExitedMenu(rpcParams->senderId);
+			//}
+		}
+		// Reset menu for player, even if it fails
+		pMenuPool->ResetForPlayer(rpcParams->senderId);
+	}
 }
 
 void TypingEvent(RPCParameters* rpcParams)

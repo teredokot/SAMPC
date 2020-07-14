@@ -47,7 +47,7 @@ public:
 	
 	BYTE GetPlayerMenu(BYTE bytePlayer)
 	{
-		if (bytePlayer >= MAX_PLAYERS) return 255;
+		if (bytePlayer >= MAX_PLAYERS) return INVALID_MENU_ID;
 		return m_bytePlayerMenu[bytePlayer];
 	}
 	
@@ -59,7 +59,7 @@ public:
 	void ResetForPlayer(BYTE bytePlayer)
 	{
 		if (bytePlayer < MAX_PLAYERS)
-			m_bytePlayerMenu[bytePlayer] = 255;
+			m_bytePlayerMenu[bytePlayer] = INVALID_MENU_ID;
 	}
 };
 

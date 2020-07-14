@@ -138,3 +138,8 @@ void CMenu::HideForPlayer(BYTE bytePlayerID)
 	pRak->RPC(RPC_ScrHideMenu, &bsMenu, HIGH_PRIORITY, 
 		RELIABLE, 0, pRak->GetPlayerIDFromIndex(bytePlayerID), false, false);
 }
+
+bool CMenu::ValidRow(unsigned char ucRow)
+{
+	return (ucRow < MAX_MENU_ITEMS && (m_charItems[ucRow][0][0] != 0 || m_charItems[ucRow][1][0] != 0));
+}
