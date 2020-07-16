@@ -1115,15 +1115,11 @@ void CLocalPlayer::Say(PCHAR szText)
 void CLocalPlayer::SendEnterVehicleNotification(VEHICLEID VehicleID, bool bPassenger)
 {
 	RakNet::BitStream bsSend;
-	BYTE bytePassenger=0;
 
 	//pChatWindow->AddDebugMessage("Enter Vehicle: %u %d",VehicleID,bPassenger);
 
-	if(bPassenger) {
-		bytePassenger = 1;
-	}
 	bsSend.Write(VehicleID);
-	bsSend.Write(bytePassenger);
+	bsSend.Write(bPassenger);
 
 	pNetGame->GetRakClient()->RPC(RPC_EnterVehicle,&bsSend,HIGH_PRIORITY,RELIABLE_SEQUENCED,0,false);
 

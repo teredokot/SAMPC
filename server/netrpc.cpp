@@ -315,34 +315,41 @@ void Death(RPCParameters *rpcParams)
 //----------------------------------------------------
 // Sent by client when they want to enter a
 // vehicle gracefully.
+// This RPC only gets triggered when player vehicle entering task is started,
+// not when player already in a vehicle, so they could stop their character entering anytime
 
-void EnterVehicle(RPCParameters *rpcParams)
+void EnterVehicle(RPCParameters* rpcParams)
 {
-	PlayerID sender = rpcParams->sender;
+	bool bValidEntering = false;
 
-	RakNet::BitStream bsData(rpcParams);
+	// Expecting 2 bytes and 1 bit of data
+	if (rpcParams->numberOfBitsOfData == 17) {
+		// Cheking if player and vehicle pool is initialized
+		if (pNetGame->GetPlayerPool() && pNetGame->GetVehiclePool()) {
+			// Checking if player is valid and get object of it
+			CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(rpcParams->senderId);
+			if (pPlayer != nullptr) {
+				RakNet::BitStream bsData(rpcParams);
+				VEHICLEID VehicleID = INVALID_VEHICLE;
+				bool bPassenger = false;
 
-	if(pNetGame->GetGameState() != GAMESTATE_RUNNING) return;
-	if(!pNetGame->GetPlayerPool()->GetSlotState(pRak->GetIndexFromPlayerID(sender))) return;
+				bsData.Read(VehicleID);
+				bsData.Read(bPassenger);
 
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
-	CPlayer	*pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-	
-	VEHICLEID VehicleID=0;
-	BYTE bytePassenger=0;
-
-	bsData.Read(VehicleID);
-	bsData.Read(bytePassenger);
-
-	if(pPlayer) {
-		if(VehicleID == 0xFFFF) {
-			pNetGame->KickPlayer(bytePlayerID);
-			return;
+				// Checking if the vehicle ID is exists
+				if (pNetGame->GetVehiclePool()->GetSlotState(VehicleID)) {
+					// Notify server and scripts
+					pPlayer->EnterVehicle(VehicleID, bPassenger);
+				}
+			}
 		}
-		pPlayer->EnterVehicle(VehicleID,bytePassenger);
 	}
 
-	//logprintf("%u enters vehicle %u",bytePlayerID,byteVehicleID);
+	// If some of the check is not right, kicking the player from the server
+	if (!bValidEntering) {
+		logprintf("[SERVER] Kicking player %d for entering an invalid vehicle.", rpcParams->senderId);
+		pNetGame->KickPlayer(rpcParams->senderId);
+	}
 }
 
 //----------------------------------------------------
@@ -378,7 +385,7 @@ void ExitVehicle(RPCParameters *rpcParams)
 	}
 	// If it was an invalid vehicle exiting, player about to get desyncronized, kicking player out from the server
 	if (!bValidExiting) {
-		logprintf("[SERVER] Kicking %d for exiting an invalid vehicle.", rpcParams->senderId);
+		logprintf("[SERVER] Kicking player %d for exiting an invalid vehicle.", rpcParams->senderId);
 		pNetGame->KickPlayer(rpcParams->senderId);
 	}
 }
