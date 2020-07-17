@@ -59,7 +59,7 @@ CPlayer::CPlayer()
 	m_bHasTrailerUpdates = false;
 	m_byteState = PLAYER_STATE_NONE;
 	m_dwColor = 0;
-	m_wLastKeys = 0;
+	m_uiLastKeys = 0;
 
 	m_vecPos.X = 0.0f;
 	m_vecPos.Y = 0.0f;
@@ -251,7 +251,7 @@ void CPlayer::BroadcastSyncData()
 	RakNet::BitStream bsSync;
 	//RakNet::BitStream bsAim;
 	
-	WORD wKeys;
+	unsigned int uiKeys;
 
 	if( GetState() == PLAYER_STATE_ONFOOT &&
 		m_byteUpdateFromNetwork == UPDATE_TYPE_ONFOOT )
@@ -278,7 +278,7 @@ void CPlayer::BroadcastSyncData()
 		}
 
 		// GENERAL KEYSET
-		bsSync.Write(m_ofSync.wKeys);
+		bsSync.Write(m_ofSync.uiKeys);
 		
 		// VECTOR POSITION
 		bsSync.Write((const char*)&m_ofSync.vecPos,sizeof(VECTOR));
@@ -353,7 +353,7 @@ void CPlayer::BroadcastSyncData()
 		// KEYS
 		bsSync.Write(m_icSync.lrAnalog);
 		bsSync.Write(m_icSync.udAnalog);
-		bsSync.Write(m_icSync.wKeys);
+		bsSync.Write(m_icSync.uiKeys);
 
 		// ROLL / DIRECTION / POSITION / MOVE SPEED
 		bsSync.Write((const char*)&m_icSync.cvecRoll,sizeof(C_VECTOR1));
@@ -448,10 +448,10 @@ void CPlayer::BroadcastSyncData()
 	{			
 		bsSync.Write((BYTE)ID_PASSENGER_SYNC);
 		bsSync.Write(m_bytePlayerID);
-		wKeys = m_psSync.wKeys;
-		if (m_psSync.byteCurrentWeapon == 43) m_psSync.wKeys &= NOT_KEY_FIRE;
+		uiKeys = m_psSync.uiKeys;
+		if (m_psSync.byteCurrentWeapon == 43) m_psSync.uiKeys &= NOT_KEY_FIRE;
 		bsSync.Write((PCHAR)&m_psSync,sizeof (PASSENGER_SYNC_DATA));
-		m_psSync.wKeys = wKeys;
+		m_psSync.uiKeys = uiKeys;
 		pNetGame->BroadcastData(&bsSync,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,0,m_bytePlayerID);
 	}
 
@@ -596,7 +596,7 @@ void CPlayer::StoreOnFootFullSyncData(ONFOOT_SYNC_DATA *pofSync)
 			break;
 	}
 
-	CheckKeyUpdatesForScript(m_ofSync.wKeys);
+	CheckKeyUpdatesForScript(m_ofSync.uiKeys);
 	SetState(PLAYER_STATE_ONFOOT);
 
 	if(pFilterScripts && pGameMode) {
@@ -664,7 +664,7 @@ void CPlayer::StoreInCarFullSyncData(INCAR_SYNC_DATA *picSync)
 
 	m_icSync.byteCurrentWeapon = CheckWeapon(m_icSync.byteCurrentWeapon);
 
-	CheckKeyUpdatesForScript(m_icSync.wKeys);
+	CheckKeyUpdatesForScript(m_icSync.uiKeys);
 	SetState(PLAYER_STATE_DRIVER);
 
 	if(pFilterScripts && pGameMode) {
@@ -716,7 +716,7 @@ void CPlayer::StorePassengerFullSyncData(PASSENGER_SYNC_DATA *ppsSync)
 	
 	m_byteUpdateFromNetwork = UPDATE_TYPE_PASSENGER;
 
-	CheckKeyUpdatesForScript(m_psSync.wKeys);
+	CheckKeyUpdatesForScript(m_psSync.uiKeys);
 	SetState(PLAYER_STATE_PASSENGER);
 
 	if(pFilterScripts && pGameMode) {
@@ -733,7 +733,7 @@ void CPlayer::StoreSpectatorFullSyncData(SPECTATOR_SYNC_DATA *pspSync)
 	memcpy(&m_spSync,pspSync,sizeof(SPECTATOR_SYNC_DATA));
 	UpdatePosition(m_spSync.vecPos.X,m_spSync.vecPos.Y,m_spSync.vecPos.Z);
 	
-	CheckKeyUpdatesForScript(m_spSync.wKeys);
+	CheckKeyUpdatesForScript(m_spSync.uiKeys);
 	
 	if (m_byteState != PLAYER_STATE_SPECTATING) {
 		RakNet::BitStream bsSend;
@@ -1124,16 +1124,16 @@ void CPlayer::SetClock(BYTE byteClock)
 
 //----------------------------------------------------
 
-void CPlayer::CheckKeyUpdatesForScript(WORD wKeys)
+void CPlayer::CheckKeyUpdatesForScript(UINT uiKeys)
 {
-	if(m_wLastKeys != wKeys) {
+	if(m_uiLastKeys != uiKeys) {
 		if(pNetGame->GetGameMode()) {
-			pNetGame->GetGameMode()->OnPlayerKeyStateChange(m_bytePlayerID,wKeys,m_wLastKeys);
+			pNetGame->GetGameMode()->OnPlayerKeyStateChange(m_bytePlayerID, uiKeys, m_uiLastKeys);
 		}
 		if(pNetGame->GetFilterScripts()) {
-			pNetGame->GetFilterScripts()->OnPlayerKeyStateChange(m_bytePlayerID,wKeys,m_wLastKeys);
+			pNetGame->GetFilterScripts()->OnPlayerKeyStateChange(m_bytePlayerID, uiKeys, m_uiLastKeys);
 		}
-		m_wLastKeys = wKeys;
+		m_uiLastKeys = uiKeys;
 	}
 }
 

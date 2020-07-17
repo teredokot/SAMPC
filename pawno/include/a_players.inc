@@ -68,6 +68,33 @@
 #define FIGHT_STYLE_GRABKICK	(15)
 #define FIGHT_STYLE_ELBOW 		(16)
 
+#define KEY_ACTION 				(1)
+#define KEY_CROUCH 				(2)
+#define KEY_FIRE 				(4)
+#define KEY_SPRINT 				(8)
+#define KEY_SECONDARY_ATTACK	(16)
+#define KEY_JUMP 				(32)
+#define KEY_LOOK_RIGHT 			(64)
+#define KEY_AIM 				(128)
+#define KEY_HANDBRAKE 			(128)
+#define KEY_LOOK_LEFT 			(256)
+#define KEY_LOOK_BEHIND 		(512)
+#define KEY_SUBMISSION 			(512)
+#define KEY_WALK 				(1024)
+#define KEY_ANALOG_UP 			(2048)
+#define KEY_ANALOG_DOWN 		(4096)
+#define KEY_ANALOG_LEFT 		(8192)
+#define KEY_ANALOG_RIGHT 		(16384)
+#define KEY_YES 				(32768)
+#define KEY_NO 					(65536)
+#define KEY_CTRL_BACK 			(131072)
+#define KEY_CTRL_FORWARD 		(262144)
+#define KEY_CAMERA 				(524288)
+#define KEY_UP 					(-128)
+#define KEY_DOWN 				(128)
+#define KEY_LEFT 				(-128)
+#define KEY_RIGHT 				(128)
+
 native GetPlayerCount();
 native GetPlayerIDFromName(const name[]);
 native SetSpawnInfo(playerid, teamid, skinid, Float:x, Float:y, Float:z, Float:a, weap1, ammo1, weap2, ammo2, weap3, ammo3);

@@ -315,32 +315,32 @@ bool CLocalPlayer::Process()
 
 			// TIMING FOR ONFOOT AIM SENDS
 			WORD lrAnalog,udAnalog;
-			WORD wKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
+			UINT uiKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
 			BYTE bytePlayerCount = pNetGame->GetPlayerPool()->GetCount();
 			
 			// Not targeting or firing. We need a very slow rate to sync the head.
-			if(!IS_TARGETING(wKeys) && !IS_FIRING(wKeys)) {
+			if(!IS_TARGETING(uiKeys) && !IS_FIRING(uiKeys)) {
 				if((dwThisTick - m_dwLastAimSendTick) > (UINT)NETMODE_HEADSYNC_SENDRATE){
 					m_dwLastAimSendTick = dwThisTick;
 					SendAimSyncData();
 				}
 			}
 			// Targeting only. Just synced for show really, so use a slower rate
-			else if(IS_TARGETING(wKeys) && !IS_FIRING(wKeys)) {
+			else if(IS_TARGETING(uiKeys) && !IS_FIRING(uiKeys)) {
 				if((dwThisTick - m_dwLastAimSendTick) > (UINT)NETMODE_AIM_SENDRATE+(iNumberOfPlayersInLocalRange*NETMODE_SEND_MULTIPLIER)){
 					m_dwLastAimSendTick = dwThisTick;
 					SendAimSyncData();
 				}
 			}
 			// Targeting and Firing. Needs a very accurate send rate.
-			else if(IS_TARGETING(wKeys) && IS_FIRING(wKeys)) {
+			else if(IS_TARGETING(uiKeys) && IS_FIRING(uiKeys)) {
 				if((dwThisTick - m_dwLastAimSendTick) > (UINT)NETMODE_FIRING_SENDRATE+(iNumberOfPlayersInLocalRange*NETMODE_SEND_MULTIPLIER)) {
 					m_dwLastAimSendTick = dwThisTick;
 					SendAimSyncData();
 				}
 			}
 			// Firing without targeting. Needs a normal onfoot sendrate.
-			else if(!IS_TARGETING(wKeys) && IS_FIRING(wKeys)) {
+			else if(!IS_TARGETING(uiKeys) && IS_FIRING(uiKeys)) {
 				if((dwThisTick - m_dwLastAimSendTick) > (UINT)GetOptimumOnFootSendRate(iNumberOfPlayersInLocalRange)) {
 					m_dwLastAimSendTick = dwThisTick;
 					SendAimSyncData();
@@ -625,7 +625,7 @@ void CLocalPlayer::SendOnFootFullSyncData()
 	MATRIX4X4 matPlayer;
 	VECTOR vecMoveSpeed;
 	WORD lrAnalog,udAnalog;
-	WORD wKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
+	UINT uiKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
 
 	ONFOOT_SYNC_DATA ofSync;
 
@@ -635,7 +635,7 @@ void CLocalPlayer::SendOnFootFullSyncData()
 	// GENERAL PLAYER SYNC DATA
 	ofSync.lrAnalog = lrAnalog;
 	ofSync.udAnalog = udAnalog;
-	ofSync.wKeys = wKeys;
+	ofSync.uiKeys = uiKeys;
 	ofSync.vecPos.X = matPlayer.pos.X;
 	ofSync.vecPos.Y = matPlayer.pos.Y;
 	ofSync.vecPos.Z = matPlayer.pos.Z;
@@ -722,7 +722,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 	VECTOR vecMoveSpeed;
 
 	WORD lrAnalog,udAnalog;
-	WORD wKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
+	UINT uiKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
 	CVehicle *pGameVehicle=NULL;
 	
 	INCAR_SYNC_DATA icSync;
@@ -735,7 +735,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 
 		icSync.lrAnalog = lrAnalog;
 		icSync.udAnalog = udAnalog;
-		icSync.wKeys = wKeys;
+		icSync.uiKeys = uiKeys;
 
 		// get the vehicle matrix
 		pGameVehicle = pVehiclePool->GetAt(icSync.VehicleID);
@@ -810,7 +810,7 @@ void CLocalPlayer::SendInCarFullSyncData()
 			icSync.byteLandingGearState = 0;
 		else icSync.byteLandingGearState = 1;
 
-		if (wKeys & 4) { // firing
+		if (IS_FIRING(uiKeys)) { // firing
 			BYTE byteCurrentWeapon = m_pPlayerPed->GetCurrentWeapon();
 			if (byteCurrentWeapon == WEAPON_UZI || 
 				byteCurrentWeapon == WEAPON_MP5 || 
@@ -873,7 +873,7 @@ void CLocalPlayer::SendPassengerFullSyncData()
 	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
 
 	WORD lrAnalog,udAnalog;
-	WORD wKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
+	UINT uiKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
 	PASSENGER_SYNC_DATA psSync;
 	MATRIX4X4 mat;
 
@@ -883,7 +883,7 @@ void CLocalPlayer::SendPassengerFullSyncData()
 
 	psSync.lrAnalog = lrAnalog;
 	psSync.udAnalog = udAnalog;
-	psSync.wKeys = wKeys;
+	psSync.uiKeys = uiKeys;
 	psSync.bytePlayerHealth = (BYTE)m_pPlayerPed->GetHealth();
 	psSync.bytePlayerArmour = (BYTE)m_pPlayerPed->GetArmour();
 
@@ -946,7 +946,7 @@ int CLocalPlayer::GetOptimumOnFootSendRate(int iPlayersEffected)
 	BYTE	 bytePlayerCount = pNetGame->GetPlayerPool()->GetCount();
 
 	WORD lrAnalog,udAnalog;
-	WORD wKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
+	UINT uiKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
 
 	if(m_pPlayerPed) {
 
@@ -955,7 +955,7 @@ int CLocalPlayer::GetOptimumOnFootSendRate(int iPlayersEffected)
 		if( (vecMoveSpeed.X == 0.0f) &&
 			(vecMoveSpeed.Y == 0.0f) &&
 			(vecMoveSpeed.Z == 0.0f) &&
-			!IS_TARGETING(wKeys) ) {
+			!IS_TARGETING(uiKeys) ) {
 
 			if(pNetGame->IsLanMode()) return LANMODE_IDLE_ONFOOT_SENDRATE;
 			else return (NETMODE_IDLE_ONFOOT_SENDRATE + (int)iPlayersEffected*NETMODE_SEND_MULTIPLIER); // scale to number of players.
@@ -1434,7 +1434,7 @@ void CLocalPlayer::ProcessSpectating()
 	MATRIX4X4 matPos;
 
 	WORD lrAnalog,udAnalog;
-	WORD wKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
+	UINT uiKeys = m_pPlayerPed->GetKeys(&lrAnalog,&udAnalog);
 	pGame->GetCamera()->GetMatrix(&matPos);
 
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
@@ -1447,7 +1447,7 @@ void CLocalPlayer::ProcessSpectating()
 	spSync.vecPos.Z = matPos.pos.Z;
 	spSync.lrAnalog = lrAnalog;
 	spSync.udAnalog = udAnalog;
-	spSync.wKeys = wKeys;
+	spSync.uiKeys = uiKeys;
 
 	if((GetTickCount() - m_dwLastSendSpecTick) > 200) {
 		m_dwLastSendSpecTick = GetTickCount();

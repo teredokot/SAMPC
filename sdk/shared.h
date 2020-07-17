@@ -203,7 +203,7 @@ typedef struct {
 typedef struct {
 	unsigned short lrAnalog;
 	unsigned short udAnalog;
-	unsigned short wKeys;
+	unsigned int uiKeys;
 	VECTOR vecPos;
 	float fRotation;
 	unsigned char byteHealth;
@@ -230,7 +230,7 @@ typedef struct {
 	VEHICLEID VehicleID;
 	unsigned short lrAnalog;
 	unsigned short udAnalog;
-	unsigned short wKeys;
+	unsigned int uiKeys;
 	C_VECTOR1 cvecRoll;
 	C_VECTOR1 cvecDirection;
 	VECTOR vecPos;
@@ -257,14 +257,14 @@ typedef struct {
 	unsigned char bytePlayerArmour;
 	unsigned short lrAnalog;
 	unsigned short udAnalog;
-	unsigned short wKeys;
+	unsigned int uiKeys;
 	VECTOR vecPos;
 } PASSENGER_SYNC_DATA;
 
 typedef struct {
 	unsigned short lrAnalog;
 	unsigned short udAnalog;
-	unsigned short wKeys;
+	unsigned int uiKeys;
 	VECTOR vecPos;
 } SPECTATOR_SYNC_DATA;
 

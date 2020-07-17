@@ -29,7 +29,7 @@ private:
 	SPECTATOR_SYNC_DATA		m_spSync;
 	TRAILER_SYNC_DATA		m_trSync;
 
-	WORD					m_wLastKeys;
+	UINT					m_uiLastKeys;
 
 	bool					m_bHasAimUpdates;
 	bool					m_bHasTrailerUpdates;
@@ -183,7 +183,7 @@ public:
 	void SetClock(BYTE byteClock);
 
 	BYTE CheckWeapon(BYTE weapon);
-	void CheckKeyUpdatesForScript(WORD wKeys);
+	void CheckKeyUpdatesForScript(UINT uiKeys);
 
 	BYTE GetSpecialAction() {
 		if(GetState() == PLAYER_STATE_ONFOOT) return m_ofSync.byteSpecialAction;

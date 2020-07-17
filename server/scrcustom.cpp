@@ -4030,30 +4030,30 @@ static cell n_GetPlayerKeys(AMX *amx, cell *params)
 
 	CPlayer * pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 	if (pPlayer) {
-		WORD wKeys, udAnalog, lrAnalog;
+		unsigned int uiKeys, udAnalog, lrAnalog;
 		int iPlayerState = pPlayer->GetState();
 		switch (iPlayerState)
 		{
 		case PLAYER_STATE_ONFOOT:
-			wKeys = pPlayer->GetOnFootSyncData()->wKeys;
+			uiKeys = pPlayer->GetOnFootSyncData()->uiKeys;
 			udAnalog = (short)pPlayer->GetOnFootSyncData()->udAnalog;
 			lrAnalog = (short)pPlayer->GetOnFootSyncData()->lrAnalog;
 			break;
 
 		case PLAYER_STATE_DRIVER:
-			wKeys = pPlayer->GetInCarSyncData()->wKeys;
+			uiKeys = pPlayer->GetInCarSyncData()->uiKeys;
 			udAnalog = (short)pPlayer->GetInCarSyncData()->udAnalog;
 			lrAnalog = (short)pPlayer->GetInCarSyncData()->lrAnalog;
 			break;
 
 		case PLAYER_STATE_PASSENGER:
-			wKeys = pPlayer->GetPassengerSyncData()->wKeys;
+			uiKeys = pPlayer->GetPassengerSyncData()->uiKeys;
 			udAnalog = (short)pPlayer->GetPassengerSyncData()->udAnalog;
 			lrAnalog = (short)pPlayer->GetPassengerSyncData()->lrAnalog;
 			break;
 
 		case PLAYER_STATE_SPECTATING:
-			wKeys = pPlayer->GetSpectatorSyncData()->wKeys;
+			uiKeys = pPlayer->GetSpectatorSyncData()->uiKeys;
 			udAnalog = (short)pPlayer->GetSpectatorSyncData()->udAnalog;
 			lrAnalog = (short)pPlayer->GetSpectatorSyncData()->lrAnalog;
 			break;
@@ -4063,7 +4063,7 @@ static cell n_GetPlayerKeys(AMX *amx, cell *params)
 		}
 		cell* cptr;
 		amx_GetAddr(amx, params[2], &cptr);
-		*cptr = (cell)wKeys;
+		*cptr = (cell)uiKeys;
 		amx_GetAddr(amx, params[3], &cptr);
 		*cptr = (cell)udAnalog;
 		amx_GetAddr(amx, params[4], &cptr);
