@@ -44,3 +44,6 @@ pawno/settings.ini
 # Lazarus generated files from exgui (Server browser and mod launcher)
 exgui_lazarus/backup/
 exgui_lazarus/lib/
+
+# RakNet
+sdk/raknet/*.cpp

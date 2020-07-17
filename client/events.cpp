@@ -52,8 +52,8 @@ void ProcessIncommingEvent(BYTE bytePlayerID, int iEventType, DWORD dwParam1, DW
 		case EVENT_TYPE_CARCOMPONENT:
 			iVehicleID = pVehiclePool->FindGtaIDFromID(dwParam1);
 			iComponent = (int)dwParam2;
-			pGame->RequestModel(iComponent);
-			pGame->LoadRequestedModels();
+			CGame::RequestModel(iComponent);
+			CGame::LoadRequestedModels();
 			ScriptCommand(&request_car_component,iComponent);
 
 			iWait = 10;

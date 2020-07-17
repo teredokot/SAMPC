@@ -26,6 +26,7 @@ void ServerJoin(RPCParameters *rpcParams)
 	CHAR szPlayerName[MAX_PLAYER_NAME+1];
 	BYTE bytePlayerID;
 	BYTE byteNameLen=0;
+	int iPlayerScore;
 
 	RakNet::BitStream bsData(rpcParams);
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
@@ -34,9 +35,11 @@ void ServerJoin(RPCParameters *rpcParams)
 	bsData.Read(byteNameLen);
 	bsData.Read(szPlayerName,byteNameLen);
 	szPlayerName[byteNameLen] = '\0';
+	bsData.Read(iPlayerScore);
 
 	// Add this client to the player pool.
 	pPlayerPool->New(bytePlayerID, szPlayerName);
+	pPlayerPool->UpdateScore(bytePlayerID, iPlayerScore);
 
 	/*
 	switch (bytePlayerState) {
@@ -109,7 +112,7 @@ void InitGame(RPCParameters *rpcParams)
 	pGame->EnableStuntBonus(bStuntBonus);
 	if (bLanMode) pNetGame->SetLanMode(true);
 
-	pNetGame->InitGameLogic();
+	//pNetGame->InitGameLogic();
 
 	// Set the gravity now
 	pGame->SetGravity(pNetGame->m_fGravity);
@@ -153,13 +156,13 @@ void Chat(RPCParameters *rpcParams)
 	szText[uiTextLen] = '\0';
 
 	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-	if (bytePlayerID == pPlayerPool->GetLocalPlayerID())
-	{
-		pChatWindow->AddChatMessage(pPlayerPool->GetLocalPlayerName(),
-			pPlayerPool->GetLocalPlayer()->GetPlayerColorAsARGB(), (char*)szText);
+	if (bytePlayerID == pPlayerPool->GetLocalPlayerID()) {
+		CLocalPlayer* pPlayer = pPlayerPool->GetLocalPlayer();
+		pChatWindow->AddChatMessage((CHAR*)pPlayer->GetName(),
+			pPlayer->GetPlayerColorAsARGB(), (char*)szText);
 	} else {
-		CRemotePlayer *pRemotePlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-		if(pRemotePlayer) {
+		CRemotePlayer *pRemotePlayer = pPlayerPool->GetAt(bytePlayerID);
+		if(pRemotePlayer != NULL) {
 			pRemotePlayer->Say(szText);	
 		}
 	}
@@ -359,6 +362,9 @@ void VehicleSpawn(RPCParameters *rpcParams)
 	bsData.Read(fSpawnRotation);
 	bsData.Read(iInterior);
 
+	bsData.ReadBits((unsigned char*)&pVehiclePool->m_Windows[VehicleID], 4);
+	bsData.ReadBits((unsigned char*)&pVehiclePool->m_Doors[VehicleID], 4);
+
 	bsData.Read(bHasNumberPlate);
 	if(bHasNumberPlate) {
 		bsData.Read(cNumberPlate, 9); // Constant size defined by SA
@@ -386,8 +392,8 @@ void VehicleSpawn(RPCParameters *rpcParams)
 				DWORD data = m_CarModInfo.ucCarMod[i] + 1000;
 				DWORD v = 0;
 
-				pGame->RequestModel(data);
-				pGame->LoadRequestedModels();
+				CGame::RequestModel(data);
+				CGame::LoadRequestedModels();
 				ScriptCommand(&request_car_component, data);
 
 				int iWait = 10;
@@ -483,24 +489,20 @@ void DisableRaceCheckpoint(RPCParameters *rpcParams)
 
 //----------------------------------------------------
 
-void UpdateScoresPingsIPs(RPCParameters *rpcParams)
+static void UpdatePings(RPCParameters* rpcParams)
 {
-	RakNet::BitStream bsData(rpcParams);
-
-	BYTE bytePlayerId;
-	int  iPlayerScore;
-	DWORD dwPlayerPing;
-
-	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
-
-	for (BYTE i=0; i<(rpcParams->numberOfBitsOfData/72); i++)
-	{
-		bsData.Read(bytePlayerId);
-		bsData.Read(iPlayerScore);
-		bsData.Read(dwPlayerPing);
-
-		pPlayerPool->UpdateScore(bytePlayerId, iPlayerScore);
-		pPlayerPool->UpdatePing(bytePlayerId, dwPlayerPing);
+	if (pNetGame->GetPlayerPool()) {
+		RakNet::BitStream bsData(rpcParams);
+		if (bsData.GetNumberOfUnreadBits() >= 32 && bsData.GetNumberOfUnreadBits() <= (32 * MAX_PLAYERS)) {
+			unsigned short usPlayerId = INVALID_PLAYER_ID_EX;
+			unsigned short usPlayerPing = 0;
+			for (unsigned short i = 0; i < (rpcParams->numberOfBitsOfData / 32); i++) {
+				if (bsData.Read(usPlayerId) && pNetGame->GetPlayerPool()->GetSlotState((unsigned char)usPlayerId)) {
+					bsData.Read(usPlayerPing);
+					pNetGame->GetPlayerPool()->UpdatePing(usPlayerId, usPlayerPing);
+				}
+			}
+		}
 	}
 }
 
@@ -747,11 +749,48 @@ void Instagib(RPCParameters *rpcParams)
 
 //----------------------------------------------------
 
-// AntiCheat
-/*void ACServerProtected(RPCParameters *rpcParams)
+static BYTE GetByteSumAtAddress(DWORD dwAddr, BYTE byteCount)
 {
-	
-}*/
+	BYTE sum = 0, byte = 0;
+	do {
+		sum ^= *(BYTE*)(dwAddr + byte++) & 0xCC;
+	} while (byte != byteCount);
+	return sum;
+}
+
+// TODO: Add type: 70, 2, 71, 69, 72
+// What are these check type numbers even...
+static void ClientCheck(RPCParameters* rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+
+	unsigned char ucType, ucOffset, ucCount;
+	unsigned long ulMemAddress;
+
+	if (bsData.GetNumberOfUnreadBits() == 72 && bsData.Read(ucType)) {
+		bsData.Read(ulMemAddress);
+		bsData.Read(ucOffset);
+		bsData.Read(ucCount);
+		if (ucType == 5 && (ulMemAddress >= 0x400000 && ulMemAddress <= 0x856E00)) {
+			unsigned char ucSum = GetByteSumAtAddress(ulMemAddress + ucOffset, ucCount);
+
+			RakNet::BitStream bsSend;
+			bsSend.Write<unsigned char>(5); // type
+			bsSend.Write(ulMemAddress);
+			bsSend.Write(ucSum);
+			pNetGame->Send(RPC_ClientCheck, &bsSend);
+		}
+		else if (ucType == 72) {
+			ulMemAddress = Util_GetTime() & 0xFFFFFFF | 0x30000000;
+
+			RakNet::BitStream bsSend;
+			bsSend.Write<unsigned char>(72); // type
+			bsSend.Write(ulMemAddress);
+			bsSend.Write<unsigned char>(0);
+			pNetGame->Send(RPC_ClientCheck, &bsSend);
+		}
+	}
+}
 
 //----------------------------------------------------
 
@@ -773,7 +812,7 @@ void RegisterRPCs(RakClientInterface * pRakClient)
 	REGISTER_STATIC_RPC(pRakClient,DisableCheckpoint);
 	REGISTER_STATIC_RPC(pRakClient,SetRaceCheckpoint);
 	REGISTER_STATIC_RPC(pRakClient,DisableRaceCheckpoint);
-	REGISTER_STATIC_RPC(pRakClient,UpdateScoresPingsIPs);
+	REGISTER_STATIC_RPC(pRakClient,UpdatePings);
 	//REGISTER_STATIC_RPC(pRakClient,SvrStats);
 	REGISTER_STATIC_RPC(pRakClient,GameModeRestart);
 	REGISTER_STATIC_RPC(pRakClient,ConnectionRejected);
@@ -786,8 +825,8 @@ void RegisterRPCs(RakClientInterface * pRakClient)
 	REGISTER_STATIC_RPC(pRakClient,Weather);
 	REGISTER_STATIC_RPC(pRakClient,Instagib);
 	REGISTER_STATIC_RPC(pRakClient,SetTimeEx);
-	REGISTER_STATIC_RPC(pRakClient,ToggleClock); // 31
-	//REGISTER_STATIC_RPC(pRakClient,ACServerProtected);
+	REGISTER_STATIC_RPC(pRakClient,ToggleClock);
+	REGISTER_STATIC_RPC(pRakClient,ClientCheck);
 }
 
 //----------------------------------------------------

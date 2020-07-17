@@ -190,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="scrdatabase.cpp" />
     <ClCompile Include="variable.cpp" />
+    <ClCompile Include="..\sdk\sha2\sha256.cpp">
+      <Filter>sdk\sha2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="console.h" />
@@ -473,6 +476,9 @@
     </ClInclude>
     <ClInclude Include="scrcore.h" />
     <ClInclude Include="variable.h" />
+    <ClInclude Include="..\sdk\sha2\sha256.h">
+      <Filter>sdk\sha2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sdk">
@@ -489,6 +495,9 @@
     </Filter>
     <Filter Include="sdk\zlib">
       <UniqueIdentifier>{2d7eee43-7c5a-4025-9217-21cb99820dcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\sha2">
+      <UniqueIdentifier>{d6559214-eb78-4750-80ad-be8aaca9b456}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

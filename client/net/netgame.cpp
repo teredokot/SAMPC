@@ -53,7 +53,7 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 
 	// Setup player pool
 	m_pPlayerPool = new CPlayerPool();
-	m_pPlayerPool->SetLocalPlayerName(szPlayerName);
+	m_pPlayerPool->GetLocalPlayer()->SetName(szPlayerName);
 
 	m_pVehiclePool = new CVehiclePool();
 	m_pPickupPool  = new CPickupPool();
@@ -76,7 +76,7 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_byteWorldTime = 12;
 	m_byteWorldMinute = 0;
 	m_byteWeather	= 10;
-	m_fGravity = (float)0.008000000;
+	m_fGravity = 0.008000000f;
 	m_iDeathDropMoney = 0;
 	m_bLanMode = false;
 	m_byteHoldTime = 1;
@@ -84,9 +84,18 @@ CNetGame::CNetGame(PCHAR szHostOrIp, int iPort,
 	m_bDisableEnterExits = false;
 	m_fNameTagDrawDistance = 70.0f;
 	m_bNameTagLOS = true;
+	m_bAllowWeapons = true;
+	m_bLimitGlobalMarkerRadius = false;
+	m_bShowPlayerMarkers = true;
+	m_bShowPlayerTags = true;
+	m_bTirePopping = true;
+	m_fGlobalMarkerRadius = 10000.0f;
+
+	m_WorldBounds[0] = m_WorldBounds[2] = 20000.0f;
+	m_WorldBounds[1] = m_WorldBounds[3] = -20000.0f;
 
 	int i;
-	for (i = 0; i < 32; i++) m_dwMapIcon[i] = NULL;
+	for (i = 0; i < MAX_MAP_ICON; i++) m_dwMapIcon[i] = NULL;
 
 	m_byteFriendlyFire = 1;
 	pGame->EnableClock(0); // Hide the clock by default
@@ -179,7 +188,7 @@ void CNetGame::ShutdownForGameModeRestart()
 
 //----------------------------------------------------
 
-void CNetGame::InitGameLogic()
+/*void CNetGame::InitGameLogic()
 {
 	//GameResetRadarColors();
 
@@ -187,7 +196,7 @@ void CNetGame::InitGameLogic()
 	m_WorldBounds[1] = -20000.0f;
 	m_WorldBounds[2] = 20000.0f;
 	m_WorldBounds[3] = -20000.0f;
-}
+}*/
 
 //----------------------------------------------------
 
@@ -203,28 +212,28 @@ void CNetGame::Process()
 	pGame->SetWorldWeather(m_byteWeather);
 
 	// KEEP THE FOLLOWING ANIMS LOADED DURING THE NETGAME
-	if(!pGame->IsAnimationLoaded("PARACHUTE")) pGame->RequestAnimation("PARACHUTE");
-	if(!pGame->IsAnimationLoaded("DANCING")) pGame->RequestAnimation("DANCING");
-	if(!pGame->IsAnimationLoaded("GFUNK")) pGame->RequestAnimation("GFUNK");
-	if(!pGame->IsAnimationLoaded("RUNNINGMAN"))	pGame->RequestAnimation("RUNNINGMAN");
-    if(!pGame->IsAnimationLoaded("WOP")) pGame->RequestAnimation("WOP");
-	if(!pGame->IsAnimationLoaded("STRIP")) pGame->RequestAnimation("STRIP");
-	if(!pGame->IsAnimationLoaded("PAULNMAC")) pGame->RequestAnimation("PAULNMAC");
+	if(CGame::IsAnimationLoaded("PARACHUTE") == 0) CGame::RequestAnimation("PARACHUTE");
+	if(CGame::IsAnimationLoaded("DANCING") == 0) CGame::RequestAnimation("DANCING");
+	if(CGame::IsAnimationLoaded("GFUNK") == 0) CGame::RequestAnimation("GFUNK");
+	if(CGame::IsAnimationLoaded("RUNNINGMAN") == 0)	CGame::RequestAnimation("RUNNINGMAN");
+	if(CGame::IsAnimationLoaded("WOP") == 0) CGame::RequestAnimation("WOP");
+	if(CGame::IsAnimationLoaded("STRIP") == 0) CGame::RequestAnimation("STRIP");
+	if(CGame::IsAnimationLoaded("PAULNMAC") == 0) CGame::RequestAnimation("PAULNMAC");
 				
-	if(!pGame->IsModelLoaded(OBJECT_PARACHUTE)) {
-		pGame->RequestModel(OBJECT_PARACHUTE);
+	if(!CGame::IsModelLoaded(OBJECT_PARACHUTE)) {
+		CGame::RequestModel(OBJECT_PARACHUTE);
 	}
 
 	// keep the throwable weapon models loaded
-	if (!pGame->IsModelLoaded(WEAPON_MODEL_TEARGAS))
-		pGame->RequestModel(WEAPON_MODEL_TEARGAS);
-	if (!pGame->IsModelLoaded(WEAPON_MODEL_GRENADE))
-		pGame->RequestModel(WEAPON_MODEL_GRENADE);
-	if (!pGame->IsModelLoaded(WEAPON_MODEL_MOLTOV))
-		pGame->RequestModel(WEAPON_MODEL_MOLTOV);
+	if (!CGame::IsModelLoaded(WEAPON_MODEL_TEARGAS))
+		CGame::RequestModel(WEAPON_MODEL_TEARGAS);
+	if (!CGame::IsModelLoaded(WEAPON_MODEL_GRENADE))
+		CGame::RequestModel(WEAPON_MODEL_GRENADE);
+	if (!CGame::IsModelLoaded(WEAPON_MODEL_MOLTOV))
+		CGame::RequestModel(WEAPON_MODEL_MOLTOV);
 
 	// cellphone
-	if (!pGame->IsModelLoaded(330)) pGame->RequestModel(330);
+	if (!CGame::IsModelLoaded(330)) CGame::RequestModel(330);
 
 	if(GetGameState() == GAMESTATE_CONNECTED) {
 
@@ -411,7 +420,7 @@ void CNetGame::Packet_PlayerSync(Packet *p)
 	if(bHasUD) bsPlayerSync.Read(ofSync.udAnalog);
 
 	// GENERAL KEYS
-	bsPlayerSync.Read(ofSync.wKeys);
+	bsPlayerSync.Read(ofSync.uiKeys);
 
 	// VECTOR POS
 	bsPlayerSync.Read((char*)&ofSync.vecPos,sizeof(VECTOR));
@@ -519,7 +528,7 @@ void CNetGame::Packet_VehicleSync(Packet *p)
 	// KEYS
 	bsSync.Read(icSync.lrAnalog);
 	bsSync.Read(icSync.udAnalog);
-	bsSync.Read(icSync.wKeys);
+	bsSync.Read(icSync.uiKeys);
 
 	// ROLL / DIRECTION / POSITION / MOVE SPEED
 	bsSync.Read((char*)&icSync.cvecRoll,sizeof(C_VECTOR1));
@@ -723,6 +732,7 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 	unsigned short port=0;
 	unsigned short playerId=0;
 	unsigned int uiChallenge=0;
+	CLocalPlayer* pPlayer = m_pPlayerPool->GetLocalPlayer();
 
 	bsReturnParams.IgnoreBits(8);
 	bsReturnParams.Read(binaryAddr);
@@ -740,13 +750,13 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 
 	int iVersion = NETGAME_VERSION;
 	//BYTE byteMod = MOD_VERSION;
-	BYTE byteNameLen = (BYTE)strlen(m_pPlayerPool->GetLocalPlayerName());
+	BYTE byteNameLen = (BYTE)strlen(pPlayer->GetName());
 
 	RakNet::BitStream bsSend;
 	bsSend.Write(iVersion);
 	//bsSend.Write(byteMod);
 	bsSend.Write(byteNameLen);
-	bsSend.Write(m_pPlayerPool->GetLocalPlayerName(),byteNameLen);
+	bsSend.Write(pPlayer->GetName(),byteNameLen);
 	bsSend.Write(uiChallenge);
 	
 	size_t uiVersionLen = strlen(SAMP_VERSION);
@@ -758,14 +768,13 @@ void CNetGame::Packet_ConnectionSucceeded(Packet *p)
 
 //----------------------------------------------------
 
-void CNetGame::UpdatePlayerScoresAndPings()
+void CNetGame::UpdatePlayerPings()
 {
 	static DWORD dwLastUpdateTick = 0;
 
-	if ((GetTickCount() - dwLastUpdateTick) > 3000) {
+	if ((GetTickCount() - dwLastUpdateTick) > RPC_PING_UPDATE_TIME) {
 		dwLastUpdateTick = GetTickCount();
-		RakNet::BitStream bsParams;
-		m_pRakClient->RPC(RPC_UpdateScoresPingsIPs, &bsParams, HIGH_PRIORITY, RELIABLE, 0, false);
+		m_pRakClient->RPC(RPC_UpdatePings, NULL, HIGH_PRIORITY, RELIABLE, 0, false);
 	}
 }
 
@@ -845,7 +854,7 @@ void CNetGame::ResetGangZonePool()
 
 void CNetGame::SetMapIcon(BYTE byteIndex, float fX, float fY, float fZ, BYTE byteIcon, DWORD dwColor)
 {
-	if (byteIndex >= 32) return;
+	if (byteIndex >= MAX_MAP_ICON) return;
 	if (m_dwMapIcon[byteIndex] != NULL) DisableMapIcon(byteIndex);
 	//ScriptCommand(&create_radar_marker_without_sphere, fX, fY, fZ, byteIcon, &m_dwMapIcon);
 	m_dwMapIcon[byteIndex] = pGame->CreateRadarMarkerIcon(byteIcon, fX, fY, fZ, dwColor);
@@ -856,7 +865,7 @@ void CNetGame::SetMapIcon(BYTE byteIndex, float fX, float fY, float fZ, BYTE byt
 
 void CNetGame::DisableMapIcon(BYTE byteIndex)
 {
-	if (byteIndex >= 32) return;
+	if (byteIndex >= MAX_MAP_ICON) return;
 	ScriptCommand(&disable_marker, m_dwMapIcon[byteIndex]);
 	m_dwMapIcon[byteIndex] = NULL;
 }
@@ -866,7 +875,7 @@ void CNetGame::DisableMapIcon(BYTE byteIndex)
 void CNetGame::ResetMapIcons()
 {
 	BYTE i;
-	for (i = 0; i < 32; i++)
+	for (i = 0; i < MAX_MAP_ICON; i++)
 	{
 		if (m_dwMapIcon[i] != NULL) DisableMapIcon(i);
 	}

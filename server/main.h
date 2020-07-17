@@ -104,6 +104,9 @@ typedef struct _SERVER_SETTINGS {
 // SQLite3
 #include <sqlite/sqlite3.h>
 
+// SHA2-256
+#include <sha2/sha256.h>
+
 // Shared stuffs
 #include "shared.h"
 

@@ -5,7 +5,10 @@
 #define _players_included
 
 #define SPECIAL_ACTION_NONE				(0)
+#define SPECIAL_ACTION_DUCK 			(1)
 #define SPECIAL_ACTION_USEJETPACK		(2)
+#define SPECIAL_ACTION_ENTER_VEHICLE 	(3)
+#define SPECIAL_ACTION_EXIT_VEHICLE		(4)
 #define SPECIAL_ACTION_DANCE1			(5)
 #define SPECIAL_ACTION_DANCE2			(6)
 #define SPECIAL_ACTION_DANCE3			(7)
@@ -15,6 +18,7 @@
 #define SPECIAL_ACTION_SITTING			(12)
 #define SPECIAL_ACTION_STOPUSECELLPHONE (13)
 #define SPECIAL_ACTION_URINATE			(68)
+#define SPECIAL_ACTION_PISSING			(SPECIAL_ACTION_URINATE)
 
 #define PLAYER_STATE_NONE						(0)
 #define PLAYER_STATE_ONFOOT						(1)
@@ -57,6 +61,40 @@
 #define PLAYER_VARTYPE_STRING	(2)
 #define PLAYER_VARTYPE_FLOAT	(3)
 
+#define FIGHT_STYLE_NORMAL 		(4)
+#define FIGHT_STYLE_BOXING 		(5)
+#define FIGHT_STYLE_KUNGFU 		(6)
+#define FIGHT_STYLE_KNEEHEAD 	(7)
+#define FIGHT_STYLE_GRABKICK	(15)
+#define FIGHT_STYLE_ELBOW 		(16)
+
+#define KEY_ACTION 				(1)
+#define KEY_CROUCH 				(2)
+#define KEY_FIRE 				(4)
+#define KEY_SPRINT 				(8)
+#define KEY_SECONDARY_ATTACK	(16)
+#define KEY_JUMP 				(32)
+#define KEY_LOOK_RIGHT 			(64)
+#define KEY_AIM 				(128)
+#define KEY_HANDBRAKE 			(128)
+#define KEY_LOOK_LEFT 			(256)
+#define KEY_LOOK_BEHIND 		(512)
+#define KEY_SUBMISSION 			(512)
+#define KEY_WALK 				(1024)
+#define KEY_ANALOG_UP 			(2048)
+#define KEY_ANALOG_DOWN 		(4096)
+#define KEY_ANALOG_LEFT 		(8192)
+#define KEY_ANALOG_RIGHT 		(16384)
+#define KEY_YES 				(32768)
+#define KEY_NO 					(65536)
+#define KEY_CTRL_BACK 			(131072)
+#define KEY_CTRL_FORWARD 		(262144)
+#define KEY_CAMERA 				(524288)
+#define KEY_UP 					(-128)
+#define KEY_DOWN 				(128)
+#define KEY_LEFT 				(-128)
+#define KEY_RIGHT 				(128)
+
 native GetPlayerCount();
 native GetPlayerIDFromName(const name[]);
 native SetSpawnInfo(playerid, teamid, skinid, Float:x, Float:y, Float:z, Float:a, weap1, ammo1, weap2, ammo2, weap3, ammo3);
@@ -74,7 +112,7 @@ native SetPlayerHealth(playerid, Float:health);
 native GetPlayerHealth(playerid, &Float:health);
 native SetPlayerArmour(playerid, Float:health);
 native GetPlayerArmour(playerid, &Float:health);
-native SetPlayerAmmo(playerid, weaponslot, ammo);
+native SetPlayerAmmo(playerid, weaponid, ammo);
 native GetPlayerAmmo(playerid);
 native SetPlayerTeam(playerid, teamid);
 native GetPlayerTeam(playerid);
@@ -151,7 +189,12 @@ native SetPlayerSkillLevel(playerid, skill, level);
 native GetPlayerSurfingVehicleID(playerid);
 native GetPlayerVehicleSeat(playerid);
 native GetPlayerCameraMode(playerid);
+native GetPlayerCameraZoom(playerid);
+native GetPlayerCameraPos(playerid, &Float:x=0.0, &Float:y=0.0, &Float:z=0.0);
+native GetPlayerCameraFrontVector(playerid, &Float:x=0.0, &Float:y=0.0, &Float:z=0.0);
 native SetPlayerArmedWeapon(playerid, weaponid);
+native GetPlayerFightingStyle(playerid);
+native GetPlayerFightingMove(playerid);
 native SetPlayerFightingStyle(playerid, style, moves = 6);
 native SetPlayerMaxHealth(playerid, Float:max_health);
 native InterpolateCameraPos(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = CAMERA_CUT);
@@ -159,6 +202,10 @@ native InterpolateCameraLookAt(playerid, Float:FromX, Float:FromY, Float:FromZ, 
 native SetPlayerBlurLevel(playerid, blur_level);
 native SetPlayerGameSpeed(playerid, Float:speed);
 native GetPlayerWeaponState(playerid);
+native SendClientCheck(playerid, type, address, offset, count);
+native TogglePlayerChatbox(playerid, show);
+native IsPlayerTyping(playerid);
+native TogglePlayerWidescreen(playerid, on);
 
 native SetPVarInt(playerid, varname[], int_value);
 native SetPVarString(playerid, varname[], string_value[]);

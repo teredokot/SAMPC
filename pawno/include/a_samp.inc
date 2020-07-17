@@ -37,8 +37,7 @@
 #define MAX_CMD_INPUT 		(128)
 #define MAX_TEXT_DRAW_LINE	(256)
 #define MAX_FILTER_SCRIPTS 	(16)
-
-
+#define MAX_MAP_ICON		(200)
 
 #define DISCONNECT_REASON_LOST_CONNECTION	(0)
 #define DISCONNECT_REASON_DISCONNECTED 		(1)
@@ -346,6 +345,7 @@ native Float:asin(Float:value);
 native Float:acos(Float:value);
 native Float:atan(Float:value);
 native Float:atan2(Float:y, Float:x);
+native SHA256_PassHash(password[], salt[], ret_hash[], ret_hash_len);
 native GetPlayerPoolSize();
 native GetVehiclePoolSize();
 native SetGameModeText(gamemode[]);

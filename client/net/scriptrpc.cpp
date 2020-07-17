@@ -95,21 +95,21 @@ void ScrSetPlayerName(RPCParameters *rpcParams)
 	// a.k.a. when the nick is not in use?
 	bsData.Read(byteSuccess);
 	
-	if (pPlayerPool->GetLocalPlayerID() == bytePlayerID)
-	{
-		PCHAR szOldNick = pPlayerPool->GetLocalPlayerName();
-		pPlayerPool->SetLocalPlayerName(szNewName);
+	if (pPlayerPool->GetLocalPlayerID() == bytePlayerID) {
+		CLocalPlayer* pPlayer = pPlayerPool->GetLocalPlayer();
 
 		if (pDeathWindow)
-			pDeathWindow->ChangeNick(szOldNick, szNewName);
-	}
-	else if(pPlayerPool->GetSlotState(bytePlayerID))
-	{
-		PCHAR szOldNick = pPlayerPool->GetPlayerName(bytePlayerID);
-		pPlayerPool->SetPlayerName(bytePlayerID, szNewName);
+			pDeathWindow->ChangeNick((PCHAR)pPlayer->GetName(), szNewName);
 
-		if (pDeathWindow)
-			pDeathWindow->ChangeNick(szOldNick, szNewName);
+		pPlayer->SetName(szNewName);
+	} else {
+		CRemotePlayer* pPlayer = pPlayerPool->GetAt(bytePlayerID);
+		if (pPlayer != NULL) {
+			if (pDeathWindow)
+				pDeathWindow->ChangeNick((PCHAR)pPlayer->GetName(), szNewName);
+
+			pPlayer->SetName(szNewName);
+		}
 	}
 }
 
@@ -213,7 +213,7 @@ void ScrPutPlayerInVehicle(RPCParameters *rpcParams)
 
 void ScrRemovePlayerFromVehicle(RPCParameters *rpcParams)
 {
-	RakNet::BitStream bsData(rpcParams);
+	//RakNet::BitStream bsData(rpcParams);
 
 	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 	pPlayerPool->GetLocalPlayer()->GetPlayerPed()->ExitCurrentVehicle();
@@ -508,12 +508,13 @@ void ScrDeathMessage(RPCParameters *rpcParams)
 		szKillerName = NULL; dwKillerColor = 0;
 	} else {
 		if(pPlayerPool->GetLocalPlayerID() == byteKiller) {
-			szKillerName = pPlayerPool->GetLocalPlayerName();
+			szKillerName = (PCHAR)pPlayerPool->GetLocalPlayer()->GetName();
 			dwKillerColor = pPlayerPool->GetLocalPlayer()->GetPlayerColorAsARGB();
 		} else {
-			if(pPlayerPool->GetSlotState(byteKiller)) {
-				szKillerName = pPlayerPool->GetPlayerName(byteKiller);
-				dwKillerColor = pPlayerPool->GetAt(byteKiller)->GetPlayerColorAsARGB();
+			CRemotePlayer* pPlayer = pPlayerPool->GetAt(byteKiller);
+			if (pPlayer != NULL) {
+				szKillerName = (PCHAR)pPlayer->GetName();
+				dwKillerColor = pPlayer->GetPlayerColorAsARGB();
 			} else {
 				//pChatWindow->AddDebugMessage("Slot State Killer FALSE");
 				szKillerName = NULL; dwKillerColor = 0;
@@ -523,12 +524,13 @@ void ScrDeathMessage(RPCParameters *rpcParams)
 
 	// Determine the killee's name and color
 	if(pPlayerPool->GetLocalPlayerID() == byteKillee) {
-		szKilleeName = pPlayerPool->GetLocalPlayerName();
+		szKilleeName = (PCHAR)pPlayerPool->GetLocalPlayer()->GetName();
 		dwKilleeColor = pPlayerPool->GetLocalPlayer()->GetPlayerColorAsARGB();
 	} else {
-		if(pPlayerPool->GetSlotState(byteKillee)) {
-			szKilleeName = pPlayerPool->GetPlayerName(byteKillee);
-			dwKilleeColor = pPlayerPool->GetAt(byteKillee)->GetPlayerColorAsARGB();
+		CRemotePlayer* pPlayer = pPlayerPool->GetAt(byteKillee);
+		if (pPlayer != NULL) {
+			szKilleeName = (PCHAR)pPlayer->GetName();
+			dwKilleeColor = pPlayer->GetPlayerColorAsARGB();
 		} else {
 			//pChatWindow->AddDebugMessage("Slot State Killee FALSE");
 			szKilleeName = NULL; dwKilleeColor = 0;
@@ -1360,67 +1362,72 @@ void ScrEnableStuntBonus(RPCParameters *rpcParams)
 
 static void ScrSetVehicle(RPCParameters* rpcParams)
 {
-	RakNet::BitStream in(rpcParams);
+	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+	if (pVehiclePool) {
+		RakNet::BitStream in(rpcParams);
+		if (in.GetNumberOfUnreadBits() >= 24) {
+			unsigned char ucOP = 0;
+			VEHICLEID nVehicleID = 0;
 
-	int iOP = 0;
-	VEHICLEID iVehicleID = 0;
+			in.Read(ucOP);
+			in.Read(nVehicleID);
 
-	in.Read(iOP);
-	in.Read(iVehicleID);
+			CVehicle* pVehicle = pVehiclePool->GetAt(nVehicleID);
+			if (pVehicle != NULL) {
+				switch (ucOP) {
+				case 1:
+					pVehicle->Fix();
+					break;
+				case 2: {
+					if (in.GetNumberOfUnreadBits() == 4) {
+						in.ReadBits((unsigned char*)&pVehiclePool->m_Windows[nVehicleID], 4);
 
-	CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(iVehicleID);
-	if (pVehicle == NULL)
-		return;
-	
-	switch (iOP)
-	{
-	case 1:
-		pVehicle->Fix();
-		break;
-	case 2:
-		int d, p, bl, br;
+						// TODO: Need checking at and add model filtering here and/or server
+						// Seems like it works on most of the vehicles, but on some vehicles it crashes the game,
+						// with gta_sa.exe:0x6D30B5 crash address. ecx at [ecx+18h] looks like not initialized.
+						if (pVehicle->GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR) {
+							pVehicle->ToggleWindow(10, pVehiclePool->m_Windows[nVehicleID].bDriver);
+							pVehicle->ToggleWindow(8, pVehiclePool->m_Windows[nVehicleID].bPassenger);
+							pVehicle->ToggleWindow(11, pVehiclePool->m_Windows[nVehicleID].bBackLeft);
+							pVehicle->ToggleWindow(9, pVehiclePool->m_Windows[nVehicleID].bBackRight);
+						}
+					}
+					break;
+				}
+				case 3: {
+					pVehicle->ToggleTaxiLight(in.ReadBit());
+					break;
+				}
+				case 4: {
+					pVehicle->ToggleEngine(in.ReadBit());
+					break;
+				}
+				case 5: {
+					pVehicle->SetLightState(in.ReadBit());
+					break;
+				}
+				case 6: {
+					pVehicle->SetFeature(in.ReadBit());
+					break;
+				}
+				case 7: {
+					pVehicle->SetVisibility(in.ReadBit());
+					break;
+				}
+				case 8: {
+					if (in.GetNumberOfUnreadBits() == 4) {
+						in.ReadBits((unsigned char*)&pVehiclePool->m_Doors[nVehicleID], 4);
 
-		in.Read(d);
-		in.Read(p);
-		in.Read(bl);
-		in.Read(br);
-
-		pVehicle->ToggleWindow(10, !!d);
-		pVehicle->ToggleWindow(8, !!p);
-		pVehicle->ToggleWindow(11, !!bl);
-		pVehicle->ToggleWindow(9, !!br);
-		break;
-	case 3:
-	{
-		int iOn = 0;
-		in.Read(iOn);
-		pVehicle->ToggleTaxiLight(!!iOn);
-		break;
-	}
-	case 4:
-	{
-		int iEngineState = 0;
-		in.Read(iEngineState);
-		pVehicle->ToggleEngine(!!iEngineState);
-		break;
-	}
-	case 5:
-	{
-		unsigned char ucState = 0;
-		in.Read(ucState);
-		pVehicle->SetLightState(ucState);
-		break;
-	}
-	case 6:
-	{
-		pVehicle->SetFeature(in.ReadBit());
-		break;
-	}
-	case 7:
-	{
-		pVehicle->SetVisibility(in.ReadBit());
-		break;
-	}
+						pVehicle->ToggleDoor(2, 10, pVehiclePool->m_Doors[nVehicleID].bDriver ? 1.0f : 0.0f);
+						pVehicle->ToggleDoor(3, 8, pVehiclePool->m_Doors[nVehicleID].bPassenger ? 1.0f : 0.0f);
+						pVehicle->ToggleDoor(4, 11, pVehiclePool->m_Doors[nVehicleID].bBackLeft ? 1.0f : 0.0f);
+						pVehicle->ToggleDoor(5, 9, pVehiclePool->m_Doors[nVehicleID].bBackRight ? 1.0f : 0.0f);
+					}
+					break;
+				}
+				}
+			}
+		}
 	}
 }
 
@@ -1593,6 +1600,35 @@ static void ScrSetGameSpeed(RPCParameters* rpcParams)
 	}
 }
 
+static void ScrToggleChatbox(RPCParameters* rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+	if (bsData.GetNumberOfUnreadBits() == 1 && pChatWindow) {
+		pChatWindow->ForceHide(bsData.ReadBit());
+	}
+}
+
+static void ScrToggleWidescreen(RPCParameters* rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+	if (bsData.GetNumberOfUnreadBits() == 1) {
+		pGame->GetCamera()->ToggleWidescreen(bsData.ReadBit());
+	}
+}
+
+static void ScrSetScore(RPCParameters * rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+	if (bsData.GetNumberOfUnreadBits() == 48) {
+		unsigned short usPlayerId;
+		int iScore;
+		if (bsData.Read(usPlayerId) && usPlayerId < MAX_PLAYERS) {
+			bsData.Read(iScore);
+			pNetGame->GetPlayerPool()->UpdateScore(usPlayerId, iScore);
+		}
+	}
+}
+
 //----------------------------------------------------
 
 void RegisterScriptRPCs(RakClientInterface* pRakClient)
@@ -1676,6 +1712,9 @@ void RegisterScriptRPCs(RakClientInterface* pRakClient)
 	REGISTER_STATIC_RPC(pRakClient, ScrInterpolateCamera);
 	REGISTER_STATIC_RPC(pRakClient, ScrVehicleComponent);
 	REGISTER_STATIC_RPC(pRakClient, ScrSetGameSpeed);
+	REGISTER_STATIC_RPC(pRakClient, ScrToggleChatbox);
+	REGISTER_STATIC_RPC(pRakClient, ScrToggleWidescreen);
+	REGISTER_STATIC_RPC(pRakClient, ScrSetScore);
 }
 
 //----------------------------------------------------

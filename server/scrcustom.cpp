@@ -965,9 +965,8 @@ static cell n_ForceClassSelection(AMX *amx, cell *params)
 	CHECK_PARAMS(amx, "ForceClassSelection", 1);
 	if (pNetGame->GetPlayerPool()->GetSlotState(params[1]))
 	{
-		RakNet::BitStream bsData;
 		RakServerInterface *pRak = pNetGame->GetRakServer();
-		pRak->RPC(RPC_ScrForceSpawnSelection , &bsData, HIGH_PRIORITY, RELIABLE, 0, pRak->GetPlayerIDFromIndex((int)params[1]), false, false);
+		pRak->RPC(RPC_ScrForceSpawnSelection , NULL, HIGH_PRIORITY, RELIABLE, 0, pRak->GetPlayerIDFromIndex((int)params[1]), false, false);
 		return 1;
 	} else {
 		return 0;
@@ -1082,18 +1081,52 @@ static cell n_GetPlayerSkin(AMX *amx, cell *params)
 	return 0;
 }
 
+// native GetPlayerFightingStyle(playerid)
+static cell n_GetPlayerFightingStyle(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerFightingStyle", 1);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			return pPlayer->m_ucFightingStyle;
+		}
+	}
+	return 4; // FIGHT_STYLE_NORMAL
+}
+
+// native GetPlayerFightingMove(playerid)
+static cell n_GetPlayerFightingMove(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerFightingMove", 1);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			return pPlayer->m_ucFightingMove;
+		}
+	}
+	return 0;
+}
+
+// native SetPlayerFightingStyle(playerid, style, moves = 6)
 static cell n_SetPlayerFightingStyle(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetPlayerFightingStyle", 3);
-	CPlayerPool* pPool = pNetGame->GetPlayerPool();
-	if (pPool && pPool->GetSlotState(params[1]))
-	{
-		RakNet::BitStream out;
-		out.Write<int>(4);
-		out.Write((unsigned char)params[2]);
-		out.Write((unsigned char)params[3]);
-		pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out);
-		return 1;
+
+	if (VALIDATE_FIGHTING(params[2], params[3])) {
+		if (pNetGame->GetPlayerPool()) {
+			CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+			if (pPlayer != nullptr) {
+				RakNet::BitStream out;
+				out.Write<int>(4);
+				out.Write((unsigned char)params[2]);
+				out.Write((unsigned char)params[3]);
+				if (pNetGame->SendToPlayer(params[1], RPC_ScrSetPlayer, &out)) {
+					pPlayer->m_ucFightingStyle = (unsigned char)params[2];
+					pPlayer->m_ucFightingMove = (unsigned char)params[3];
+					return 1;
+				}
+			}
+		}
 	}
 	return 0;
 }
@@ -1190,6 +1223,71 @@ static cell n_GetPlayerWeaponState(AMX* amx, cell* params)
 		return pPlayer->GetAimSyncData()->byteWeaponState;
 	}
 	return -2;
+}
+
+// native SendClientCheck(playerid, type, address, offset, count)
+static cell n_SendClientCheck(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SendClientCheck", 5);
+	if (pNetGame->GetPlayerPool() && pNetGame->GetPlayerPool()->GetSlotState(params[1])) {
+		if ((params[2] >= 2 && params[2] <= 72) && (params[4] >= 0 && params[4] <= 255) &&
+			(params[5] >= 0 && params[5] <= 255)) {
+			RakNet::BitStream bsSend;
+			unsigned char
+				ucType = (unsigned char)params[2],
+				ucOffset = (unsigned char)params[4],
+				ucCount = (unsigned char)params[5];
+			unsigned long
+				ulAddress = (unsigned long)params[3];
+
+			bsSend.Write(ucType);
+			bsSend.Write(ulAddress);
+			bsSend.Write(ucOffset);
+			bsSend.Write(ucCount);
+
+			return pNetGame->SendToPlayer(params[1], RPC_ClientCheck, &bsSend);
+		}
+	}
+	return 0;
+}
+
+// native TogglePlayerChatbox(playerid, show)
+static cell n_TogglePlayerChatbox(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "TogglePlayerChatbox", 2);
+
+	if (pNetGame->GetPlayerPool() && pNetGame->GetPlayerPool()->GetSlotState(params[1])) {
+		RakNet::BitStream bsSend;
+		bsSend.Write(params[2] ? false : true);
+		return pNetGame->SendToPlayer(params[1], RPC_ScrToggleChatbox, &bsSend);
+	}
+	return 0;
+}
+
+// native TogglePlayerWidescreen(playerid, on)
+static cell n_TogglePlayerWidescreen(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "TogglePlayerWidescreen", 2);
+
+	if (pNetGame->GetPlayerPool() && pNetGame->GetPlayerPool()->GetSlotState(params[1])) {
+		RakNet::BitStream bsSend;
+		bsSend.Write(params[2] ? true : false);
+		return pNetGame->SendToPlayer(params[1], RPC_ScrToggleWidescreen, &bsSend);
+	}
+	return 0;
+}
+
+// native IsPlayerTyping(playerid)
+static cell n_IsPlayerTyping(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "IsPlayerTyping", 1);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			return pPlayer->m_bTyping;
+		}
+	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------------
@@ -1318,11 +1416,61 @@ static cell n_RepairVehicle(AMX* amx, cell* params)
 	{
 		RakNet::BitStream bs;
 
-		bs.Write<int>(VEHICLE_OP_REPAIR);
-		bs.Write(params[1]);
+		bs.Write<unsigned char>(1);
+		bs.Write((VEHICLEID)params[1]);
 
 		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &bs, HIGH_PRIORITY,
 			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+	}
+	return 0;
+}
+
+// native SetVehicleParamsCarDoors(vehicleid, driver, passenger, backleft, backright)
+static cell n_SetVehicleParamsCarDoors(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SetVehicleParamsCarDoors", 5);
+
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			RakNet::BitStream bsSend;
+
+			// Ignore negative numbers, this ditches calling GetVehicleParamsCarDoors before this call
+			if (params[2] >= 0) pVehicle->m_Doors.bDriver = (params[2] != 0);
+			if (params[3] >= 0) pVehicle->m_Doors.bPassenger = (params[3] != 0);
+			if (params[4] >= 0) pVehicle->m_Doors.bBackLeft = (params[4] != 0);
+			if (params[5] >= 0) pVehicle->m_Doors.bBackRight = (params[5] != 0);
+
+			bsSend.Write<unsigned char>(8);
+			bsSend.Write((VEHICLEID)params[1]); // vehicleid
+			bsSend.WriteBits((unsigned char*)&pVehicle->m_Doors, 4);
+
+			return pNetGame->SendToAll(RPC_ScrSetVehicle, &bsSend);
+		}
+	}
+	return 0;
+}
+
+// native GetVehicleParamsCarDoors(vehicleid, &driver, &passenger, &backleft, &backright)
+static cell n_GetVehicleParamsCarDoors(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleParamsCarDoors", 5);
+
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			cell* cptr;
+			if (amx_GetAddr(amx, params[2], &cptr) == AMX_ERR_NONE)
+				*cptr = pVehicle->m_Doors.bDriver;
+			if (amx_GetAddr(amx, params[3], &cptr) == AMX_ERR_NONE)
+				*cptr = pVehicle->m_Doors.bPassenger;
+			if (amx_GetAddr(amx, params[4], &cptr) == AMX_ERR_NONE)
+				*cptr = pVehicle->m_Doors.bBackLeft;
+			if (amx_GetAddr(amx, params[5], &cptr) == AMX_ERR_NONE)
+				*cptr = pVehicle->m_Doors.bBackRight;
+
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -1332,20 +1480,47 @@ static cell n_SetVehicleParamsCarWindows(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetVehicleParamsCarWindows", 5);
 
-	CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
-	if (pVehiclePool && pVehiclePool->GetSlotState(params[1]))
-	{
-		RakNet::BitStream out;
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			RakNet::BitStream out;
 
-		out.Write<int>(VEHICLE_OP_WINDOW);
-		out.Write(params[1]); // vehicleid
-		out.Write(params[2]); // driver
-		out.Write(params[3]); // passenger
-		out.Write(params[4]); // back-left
-		out.Write(params[5]); // back-right
+			// Ignore negative numbers, this can ditches calling GetVehicleParamsCarWindows before this call
+			if (params[2] >= 0) pVehicle->m_Windows.bDriver = (params[2] != 0);
+			if (params[3] >= 0) pVehicle->m_Windows.bPassenger = (params[3] != 0);
+			if (params[4] >= 0) pVehicle->m_Windows.bBackLeft = (params[4] != 0);
+			if (params[5] >= 0) pVehicle->m_Windows.bBackRight = (params[5] != 0);
 
-		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
-			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
+			out.Write<unsigned char>(2);
+			out.Write((VEHICLEID)params[1]); // vehicleid
+			out.WriteBits((unsigned char*)&pVehicle->m_Windows, 4);
+
+			return pNetGame->SendToAll(RPC_ScrSetVehicle, &out);
+		}
+	}
+	return 0;
+}
+
+// native GetVehicleParamsCarWindows(vehicleid, &driver, &passenger, &backleft, &backright)
+static cell n_GetVehicleParamsCarWindows(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetVehicleParamsCarWindows", 5);
+
+	if (pNetGame->GetVehiclePool()) {
+		CVehicle* pVehicle = pNetGame->GetVehiclePool()->GetAt(params[1]);
+		if (pVehicle != nullptr) {
+			cell* cptr;
+			if (amx_GetAddr(amx, params[2], &cptr) == AMX_ERR_NONE)
+				*cptr = pVehicle->m_Windows.bDriver;
+			if (amx_GetAddr(amx, params[3], &cptr) == AMX_ERR_NONE)
+				*cptr = pVehicle->m_Windows.bPassenger;
+			if (amx_GetAddr(amx, params[4], &cptr) == AMX_ERR_NONE)
+				*cptr = pVehicle->m_Windows.bBackLeft;
+			if (amx_GetAddr(amx, params[5], &cptr) == AMX_ERR_NONE)
+				*cptr = pVehicle->m_Windows.bBackRight;
+
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -1360,9 +1535,9 @@ static cell n_ToggleTaxiLight(AMX* amx, cell* params)
 	{
 		RakNet::BitStream out;
 
-		out.Write<int>(VEHICLE_OP_TAXI_LIGHT);
-		out.Write(params[1]); // vehicleid
-		out.Write(params[2]); // toggle
+		out.Write<unsigned char>(3);
+		out.Write((VEHICLEID)params[1]); // vehicleid
+		out.Write((params[2] != 0) ? true : false); // toggle
 
 		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
 			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
@@ -1380,9 +1555,9 @@ static cell n_SetVehicleEngineState(AMX* amx, cell* params)
 	{
 		RakNet::BitStream out;
 
-		out.Write<int>(4);
-		out.Write(params[1]); // vehicleid
-		out.Write(params[2]); // toggle
+		out.Write<unsigned char>(4);
+		out.Write((VEHICLEID)params[1]); // vehicleid
+		out.Write((params[2]) ? true : false); // toggle
 
 		return (cell)pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY,
 			RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
@@ -1706,10 +1881,9 @@ static cell n_RemovePlayerFromVehicle(AMX *amx, cell *params)
 	CHECK_PARAMS(amx, "RemovePlayerFromVehicle", 1);
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
-	RakNet::BitStream bsParams;
 
 	RakServerInterface *pRak = pNetGame->GetRakServer();
-	pNetGame->GetRakServer()->RPC(RPC_ScrRemovePlayerFromVehicle , &bsParams, HIGH_PRIORITY,
+	pNetGame->GetRakServer()->RPC(RPC_ScrRemovePlayerFromVehicle, NULL, HIGH_PRIORITY,
 		RELIABLE, 0, pRak->GetPlayerIDFromIndex(params[1]), false, false);
 
 	return 1;
@@ -1777,7 +1951,7 @@ static cell n_GetWeaponName(AMX *amx, cell *params)
 	CHECK_PARAMS(amx, "GetWeaponName", 3);
 	if(params[1] > WEAPON_COLLISION) return 0;
 
-	return set_amxstring(amx,params[2],pNetGame->GetWeaponName(params[1]),params[3]);
+	return set_amxstring(amx,params[2],GetWeaponName(params[1]),params[3]);
 }
 
 // native FindWeaponID(const name[])
@@ -1789,9 +1963,9 @@ static cell n_FindWeaponID(AMX* amx, cell* params)
 	if (mn) {
 		for (unsigned char i = 0; i <= 46; i++) {
 #ifdef WIN32
-			if (StrStrI(pNetGame->GetWeaponName(i), mn) != NULL)
+			if (StrStrI(GetWeaponName(i), mn) != NULL)
 #else
-			if (strcasestr(pNetGame->GetWeaponName(i), mn) != NULL)
+			if (strcasestr(GetWeaponName(i), mn) != NULL)
 #endif
 			{
 				return (cell)i;
@@ -2054,14 +2228,12 @@ static cell n_SetVehicleLightState(AMX* amx, cell* params)
 {
 	CHECK_PARAMS(amx, "SetVehicleLightState", 2);
 	CVehiclePool* pPool = pNetGame->GetVehiclePool();
-	if (pPool && pPool->GetSlotState(params[1]))
-	{
-		unsigned char ucState = (params[2]) ? (1) : (0);
+	if (pPool && pPool->GetSlotState(params[1])) {
 		RakNet::BitStream out;
 
-		out.Write<int>(5);
+		out.Write<unsigned char>(5);
 		out.Write((VEHICLEID)params[1]);
-		out.Write(ucState);
+		out.Write((params[2] != 0) ? true : false);
 
 		return pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out, HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 	}
@@ -2232,9 +2404,9 @@ static cell n_SetVehicleFeature(AMX* amx, cell* params)
 	if (pPool && pPool->GetSlotState(params[1]))
 	{
 		RakNet::BitStream out;
-		out.Write<int>(6);
+		out.Write<unsigned char>(6);
 		out.Write((VEHICLEID)params[1]);
-		out.Write((bool)params[2]);
+		out.Write((params[2] != 0) ? true : false);
 		return pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out,
 			HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 	}
@@ -2248,9 +2420,9 @@ static cell n_SetVehicleVisibility(AMX* amx, cell* params)
 	if (pPool && pPool->GetSlotState(params[1]))
 	{
 		RakNet::BitStream out;
-		out.Write<int>(7);
+		out.Write<unsigned char>(7);
 		out.Write((VEHICLEID)params[1]);
-		out.Write((bool)params[2]);
+		out.Write((params[2] != 0) ? true : false);
 		return pNetGame->GetRakServer()->RPC(RPC_ScrSetVehicle, &out,
 			HIGH_PRIORITY, RELIABLE, 0, UNASSIGNED_PLAYER_ID, true, false);
 	}
@@ -2920,9 +3092,8 @@ static cell n_SetCameraBehindPlayer(AMX *amx, cell *params)
 {	
 	CHECK_PARAMS(amx, "SetCameraBehindPlayer", 1);
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
-	RakNet::BitStream bsParams;
 	RakServerInterface* pRak = pNetGame->GetRakServer();
-	pRak->RPC(RPC_ScrSetCameraBehindPlayer , &bsParams, HIGH_PRIORITY, RELIABLE, 0,
+	pRak->RPC(RPC_ScrSetCameraBehindPlayer, NULL, HIGH_PRIORITY, RELIABLE, 0,
 		pRak->GetPlayerIDFromIndex(params[1]), false, false);
 
 	return 1;
@@ -2976,8 +3147,13 @@ static cell n_SetPlayerScore(AMX *amx, cell *params)
 	if (pNetGame->GetPlayerPool()) {
 		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 		if (pPlayer != nullptr) {
-			pPlayer->m_iScore = params[2];
-			return 1;
+			RakNet::BitStream bsSend;
+			bsSend.Write((unsigned short)params[1]);
+			bsSend.Write((int)params[2]);
+			if (pNetGame->SendToAll(RPC_ScrSetScore, &bsSend)) {
+				pPlayer->m_iScore = params[2];
+				return 1;
+			}
 		}
 	}
 	return 0;
@@ -3053,8 +3229,7 @@ static cell n_ResetPlayerMoney(AMX *amx, cell *params)
 	if (pNetGame->GetPlayerPool()) {
 		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 		if (pPlayer != nullptr) {
-			RakNet::BitStream bsMoney;
-			if (pNetGame->SendToPlayer(params[1], RPC_ScrResetMoney, &bsMoney)) {
+			if (pNetGame->SendToPlayer(params[1], RPC_ScrResetMoney, NULL)) {
 				pPlayer->m_iMoney = 0;
 				return 1;
 			}
@@ -3065,17 +3240,16 @@ static cell n_ResetPlayerMoney(AMX *amx, cell *params)
 
 //----------------------------------------------------------------------------------
 // native GetPlayerAmmo(playerid)
-
-static cell n_GetPlayerAmmo(AMX *amx, cell *params)
+static cell n_GetPlayerAmmo(AMX* amx, cell* params)
 {	
 	CHECK_PARAMS(amx, "GetPlayerAmmo", 1);
-	BYTE bytePlayerID = (BYTE)params[1];
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
-	if(pPlayerPool->GetSlotState(bytePlayerID)) {
-		return pPlayerPool->GetPlayerAmmo(bytePlayerID);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			return pPlayer->GetCurrentWeaponAmmo();
+		}
 	}
-
 	return 0;
 }
 
@@ -3225,8 +3399,7 @@ static cell n_ResetPlayerWeapons(AMX *amx, cell *params)
 
 	if (!pNetGame->GetPlayerPool()->GetSlotState(params[1])) return 0;
 
-	RakNet::BitStream bsData;
-	pNetGame->GetRakServer()->RPC(RPC_ScrResetPlayerWeapons , &bsData, HIGH_PRIORITY, 
+	pNetGame->GetRakServer()->RPC(RPC_ScrResetPlayerWeapons, NULL, HIGH_PRIORITY, 
 		RELIABLE, 0, pNetGame->GetRakServer()->GetPlayerIDFromIndex(params[1]), false, false);
 	return 1;
 }
@@ -3682,14 +3855,14 @@ static cell n_GetPlayerPing(AMX *amx, cell *params)
 static cell n_GetPlayerWeapon(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "GetPlayerWeapon", 1);
-	CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
-	if(!pPlayer) return -1;	
-	BYTE byteState = pPlayer->GetState();
-	if ((byteState != PLAYER_STATE_DRIVER) || (byteState != PLAYER_STATE_PASSENGER))
-	{
-		return pPlayer->GetCurrentWeapon();
-	} else { return 0; }
-	
+
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			return pPlayer->GetCurrentWeapon();
+		}
+	}
+	return -1;
 }
 
 // native SetTimerEx(funcname[], interval, repeating, parameter)
@@ -3800,7 +3973,7 @@ static cell n_SetPlayerMarkerForPlayer(AMX *amx, cell *params)
 static cell n_SetPlayerMapIcon(AMX *amx, cell *params)
 {
 	CHECK_PARAMS(amx, "SetPlayerMapIcon", 7); // Playerid,
-	if ((BYTE)params[2] >= 32) return 0;
+	if ((BYTE)params[2] >= MAX_MAP_ICON) return 0;
 	
 	//CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt((BYTE)params[1]);
 
@@ -3857,30 +4030,30 @@ static cell n_GetPlayerKeys(AMX *amx, cell *params)
 
 	CPlayer * pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
 	if (pPlayer) {
-		WORD wKeys, udAnalog, lrAnalog;
+		unsigned int uiKeys, udAnalog, lrAnalog;
 		int iPlayerState = pPlayer->GetState();
 		switch (iPlayerState)
 		{
 		case PLAYER_STATE_ONFOOT:
-			wKeys = pPlayer->GetOnFootSyncData()->wKeys;
+			uiKeys = pPlayer->GetOnFootSyncData()->uiKeys;
 			udAnalog = (short)pPlayer->GetOnFootSyncData()->udAnalog;
 			lrAnalog = (short)pPlayer->GetOnFootSyncData()->lrAnalog;
 			break;
 
 		case PLAYER_STATE_DRIVER:
-			wKeys = pPlayer->GetInCarSyncData()->wKeys;
+			uiKeys = pPlayer->GetInCarSyncData()->uiKeys;
 			udAnalog = (short)pPlayer->GetInCarSyncData()->udAnalog;
 			lrAnalog = (short)pPlayer->GetInCarSyncData()->lrAnalog;
 			break;
 
 		case PLAYER_STATE_PASSENGER:
-			wKeys = pPlayer->GetPassengerSyncData()->wKeys;
+			uiKeys = pPlayer->GetPassengerSyncData()->uiKeys;
 			udAnalog = (short)pPlayer->GetPassengerSyncData()->udAnalog;
 			lrAnalog = (short)pPlayer->GetPassengerSyncData()->lrAnalog;
 			break;
 
 		case PLAYER_STATE_SPECTATING:
-			wKeys = pPlayer->GetSpectatorSyncData()->wKeys;
+			uiKeys = pPlayer->GetSpectatorSyncData()->uiKeys;
 			udAnalog = (short)pPlayer->GetSpectatorSyncData()->udAnalog;
 			lrAnalog = (short)pPlayer->GetSpectatorSyncData()->lrAnalog;
 			break;
@@ -3890,7 +4063,7 @@ static cell n_GetPlayerKeys(AMX *amx, cell *params)
 		}
 		cell* cptr;
 		amx_GetAddr(amx, params[2], &cptr);
-		*cptr = (cell)wKeys;
+		*cptr = (cell)uiKeys;
 		amx_GetAddr(amx, params[3], &cptr);
 		*cptr = (cell)udAnalog;
 		amx_GetAddr(amx, params[4], &cptr);
@@ -3975,6 +4148,21 @@ static cell n_atan2(AMX *amx, cell *params)
 	CHECK_PARAMS(amx, "atan2", 2);
 	float fResult = (float)(atan2(amx_ctof(params[1]), amx_ctof(params[2])) * 180 / PI);
 	return amx_ftoc(fResult);
+}
+
+// native SHA256_PassHash(password[], salt[], ret_hash[], ret_hash_len)
+static cell n_SHA256_PassHash(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "SHA256_PassHash", 4);
+
+	char* szPassword;
+	char* szSalt;
+	amx_StrParam(amx, params[1], szPassword);
+	amx_StrParam(amx, params[2], szSalt);
+	if (szPassword == NULL) return 0;
+
+	const std::string& out(szPassword);
+	return set_amxstring(amx, params[3], sha256(szSalt == NULL ? szPassword : out + szSalt).c_str(), params[4]);
 }
 
 //----------------------------------------------------
@@ -5355,6 +5543,80 @@ static cell n_GetPlayerCameraMode(AMX* amx, cell* params)
 	return -1;
 }
 
+// native GetPlayerCameraZoom(playerid)
+static cell n_GetPlayerCameraZoom(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerCameraZoom", 1);
+
+	float fRet = 0.0f;
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			fRet = (pPlayer->GetAimSyncData()->byteCamExtZoom & 63) * 0.015873017 * 35.0 + 35.0;
+			return amx_ftoc(fRet);
+		}
+	}
+	return amx_ftoc(fRet);
+}
+
+// native GetPlayerCameraPos(playerid, &Float:x, &Float:y, &Float:z)
+static cell n_GetPlayerCameraPos(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerCameraPos", 4);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			VECTOR* pAimCam = &pPlayer->GetAimSyncData()->vecAimPos;
+			cell* cptr;
+			if (amx_GetAddr(amx, params[2], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->X;
+			if (amx_GetAddr(amx, params[3], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->Y;
+			if (amx_GetAddr(amx, params[4], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->Z;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+// native GetPlayerCameraFrontVector(playerid, &Float:x, &Float:y, &Float:z)
+static cell n_GetPlayerCameraFrontVector(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerCameraFrontVector", 4);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != nullptr) {
+			VECTOR* pAimCam = &pPlayer->GetAimSyncData()->vecAimf1;
+			cell* cptr;
+			if (amx_GetAddr(amx, params[2], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->X;
+			if (amx_GetAddr(amx, params[3], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->Y;
+			if (amx_GetAddr(amx, params[4], &cptr) == AMX_ERR_NONE)
+				*cptr = pAimCam->Z;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+// native GetPlayerCameraAspectRatio(playerid)
+static cell n_GetPlayerCameraAspectRatio(AMX* amx, cell* params)
+{
+	CHECK_PARAMS(amx, "GetPlayerCameraAspectRatio", 1);
+
+	float fRet = 0.0f;
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(params[1]);
+		if (pPlayer != NULL) {
+			fRet = pPlayer->GetAimSyncData()->ucAspectRatio * 0.0039215689 + 1.0;
+			return amx_ftoc(fRet);
+		}
+	}
+	return amx_ftoc(fRet);
+}
+
 // native SetPlayerArmedWeapon(playerid, weaponid)
 static cell n_SetPlayerArmedWeapon(AMX* amx, cell* params)
 {
@@ -6224,6 +6486,9 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "atan2",					n_atan2 },
 	{ "atan",					n_atan },
 
+	// Hash
+	DEFINE_NATIVE(SHA256_PassHash),
+
 	// Server Variable
 	DEFINE_NATIVE(SetSVarInt),
 	DEFINE_NATIVE(SetSVarString),
@@ -6394,13 +6659,22 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetPlayerSurfingVehicleID),
 	DEFINE_NATIVE(GetPlayerVehicleSeat),
 	DEFINE_NATIVE(GetPlayerCameraMode),
+	DEFINE_NATIVE(GetPlayerCameraZoom),
+	DEFINE_NATIVE(GetPlayerCameraAspectRatio),
+	DEFINE_NATIVE(GetPlayerCameraPos),
+	DEFINE_NATIVE(GetPlayerCameraFrontVector),
 	DEFINE_NATIVE(SetPlayerArmedWeapon),
+	DEFINE_NATIVE(GetPlayerFightingStyle),
+	DEFINE_NATIVE(GetPlayerFightingMove),
 	DEFINE_NATIVE(SetPlayerFightingStyle),
 	DEFINE_NATIVE(SetPlayerMaxHealth),
 	DEFINE_NATIVE(InterpolateCameraPos),
 	DEFINE_NATIVE(InterpolateCameraLookAt),
 	DEFINE_NATIVE(SetPlayerGameSpeed),
 	DEFINE_NATIVE(GetPlayerWeaponState),
+	DEFINE_NATIVE(SendClientCheck),
+	DEFINE_NATIVE(TogglePlayerChatbox),
+	DEFINE_NATIVE(TogglePlayerWidescreen),
 
 	{ "SetPlayerVirtualWorld",		n_SetPlayerVirtualWorld },
 	{ "GetPlayerVirtualWorld",		n_GetPlayerVirtualWorld },
@@ -6472,7 +6746,10 @@ AMX_NATIVE_INFO custom_Natives[] =
 	DEFINE_NATIVE(GetVehicleSpawnInfo),
 	DEFINE_NATIVE(SetVehicleSpawnInfo),
 	DEFINE_NATIVE(RepairVehicle),
+	DEFINE_NATIVE(SetVehicleParamsCarDoors),
+	DEFINE_NATIVE(GetVehicleParamsCarDoors),
 	DEFINE_NATIVE(SetVehicleParamsCarWindows),
+	DEFINE_NATIVE(GetVehicleParamsCarWindows),
 	DEFINE_NATIVE(ToggleTaxiLight),
 	DEFINE_NATIVE(SetVehicleEngineState),
 	DEFINE_NATIVE(GetVehicleVelocity),

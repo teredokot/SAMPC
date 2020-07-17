@@ -19,6 +19,11 @@
 #define MAX_COLUMNS 2
 #define MAX_PICKUPS 400
 #define MAX_TEXT_DRAW_LINE 256
+#define MAX_MAP_ICON 200
+#define INVALID_PLAYER_ID_EX 65535
+#define INVALID_MENU_ID 0xFF
+
+#define RPC_PING_UPDATE_TIME 3000 // in ms (3 seconds)
 
 #define EVENT_TYPE_PAINTJOB 1
 #define EVENT_TYPE_CARCOMPONENT 2
@@ -53,7 +58,10 @@
 #define SPECTATE_TYPE_VEHICLE 2
 
 #define SPECIAL_ACTION_NONE 0
+#define SPECIAL_ACTION_DUCK 1
 #define SPECIAL_ACTION_USEJETPACK 2
+#define SPECIAL_ACTION_ENTER_VEHICLE 3
+#define SPECIAL_ACTION_EXIT_VEHICLE 4
 #define SPECIAL_ACTION_DANCE1 5
 #define SPECIAL_ACTION_DANCE2 6
 #define SPECIAL_ACTION_DANCE3 7
@@ -132,7 +140,7 @@
 #define INVALID_PLAYER_ID 255
 #define NO_TEAM 255
 
-#define PI 3.14159265
+#define PI 3.14159265f
 
 #define PACK_VEHICLE_HEALTH(f) (unsigned char)(f / 4)
 #define UNPACK_VEHICLE_HEALTH(b) (float)b * 4
@@ -195,7 +203,7 @@ typedef struct {
 typedef struct {
 	unsigned short lrAnalog;
 	unsigned short udAnalog;
-	unsigned short wKeys;
+	unsigned int uiKeys;
 	VECTOR vecPos;
 	float fRotation;
 	unsigned char byteHealth;
@@ -215,13 +223,14 @@ typedef struct {
 	VECTOR vecAimf2;
 	VECTOR vecAimPos;
 	float fAimZ;
+	unsigned char ucAspectRatio;
 } AIM_SYNC_DATA;
 
 typedef struct {
 	VEHICLEID VehicleID;
 	unsigned short lrAnalog;
 	unsigned short udAnalog;
-	unsigned short wKeys;
+	unsigned int uiKeys;
 	C_VECTOR1 cvecRoll;
 	C_VECTOR1 cvecDirection;
 	VECTOR vecPos;
@@ -248,14 +257,14 @@ typedef struct {
 	unsigned char bytePlayerArmour;
 	unsigned short lrAnalog;
 	unsigned short udAnalog;
-	unsigned short wKeys;
+	unsigned int uiKeys;
 	VECTOR vecPos;
 } PASSENGER_SYNC_DATA;
 
 typedef struct {
 	unsigned short lrAnalog;
 	unsigned short udAnalog;
-	unsigned short wKeys;
+	unsigned int uiKeys;
 	VECTOR vecPos;
 } SPECTATOR_SYNC_DATA;
 
@@ -309,5 +318,28 @@ typedef struct _CAR_MOD_INFO
 	int iColor0;
 	int iColor1;
 } CAR_MOD_INFO;
+
+struct MENU_INT
+{
+	bool bMenu;
+	bool bRow[MAX_MENU_ITEMS];
+	bool bPadding[8 - ((MAX_MENU_ITEMS + 1) % 8)];
+};
+
+typedef struct
+{
+	unsigned char bDriver : 1;
+	unsigned char bPassenger : 1;
+	unsigned char bBackLeft : 1;
+	unsigned char bBackRight : 1;
+} CAR_WINDOW_FLAG;
+
+typedef struct
+{
+	unsigned char bDriver : 1;
+	unsigned char bPassenger : 1;
+	unsigned char bBackLeft : 1;
+	unsigned char bBackRight : 1;
+} VEHICLE_OPEN_CLOSE_FLAG;
 
 #endif // _SAMP_SHARED_H

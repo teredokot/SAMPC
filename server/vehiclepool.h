@@ -12,13 +12,6 @@
 
 #define INVALID_VEHICLE (0xFFFF)
 
-enum eVehicleOP
-{
-	VEHICLE_OP_REPAIR = 1,
-	VEHICLE_OP_WINDOW = 2,
-	VEHICLE_OP_TAXI_LIGHT = 3,
-};
-
 //----------------------------------------------------
 
 class CVehiclePool

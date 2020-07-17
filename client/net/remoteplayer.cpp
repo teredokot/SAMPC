@@ -38,6 +38,9 @@ CRemotePlayer::CRemotePlayer()
 	m_iVirtualWorld = 0;
 	m_dwLastHeadUpdate = GetTickCount();
 	m_dwStreamUpdate = 0;
+	m_iScore = 0;
+	m_usPing = 0;
+	m_szName[0] = '\0';
 }
 
 //----------------------------------------------------
@@ -49,6 +52,16 @@ CRemotePlayer::~CRemotePlayer()
 		delete m_pPlayerPed;
 		m_pPlayerPed = NULL;
 	}
+}
+
+void CRemotePlayer::SetName(const char* szName)
+{
+	strncpy_s(m_szName, szName, MAX_PLAYER_NAME);
+}
+
+const char* CRemotePlayer::GetName()
+{
+	return m_szName;
 }
 
 //----------------------------------------------------
@@ -109,7 +122,7 @@ void CRemotePlayer::Process(int iLocalWorld)
 				}
 
 				// First person weapon action hack
-				if (IS_TARGETING(m_ofSync.wKeys)) {
+				if (IS_TARGETING(m_ofSync.uiKeys)) {
 					if (m_pPlayerPed->GetCurrentWeapon() == 34 ||
 						m_pPlayerPed->GetCurrentWeapon() == 35 ||
 						m_pPlayerPed->GetCurrentWeapon() == 36)
@@ -256,7 +269,7 @@ void CRemotePlayer::Process(int iLocalWorld)
 				m_bPassengerDriveByMode = false;
 				ProcessSpecialActions(m_ofSync.byteSpecialAction);
 				//m_pPlayerPed->SetMoveSpeedVector(m_ofSync.vecMoveSpeed);
-				m_pPlayerPed->SetKeys(m_ofSync.wKeys,m_ofSync.lrAnalog,m_ofSync.udAnalog);
+				m_pPlayerPed->SetKeys(m_ofSync.uiKeys,m_ofSync.lrAnalog,m_ofSync.udAnalog);
 
 				if(m_pPlayerPed->IsInJetpackMode()) {
 					m_pPlayerPed->ForceTargetRotation(m_ofSync.fRotation);
@@ -287,13 +300,13 @@ void CRemotePlayer::Process(int iLocalWorld)
 					m_pPlayerPed->SetKeys(0,0,0);
 					if(m_pCurrentVehicle) m_pCurrentVehicle->SetMoveSpeedVector(vec);
 				} else {
-					m_pPlayerPed->SetKeys(m_icSync.wKeys,m_icSync.lrAnalog,m_icSync.udAnalog);
+					m_pPlayerPed->SetKeys(m_icSync.uiKeys,m_icSync.lrAnalog,m_icSync.udAnalog);
 					m_pPlayerPed->ProcessVehicleHorn();
 				}
 			}
 			else if(GetState() == PLAYER_STATE_PASSENGER) {
 				m_pPlayerPed->CheckVehicleParachute();
-				m_pPlayerPed->SetKeys(m_psSync.wKeys,0,0);
+				m_pPlayerPed->SetKeys(m_psSync.uiKeys,0,0);
 				
 			}
 			else {
@@ -649,7 +662,7 @@ void CRemotePlayer::UpdateIncarTargetPosition()
 		m_pCurrentVehicle->SetMoveSpeedVector(vec);
 		m_icSync.udAnalog = 0;
 		m_icSync.lrAnalog = 0;
-		m_icSync.wKeys = 0;
+		m_icSync.uiKeys = 0;
 		m_icSync.vecMoveSpeed.X = 0.0f;
 		m_icSync.vecMoveSpeed.Y = 0.0f;
 		m_icSync.vecMoveSpeed.Z = 0.0f;
@@ -967,8 +980,7 @@ void CRemotePlayer::HandleDeath()
 
 void CRemotePlayer::Say(unsigned char *szText)
 {
-	char * szPlayerName = pNetGame->GetPlayerPool()->GetPlayerName(m_bytePlayerID);
-	pChatWindow->AddChatMessage(szPlayerName,GetPlayerColorAsARGB(),(char*)szText);
+	pChatWindow->AddChatMessage(m_szName,GetPlayerColorAsARGB(),(char*)szText);
 }
 
 //----------------------------------------------------
@@ -989,7 +1001,7 @@ float CRemotePlayer::GetDistanceFromRemotePlayer(CRemotePlayer *pFromPlayer)
 	fSY = (matThisPlayer.pos.Y - matFromPlayer.pos.Y) * (matThisPlayer.pos.Y - matFromPlayer.pos.Y);
 	fSZ = (matThisPlayer.pos.Z - matFromPlayer.pos.Z) * (matThisPlayer.pos.Z - matFromPlayer.pos.Z);
 		
-	return (float)sqrt(fSX + fSY + fSZ);	
+	return sqrtf(fSX + fSY + fSZ);	
 }
 
 //----------------------------------------------------

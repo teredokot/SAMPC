@@ -61,7 +61,7 @@ void CMenu::Show()
 					, MS(3,1), MS(4,1), MS(5,1)
 					, MS(6,1), MS(7,1), MS(8,1)
 					, MS(9,1), MS(10,1), MS(11,1));
-		ScriptCommand(&set_panel_column_width, m_dwPanel, 1, (int)m_fCol1Width);
+		ScriptCommand(&set_panel_column_width, m_dwPanel, 1, (int)m_fCol2Width);
 	}
 	for (BYTE i = 0; i < MAX_MENU_ITEMS; i++)
 	{

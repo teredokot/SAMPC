@@ -29,9 +29,9 @@ public:
 	void ResetPointers();
 	void SetInitialState();
 
-	void  SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog);
-	WORD  GetKeys(WORD * lrAnalog, WORD * udAnalog);
-	
+	void  SetKeys(UINT uiKeys, WORD lrAnalog, WORD udAnalog);
+	UINT  GetKeys(WORD* lrAnalog, WORD* udAnalog);
+
 	CAMERA_AIM * GetCurrentAim();
 	void SetCurrentAim(CAMERA_AIM *pAim);
 
@@ -170,6 +170,11 @@ public:
 	void		SetAimZ(float fAimZ);
 
 	void SetFightingStyle(unsigned char style, unsigned char move);
+	void GetFightingStyle(unsigned char* style, unsigned char* move);
+
+	bool IsDucking();
+	unsigned char IsEnteringVehicle();
+	bool IsExitingVehicle();
 
 	PED_TYPE    *m_pPed;
 	BYTE		m_bytePlayerNumber;

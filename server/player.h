@@ -29,7 +29,7 @@ private:
 	SPECTATOR_SYNC_DATA		m_spSync;
 	TRAILER_SYNC_DATA		m_trSync;
 
-	WORD					m_wLastKeys;
+	UINT					m_uiLastKeys;
 
 	bool					m_bHasAimUpdates;
 	bool					m_bHasTrailerUpdates;
@@ -60,6 +60,11 @@ public:
 	bool					m_bIsAdmin;
 	int						m_iMoney;
 	int						m_iScore;
+	bool					m_bTyping;
+	RakNet::Time			m_nLastPingUpdate;
+
+	unsigned char			m_ucFightingStyle;
+	unsigned char			m_ucFightingMove;
 
 	// Weapon data
 	DWORD					m_dwSlotAmmo[13];
@@ -156,7 +161,14 @@ public:
 	bool IsInCheckpoint() { return m_bInCheckpoint; };
 	bool IsInRaceCheckpoint() { return m_bInRaceCheckpoint; };
 	BYTE GetTeam() { return m_SpawnInfo.byteTeam; };
-	BYTE GetCurrentWeapon() { return m_ofSync.byteCurrentWeapon; };
+	unsigned char GetCurrentWeapon() {
+		if (m_byteState == PLAYER_STATE_PASSENGER)
+			return m_psSync.byteCurrentWeapon;
+		else if (m_byteState == PLAYER_STATE_DRIVER)
+			return m_icSync.byteCurrentWeapon;
+		// Return onfoot weapon in any other state
+		return m_ofSync.byteCurrentWeapon;
+	};
 	
 	//WEAPON_SLOT_TYPE* GetWeaponSlotsData();
 	void SetWeaponSlot(BYTE byteSlot, DWORD dwWeapon, DWORD dwAmmo);
@@ -171,7 +183,7 @@ public:
 	void SetClock(BYTE byteClock);
 
 	BYTE CheckWeapon(BYTE weapon);
-	void CheckKeyUpdatesForScript(WORD wKeys);
+	void CheckKeyUpdatesForScript(UINT uiKeys);
 
 	BYTE GetSpecialAction() {
 		if(GetState() == PLAYER_STATE_ONFOOT) return m_ofSync.byteSpecialAction;
@@ -182,6 +194,8 @@ public:
 	int GetVirtualWorld() const {
 		return m_iVirtualWorld;
 	}
+
+	unsigned long GetCurrentWeaponAmmo();
 };
 
 #endif

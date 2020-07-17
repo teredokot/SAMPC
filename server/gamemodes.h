@@ -79,9 +79,10 @@ public:
 	int OnPlayerClickMap(cell playerid, float fX, float fY, float fZ);
 	int OnTrailerUpdate(cell playerid, cell vehicleid);
 	int OnRconLoginAttempt(char* szIP, char* szPassword, cell success);
-	int OnPlayerBeginTyping(cell playerid);
-	int OnPlayerEndTyping(cell playerid);
+	void OnPlayerBeginTyping(cell playerid);
+	void OnPlayerEndTyping(cell playerid);
 	int OnPlayerStunt(cell playerid, cell vehicleid);
+	void OnClientCheckResponse(cell playerid, cell type, cell address, cell checksum);
 };
 
 //----------------------------------------------------------------------------------

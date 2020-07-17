@@ -7,11 +7,6 @@
 //
 //----------------------------------------------------------
 
-
-#include <windows.h>
-#include <math.h>
-#include <stdio.h>
-
 #include "../main.h"
 #include "util.h"
 #include "entity.h"
@@ -128,10 +123,10 @@ void CEntity::SetModelIndex(UINT uiModel)
 {
 	if(!m_pEntity) return;
 
-	if(!pGame->IsModelLoaded(uiModel)) {
-		pGame->RequestModel(uiModel);
-		pGame->LoadRequestedModels();
-		while(!pGame->IsModelLoaded(uiModel)) Sleep(1);
+	if(!CGame::IsModelLoaded(uiModel)) {
+		CGame::RequestModel(uiModel);
+		CGame::LoadRequestedModels();
+		while(!CGame::IsModelLoaded(uiModel)) Sleep(1);
 	}
 
 	DWORD dwThisEntity = (DWORD)m_pEntity;
@@ -149,8 +144,6 @@ void CEntity::SetModelIndex(UINT uiModel)
 		mov     word ptr [esi+34], dx
 		call    dword ptr [eax+20] ; SetModelIndex
 	}
-
-	pGame->RemoveModel(uiModel);
 }
 
 //-----------------------------------------------------------
@@ -214,7 +207,7 @@ float CEntity::GetDistanceFromLocalPlayerPed()
 	fSY = (matThis.pos.Y - matFromPlayer.pos.Y) * (matThis.pos.Y - matFromPlayer.pos.Y);
 	fSZ = (matThis.pos.Z - matFromPlayer.pos.Z) * (matThis.pos.Z - matFromPlayer.pos.Z);
 	
-	return (float)sqrt(fSX + fSY + fSZ);
+	return sqrtf(fSX + fSY + fSZ);
 }
 
 //-----------------------------------------------------------
@@ -229,7 +222,7 @@ float CEntity::GetDistanceFromPoint(float X, float Y, float Z)
 	fSY = (matThis.pos.Y - Y) * (matThis.pos.Y - Y);
 	fSZ = (matThis.pos.Z - Z) * (matThis.pos.Z - Z);
 	
-	return (float)sqrt(fSX + fSY + fSZ);
+	return sqrtf(fSX + fSY + fSZ);
 }
 
 //-----------------------------------------------------------

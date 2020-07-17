@@ -17,28 +17,13 @@ private:
 
 	CLocalPlayer	*m_pLocalPlayer;
 	BYTE			m_byteLocalPlayerID;
-	int				m_iLocalPlayerScore;
-	DWORD			m_dwLocalPlayerPing;
 
 	bool			m_bPlayerSlotState[MAX_PLAYERS];
 	CRemotePlayer	*m_pPlayers[MAX_PLAYERS];
-	DWORD			m_dwPlayerPings[MAX_PLAYERS];
-	ULONG			m_ulIPAddresses[MAX_PLAYERS];
-	int				m_iPlayerScores[MAX_PLAYERS];
 
-	CHAR			m_szPlayerNames[MAX_PLAYERS][MAX_PLAYER_NAME+1];
-	CHAR			m_szLocalPlayerName[MAX_PLAYER_NAME+1];	
-	
 public:
 	// Process All CPlayers
 	bool Process();
-
-	void SetLocalPlayerName(PCHAR szName) { strcpy_s(m_szLocalPlayerName,szName); };
-	PCHAR GetLocalPlayerName() { return m_szLocalPlayerName; };
-	PCHAR GetPlayerName(BYTE bytePlayerID) { return m_szPlayerNames[bytePlayerID]; };
-	void SetPlayerName(BYTE bytePlayerID, PCHAR szName) {
-		strcpy_s(m_szPlayerNames[bytePlayerID], szName);
-	}
 
 	CLocalPlayer * GetLocalPlayer() { return m_pLocalPlayer; };
 	BYTE FindRemotePlayerIDFromGtaPtr(PED_TYPE * pActor);
@@ -46,19 +31,22 @@ public:
 	bool New(BYTE bytePlayerID, PCHAR szPlayerName);
 	bool Delete(BYTE bytePlayerID, BYTE byteReason);
 
-	CRemotePlayer* GetAt(BYTE bytePlayerID) {
-		if(bytePlayerID > MAX_PLAYERS) { return NULL; }
-		return m_pPlayers[bytePlayerID];
+	CRemotePlayer* GetAt(unsigned short usPlayerID) {
+		if (usPlayerID < MAX_PLAYERS) {
+			return m_pPlayers[usPlayerID];
+		}
+		return NULL;
 	};
 
 	// Find out if the slot is inuse.
-	bool GetSlotState(BYTE bytePlayerID) {
-		if(bytePlayerID > MAX_PLAYERS) { return false; }
-		return m_bPlayerSlotState[bytePlayerID];
+	bool GetSlotState(unsigned short usPlayerID) {
+		if (usPlayerID < MAX_PLAYERS) {
+			return m_bPlayerSlotState[usPlayerID];
+		}
+		return false;
 	};
 	
 	void SetLocalPlayerID(BYTE byteID) {
-		strcpy_s(m_szPlayerNames[byteID],m_szLocalPlayerName);
 		m_byteLocalPlayerID = byteID;
 	};
 
@@ -66,54 +54,46 @@ public:
 
 	BYTE GetCount();
 
-	void UpdateScore(BYTE bytePlayerId, int iScore)
-	{ 
-		if (bytePlayerId == m_byteLocalPlayerID)
-		{
-			m_iLocalPlayerScore = iScore;
-		} else {
-			if (bytePlayerId > MAX_PLAYERS-1) { return; }
-			m_iPlayerScores[bytePlayerId] = iScore;
-		}
-	};
-
-	void UpdatePing(BYTE bytePlayerId, DWORD dwPing) { 
-		if (bytePlayerId == m_byteLocalPlayerID)
-		{
-			m_dwLocalPlayerPing = dwPing;
-		} else {
-			if (bytePlayerId > MAX_PLAYERS-1) { return; }
-			m_dwPlayerPings[bytePlayerId] = dwPing;
-		}
-	};
-
-	void UpdateIPAddress(BYTE bytePlayerId, ULONG ulIPAddress) {
-		if (bytePlayerId > MAX_PLAYERS-1) { return; }
-		m_ulIPAddresses[bytePlayerId] = ulIPAddress;
-	}
-
 	int GetLocalPlayerScore() {
-		return m_iLocalPlayerScore;
+		return m_pLocalPlayer->m_iScore;
 	};
 
-	DWORD GetLocalPlayerPing() {
-		return m_dwLocalPlayerPing;
-	};
-
+	// Used in scoreboard.cpp, and array index gets checked by GetSlotState()
 	int GetPlayerScore(BYTE bytePlayerId) {
-		if (bytePlayerId > MAX_PLAYERS-1) { return 0; }
-		return m_iPlayerScores[bytePlayerId];
+		return m_pPlayers[bytePlayerId]->m_iScore;
 	};
 
-	DWORD GetPlayerPing(BYTE bytePlayerId)
+	void UpdateScore(unsigned short usPlayerId, int iScore)
+	{ 
+		if (usPlayerId > MAX_PLAYERS - 1)
+			return;
+
+		if (usPlayerId == m_byteLocalPlayerID) {
+			m_pLocalPlayer->m_iScore = iScore;
+		} else {
+			if (m_pPlayers[usPlayerId] != NULL)
+				m_pPlayers[usPlayerId]->m_iScore = iScore;
+		}
+	};
+
+	unsigned short GetLocalPlayerPing() {
+		return m_pLocalPlayer->m_usPing;
+	};
+
+	// Used in netrpc.cpp at UpdatePings(), and player index is checked by GetSlotState()
+	void UpdatePing(unsigned short usPlayerId, unsigned short usPing) {
+		if (usPlayerId == m_byteLocalPlayerID) {
+			m_pLocalPlayer->m_usPing = usPing;
+		} else {
+			if (m_pPlayers[usPlayerId] != NULL)
+				m_pPlayers[usPlayerId]->m_usPing = usPing;
+		}
+	};
+
+	// Used in scoreboard.cpp, and player index gets checked by GetSlotState()
+	unsigned short GetPlayerPing(BYTE bytePlayerId)
 	{
-		if (bytePlayerId > MAX_PLAYERS-1) { return 0; }
-		return m_dwPlayerPings[bytePlayerId];
-	};
-
-	ULONG GetPlayerIP(BYTE bytePlayerId) {
-		if (bytePlayerId > MAX_PLAYERS-1) { return 0; }
-		return m_ulIPAddresses[bytePlayerId];
+		return m_pPlayers[bytePlayerId]->m_usPing;
 	};
 
 	void DeactivateAll();

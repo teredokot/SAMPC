@@ -73,10 +73,10 @@ public:
 	void	InitGame();
 	bool	IsMenuActive();
 	bool	IsGameLoaded();
-	void	RequestModel(int iModelID);
-	void	LoadRequestedModels();
-	bool	IsModelLoaded(int iModelID);
-	void    RemoveModel(int iModelID);
+	static void RequestModel(int iModelID);
+	static void LoadRequestedModels();
+	static bool IsModelLoaded(int iModelID);
+	static void RemoveModel(int iModelID);
 	void	SetWorldTime(int iHour, int iMinute);
 	void	GetWorldTime(int* iHour, int* iMinute);
 	void	ToggleThePassingOfTime(BYTE byteOnOff);
@@ -87,9 +87,9 @@ public:
 	void	SetMaxStats();
 	void	DisableTrainTraffic();
 	void	RefreshStreamingAt(float x, float y);
-	void    RequestAnimation(char *szAnimFile);
-	int		IsAnimationLoaded(char *szAnimFile);
-	void	ReleaseAnimation(char *szAnimFile);
+	static void RequestAnimation(char *szAnimFile);
+	static int IsAnimationLoaded(char *szAnimFile);
+	static void ReleaseAnimation(char *szAnimFile);
 	void	ToggleRadar(int iToggle);
 	void	DisplayGameText(char *szStr,int iTime,int iSize);
 	void	PlaySound(int iSound, float fX, float fY, float fZ);
@@ -98,7 +98,7 @@ public:
 	void	EnableZoneNames(BYTE byteEnable);
 	void	SetWantedLevel(BYTE byteLevel);
 	void	SetGameTextCount(WORD wCount);
-	void	DrawGangZone(float* fPos, DWORD dwColor);
+	void	DrawGangZone(float fPos[], DWORD dwColor);
 	void    EnableStuntBonus(bool bEnable);
 	void	SetDrunkLevel(float fLevel);
 	void   UpdateCheckpoints();
@@ -144,8 +144,6 @@ public:
 		return m_pGamePlayer;
 	};
 
-	const PCHAR GetWeaponName(int iWeaponID);
-
 	DWORD CreatePickup(int iModel, int iType, float fX, float fY, float fZ);
 	DWORD CreateWeaponPickup(int iModel, DWORD dwAmmo, float fX, float fY, float fZ);
 
@@ -165,9 +163,12 @@ public:
 	float GetGameSpeed();
 
 	CGame();
-	~CGame() {};
+	//~CGame() {};
 
 	void DisableCamera(bool bDisable);
+
+	static float GetFPS();
+	static float GetAspectRatio();
 };
 
 //-----------------------------------------------------------

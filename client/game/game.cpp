@@ -37,6 +37,11 @@ CGame::CGame()
 	m_bCheckpointsEnabled = false;
 	m_bRaceCheckpointsEnabled = false;
 	m_dwRaceCheckpointHandle = NULL;
+	m_byteRaceType = 0;
+	m_dwCheckpointMarker = 0;
+	m_dwRaceCheckpointMarker = 0;
+	m_fRaceCheckpointSize = 0.0f;
+	m_vecCheckpointPos = m_vecCheckpointExtent = m_vecRaceCheckpointPos = m_vecRaceCheckpointNext = { 0.0f, 0.0f, 0.0f };
 }
 
 //-----------------------------------------------------------
@@ -191,50 +196,63 @@ bool CGame::IsGameLoaded()
 
 //-----------------------------------------------------------
 
+// OPC: 0247 (0047EF90) request_model
 void CGame::RequestModel(int iModelID)
 {
-	/*
-	_asm push 2
-	_asm push iModelID
-	_asm mov edx, 0x4087E0
-	_asm call edx
-	_asm add esp, 8*/
+	if (iModelID < 0)
+		return;
 
-	ScriptCommand(&request_model,iModelID);
+	DWORD dwFunc = 0x4087E0;
+	_asm {
+		push 2
+		push iModelID
+		call dwFunc
+		add esp, 8
+	}
 }
 
-//-----------------------------------------------------------
-
+// OPC: 038B (00483DDB) load_requested_models
 void CGame::LoadRequestedModels()
 {
-	/*
-	_asm push 0
-	_asm mov edx, 0x40EA10
-	_asm call edx
-	_asm add esp, 4*/
-
-	ScriptCommand(&load_requested_models);
+	DWORD dwFunc = 0x40EA10;
+	_asm {
+		push 0
+		call dwFunc
+		add esp, 4
+	}
 }
 
-//-----------------------------------------------------------
-
+// OPC: 0248 (0047EFDE) is_model_available
+// [0x8E4CC0 + 0x10] g_struModelInfo.iState (0=not loaded, 1=loaded, 2=requested)
 bool CGame::IsModelLoaded(int iModelID)
 {
-	return ScriptCommand(&is_model_available,iModelID);
+	if (iModelID < 0)
+		return false;
+
+	DWORD dwFunc = 0x4044C0;
+	bool bRet = false;
+	_asm {
+		push iModelID
+		call dwFunc
+		mov bRet, al
+		add esp, 4
+	}
+	return bRet;
 }
 
-//-----------------------------------------------------------
-
+// OPC: 0249 (0047F03E) release_model
+// sub_4089A0() has internal checks, so IsModelLoaded is not needed here
 void CGame::RemoveModel(int iModelID)
 {
-	/*
-	_asm push iModelID
-	_asm mov edx, 0x4089A0
-	_asm call edx
-	_asm add esp, 4*/
+	if (iModelID < 0)
+		return;
 
-	if (IsModelLoaded(iModelID))
-		ScriptCommand(&release_model,iModelID);
+	DWORD dwFunc = 0x4089A0;
+	_asm {
+		push iModelID
+		call dwFunc
+		add esp, 4
+	}
 }
 
 //-----------------------------------------------------------
@@ -330,24 +348,65 @@ void CGame::RefreshStreamingAt(float x, float y)
 
 //-----------------------------------------------------------
 
+// OPC: 04ED (0048C351) load_animation
 void CGame::RequestAnimation(char *szAnimFile)
 {
-	ScriptCommand(&request_animation, szAnimFile);
+	DWORD dwFunc1 = 0x4D3990;
+	DWORD dwFunc2 = 0x4087E0;
+	_asm {
+		push szAnimFile
+		call dwFunc1
+		test eax, eax
+		jz sub_4D3990_failed
+		mov edi, eax
+		lea eax, [edi+63E7h]
+		push 4
+		push eax
+		call dwFunc2
+		add esp, 8
+	sub_4D3990_failed:
+		add esp, 4
+	}
 }
 
-//-----------------------------------------------------------
-
+// OPC: 04EE (0048C391) is_animation_loaded
 int CGame::IsAnimationLoaded(char *szAnimFile)
 {
-	return ScriptCommand(&is_animation_loaded,szAnimFile);
+	DWORD dwFunc = 0x4D3940;
+	char cRet = -1;
+	_asm {
+		push szAnimFile
+		call dwFunc
+		test eax, eax
+		jz sub_4D3940_failed
+		mov cl, [eax+10h]
+		mov cRet, cl
+	sub_4D3940_failed:
+		add esp, 4	
+	}
+	return cRet;
 }
 
-//-----------------------------------------------------------
-
+// OPC: 04EF (0048C3D5) release_animation
+// IsAnimationLoaded not needed here. sub_48B570() has internal check for loaded animation.
 void CGame::ReleaseAnimation(char *szAnimFile)
 {
-	if (IsAnimationLoaded(szAnimFile))
-		ScriptCommand(&release_animation,szAnimFile);
+	DWORD dwFunc1 = 0x4D3990;
+	DWORD dwFunc2 = 0x48B570;
+	int iModelId = 0;
+	_asm {
+		push szAnimFile
+		call dwFunc1
+		add esp, 4
+		test eax, eax
+		jz sub_4D3990_failed
+		mov edi, eax
+		push edi
+		call dwFunc2
+		add esp, 4
+	sub_4D3990_failed:
+		add esp, 4
+	}
 }
 
 //-----------------------------------------------------------
@@ -577,104 +636,6 @@ void CGame::ResetLocalMoney()
 int CGame::GetLocalMoney()
 {	
 	return *(int *)0xB7CE50;
-}
-
-//-----------------------------------------------------------
-
-const PCHAR CGame::GetWeaponName(int iWeaponID)
-{
-	switch(iWeaponID) { 
-      case WEAPON_BRASSKNUCKLE: 
-         return "Brass Knuckles"; 
-      case WEAPON_GOLFCLUB: 
-         return "Golf Club"; 
-      case WEAPON_NITESTICK: 
-         return "Nite Stick"; 
-      case WEAPON_KNIFE: 
-         return "Knife"; 
-      case WEAPON_BAT: 
-         return "Baseball Bat"; 
-      case WEAPON_SHOVEL: 
-         return "Shovel"; 
-      case WEAPON_POOLSTICK: 
-         return "Pool Cue"; 
-      case WEAPON_KATANA: 
-         return "Katana"; 
-      case WEAPON_CHAINSAW: 
-         return "Chainsaw"; 
-      case WEAPON_DILDO: 
-         return "Dildo"; 
-      case WEAPON_DILDO2: 
-         return "Dildo"; 
-      case WEAPON_VIBRATOR: 
-         return "Vibrator"; 
-      case WEAPON_VIBRATOR2: 
-         return "Vibrator"; 
-      case WEAPON_FLOWER: 
-         return "Flowers"; 
-      case WEAPON_CANE: 
-         return "Cane"; 
-      case WEAPON_GRENADE: 
-         return "Grenade"; 
-      case WEAPON_TEARGAS: 
-         return "Teargas";
-	  case WEAPON_MOLTOV: 
-         return "Molotov";
-      case WEAPON_COLT45: 
-         return "Colt 45"; 
-      case WEAPON_SILENCED: 
-         return "Silenced Pistol"; 
-      case WEAPON_DEAGLE: 
-         return "Desert Eagle"; 
-      case WEAPON_SHOTGUN: 
-         return "Shotgun"; 
-      case WEAPON_SAWEDOFF: 
-         return "Sawn-off Shotgun"; 
-      case WEAPON_SHOTGSPA: // wtf? 
-         return "Combat Shotgun"; 
-      case WEAPON_UZI: 
-         return "UZI"; 
-      case WEAPON_MP5: 
-         return "MP5"; 
-      case WEAPON_AK47: 
-         return "AK47"; 
-      case WEAPON_M4: 
-         return "M4"; 
-      case WEAPON_TEC9: 
-         return "TEC9"; 
-      case WEAPON_RIFLE: 
-         return "Rifle"; 
-      case WEAPON_SNIPER: 
-         return "Sniper Rifle"; 
-      case WEAPON_ROCKETLAUNCHER: 
-         return "Rocket Launcher"; 
-      case WEAPON_HEATSEEKER: 
-         return "Heat Seaker"; 
-      case WEAPON_FLAMETHROWER: 
-         return "Flamethrower"; 
-      case WEAPON_MINIGUN: 
-         return "Minigun"; 
-      case WEAPON_SATCHEL: 
-         return "Satchel Explosives"; 
-      case WEAPON_BOMB: 
-         return "Bomb"; 
-      case WEAPON_SPRAYCAN: 
-         return "Spray Can"; 
-      case WEAPON_FIREEXTINGUISHER: 
-         return "Fire Extinguisher"; 
-      case WEAPON_CAMERA: 
-         return "Camera"; 
-      case WEAPON_PARACHUTE: 
-         return "Parachute"; 
-      case WEAPON_VEHICLE: 
-         return "Vehicle"; 
-      case WEAPON_DROWN: 
-         return "Drowned"; 
-      case WEAPON_COLLISION: 
-         return "Splat";
-	}
-
-	return "";
 }
 
 //-----------------------------------------------------------
@@ -919,5 +880,14 @@ void CGame::DisableCamera(bool bDisable)
 		*(BYTE*)0x531140 = 0x83; // sub (keyboard event process)
 		SetCursor(NULL);
 	}
-	
+}
+
+float CGame::GetFPS()
+{
+	return *(float*)0xB7CB50;
+}
+
+float CGame::GetAspectRatio()
+{
+	return *(float*)0xC3EFA4;
 }

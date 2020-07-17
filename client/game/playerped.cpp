@@ -199,7 +199,7 @@ void CPlayerPed::SetInitialState()
 
 //-----------------------------------------------------------
 
-void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
+void CPlayerPed::SetKeys(UINT uiKeys, WORD lrAnalog, WORD udAnalog)
 {
 	GTA_CONTROLSET *pPlayerKeys = GameGetPlayerKeys(m_bytePlayerNumber);
 	
@@ -232,7 +232,7 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 	 }
 
 	 // SECONDARY FIRE (4)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[4]) {
 			pPlayerKeys->wKeys1[4] = 0xFF;
 			pPlayerKeys->wKeys2[4] = 0xFF;
@@ -244,10 +244,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[4] = 0x00;
 		pPlayerKeys->wKeys2[4] = 0x00;
 	 }
-	 wKeys >>= 1; // 1
+	 uiKeys >>= 1; // 1
 
 	 // CROUCHING TOGGLE (18)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[18]) {
 			pPlayerKeys->wKeys1[18] = 0xFF;
 			pPlayerKeys->wKeys2[18] = 0xFF;
@@ -259,10 +259,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[18] = 0x00;
 		pPlayerKeys->wKeys2[18] = 0x00;
 	 }
-	 wKeys >>= 1; // 2
+	 uiKeys >>= 1; // 2
 
 	  // FIRING (17)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[17]) {
 			pPlayerKeys->wKeys1[17] = 0xFF;
 			pPlayerKeys->wKeys2[17] = 0xFF;
@@ -274,10 +274,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[17] = 0x00;
 		pPlayerKeys->wKeys2[17] = 0x00;
 	 }
-	 wKeys >>= 1; // 3
+	 uiKeys >>= 1; // 3
 	 
 	  // SPRINT (16)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[16]) {
 			pPlayerKeys->wKeys1[16] = 0xFF;
 			pPlayerKeys->wKeys2[16] = 0xFF;
@@ -289,11 +289,11 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[16] = 0x00;
 		pPlayerKeys->wKeys2[16] = 0x00;
 	 }
-	 wKeys >>= 1; // 4
+	 uiKeys >>= 1; // 4
 
 
 	 // SECONDARY ONFOOT ATTACK (15)
-	 if( (wKeys & 1) && !IsInJetpackMode() ) {
+	 if( (uiKeys & 1) && !IsInJetpackMode() ) {
 		if(pPlayerKeys->wKeys1[15]) {
 			pPlayerKeys->wKeys1[15] = 0xFF;
 			pPlayerKeys->wKeys2[15] = 0xFF;
@@ -305,10 +305,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[15] = 0x00;
 		pPlayerKeys->wKeys2[15] = 0x00;
 	 }
-	 wKeys >>= 1; // 5
+	 uiKeys >>= 1; // 5
 
 	 // JUMP (14)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[14]) {
 			pPlayerKeys->wKeys1[14] = 0xFF;
 			pPlayerKeys->wKeys2[14] = 0xFF;
@@ -320,10 +320,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[14] = 0x00;
 		pPlayerKeys->wKeys2[14] = 0x00;
 	 }
-	 wKeys >>= 1; // 6
+	 uiKeys >>= 1; // 6
 
 	 // INCAR LOOK RIGHT (7)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[7]) {
 			pPlayerKeys->wKeys1[7] = 0xFF;
 			pPlayerKeys->wKeys2[7] = 0xFF;
@@ -335,10 +335,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[7] = 0x00;
 		pPlayerKeys->wKeys2[7] = 0x00;
 	 }
-	 wKeys >>= 1; // 7
+	 uiKeys >>= 1; // 7
 
 	 // INCAR HANDBRAKE / ONFOOT TARGET (6)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[6]) {
 			pPlayerKeys->wKeys1[6] = 0xFF;
 			pPlayerKeys->wKeys2[6] = 0xFF;
@@ -350,10 +350,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[6] = 0x00;
 		pPlayerKeys->wKeys2[6] = 0x00;
 	 }
-	 wKeys >>= 1; // 8
+	 uiKeys >>= 1; // 8
 
  	 // INCAR LOOK LEFT (5)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[5]) {
 			pPlayerKeys->wKeys1[5] = 0xFF;
 			pPlayerKeys->wKeys2[5] = 0xFF;
@@ -365,10 +365,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[5] = 0x00;
 		pPlayerKeys->wKeys2[5] = 0x00;
 	 }
-	 wKeys >>= 1; // 9
+	 uiKeys >>= 1; // 9
 
 	 // SUBMISSION (19)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[19] == 0xFF) {
 			pPlayerKeys->wKeys1[19] = 0xFF;
 			pPlayerKeys->wKeys2[19] = 0xFF;
@@ -380,10 +380,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[19] = 0x00;
 		pPlayerKeys->wKeys2[19] = 0x00;
 	 }
-	 wKeys >>= 1; // 10
+	 uiKeys >>= 1; // 10
 
 	 // WALKING (21)
-	 if(wKeys & 1) {
+	 if(uiKeys & 1) {
 		if(pPlayerKeys->wKeys1[21] == 0xFF) {
 			pPlayerKeys->wKeys1[21] = 0xFF;
 			pPlayerKeys->wKeys2[21] = 0xFF;
@@ -395,10 +395,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[21] = 0x00;
 		pPlayerKeys->wKeys2[21] = 0x00;
 	 }
-	 wKeys >>= 1; // 11
+	 uiKeys >>= 1; // 11
 
 	 // ANALOG2 D/U
-	 BYTE byteVal = wKeys & 3;
+	 BYTE byteVal = uiKeys & 3;
 	
 	 if(byteVal==2) {
 		pPlayerKeys->wKeys1[3] = (WORD)(128);
@@ -410,10 +410,10 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 		pPlayerKeys->wKeys1[3] = 0;
 		pPlayerKeys->wKeys2[3] = 0;
 	 }
-	 wKeys >>= 2; // 12-13
+	 uiKeys >>= 2; // 12-13
 
 	 // ANALOG2 L/R
-	 byteVal = wKeys & 3;
+	 byteVal = uiKeys & 3;
 	
 	 if(byteVal==2) {
 		pPlayerKeys->wKeys1[2] = (WORD)(128);
@@ -432,59 +432,75 @@ void CPlayerPed::SetKeys(WORD wKeys, WORD lrAnalog, WORD udAnalog)
 
 //-----------------------------------------------------------
 
-WORD CPlayerPed::GetKeys(WORD * lrAnalog, WORD * udAnalog)
+UINT CPlayerPed::GetKeys(WORD* lrAnalog, WORD* udAnalog)
 {
-	WORD wRet=0;
+	UINT uiRet = 0;
 	GTA_CONTROLSET *pInternalKeys = GameGetInternalKeys();
+	bool bInVehicle = IsInVehicle();
 
 	*lrAnalog = pInternalKeys->wKeys1[0]; // left/right analog
 	*udAnalog = pInternalKeys->wKeys1[1]; // up/down analog
 
-	if(((short)pInternalKeys->wKeys1[2]) > 0) wRet |= 1; // analog2 L
-	wRet <<= 1;
+	if (pInternalKeys->wKeys1[13]) uiRet |= 1; // camera modes
+	uiRet <<= 1;
 
-	if(((short)pInternalKeys->wKeys1[2]) < 0) wRet |= 1; // analog2 R
-	wRet <<= 1;
+	if (pInternalKeys->wKeys1[8]) uiRet |= 1; // recruit
+	uiRet <<= 1;
 
-	if(((short)pInternalKeys->wKeys1[3]) > 0) wRet |= 1; // analog2 D
-	wRet <<= 1;
+	if (pInternalKeys->wKeys1[9]) uiRet |= 1; // honk
+	uiRet <<= 1;
 
-	if(((short)pInternalKeys->wKeys1[3]) < 0) wRet |= 1; // analog2 U
-	wRet <<= 1;
+	if (pInternalKeys->wKeys1[10]) uiRet |= 1; // no
+	uiRet <<= 1;
+
+	if (pInternalKeys->wKeys1[11]) uiRet |= 1; // yes
+	uiRet <<= 1;
+
+	if(((short)pInternalKeys->wKeys1[2]) > 0) uiRet |= 1; // analog2 L
+	uiRet <<= 1;
+
+	if(((short)pInternalKeys->wKeys1[2]) < 0) uiRet |= 1; // analog2 R
+	uiRet <<= 1;
+
+	if(((short)pInternalKeys->wKeys1[3]) > 0) uiRet |= 1; // analog2 D
+	uiRet <<= 1;
+
+	if(((short)pInternalKeys->wKeys1[3]) < 0) uiRet |= 1; // analog2 U
+	uiRet <<= 1;
 	
-	if(pInternalKeys->wKeys1[21]) wRet |= 1; // walking
-	wRet <<= 1;
+	if(pInternalKeys->wKeys1[21]) uiRet |= 1; // walking
+	uiRet <<= 1;
 
-	if(pInternalKeys->wKeys1[19]) wRet |= 1; // submission
-	wRet <<= 1;
+	if(pInternalKeys->wKeys1[19]) uiRet |= 1; // submission
+	uiRet <<= 1;
 
-	if(IsInVehicle() && pInternalKeys->wKeys1[5]) wRet |= 1; // incar look left
-	wRet <<= 1;
+	if(bInVehicle && pInternalKeys->wKeys1[5]) uiRet |= 1; // incar look left
+	uiRet <<= 1;
 	
-	if(pInternalKeys->wKeys1[6]) wRet |= 1; // incar handbrake / target
-	wRet <<= 1;
+	if(pInternalKeys->wKeys1[6]) uiRet |= 1; // incar handbrake / target
+	uiRet <<= 1;
 
-	if(IsInVehicle() && pInternalKeys->wKeys1[7]) wRet |= 1; // incar look right
-	wRet <<= 1;
+	if(bInVehicle && pInternalKeys->wKeys1[7]) uiRet |= 1; // incar look right
+	uiRet <<= 1;
 
-	if(pInternalKeys->wKeys1[14]) wRet |= 1; // jump
-	wRet <<= 1;
+	if(pInternalKeys->wKeys1[14]) uiRet |= 1; // jump
+	uiRet <<= 1;
 
-	if(!IsInJetpackMode() && pInternalKeys->wKeys1[15]) wRet |= 1; // secondary onfoot attack
-	wRet <<= 1;
+	if(!IsInJetpackMode() && pInternalKeys->wKeys1[15]) uiRet |= 1; // secondary onfoot attack
+	uiRet <<= 1;
 	
-	if(pInternalKeys->wKeys1[16]) wRet |= 1; // sprint
-	wRet <<= 1;
+	if(pInternalKeys->wKeys1[16]) uiRet |= 1; // sprint
+	uiRet <<= 1;
 		
-	if(HasAmmoForCurrentWeapon() && pInternalKeys->wKeys1[17]) wRet |= 1; // fire
-	wRet <<= 1;
+	if(HasAmmoForCurrentWeapon() && pInternalKeys->wKeys1[17]) uiRet |= 1; // fire
+	uiRet <<= 1;
 	
-	if(pInternalKeys->wKeys1[18]) wRet |= 1; // crouch
-	wRet <<= 1;
+	if(pInternalKeys->wKeys1[18]) uiRet |= 1; // crouch
+	uiRet <<= 1;
 
-	if(pInternalKeys->wKeys1[4]) wRet |= 1; // secondary fire
+	if(pInternalKeys->wKeys1[4]) uiRet |= 1; // secondary fire
 
-	return wRet;
+	return uiRet;
 }
 
 //-----------------------------------------------------------
@@ -726,10 +742,10 @@ void CPlayerPed::GiveWeapon(int iWeaponID, int iAmmo)
 
 	if(iModelID == -1) return;
 
-	if(!pGame->IsModelLoaded(iModelID)) {
-		pGame->RequestModel(iModelID);
-		pGame->LoadRequestedModels();
-		while(!pGame->IsModelLoaded(iModelID)) Sleep(1);
+	if(!CGame::IsModelLoaded(iModelID)) {
+		CGame::RequestModel(iModelID);
+		CGame::LoadRequestedModels();
+		while(!CGame::IsModelLoaded(iModelID)) Sleep(1);
 	}
 
 	//ScriptCommand(&give_actor_weapon,this->m_dwGTAId,iWeaponID,iAmmo);
@@ -1363,7 +1379,7 @@ void CPlayerPed::SetMoney(int iAmount)
 void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 								 int opt1, int opt2, int opt3, int opt4, int iUnk )
 {
-	bool bLoaded = false;
+	//bool bLoaded = false;
 	int iWaitAnimLoad=0;
 
 	
@@ -1371,30 +1387,29 @@ void CPlayerPed::ApplyAnimation( char *szAnimName, char *szAnimFile, float fT,
 	if(!GamePool_Ped_GetAt(m_dwGTAId)) return;
 	if(IsPissing()) StopPissing();
     
-	// Can't allow 'naughty' anims!
-	if(!_stricmp(szAnimFile,"SEX")) return;
-
 #ifdef _DEBUG
 	//if(pChatWindow) pChatWindow->AddDebugMessage("Anim(%s,%s,%f,%d,%d,%d,%d,%d)",
 		//szAnimName,szAnimFile,fT,opt1,opt2,opt3,opt4,iUnk);
 #endif
 
-	if (!pGame->IsAnimationLoaded(szAnimFile)) {
-		pGame->RequestAnimation(szAnimFile);
-		while(!pGame->IsAnimationLoaded(szAnimFile)) {
+	int iRet = CGame::IsAnimationLoaded(szAnimFile);
+	if (iRet == 0) {
+		CGame::RequestAnimation(szAnimFile);
+		while(!CGame::IsAnimationLoaded(szAnimFile)) {
 			Sleep(5);
 			iWaitAnimLoad++;
 			if(iWaitAnimLoad == 10) return; // we can't wait forever
 		}		
-		bLoaded = true;
-	}
+		//bLoaded = true;
+	} else if (iRet == -1)
+		return;
 
 	ScriptCommand(&apply_animation,m_dwGTAId,szAnimName,szAnimFile,fT,opt1,opt2,opt3,opt4,iUnk);
 
-	if (bLoaded) {
+	//if (bLoaded) {
 		// not sure about this (how many anim files can we keep loaded?)
 		//pGame->ReleaseAnimation(szAnimFile);
-	}
+	//}
 }
 
 //-----------------------------------------------------------
@@ -1994,3 +2009,34 @@ void CPlayerPed::SetFightingStyle(unsigned char style, unsigned char move)
 	}
 }
 
+void CPlayerPed::GetFightingStyle(unsigned char* style, unsigned char* move)
+{
+	*style = *(BYTE*)(m_pPed + 0x72D);
+	*move = *(BYTE*)(m_pPed + 0x72E);
+}
+
+bool CPlayerPed::IsDucking()
+{
+	return (m_pPed->dwStateFlags >> 26) & 1;
+}
+
+unsigned char CPlayerPed::IsEnteringVehicle()
+{
+	if (m_pPed && m_pPed->Tasks && m_pPed->Tasks->pdwJumpJetPack) {
+		int iType = GetTaskTypeFromTask(m_pPed->Tasks->pdwJumpJetPack);
+		if (iType == 700 || iType == 712)
+			return 2;
+		if (iType == 701 || iType == 713)
+			return 1;
+	}
+	return 0;
+}
+
+bool CPlayerPed::IsExitingVehicle()
+{
+	if (m_pPed && m_pPed->Tasks && m_pPed->Tasks->pdwJumpJetPack) {
+		if (GetTaskTypeFromTask(m_pPed->Tasks->pdwJumpJetPack) == 704)
+			return true;
+	}
+	return false;
+}

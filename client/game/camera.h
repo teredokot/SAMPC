@@ -27,7 +27,8 @@ public:
 	void Restore();
 	void Fade(int iInOut);
 	void GetMatrix(PMATRIX4X4 Matrix);
-	
+	void ToggleWidescreen(bool bOn);
+
 	CCamera()
 	{
 		m_matPos = (MATRIX4X4 *)ADDR_CAMERA;

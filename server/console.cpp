@@ -824,9 +824,11 @@ void CConsole::Execute(char* pExecLine)
 		return;
 	}
 
-	if (!pNetGame->GetGameMode()->OnRconCommand(pExecLine) ||
-		!pNetGame->GetFilterScripts()->OnRconCommand(pExecLine))
-	{
-		logprintf("Unknown command or variable:\n  %s", cmd);
+	if (pNetGame->GetGameMode() != NULL && pNetGame->GetFilterScripts() != NULL) {
+		if (!pNetGame->GetGameMode()->OnRconCommand(pExecLine) ||
+			!pNetGame->GetFilterScripts()->OnRconCommand(pExecLine))
+		{
+			logprintf("Unknown command or variable:\n  %s", cmd);
+		}
 	}
 }

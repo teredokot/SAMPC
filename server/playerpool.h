@@ -26,7 +26,6 @@ private:
 	//CHAR	m_szPlayerName[MAX_PLAYERS][MAX_PLAYER_NAME+1];
 	//int 	m_iPlayerScore[MAX_PLAYERS];
 	//int	m_iPlayerMoney[MAX_PLAYERS];
-	DWORD	m_dwPlayerAmmo[MAX_PLAYERS];
 	//bool	m_bIsAnAdmin[MAX_PLAYERS];
 	//BYTE	m_byteVirtualWorld[MAX_PLAYERS];
 	int		m_iPlayerCount;
@@ -79,17 +78,6 @@ public:
 		if(bytePlayerID >= MAX_PLAYERS) return;
 		m_iPlayerMoney[bytePlayerID] = iMoney;
 	};*/
-
-	// TODO: Move these to CPlayer
-	DWORD GetPlayerAmmo(BYTE bytePlayerID) {
-		if(bytePlayerID >= MAX_PLAYERS) { return 0; }
-		return m_dwPlayerAmmo[bytePlayerID];
-	};
-
-	void SetPlayerAmmo(BYTE bytePlayerID, DWORD dwAmmo) {
-		if(bytePlayerID >= MAX_PLAYERS) return;
-		m_dwPlayerAmmo[bytePlayerID] = dwAmmo;
-	};
 
 	/*void ResetPlayerScoresAndMoney() {
 		//memset(&m_iPlayerScore[0],0,sizeof(int) * MAX_PLAYERS);

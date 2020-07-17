@@ -315,34 +315,42 @@ void Death(RPCParameters *rpcParams)
 //----------------------------------------------------
 // Sent by client when they want to enter a
 // vehicle gracefully.
+// This RPC only gets triggered when player vehicle entering task is started,
+// not when player already in a vehicle, so they could stop their character entering anytime
 
-void EnterVehicle(RPCParameters *rpcParams)
+void EnterVehicle(RPCParameters* rpcParams)
 {
-	PlayerID sender = rpcParams->sender;
+	bool bValidEntering = false;
 
-	RakNet::BitStream bsData(rpcParams);
+	// Expecting 2 bytes and 1 bit of data
+	if (rpcParams->numberOfBitsOfData == 17) {
+		// Cheking if player and vehicle pool is initialized
+		if (pNetGame->GetPlayerPool() && pNetGame->GetVehiclePool()) {
+			// Checking if player is valid and get object of it
+			CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(rpcParams->senderId);
+			if (pPlayer != nullptr) {
+				RakNet::BitStream bsData(rpcParams);
+				VEHICLEID VehicleID = INVALID_VEHICLE;
+				bool bPassenger = false;
 
-	if(pNetGame->GetGameState() != GAMESTATE_RUNNING) return;
-	if(!pNetGame->GetPlayerPool()->GetSlotState(pRak->GetIndexFromPlayerID(sender))) return;
+				bsData.Read(VehicleID);
+				bsData.Read(bPassenger);
 
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
-	CPlayer	*pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-	
-	VEHICLEID VehicleID=0;
-	BYTE bytePassenger=0;
-
-	bsData.Read(VehicleID);
-	bsData.Read(bytePassenger);
-
-	if(pPlayer) {
-		if(VehicleID == 0xFFFF) {
-			pNetGame->KickPlayer(bytePlayerID);
-			return;
+				// Checking if the vehicle ID is exists
+				if (pNetGame->GetVehiclePool()->GetSlotState(VehicleID)) {
+					// Notify server and scripts
+					pPlayer->EnterVehicle(VehicleID, bPassenger);
+					bValidEntering = true;
+				}
+			}
 		}
-		pPlayer->EnterVehicle(VehicleID,bytePassenger);
 	}
 
-	//logprintf("%u enters vehicle %u",bytePlayerID,byteVehicleID);
+	// If some of the check is not right, kicking the player from the server
+	if (!bValidEntering) {
+		logprintf("[SERVER] Kicking player %d for entering an invalid vehicle.", rpcParams->senderId);
+		pNetGame->KickPlayer(rpcParams->senderId);
+	}
 }
 
 //----------------------------------------------------
@@ -351,32 +359,36 @@ void EnterVehicle(RPCParameters *rpcParams)
 
 void ExitVehicle(RPCParameters *rpcParams)
 {
-	PlayerID sender = rpcParams->sender;
+	bool bValidExiting = false;
 
-	RakNet::BitStream bsData(rpcParams);
-
-	if(pNetGame->GetGameState() != GAMESTATE_RUNNING) return;
-	if(!pNetGame->GetPlayerPool()->GetSlotState(pRak->GetIndexFromPlayerID(sender))) return;
-
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(sender);
-	CPlayer	*pPlayer = pNetGame->GetPlayerPool()->GetAt(bytePlayerID);
-
-	VEHICLEID VehicleID;
-	bsData.Read(VehicleID);
-	
-	if(pPlayer) {
-		if(VehicleID == 0xFFFF) {
-			pNetGame->KickPlayer(bytePlayerID);
-			return;
+	// Expecting only 2 bytes of data
+	if (rpcParams->numberOfBitsOfData == 16) {
+		// Checking if player and vehicle pool is initialized
+		if (pNetGame->GetPlayerPool() && pNetGame->GetVehiclePool()) {
+			// Checking if the player is valid, and use that object info
+			CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(rpcParams->senderId);
+			// Also checking if player was actually in a vehicle as driver or a passenger
+			if (pPlayer != nullptr && (pPlayer->GetState() == PLAYER_STATE_DRIVER || pPlayer->GetState() == PLAYER_STATE_PASSENGER)) {
+				RakNet::BitStream bsData(rpcParams);
+				// Expecting only 2 bytes of data
+				//if (bsData.GetNumberOfUnreadBits() == 16) {
+					VEHICLEID VehicleID;
+					bsData.Read(VehicleID);
+					// Checking if the actual vehicle is valid
+					if (pNetGame->GetVehiclePool()->GetSlotState(VehicleID)) {
+						// Notify vehicle exit event
+						pPlayer->ExitVehicle(VehicleID);
+						bValidExiting = true;
+					}
+				//}
+			}
 		}
-		pPlayer->ExitVehicle(VehicleID);
 	}
-
-	// HACK by spookie - this gonna cause probs, or are they defo out of the car now?
-	// comment by kyeman - No they're not, it's just an advisory for the anims.
-	//pNetGame->GetVehiclePool()->GetAt(byteVehicleID)->m_byteDriverID = INVALID_ID;
-
-	//logprintf("%u exits vehicle %u",bytePlayerID,byteVehicleID);
+	// If it was an invalid vehicle exiting, player about to get desyncronized, kicking player out from the server
+	if (!bValidExiting) {
+		logprintf("[SERVER] Kicking player %d for exiting an invalid vehicle.", rpcParams->senderId);
+		pNetGame->KickPlayer(rpcParams->senderId);
+	}
 }
 
 //----------------------------------------------------
@@ -420,29 +432,25 @@ void ServerCommand(RPCParameters *rpcParams)
 
 //----------------------------------------------------
 
-void UpdateScoresPingsIPs(RPCParameters *rpcParams)
+static void UpdatePings(RPCParameters* rpcParams)
 {
-	PlayerID sender = rpcParams->sender;
-
-	RakNet::BitStream bsData(rpcParams);
-
-	RakNet::BitStream bsParams;
-	CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
-	BYTE bytePlayerId = pRak->GetIndexFromPlayerID(sender);
-
-	if(!pPlayerPool->GetSlotState(bytePlayerId)) return;
-
-	for (BYTE i=0; i<MAX_PLAYERS; i++)
-	{
-		if (pPlayerPool->GetSlotState(i))
-		{
-			bsParams.Write(i);
-			bsParams.Write(pPlayerPool->GetAt(i)->m_iScore);
-			bsParams.Write((DWORD)pRak->GetLastPing(pRak->GetPlayerIDFromIndex(i)));
+	CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+	if (pPlayerPool) {
+		CPlayer* pPlayer = pPlayerPool->GetAt(rpcParams->senderId);
+		RakNet::Time nTimeNow = RakNet::GetTime();
+		if (pPlayer != NULL && (nTimeNow - pPlayer->m_nLastPingUpdate) >= RPC_PING_UPDATE_TIME) {
+			pPlayer->m_nLastPingUpdate = nTimeNow;
+			RakNet::BitStream bsParams;
+			for (unsigned short i = 0; i < pPlayerPool->GetLastPlayerId(); i++) {
+				if (pPlayerPool->GetSlotState(i)) {
+					bsParams.Write(i);
+					// GetLastPing could return -1 when fails, but its only overflow back to 65535
+					bsParams.Write((unsigned short)pRak->GetLastPing(pRak->GetPlayerIDFromIndex(i)));
+				}
+			}
+			pNetGame->SendToPlayer(rpcParams->senderId, RPC_UpdatePings, &bsParams);
 		}
 	}
-
-	pRak->RPC(RPC_UpdateScoresPingsIPs, &bsParams, HIGH_PRIORITY, RELIABLE, 0, sender, false, false);
 }
 
 //----------------------------------------------------
@@ -738,57 +746,99 @@ void PickedUpPickup(RPCParameters *rpcParams)
 }
 
 void MenuSelect(RPCParameters *rpcParams)
-{	
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(rpcParams->sender);
-
-	RakNet::BitStream bsData(rpcParams);
-
-	BYTE byteRow;
-	bsData.Read(byteRow);
-
-	CGameMode *pGameMode = pNetGame->GetGameMode();
-	CFilterScripts *pFilters = pNetGame->GetFilterScripts();
-
-	if(pGameMode) pGameMode->OnPlayerSelectedMenuRow(bytePlayerID, byteRow);
-	if(pFilters) pFilters->OnPlayerSelectedMenuRow(bytePlayerID, byteRow);
-
-	pNetGame->GetMenuPool()->ResetPlayer(bytePlayerID);
+{
+	// Checking if the menu pool is initialized
+	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
+	if (pMenuPool) {
+		// Do we have shown menu to player?
+		unsigned char ucMenuId = pMenuPool->GetPlayerMenu(rpcParams->senderId);
+		if (ucMenuId != INVALID_MENU_ID) {
+			// Checking if the actual menu is valid, and get the data of it for validating row
+			CMenu* pMenu = pMenuPool->GetAt(ucMenuId);
+			if (pMenu != nullptr) {
+				RakNet::BitStream bsData(rpcParams);
+				// Expecting a 1 byte packet size
+				if (bsData.GetNumberOfUnreadBits() == 8) {
+					unsigned char ucRow = MAX_MENU_ITEMS;
+					bsData.Read(ucRow);
+					// Validate menu row, if valid then notify scripts
+					if (pMenu->ValidRow(ucRow)) {
+						if (pNetGame->GetGameMode())
+							pNetGame->GetGameMode()->OnPlayerSelectedMenuRow(rpcParams->senderId, ucRow);
+						if (pNetGame->GetFilterScripts())
+							pNetGame->GetFilterScripts()->OnPlayerSelectedMenuRow(rpcParams->senderId, ucRow);
+					}
+				}
+			}
+		}
+		// Reset anyway, even it fails
+		pMenuPool->ResetForPlayer(rpcParams->senderId);
+	}
 }
 
 void MenuQuit(RPCParameters *rpcParams)
 {
-	BYTE bytePlayerID = pRak->GetIndexFromPlayerID(rpcParams->sender);
-		
-	CGameMode *pGameMode = pNetGame->GetGameMode();
-	CFilterScripts *pFilters = pNetGame->GetFilterScripts();
-
-	if(pGameMode) pGameMode->OnPlayerExitedMenu(bytePlayerID);
-	if(pFilters) pFilters->OnPlayerExitedMenu(bytePlayerID);
-
-	pNetGame->GetMenuPool()->ResetPlayer(bytePlayerID);
+	// Checking if the menu pool is initialized
+	CMenuPool* pMenuPool = pNetGame->GetMenuPool();
+	if (pMenuPool) {
+		// Do we have shown menu to player?
+		unsigned char ucMenuId = pMenuPool->GetPlayerMenu(rpcParams->senderId);
+		if (ucMenuId != INVALID_MENU_ID) {
+			// Probably already valid at this point, but still making sure..
+			//if (pMenuPool->GetSlotState(ucMenuId)) {
+				// Notify the scripts
+				if (pNetGame->GetGameMode())
+					pNetGame->GetGameMode()->OnPlayerExitedMenu(rpcParams->senderId);
+				if (pNetGame->GetFilterScripts())
+					pNetGame->GetFilterScripts()->OnPlayerExitedMenu(rpcParams->senderId);
+			//}
+		}
+		// Reset menu for player, even if it fails
+		pMenuPool->ResetForPlayer(rpcParams->senderId);
+	}
 }
 
 void TypingEvent(RPCParameters* rpcParams)
 {
-	RakNet::BitStream in(rpcParams);
+	if (pNetGame->GetPlayerPool()) {
+		CPlayer* pPlayer = pNetGame->GetPlayerPool()->GetAt(rpcParams->senderId);
+		if (pPlayer != NULL) {
+			RakNet::BitStream in(rpcParams);
+			if (in.GetNumberOfUnreadBits() == 1) {
+				CFilterScripts* pFS = pNetGame->GetFilterScripts();
+				CGameMode* pGM = pNetGame->GetGameMode();
+				if (pFS == NULL || pGM == NULL)
+					return;
 
-	int iSenderId = pNetGame->GetRakServer()->GetIndexFromPlayerID(rpcParams->sender);
-	CPlayerPool* pPool = pNetGame->GetPlayerPool();
-	unsigned char ucType = 0;
-	if (in.GetNumberOfUnreadBits() == 1 && pPool && pPool->GetSlotState(iSenderId))
-	{
-		CFilterScripts* pFS = pNetGame->GetFilterScripts();
-		CGameMode* pGM = pNetGame->GetGameMode();
-		if (pFS == NULL || pGM == NULL)
-			return;
-
-		if (in.ReadBit()) {
-			pFS->OnPlayerBeginTyping(iSenderId);
-			pGM->OnPlayerBeginTyping(iSenderId);
-		} else {
-			pFS->OnPlayerEndTyping(iSenderId);
-			pGM->OnPlayerEndTyping(iSenderId);
+				if (in.ReadBit()) {
+					pPlayer->m_bTyping = true;
+					pFS->OnPlayerBeginTyping(rpcParams->senderId);
+					pGM->OnPlayerBeginTyping(rpcParams->senderId);
+				} else {
+					pPlayer->m_bTyping = false;
+					pFS->OnPlayerEndTyping(rpcParams->senderId);
+					pGM->OnPlayerEndTyping(rpcParams->senderId);
+				}
+			}
 		}
+	}
+}
+
+static void ClientCheck(RPCParameters* rpcParams)
+{
+	RakNet::BitStream bsData(rpcParams);
+	if (bsData.GetNumberOfUnreadBits() == 48) {
+		unsigned char ucType, ucCheckSum;
+		unsigned long ulMemAddress;
+
+		bsData.Read(ucType);
+		bsData.Read(ulMemAddress);
+		bsData.Read(ucCheckSum);
+
+		if (pNetGame->GetFilterScripts())
+			pNetGame->GetFilterScripts()->OnClientCheckResponse(rpcParams->senderId, ucType, ulMemAddress, ucCheckSum);
+		if (pNetGame->GetGameMode())
+			pNetGame->GetGameMode()->OnClientCheckResponse(rpcParams->senderId, ucType, ulMemAddress, ucCheckSum);
 	}
 }
 
@@ -807,7 +857,7 @@ void RegisterRPCs(RakServerInterface * pRakServer)
 	REGISTER_STATIC_RPC(pRakServer, EnterVehicle);
 	REGISTER_STATIC_RPC(pRakServer, ExitVehicle);
 	REGISTER_STATIC_RPC(pRakServer, ServerCommand);
-	REGISTER_STATIC_RPC(pRakServer, UpdateScoresPingsIPs);
+	REGISTER_STATIC_RPC(pRakServer, UpdatePings);
 	//REGISTER_STATIC_RPC(pRakServer, SvrStats);
 	REGISTER_STATIC_RPC(pRakServer, SetInteriorId);
 	REGISTER_STATIC_RPC(pRakServer, ScmEvent);
@@ -818,6 +868,7 @@ void RegisterRPCs(RakServerInterface * pRakServer)
 	REGISTER_STATIC_RPC(pRakServer, MenuSelect);
 	REGISTER_STATIC_RPC(pRakServer, MenuQuit);
 	REGISTER_STATIC_RPC(pRakServer, TypingEvent);
+	REGISTER_STATIC_RPC(pRakServer, ClientCheck);
 }
 
 //----------------------------------------------------

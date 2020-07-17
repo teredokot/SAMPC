@@ -71,7 +71,7 @@ void __stdcall RenderPlayerTags()
 							dwHitEntity = 1;
 
 						if (dwHitEntity) {
-							sprintf_s(szBuffer, "%s(%d)", pPlayerPool->GetPlayerName(x), x);
+							sprintf_s(szBuffer, "%s(%d)", Player->GetName(), x);
 							pPlayerTags->Draw(
 								{matPlayer.pos.X, matPlayer.pos.Y, matPlayer.pos.Z},
 								szBuffer,
@@ -272,10 +272,7 @@ HRESULT __stdcall IDirect3DDevice9Hook::Present(CONST RECT* pSourceRect, CONST R
 			if(pDeathWindow) pDeathWindow->Draw();		
 		}
 
-#ifndef USE_NUKLEAR_INPUT
 		if (pCursor) pCursor->Process();
-#endif
-		GUI_Render();
 
 #ifndef _DEBUG
 		if(tSettings.bDebug)

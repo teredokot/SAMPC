@@ -85,7 +85,7 @@ public:
 	char		m_szHostOrIp[256];
 	int			m_iPort;
 
-	DWORD		m_dwMapIcon[32];
+	DWORD		m_dwMapIcon[MAX_MAP_ICON];
 
 	CNetGame(PCHAR szHostOrIp,int iPort,PCHAR szPlayerName,PCHAR szPass);
 	~CNetGame();
@@ -105,10 +105,10 @@ public:
 	bool GetWalkStyle() { return m_bUseCJWalk; };
 	void SetLanMode(bool bMode) { m_bLanMode = bMode; };
 
-	void InitGameLogic();
+	//void InitGameLogic();
 	void Process();
 
-	void UpdatePlayerScoresAndPings();
+	void UpdatePlayerPings();
 	void ResetVehiclePool();
 	void ResetPlayerPool();
 	void ResetPickupPool();

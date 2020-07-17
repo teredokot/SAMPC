@@ -77,3 +77,14 @@ void CCamera::InterpolateCameraLookAt(VECTOR* from, VECTOR* to, FLOAT time, BYTE
 {
 	((void(__thiscall*)(CAMERA_TYPE*, VECTOR*, VECTOR*, FLOAT, BYTE))0x50D1D0)(m_pCamera, from, to, time, mode);
 }
+
+// OPC: 02A3 (toggle_widescreen) - 0x0047F684
+void CCamera::ToggleWidescreen(bool bOn)
+{
+	DWORD dwThis = (DWORD)m_pCamera;
+	DWORD dwFunc = bOn ? 0x50C140 : 0x50C150;
+	_asm {
+		mov ecx, dwThis
+		call dwFunc
+	}
+}

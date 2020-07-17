@@ -55,9 +55,7 @@ public:
 	int MsgProc(UINT uMsg, DWORD wParam, DWORD lParam);
 
 	void ProcessInput();
-#ifdef USE_NUKLEAR_INPUT
-	void ProcessInput(char* szInput);
-#endif
+
 	void RecallUp();
 	void RecallDown();
 	

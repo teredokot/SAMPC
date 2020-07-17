@@ -1144,7 +1144,7 @@ int CFilterScripts::OnRconLoginAttempt(char* szIP, char* szPassword, cell succes
 	return (int)ret;
 }
 
-int CFilterScripts::OnPlayerBeginTyping(cell playerid)
+void CFilterScripts::OnPlayerBeginTyping(cell playerid)
 {
 	int idx = 0;
 	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++)
@@ -1158,10 +1158,9 @@ int CFilterScripts::OnPlayerBeginTyping(cell playerid)
 			amx_Exec(m_pFilterScripts[i], NULL, idx);
 		}
 	}
-	return 1;
 }
 
-int CFilterScripts::OnPlayerEndTyping(cell playerid)
+void CFilterScripts::OnPlayerEndTyping(cell playerid)
 {
 	int idx = 0;
 	for (int i = 0; i < MAX_FILTER_SCRIPTS; i++)
@@ -1175,7 +1174,6 @@ int CFilterScripts::OnPlayerEndTyping(cell playerid)
 			amx_Exec(m_pFilterScripts[i], NULL, idx);
 		}
 	}
-	return 1;
 }
 
 int CFilterScripts::OnPlayerStunt(cell playerid, cell vehicleid)
@@ -1194,4 +1192,23 @@ int CFilterScripts::OnPlayerStunt(cell playerid, cell vehicleid)
 		}
 	}
 	return 1;
+}
+
+void CFilterScripts::OnClientCheckResponse(cell playerid, cell type, cell address, cell checksum)
+{
+	int idx = 0;
+	for (unsigned i = 0; i < MAX_FILTER_SCRIPTS; i++)
+	{
+		if (m_pFilterScripts[i] == NULL)
+			continue;
+
+		if (!amx_FindPublic(m_pFilterScripts[i], "OnClientCheckResponse", &idx))
+		{
+			amx_Push(m_pFilterScripts[i], checksum);
+			amx_Push(m_pFilterScripts[i], address);
+			amx_Push(m_pFilterScripts[i], type);
+			amx_Push(m_pFilterScripts[i], playerid);
+			amx_Exec(m_pFilterScripts[i], NULL, idx);
+		}
+	}
 }

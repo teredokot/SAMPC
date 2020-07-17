@@ -33,7 +33,7 @@ enum eRPCTable
 	RPC_Death,
 	RPC_EnterVehicle,
 	RPC_ExitVehicle,
-	RPC_UpdateScoresPingsIPs,
+	RPC_UpdatePings,
 	//RPC_SvrStats,
 	RPC_ScmEvent,
 	RPC_ScrSetSpawnInfo,
@@ -132,6 +132,10 @@ enum eRPCTable
 	RPC_TypingEvent,
 	RPC_ScrVehicleComponent,
 	RPC_ScrSetGameSpeed,
+	RPC_ClientCheck,
+	RPC_ScrToggleChatbox,
+	RPC_ScrToggleWidescreen,
+	RPC_ScrSetScore,
 
 	MAX_RPC_ID_AVAILABLE
 };

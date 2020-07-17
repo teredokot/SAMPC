@@ -40,10 +40,10 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		(iType != TRAIN_TRAM)) {
 
 		// NORMAL VEHICLE
-		if(!pGame->IsModelLoaded(iType)) {
-			pGame->RequestModel(iType);
-			pGame->LoadRequestedModels();
-			while(!pGame->IsModelLoaded(iType)) Sleep(5);
+		if(!CGame::IsModelLoaded(iType)) {
+			CGame::RequestModel(iType);
+			CGame::LoadRequestedModels();
+			while(!CGame::IsModelLoaded(iType)) Sleep(5);
 		}
 
 		if (szNumberPlate && szNumberPlate[0]) 
@@ -62,10 +62,9 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		m_dwGTAId = dwRetID;
 		dwLastCreatedVehicleID = dwRetID;
 		m_pVehicle->dwDoorsLocked = 0;
-		m_bIsLocked = FALSE;
+		//m_bIsLocked = FALSE;
 		
-		Remove(); // They'll be added manually during pool processing.
-		pGame->RemoveModel(iType);						
+		Remove(); // They'll be added manually during pool processing.					
 	}
 	else if( (iType == TRAIN_PASSENGER_LOCO) || 
 		(iType == TRAIN_FREIGHT_LOCO) ||
@@ -93,9 +92,9 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 			15 538 0   0   0   0   0   0  0  0  0  0  0  0  0  0  0
 		*/
 
-		pGame->RequestModel(iType);
-		pGame->LoadRequestedModels();
-		while (!pGame->IsModelLoaded(iType)) Sleep(1);
+		CGame::RequestModel(iType);
+		CGame::LoadRequestedModels();
+		while (!CGame::IsModelLoaded(iType)) Sleep(1);
 
 		if (iType == TRAIN_PASSENGER_LOCO) iType = 10; // 5
 		else if (iType == TRAIN_FREIGHT_LOCO) iType = 15; // 3
@@ -105,17 +104,17 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		if(fRotation != 0.0f) {
 			dwDirection = 1;
 		}
-		pGame->RequestModel(TRAIN_PASSENGER_LOCO);
-		pGame->RequestModel(TRAIN_PASSENGER);
-		pGame->RequestModel(TRAIN_FREIGHT_LOCO);
-		pGame->RequestModel(TRAIN_FREIGHT);
-		pGame->RequestModel(TRAIN_TRAM);
-		pGame->LoadRequestedModels();
-		while(!pGame->IsModelLoaded(TRAIN_PASSENGER_LOCO)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_PASSENGER)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_FREIGHT_LOCO)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_FREIGHT)) Sleep(1);
-		while(!pGame->IsModelLoaded(TRAIN_TRAM)) Sleep(1);*/
+		CGame::RequestModel(TRAIN_PASSENGER_LOCO);
+		CGame::RequestModel(TRAIN_PASSENGER);
+		CGame::RequestModel(TRAIN_FREIGHT_LOCO);
+		CGame::RequestModel(TRAIN_FREIGHT);
+		CGame::RequestModel(TRAIN_TRAM);
+		CGame::LoadRequestedModels();
+		while(!CGame::IsModelLoaded(TRAIN_PASSENGER_LOCO)) Sleep(1);
+		while(!CGame::IsModelLoaded(TRAIN_PASSENGER)) Sleep(1);
+		while(!CGame::IsModelLoaded(TRAIN_FREIGHT_LOCO)) Sleep(1);
+		while(!CGame::IsModelLoaded(TRAIN_FREIGHT)) Sleep(1);
+		while(!CGame::IsModelLoaded(TRAIN_TRAM)) Sleep(1);*/
 	
 		ScriptCommand(&create_train,iType,fPosX,fPosY,fPosZ,fRotation!=0.0f,&dwRetID);
 
@@ -127,10 +126,10 @@ CVehicle::CVehicle( int iType, float fPosX, float fPosY,
 		GamePrepareTrain(m_pVehicle);
 		//ScriptCommand(&set_train_flag, &dwRetID, 0);
 
-		//pGame->RemoveModel(TRAIN_PASSENGER_LOCO);
-		//pGame->RemoveModel(TRAIN_PASSENGER);
-		//pGame->RemoveModel(TRAIN_FREIGHT_LOCO);
-		//pGame->RemoveModel(TRAIN_FREIGHT);
+		//CGame::RemoveModel(TRAIN_PASSENGER_LOCO);
+		//CGame::RemoveModel(TRAIN_PASSENGER);
+		//CGame::RemoveModel(TRAIN_FREIGHT_LOCO);
+		//CGame::RemoveModel(TRAIN_FREIGHT);
 	}
 	else if((iType == TRAIN_PASSENGER) ||
 			(iType == TRAIN_FREIGHT) ) {
@@ -263,10 +262,10 @@ void CVehicle::Recreate()
 
 		ScriptCommand(&destroy_car,m_dwGTAId);
 
-		if(!pGame->IsModelLoaded(uiType)) {
-			pGame->RequestModel(uiType);
-			pGame->LoadRequestedModels();
-			while(!pGame->IsModelLoaded(uiType)) Sleep(5);
+		if(!CGame::IsModelLoaded(uiType)) {
+			CGame::RequestModel(uiType);
+			CGame::LoadRequestedModels();
+			while(!CGame::IsModelLoaded(uiType)) Sleep(5);
 		}
 
 		ScriptCommand(&create_car,uiType,mat.pos.X,mat.pos.Y,mat.pos.Z,&dwRetID);
@@ -278,13 +277,13 @@ void CVehicle::Recreate()
 		m_dwGTAId = dwRetID;
 		dwLastCreatedVehicleID = dwRetID;
 		m_pVehicle->dwDoorsLocked = 0;
-		m_bIsLocked = FALSE;
+		//m_bIsLocked = FALSE;
 		//LinkToInterior(m_byteInterior);
 
 		SetMatrix(mat);
 		SetColor(byteColor1,byteColor2);
 
-		//pGame->RemoveModel(uiType);
+		//CGame::RemoveModel(uiType);
 	}
 	
 }
@@ -800,18 +799,18 @@ void CVehicle::RemoveEveryoneFromVehicle()
 
 	float fPosX = m_pVehicle->entity.mat->pos.X;
 	float fPosY = m_pVehicle->entity.mat->pos.Y;
-	float fPosZ = m_pVehicle->entity.mat->pos.Z;
+	float fPosZ = m_pVehicle->entity.mat->pos.Z + 2.0f;
 
 	int iPlayerID = 0;
 	if (m_pVehicle->pDriver) {
 		iPlayerID = GamePool_Ped_GetIndex( m_pVehicle->pDriver );
-		ScriptCommand( &remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY, fPosZ + 2 );
+		ScriptCommand( &remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY, fPosZ );
 	}
 
 	for (int i = 0; i < 7; i++) {
 		if (m_pVehicle->pPassengers[i] != NULL) {
 			iPlayerID = GamePool_Ped_GetIndex( m_pVehicle->pPassengers[i] );
-			ScriptCommand( &remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY, fPosZ + 2 );
+			ScriptCommand( &remove_actor_from_car_and_put_at, iPlayerID, fPosX, fPosY, fPosZ );
 		}
 	}
 }
@@ -826,10 +825,10 @@ BOOL CVehicle::VerifyInstance()
 	return FALSE;
 }
 
-void CVehicle::ToggleWindow(unsigned char ucDoorId, bool bOpen)
+void CVehicle::ToggleWindow(unsigned char ucDoorId, bool bClosed)
 {
 	DWORD dwThis = (DWORD)m_pVehicle;
-	DWORD dwFunc = bOpen ? (0x6D3080) : (0x6D30B0);
+	DWORD dwFunc = bClosed ? (0x6D30B0) : (0x6D3080);
 	DWORD dwDoorId = (DWORD)ucDoorId;
 
 	_asm mov ecx, dwThis
@@ -938,6 +937,34 @@ void CVehicle::SetFeature(bool bToggle)
 void CVehicle::SetVisibility(bool bVisible)
 {
 	ScriptCommand(&set_car_visibility, m_dwGTAId, bVisible);
+}
+
+/*
+	Door & Node indexes:
+		2 & 10 = Front Left
+		3 & 8 = Front Right
+		4 & 11 - Rear Left
+		5 & 9 - Rear Right
+	Angles:
+		0.0f = fully closed
+		1.0f = fully open
+*/
+void CVehicle::ToggleDoor(int iDoor, int iNodeIndex, float fAngle)
+{
+	if (GetVehicleSubtype() == VEHICLE_SUBTYPE_CAR) {
+		DWORD dwFunc = 0x6A6AE0;
+		DWORD dwThis = (DWORD)m_pVehicle;
+		_asm {
+			push 1
+			push fAngle
+			push iDoor
+			push iNodeIndex
+			push 0
+			mov ecx, dwThis
+			call dwFunc
+			//add esp, 20
+		}
+	}
 }
 
 //-----------------------------------------------------------

@@ -90,7 +90,7 @@ public:
 	BOOL	HasADriver();
 	BOOL	VerifyInstance();
 
-	void ToggleWindow(unsigned char ucDoorId, bool bOpen);
+	void ToggleWindow(unsigned char ucDoorId, bool bClosed);
 	void ToggleTaxiLight(bool bToggle);
 	void ToggleEngine(bool bToggle);
 	bool IsUpsideDown();
@@ -99,10 +99,11 @@ public:
 	void ToggleComponent(DWORD dwComp, FLOAT fAngle);
 	void SetFeature(bool bToggle);
 	void SetVisibility(bool bVisible);
+	void ToggleDoor(int iDoor, int iNodeIndex, float fAngle);
 
 	VEHICLE_TYPE	*m_pVehicle;
 	BOOL		m_bIsInvulnerable;
-	BOOL		m_bIsLocked; // No control state
+	//BOOL		m_bIsLocked; // No control state
 	BOOL		m_bDoorsLocked; // Vehicle is enterable TRUE/FALSE
 	BYTE		m_byteObjectiveVehicle; // Is this a special objective vehicle? 0/1
 	BOOL		m_bSpecialMarkerEnabled;
