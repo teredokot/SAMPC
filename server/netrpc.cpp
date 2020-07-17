@@ -340,6 +340,7 @@ void EnterVehicle(RPCParameters* rpcParams)
 				if (pNetGame->GetVehiclePool()->GetSlotState(VehicleID)) {
 					// Notify server and scripts
 					pPlayer->EnterVehicle(VehicleID, bPassenger);
+					bValidEntering = true;
 				}
 			}
 		}

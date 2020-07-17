@@ -2832,6 +2832,7 @@ bool RakPeer::HandleRPCPacket( const char *data, int length, PlayerID playerId, 
 
 	//rpcParms.recipient=this;
 	rpcParms.sender=playerId;
+	rpcParms.senderId=playerIndex;
 
 	// Note to self - if I change this format then I have to change the PacketLogger class too
 	incomingBitStream.IgnoreBits(8);
