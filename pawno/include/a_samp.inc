@@ -446,8 +446,6 @@ native GangZoneFlashForAll(gangzoneid, color);
 native GangZoneStopFlashForPlayer(playerid, gangzoneid);
 native GangZoneStopFlashForAll(gangzoneid);
 
-native SHA256_PassHash(password[], salt[], ret_hash[], ret_hash_len);
-
 native SetSVarInt(varname[], int_value);
 native SetSVarString(varname[], string_value[]);
 native SetSVarFloat(varname[], Float:float_value);

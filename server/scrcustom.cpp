@@ -13,7 +13,6 @@
 */
 
 #include "main.h"
-#include "sha256.h"
 
 #define CHECK_PARAMS(amx,fn,c) \
 	{ \
@@ -39,23 +38,6 @@
 	}
 
 #define DEFINE_NATIVE(func) {#func, n_##func}
-
-//----------------------------------------------------------------------------------
-
-// native SHA256_PassHash(password[], salt[], ret_hash[], ret_hash_len)
-static cell n_SHA256_PassHash(AMX* amx, cell* params)
-{
-	CHECK_PARAMS(amx, "SHA256_PassHash", 4);
-
-	char* szPassword;
-	char* szSalt;
-	amx_StrParam(amx, params[1], szPassword);
-	amx_StrParam(amx, params[2], szSalt);
-	if (szPassword == NULL) return 0;
-
-	const std::string &out(szPassword);
-	return set_amxstring(amx, params[3], sha256(szSalt == NULL ? szPassword : out + szSalt).c_str(), params[4]);
-}
 
 //----------------------------------------------------------------------------------
 
@@ -6241,9 +6223,6 @@ AMX_NATIVE_INFO custom_Natives[] =
 	{ "acos",					n_acos },
 	{ "atan2",					n_atan2 },
 	{ "atan",					n_atan },
-
-	// Hash
-	DEFINE_NATIVE(SHA256_PassHash),
 
 	// Server Variable
 	DEFINE_NATIVE(SetSVarInt),

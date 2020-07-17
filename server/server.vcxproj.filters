@@ -190,7 +190,6 @@
     </ClCompile>
     <ClCompile Include="scrdatabase.cpp" />
     <ClCompile Include="variable.cpp" />
-    <ClCompile Include="sha256.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="console.h" />
@@ -474,7 +473,6 @@
     </ClInclude>
     <ClInclude Include="scrcore.h" />
     <ClInclude Include="variable.h" />
-    <ClInclude Include="sha256.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sdk">
